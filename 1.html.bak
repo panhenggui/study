@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>phg学习中心</title>
+</head>
+<style type="text/css">
+  a{
+      text-decoration:none；   /*去a的下划线*/
+  }
+  .pointer{
+      position:fixed;
+      right:100px;
+      botton:100px;
+      transform:rotate(180deg);
+      transition:transform 1000ms linear;
+      opacity:0.3
+  }
+  .pointer:hover{
+      transform:rotate(360deg)
+      opacity:1
+  }
+</style>
+ <body>
+   <a href="#git">git</a>
+   <a href="#html">html</a>
+   <a href="#raid">raid 磁盘阵列</a>
+   <a href="#lsof">lsof</a>
+   <a href="#linux">linux</a>
+   <a href="#rm">rm</a>
+   <p><h3 style="color:#F00">excel</h3><a href="https://zhidao.baidu.com/question/539151252.html" target="_blank">excel函数 跳格求和</a></p>
+   <p><h3 style="color:#F00">VMWare</h3><a href="https://www.vmware.com/cn.html" target="_blank">官网软件下载</a></p>
+   <p><a href="https://blog.csdn.net/qq_40950957/article/details/80468030" target="_blank">最新超详细虚拟机VMware安装Kali Linux</a></p>
+   <p><a href="https://blog.csdn.net/felix__h/article/details/82853501" target="_blank">VMware Workstation 15 Pro 永久激活密钥 下载</a></p>
+   <p><a href="https://blog.51cto.com/13438667/2059926" target="_blank">windows10用WMware安装Linux虚拟机详细步骤</a></p>
+   <p><a href="http://www.cnblogs.com/onlymate/p/9837651.html" target="_blank">我的Linux之路——windows10用WMware安装CentOS7.5 虚拟机详细步骤</a></p>
+   <p><a href="https://blog.csdn.net/sinat_36564972/article/details/81560395" target="_blank">Centos6.5镜像下载</a></p>
+   <p><a href="https://www.centos.org/download/" target="_blank">官方网站</a></p>
+   <p><a href="https://opsx.alibaba.com/mirror" target="_blank">阿里云镜像</a></p>
+   <p><a href="http://url.cn/5LHrSSJ" target="_blank"> Linux中的官方源、镜像源汇总</a></p>
+   <p><a href="https://www.cnblogs.com/linjiaxin/p/6476480.html" target="_blank">Vmware虚拟机三种网络模式详解</a></p>
+   <p><a href="https://www.cnblogs.com/lnlvinso/p/9955074.html" target="_blank">linux删除文件夹下除了某一个文件之外的所有文件及find用法</a></p>
+   <p><div id="rm"><h3 style="color:#F00">rm</h3></div><a href="https://blog.csdn.net/fanren224/article/details/80724720" target="_blank">Linux 删除除某个文件之外的所有文件 rm -f !(a) 除a文件外都删除</a>
+   <br> 法一、find . -name "*" ! -name "a" -exec rm {} /;法二、rm $(ls | awk '!/a.c/') 或者rm `ls | awk '!/a.c/'</p>
+   <p><div id="liunx"><h3 style="color:#F00">linux</h3></div><a href="https://www.cnblogs.com/caicaizi/p/9643902.html" target="_blank">Linux Centos 删除除某(多)个文件之外的所有文件</a></p>
+   <p><a href="https://www.jb51.net/article/141286.htm" target="_blank">linux下使用shell脚本输出带颜色字体</a></p>
+   <p><a href="https://www.cnblogs.com/softidea/p/6855045.html" target="_blank">Linux Shell远程执行命令（命令行与脚本方式）</a></p>
+   <p><div id="lsof"><h3 style="color:#F00">lsof</h3></div><a href="https://blog.csdn.net/lufeisan/article/details/53149427" target="_blank">Linux服务器使用df和du查看磁盘大小不一致的问题和解决办法</a></p>
+   <p><div id="raid"><h3 style="color:#F00">raid 磁盘阵列</h3></div><a href="https://blog.csdn.net/vickhuc/article/details/82793626" target="_blank">RAID1磁盘阵列搭建</a></p>
+   <p>
+     <a href="https://blog.csdn.net/qq_34491508/article/details/80349271" target="_blank">windows RAID1和RAID5的搭建</a>
+   </p>
+     <div id="html"><h3 style="color:#F00">html</h3></div>
+     <a href="https://www.cnblogs.com/yxm440/p/7667539.html" target="_blank">HTML哪些是块级元素，哪些是行内元素</a>
+   <p/>
+   <p>
+   <div id="git"><h3 style="color:#F00">git</h3></div>
+   <a href="https://blog.csdn.net/qq_30505673/article/details/83868622" target="_blank">windows10环境下使用git并上传到Git</a>
+   </p>
+   <a href="#"><h3 align="center">返回顶部</h3></a>
+ </body>
+</html>

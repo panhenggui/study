@@ -11,7 +11,7 @@
   .pointer{
       position:fixed;
       right:100px;
-      botton:100px;
+      bottom:100px;
       transform:rotate(180deg);
       transition:transform 1000ms linear;
       opacity:0.3
@@ -22,14 +22,135 @@
   }
 </style>
  <body>
+   <a href="#c" style="color:#F00">常用命令</a>
    <a href="#git">git</a>
-   <a href="#html">html</a>
+   <a href="#html" style="color:#F00">html</a>
    <a href="#raid">raid 磁盘阵列</a>
-   <a href="#lsof">lsof</a>
+   <a href="#lsof" style="color:#F00">lsof</a>
    <a href="#linux">linux</a>
-   <a href="#rm">rm</a>
-   <p><h3 style="color:#F00">excel</h3><a href="https://zhidao.baidu.com/question/539151252.html" target="_blank">excel函数 跳格求和</a></p>
-   <p><h3 style="color:#F00">VMWare</h3><a href="https://www.vmware.com/cn.html" target="_blank">官网软件下载</a></p>
+   <a href="#rm" style="color:#F00">rm</a>
+   <a href="#a">朱双印运维技术</a>
+   <a href="#excel" style="color:#F00">execl跳格求和</a>
+   <a href="#vmware">vmware</a>
+   <a href="#docker" style="color:#F00">docker</a>
+   <a href="#b">内核升级</a>
+   <a href="#iptable" style="color:#F00">iptable</a>
+   <a href="#shell">shell</a>
+   <a href="#elk" style="color:#F00">ELK</a>
+   <a href="#c">   静态ip配置</a>
+   <a href="#d"></a>
+   <a href="#e" style="color:#F00">内存释放</a>
+   <a href="#f">磁盘分区</a>
+   <a href="#vim" style="color:#F00">vim</a>
+   <a href="#h">为历史命令添加日期时间</a>
+   <a href="#i" style="color:#F00">自启动设置</a>
+   <a href="#yum">使用yum查看安装了哪些软件包</a>
+   <a href="#kafka" style="color:#F00">kafka的使用场景</a>
+   <a href="#">邮件</a>
+   <a href="#awk" style="color:#F00">awk/sed</a>
+   <a href="#ansible">ansible</a>
+   <a href="#k" style="color:#F00">破解root用户密码</a>
+   <a href="#scp" style="color:#F00">scp</a>
+   <a href="#tar">tar</a>
+   <a href="#l" style="color:#F00">linux网卡配置文件详解</a>
+   <p><div id="c"><h3 style="color:#F00">常用命令</h3></div>
+   <pre>
+yum provides telnet                    查找telnet安装包
+locate 文件名                         查找文件路径
+rpm –qc chrony                        查看配置文件列表
+tree 目录                             查看目录下有什么文件
+[root@localhost ~]# ps aux|head -1;ps aux|sort -rn -k3|head -10
+
+其中，第一句主要是为了获取标题（USER PID %CPU %MEM VSZ RSS TTY STAT START TIME COMMAND）信息。而“head：-N”可以指定显示的行数，默认显示10行。
+
+第二个命令是一个输出加排序组合，ps参数的a指代all，表示所有的进程，u指代user id，就是执行该进程的用户id，x指代显示所有程序，不以终端机来区分。
+
+接下来是sort命令，其中：r指代reverse，这里是指反向比较结果，输出时默认从小到大，反向后从大到小。n指代numberic sort，根据其数值排序。k代表根据哪一列进行排序，后面的数字3表示按照第3列排序。本例中，可以看到%CPU在第3个位置，因此k3表示根据%CPU的数值进行由大到小的排序。
+
+接下来的“|”为管道符号，将查询出的结果导到下面的命令中进行下一步的操作。
+最后的“head -10”命令获取默认前10行数据。
+[root@localhost ~]# ps -e -o stat,ppid,pid,cmd | egrep  '^[Zz]'Z    10808 10812 [java] <defunct>
+
+介绍下几个参数：
+
+-e：参数用于列出所有的进程
+
+-o：参数用于设定输出格式，这里只输出进程的stat(状态信息)、ppid(父进程pid)、pid（当前进程的pid)，cmd(即进程的可执行文件。
+
+egrep：是linux下的正则表达式工具
+
+'^[Zz]'：这是正则表达式，^表示第一个字符的位置，[Zz]，表示小写z或者大写的Z字母，即表示第一个字符为Z或者z开头的进程数据，只所以这样是因为僵尸进程的状态信息以Z或者z字母开头。
+
+找到僵尸进程的pid后，直接通过”kill -9 pid“命令杀掉即可，但是如果僵尸进程很多的话，就会很繁琐，因此，还需要一个批量删除僵尸进程的办法：
+
+[root@localhost ~]# ps -e -o stat,ppid,pid,cmd | grep -e '^[Zz]' | awk '{print $2}' | xargs kill -9
+
+这是个命令组合，通过管道实现命令的组合应用。
+
+“grep -e”相当于egrep命令。
+
+“awk '{print $2}' ”是将前面命令的输出信息进行过滤，仅仅输出第二列的值，而第二列就是进程的ppid。
+
+“xargs kill -9”这是将得到的ppid传给“kill -9”作为参数，也就是kill掉这些ppid。xargs命令可以将标准输入转成各种格式化的参数，这里是将管道的输出内容作为参数传递给kill命令。
+cat .bash_history                       通过命令行修改的密码，bash会自动记录历史，历史记录中记录了明文密码
+mysqladmin -uroot -pxxx password 'redhat'
+cat .mysql_history                       通过mysql命令修改的密码，mysql也会有所有操作指令的记录，这里也记录了明文密码
+set password for root@'localhost'=password('redhat');
+select user,host,password from mysql.user;
+flush privileges;
+
+[root@proxy ~]# mysqldump -uroot -predhat mydb table > table.sql
+//备份数据库中的某个数据表
+[root@proxy ~]# mysqldump -uroot -predhat mydb > mydb.sql
+//备份某个数据库
+[root@proxy ~]# mysqldump -uroot -predhat --all-databases > all.sql
+//备份所有数据库
+
+[root@proxy ~]# mysql -uroot -predhat mydb  < table.sql            //还原数据表
+[root@proxy ~]# mysql -uroot -predhat mydb  < mydb.sql            //还原数据库
+[root@proxy ~]# mysql -uroot -predhat < all.sql                    //还原所有数据库
+
+ab -c 100 -n 100  http://192.168.4.5/   客户端使用ab测试软件测试效果
+
+   </pre></p>
+   <p>
+   <div id="iptable"><h3 style="color:#F00">iptable</h3></div>
+   <pre>
+iptables  [-t 表名]  选项  [链名]  [条件]  [-j 目标操作]
+iptables  -t  filter  -I  INPUT -p  icmp  -j  REJECT
+iptables默认有4个表，nat表（地址转换表）、filter表（数据过滤表）、raw表（状态跟踪表）、mangle表（包标记表）。
+2）iptables的5个链（区分大小写）：
+INPUT链（入站规则）
+OUTPUT链（出站规则）
+FORWARD链（转发规则）
+PREROUTING链（路有前规则）
+POSTROUTING链（路由后规则）
+iptables  -nL               查看iptables防火墙规则
+   </pre>
+   </p>
+   <p>
+   <div id="vpn">
+       <h3 style="color:#F00">vpn</h3>
+   </div>
+   <a href="https://www.cnblogs.com/0zcl/p/7309766.html">vpn使用与安装</a>
+   </p>
+   <p><div id="a"><h3 style="color:#F00">朱双印运维技术</h3></div><a href="http://www.zsythink.net/" target="_blank">朱双印运维技术</a></p>
+   <p><div id="docker"><h3 style="color:#F00">docker</h3></div><a href="https://www.docker.com" target="_blank">docker官网</a>
+   <a href="https://hub.docker.com/">镜像仓库</a>
+   <a href="https://registry.docker-cn.com">本地镜像仓库</a>
+   <br>"registry-mirrors": ["https://registry.docker-cn.com"],<br>"live-restore": true<br>
+   <a href="https://coolshell.cn/articles/18190.html">GO语言、DOCKER 和新技术</a><br>
+   <a href="https://blog.csdn.net/chanmufeng/article/details/80459607">创建docker镜像的两种方式</a><br>
+   <a href="https://blog.csdn.net/u012767761/article/details/78107856">Docker镜像的获取与使用</a><br>
+   <a href="https://www.cnblogs.com/garfieldcgf/p/5462038.html">docker安装hadoop</a><br>
+   <a href="https://www.cnblogs.com/cxxjohnson/p/8411045.html">Docker入门与实战讲解</a><br>
+   <a href="https://blog.csdn.net/ityouknow/article/details/79465906">Docker(一)：Docker入门教程</a><br>
+   <a href="https://blog.csdn.net/ityouknow/article/details/79693065">Docker(四)：Docker 三剑客之 Docker Compose</a><br>
+   <a href="https://www.cnblogs.com/jsonhc/p/7767669.html">docker之Dockerfile实践</a><br>
+   </p>
+   <p><div id="b"><h3 style="color:#F00">内核升级</h3></div><a href="http://rpm.pbone.net/">升级内核3.18.25以后，kernel-headers文件</a></p>
+   <p><div id="excel"><h3 style="color:#F00">excel</h3></div><a href="https://zhidao.baidu.com/question/539151252.html" target="_blank">excel函数 跳格求和</a></p>
+   <p><div id="vmware"><h3 style="color:#F00">VMWare</h3></div><a href="https://www.vmware.com/cn.html" target="_blank">官网软件下载</a></p>
    <p><a href="https://blog.csdn.net/qq_40950957/article/details/80468030" target="_blank">最新超详细虚拟机VMware安装Kali Linux</a></p>
    <p><a href="https://blog.csdn.net/felix__h/article/details/82853501" target="_blank">VMware Workstation 15 Pro 永久激活密钥 下载</a></p>
    <p><a href="https://blog.51cto.com/13438667/2059926" target="_blank">windows10用WMware安装Linux虚拟机详细步骤</a></p>
@@ -39,10 +160,22 @@
    <p><a href="https://opsx.alibaba.com/mirror" target="_blank">阿里云镜像</a></p>
    <p><a href="http://url.cn/5LHrSSJ" target="_blank"> Linux中的官方源、镜像源汇总</a></p>
    <p><a href="https://www.cnblogs.com/linjiaxin/p/6476480.html" target="_blank">Vmware虚拟机三种网络模式详解</a></p>
-   <p><a href="https://www.cnblogs.com/lnlvinso/p/9955074.html" target="_blank">linux删除文件夹下除了某一个文件之外的所有文件及find用法</a></p>
-   <p><div id="rm"><h3 style="color:#F00">rm</h3></div><a href="https://blog.csdn.net/fanren224/article/details/80724720" target="_blank">Linux 删除除某个文件之外的所有文件 rm -f !(a) 除a文件外都删除</a>
-   <br> 法一、find . -name "*" ! -name "a" -exec rm {} /;法二、rm $(ls | awk '!/a.c/') 或者rm `ls | awk '!/a.c/'</p>
-   <p><div id="liunx"><h3 style="color:#F00">linux</h3></div><a href="https://www.cnblogs.com/caicaizi/p/9643902.html" target="_blank">Linux Centos 删除除某(多)个文件之外的所有文件</a></p>
+   <p><a href="https://blog.csdn.net/qq_41201550/article/details/80844466" target="_blank">VMware新建linux虚拟机</a></p>
+   <p><a href="https://www.cnblogs.com/yybrhr/p/9809707.html" target="_blank">windows 用VMware创建linux虚拟机，安装操作系统CentOS7.2</a><br>
+       <a href="https://jingyan.baidu.com/article/9113f81b7cfbd22b3214c790.html">vmware虚拟机 如何设置nat网络连接到主机和外网</a><br>
+       <a href="https://jingyan.baidu.com/article/e75aca8534b3b1142edac68a.html">VMware中如何让虚拟机和物理主机在同一网段</a><br>
+       <a href="https://blog.csdn.net/bobozai86/article/details/82699983">VMware虚拟机设置上网及与本地计算机通信</a><br>
+   </p>
+   <p>
+   <div id="l">
+       <h3 style="color:#F00">linux网卡配置文件详解</h3>
+       <a href="https://www.cnblogs.com/ienino/p/7717092.html">linux网卡配置文件详解</a>
+   </div>
+   </p>
+   <p><div id="rm"><h3 style="color:#F00">rm</h3></div><a href="https://www.cnblogs.com/lnlvinso/p/9955074.html" target="_blank">linux删除文件夹下除了某一个文件之外的所有文件及find用法</a></p>
+   <p><a href="https://blog.csdn.net/fanren224/article/details/80724720" target="_blank">Linux 删除除某个文件之外的所有文件 rm -f !(a) 除a文件外都删除</a>
+   <br> 法一、find . -name "*" ! -name "a" -exec rm {} /;<br>法二、rm $(ls | awk '!/a.c/') 或者rm `ls | awk '!/a.c/'</p>
+   <p><div id="linux"><h3 style="color:#F00">linux</h3></div><a href="https://www.cnblogs.com/caicaizi/p/9643902.html" target="_blank">Linux Centos 删除除某(多)个文件之外的所有文件</a></p>
    <p><a href="https://www.jb51.net/article/141286.htm" target="_blank">linux下使用shell脚本输出带颜色字体</a></p>
    <p><a href="https://www.cnblogs.com/softidea/p/6855045.html" target="_blank">Linux Shell远程执行命令（命令行与脚本方式）</a></p>
    <p><div id="lsof"><h3 style="color:#F00">lsof</h3></div><a href="https://blog.csdn.net/lufeisan/article/details/53149427" target="_blank">Linux服务器使用df和du查看磁盘大小不一致的问题和解决办法</a></p>
@@ -55,7 +188,140 @@
    <p/>
    <p>
    <div id="git"><h3 style="color:#F00">git</h3></div>
-   <a href="https://blog.csdn.net/qq_30505673/article/details/83868622" target="_blank">windows10环境下使用git并上传到Git</a>
+   <a href="https://blog.csdn.net/qq_30505673/article/details/83868622" target="_blank">windows10环境下使用git并上传到Git</a><br>
+   <a href="http://www.cnblogs.com/0zcl/p/6874588.html">git使用与安装</a><br>
+   <a href="http://p.primeton.com/articles/54c1cb4a1be20aa1bf900002">Git使用中的问题及解决</a><br>
+   </p>
+   <p>
+   <div id="elk">
+       <h3 style="color:#F00">ELK</h3>
+       <a href="https://www.cnblogs.com/kevingrace/p/5919021.html">ELK实时日志分析平台环境部署</a>
+   </div>
+   </p>
+   <p>
+   <div id="shell">
+       <h3 style="color:#F00">shell</h3>
+       <a href="https://blog.csdn.net/beyond__devil/article/details/80654580?utm_source=blogxgwz2">判断指定日期是否为节假日、双休日、工作日</a><br>
+       <a href="https://zhidao.baidu.com/question/241839027327924524.html">linux 下 shell 脚本取上一工作日日期</a><br>
+       <a href="https://zhidao.baidu.com/question/412833470.html?fr=iks&word=shell+main+%24%40+%CA%B2%C3%B4%D2%E2%CB%BC&ie=gbk">$@ 和$# 分别是什么意思</a><br>
+       <a href="http://blog.51cto.com/lielie/1430819">while read line读取</a><br>
+       <a href="http://ask.zol.com.cn/x/4454001.html">shell脚本中 –s –f –d –r –w –x –c –b –t -n是什么意思</a><br>
+       <a href="https://blog.csdn.net/u012164361/article/details/78291885">shell 脚本中中-e –d –f –L -eq等等的意义</a><br>
+       <a href="https://blog.csdn.net/xinguimeng/article/details/52410878">shell脚本中的read一些选项</a><br>
+       <a href="https://zhidao.baidu.com/question/1900325551903999900.html">shell脚本中 if 判断时候文件或目录状态检测</a><br>
+       <a href="https://www.jb51.net/article/145131.htm">Linux shell条件判断if中的-a到-z的意思</a><br>
+   </div>
+   </p>
+   <p>
+   <div id="c">
+       <h3 style="color:#F00">静态ip配置</h3>
+       <a href="https://www.cnblogs.com/chengssblog/p/6531964.html">静态ip的配置</a>
+   </div>
+   </p>
+   <p>
+   <div id="e">
+       <h3 style="color:#F00">内存释放</h3>
+       <a href="http://www.cnblogs.com/freeweb/p/5713513.html">内存释放</a>
+   </div>
+   <p>
+   <div id="f">
+       <h3 style="color:#F00">磁盘分区</h3>
+       <a href="https://www.cnblogs.com/jytx/p/6323550.html">给liunx扩展磁盘图</a><br>
+       <a href="https://blog.csdn.net/arenn/article/details/78866251">linux添加新磁盘和创建分区</a><br>
+       <a href="https://www.cnblogs.com/alexyuyu/articles/3454907.html">parted /dev/vdb分区</a><br>
+       <a href="https://blog.csdn.net/sfdst/article/details/81167080"> parted 分区</a><br>
+       <a href="https://blog.csdn.net/Wang_Xin_SH/article/details/77872885">给liunx扩展磁盘文档</a><br>
+       <a href="https://www.cnblogs.com/fiberhome/p/8109530.html">扩展、删除卷组</a><br>
+   </div>
+   </p>
+   <p>
+   <div id="vim">
+       <h3 style="color:#F00">vim</h3>
+       <a href="https://www.cnblogs.com/alamZ/p/6364823.html">vim打开文件批量修改</a><br>
+       <a href="https://www.cnblogs.com/playboysnow/p/5069877.html">vim下高级操作以及文本替换命令</a><br>
+       <a href="https://blog.csdn.net/xs1326962515/article/details/78050596">vi/vim使用进阶: 移动光标操作(一)</a><br>
+       <a href="https://blog.csdn.net/lj_trestg/article/details/79953408">vim中如何整体向左或向右移动</a><br>
+   </div>
+   </p>
+   <p>
+   <div id="h">
+       <h3 style="color:#F00">为历史命令添加日期时间</h3>
+       <a href="https://www.cnblogs.com/z1500592/p/6640256.html">为历史命令添加日期时间</a>
+   </div>
+   </p>
+   <p>
+   <div id="i">
+       <h3 style="color:#F00">自启动设置</h3>
+       <a href="https://www.aliyun.com/jiaocheng/119934.html">自启动设置</a>
+   </div>
+   </p>
+   <p>
+   <div id="yum">
+       <h3 style="color:#F00">使用yum查看安装了哪些软件包</h3>
+       <a href="https://blog.csdn.net/weixin_37773766/article/details/80290981">使用yum查看安装了哪些软件包</a>
+   </div>
+   </p>
+   <p>
+   <div id="kafka">
+       <h3 style="color:#F00">kafka</h3>
+       <a href="https://blog.csdn.net/lp284558195/article/details/80271853">kafka的使用场景</a>
+   </div>
+   </p>
+   <p>
+   <div id="mysql">
+       <h3 style="color:#F00">mysql</h3>
+       <a href="https://www.cnblogs.com/zengkefu/p/5690092.html">mysqldump --set-gtid-purged=OFF</a><br>
+       <a href="http://www.cnblogs.com/xieshuang/p/9933397.html">mysql快速生成truncate脚本清空数据库表记录</a><br>
+       <a href="https://blog.csdn.net/kuluzs/article/details/51924374">mysql5.7设置简单密码报错ERROR 1819 (HY000): Your password does not satisfy the current policy requirements</a><br>
+       <a href="https://www.cnblogs.com/wangfuyou/p/6058169.html">sql 查出一张表中重复的所有记录数据</a><br>
+       <a href="https://www.cnblogs.com/langyu1021/p/5587157.html">MYSQL数据库导入数据时出现乱码的解决办法</a><br>
+       <a href="https://www.cnblogs.com/kevingrace/p/6065088.html">Mysql数据库之Binlog日志使用总结</a><br>
+   </div>
+   </p>
+   <p>
+   <div id="g">
+       <h3 style="color:#F00">邮件</h3>
+       <a href="https://www.cnblogs.com/xd502djj/p/7815306.html">linux使用mail发邮件</a><br>
+       <a href="https://www.cnblogs.com/imweihao/p/7250500.html">linux下使用自带mail发送邮件126</a><br>
+   </div>
+   </p>
+   <p>
+   <div id="awk">
+       <h3 style="color:#F00">awk/sed</h3>
+       <a href="https://www.cnblogs.com/xudong-bupt/p/3721210.html">linux awk命令详解</a><br>
+       <a href="http://blog.sina.com.cn/s/blog_6a1837e90102vg2l.html">sed</a><br>
+       <a href="http://www.zsythink.net/archives/tag/awk/">awk朱双印</a><br>
+   </div>
+   </p>
+   <p>
+   <div id="ansible">
+       <h3 style="color:#F00">ansible</h3>
+       <a href="http://www.zsythink.net/archives/2999">ansible笔记(运维)</a>
+   </div>
+   </p>
+   <p>
+   <div id="k">
+       <h3 style="color:#F00">破解root用户密码</h3>
+       <a href="https://blog.csdn.net/weixin_41078837/article/details/80539986">Linux7/Centos7破解root用户密码</a>
+   </div>
+   </p>
+   <p>
+   <div id="scp">
+       <h3 style="color:#F00">scp</h3>
+       <a href="https://www.cnblogs.com/webnote/p/5877920.html">每天一个linux命令：scp命令</a>
+   </div>
+   </p>
+   <p>
+   <div id="tar">
+       <h3 style="color:#F00">tar</h3>
+       <a href="https://www.cnblogs.com/centos2017/p/7896807.html">打包 压缩 命令tar zip</a>
+   </div>
+   </p>
+   <p>
+   <div id="crontab">
+       <h3 style="color:#F00">crontab</h3>
+       <a href="https://blog.51cto.com/weimouren/1736063">crontab定时任务及权限</a>
+   </div>
    </p>
    <a href="#"><h3 align="center">返回顶部</h3></a>
  </body>
