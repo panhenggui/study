@@ -5,6 +5,14 @@
     <title>达内学习</title>
 </head>
 <style>
+    #dada{
+	   opacity:1;
+	   transition:transform 10000ms linear;
+	}
+	#dada:hover{
+	   opacity:0.3;
+	   transform:rotate(7200deg);
+	}
 	.pointer{
       position:fixed;
       right:100px;
@@ -18,10 +26,16 @@
       opacity:1
 </style>
 <body>
-   <a href="#a">进程、重定向</a>
+   <a href="#a">控制进程数量、重定向、正则</a>
    <a href="#pxe">pxe</a>
+   <a href="#nslookup">nslookup解析域名ip</a>
    <a href="#b">shell脚本调试技术</a>
    <a href="#c">面试技巧、个人简历</a>
+   <a href="#d">路由图、rsync</a>
+   <a href="#ldap">LDAP</a>
+   <a href="#tcp">TCP</a>
+   <a href="#e">mysql插件</a>
+   <a href="#git">git</a>
    <p><img src="./img/1.jpg"></p>
    <p><img src="./img/4.jpg"></p>
    <p><img src="./img/5.jpg"></p>
@@ -64,7 +78,7 @@
    <p><img src="./img/42.jpg"></p>
    <p><img src="./img/43.jpg"></p>
    <p><img src="./img/44.jpg"></p>
-   <div id="a"><h3 style="color:#F00">进程、重定向</h3></div>
+   <div id="a"><h3 style="color:#F00">控制进程数量、重定向、正则</h3></div>
    <p><img src="./img/50.jpg"></p>
    <p><img src="./img/51.jpg"></p>
    <p><img src="./img/52.jpg"></p>
@@ -99,7 +113,6 @@
    <p><img src="./img/88.jpg"></p>
    <p><img src="./img/89.jpg"></p>
    <p><img src="./img/90.jpg"></p>
-   <p><img src="./img/91.jpg"></p>
    <p><img src="./img/92.jpg"></p>
    <p><img src="./img/93.jpg"></p>
    <p><img src="./img/94.jpg"></p>
@@ -118,6 +131,8 @@
    <p><img src="./img/107.jpg"></p>
    <p><img src="./img/108.jpg"></p>
    <p><img src="./img/109.jpg"></p>
+   <div id="nslookup"><h3 style="color:#F00">nslookup解析域名ip</h3></div>
+   <p><img src="./img/91.jpg"></p>
    <div id="b"><h3 style="color:#F00">shell脚本调试技术</h3></div>
    <p><img src="./img/110.jpg"></p>
    <p><img src="./img/111.jpg"></p>
@@ -134,37 +149,64 @@
    <p><img src="./img/122.jpg"></p>
    <p><img src="./img/123.jpg"></p>
    <p><img src="./img/125.jpg"></p>
-   <div id=""><h3 style="color:#F00">面试技巧、个人简历</h3></div>
+   <div id="c"><h3 style="color:#F00">面试技巧、个人简历</h3></div>
    <p><img src="./img/130.jpg"></p>
-   <p><img src="./img/17.jpg"></p>
-   <p><img src="./img/18.jpg"></p>
-   <p><img src="./img/19.jpg"></p>
-   <p><img src="./img/20.jpg"></p>
-   <p><img src="./img/21.jpg"></p>
-   <p><img src="./img/22.jpg"></p>
-   <p><img src="./img/23.jpg"></p>
-   <p><img src="./img/24.jpg"></p>
-   <p><img src="./img/25.jpg"></p>
-   <p><img src="./img/26.jpg"></p>
-   <p><img src="./img/27.jpg"></p>
-   <p><img src="./img/28.jpg"></p>
-   <p><img src="./img/29.jpg"></p>
-   <p><img src="./img/30.jpg"></p>
-   <p><img src="./img/31.jpg"></p>
-   <p><img src="./img/32.jpg"></p>
-   <p><img src="./img/33.jpg"></p>
-   <p><img src="./img/34.jpg"></p>
-   <p><img src="./img/35.jpg"></p>
-   <p><img src="./img/36.jpg"></p>
-   <p><img src="./img/37.jpg"></p>
-   <p><img src="./img/38.jpg"></p>
-   <p><img src="./img/39.jpg"></p>
-   <p><img src="./img/40.jpg"></p>
-   <p><img src="./img/41.jpg"></p>
-   <p><img src="./img/42.jpg"></p>
-   <p><img src="./img/43.jpg"></p>
-   <p><img src="./img/44.jpg"></p>
-
+   <p><img src="./img/131.jpg"></p>
+   <p><img src="./img/132.jpg"></p>
+   <p><img src="./img/133.jpg"></p>
+   <p><img src="./img/134.jpg"></p>
+   <p><img src="./img/135.jpg"></p>
+   <p><img src="./img/136.jpg"></p>
+   <p><img src="./img/137.jpg"></p>
+   <p><img src="./img/138.jpg"></p>
+   <p><img src="./img/139.jpg"></p>
+   <p><img src="./img/140.jpg"></p>
+   <p><img src="./img/141.jpg"></p>
+   <p><img src="./img/142.jpg"></p>
+   <p><img src="./img/143.jpg"></p>
+   <p><img src="./img/144.jpg"></p>
+   <p><img src="./img/145.jpg"></p>
+   <p><img src="./img/146.jpg"></p>
+   <p><img src="./img/147.jpg"></p>
+   <p><img src="./img/148.jpg"></p>
+   <p><img src="./img/149.jpg"></p>
+   <p><img src="./img/150.jpg"></p>
+   <div id="d"><h3 style="color:#F00">路由图、rsync</h3></div>
+   <p><img src="./img/160.jpg"></p>
+   <p><img src="./img/161.jpg"></p>
+   <p><img src="./img/162.jpg"></p>
+   <p><img src="./img/163.jpg"></p>
+   <p><img src="./img/164.jpg"></p>
+   <div id="ldap"><h3 style="color:#F00">LDAP</h3></div>
+   <p><img src="./img/170.jpg"></p>
+   <p><img src="./img/172.jpg"></p>
+   <p><img src="./img/173.jpg"></p>
+   <p><img src="./img/174.jpg"></p>
+   <p><img src="./img/175.jpg"></p>
+   <p><img src="./img/176.jpg"></p>
+   <p><img src="./img/177.jpg"></p>
+   <p><img src="./img/178.jpg"></p>
+   <div id="tcp"><h3 style="color:#F00">TCP</h3></div>
+   <p><img src="./img/179.jpg"></p>
+   <p><img src="./img/180.jpg"></p>
+   <div id="e"><h3 style="color:#F00">mysql插件、redis服务器高可用</h3></div>
+   <p><img src="./img/181.jpg"></p>
+   <p><img src="./img/182.jpg"></p>
+   <div id="git"><h3 style="color:#F00">git</h3></div>
+   <p><img src="./img/183.jpg"></p>
+   <p><img src="./img/184.jpg"></p>
+   <div id="f"><h3 style="color:#F00">python统计、awk统计</h3></div>
+   <p><img src="./img/185.jpg"></p>
+   <p><img src="./img/186.jpg"></p>
+   <p><img src="./img/187.jpg"></p>
+   <p><img src="./img/188.jpg"></p>
+   <p><img src="./img/189.jpg"></p>
+   <p><img src="./img/190.jpg"></p>
+   <p><img src="./img/191.jpg"></p>
+   <p><img src="./img/192.jpg"></p>
+   <p><img src="./img/193.jpg"></p>
+   <p><img src="./img/194.jpg"></p>
+   <p><img src="./img/195.jpg"></p>
    <a href="#"><h3 align="center">返回顶部</h3></a>
 </body>
 </html>
