@@ -7,7 +7,7 @@
 </head>
 <style type="text/css">
   a{
-      text-decoration:none；   /*去a的下划线*/
+      text-decoration:none;  /*去a的下划线*/
   }
   .pointer{
       position:fixed;
@@ -57,10 +57,11 @@
            <li><a href="#scp" style="color:#F00">scp</a></li>
            <li><a href="#tar">tar</a></li>
            <li><a href="#l" style="color:#F00">linux网卡配置文件详解</a></li>
+          <li><a href="#k8s">k8s</a></li>
       </ul>
   </nav>
    <p><div id="c"><h3 style="color:#F00">常用命令</h3></div>
-   <pre>
+   <pre><hr>
 yum provides telnet                    查找telnet安装包
 locate 文件名                         查找文件路径
 rpm –qc chrony                        查看配置文件列表
@@ -117,6 +118,7 @@ flush privileges;
 [root@proxy ~]# mysql -uroot -predhat < all.sql                    //还原所有数据库
 
 ab -c 100 -n 100  http://192.168.4.5/   客户端使用ab测试软件测试效果
+           <hr>
 
    </pre></p>
    <p>
@@ -153,6 +155,7 @@ iptables  -nL               查看iptables防火墙规则
    <a href="https://blog.csdn.net/ityouknow/article/details/79465906">Docker(一)：Docker入门教程</a><br>
    <a href="https://blog.csdn.net/ityouknow/article/details/79693065">Docker(四)：Docker 三剑客之 Docker Compose</a><br>
    <a href="https://www.cnblogs.com/jsonhc/p/7767669.html">docker之Dockerfile实践</a><br>
+  <a href="http://blog.sina.com.cn/s/blog_6594d5d30102x39f.html">Failed to start Docker Application Container Engine问题解决</a><br>
    </p>
    <p><div id="b"><h3 style="color:#F00">内核升级</h3></div><a href="http://rpm.pbone.net/">升级内核3.18.25以后，kernel-headers文件</a></p>
    <p><div id="excel"><h3 style="color:#F00">excel</h3></div><a href="https://zhidao.baidu.com/question/539151252.html" target="_blank">excel函数 跳格求和</a></p>
@@ -172,6 +175,7 @@ iptables  -nL               查看iptables防火墙规则
        <a href="https://jingyan.baidu.com/article/e75aca8534b3b1142edac68a.html">VMware中如何让虚拟机和物理主机在同一网段</a><br>
        <a href="https://blog.csdn.net/bobozai86/article/details/82699983">VMware虚拟机设置上网及与本地计算机通信</a><br>
        <a href="https://blog.51cto.com/12173069/2051476">vmware下centos7修改网卡名、添加网卡</a><br>
+       <a href="http://ask.apelearn.com/question/14352">关于虚拟机linux每次开机都需要重启网络的解决办法</a><br>
    </p>
    <p>
    <div id="l">
@@ -334,6 +338,13 @@ iptables  -nL               查看iptables防火墙规则
        <a href="https://blog.51cto.com/weimouren/1736063">crontab定时任务及权限</a>
    </div>
    </p>
+  <div id="k8s">
+      <h3 style="color:#F00">k8s</h3>
+      <a href="https://www.kubernetes.org.cn/k8s">Kubernetes中文手册</a><br>
+      <a href="https://blog.51cto.com/wutengfei/2110752">使用kubeadm方式安装kubernetes 1.10.0</a><br>
+      <a href="https://www.jianshu.com/p/b58c85436f0a">Centos 安装 kubectl kubelet kubeadm</a><br>
+      <a href="https://www.kubernetes.org.cn/4256.html">centos7使用kubeadm安装kubernetes 1.11版本多主高可用</a><br>
+  </div>
    <a href="#"><h3 align="center">返回顶部</h3></a>
 <script src="https://cdn.jsdelivr.net/npm/jquery@1.12.4/dist/jquery.min.js"></script>
 <script src="bootstrap-3.3.7-dist/js/bootstrap.min.js"></script>
