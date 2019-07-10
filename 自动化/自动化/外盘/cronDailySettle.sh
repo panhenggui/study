@@ -1,0 +1,33 @@
+#!/bin/bash
+echo "------日终结算开始-------"
+curdate=`date "+%Y%m%d-%H%M%S"`
+echo "当前时间" $curdate
+ListDB=$HOME/list/list.db
+DatabaseHost=`cat $ListDB | awk '{print $2}'`
+DatabaseUser=`cat $ListDB | awk '{print $3}'`
+DatabasePwd=`cat $ListDB | awk '{print $4}'`
+DatabaseName=`cat $ListDB | awk '{print $5}'`
+#服务器日期
+CurrDate=`date "+%Y%m%d"`
+#下一交易日
+TradingDate=`mysql -h${DatabaseHost} -u${DatabaseUser} -p${DatabasePwd} -D${DatabaseName} -Nse "select full_date from t_sys_calendar where '${CurrDate}' < full_date and is_trade = 1;" | head -n 1`
+
+echo "下一交易日是"$TradingDate
+
+ret=`curl http://${DatabaseHost}:8080/quantdo/restfulservice/dailySettleService/dailySettleAutoHaveDate?settleDate=${CurrDate}\&nextSettleDate=${TradingDate}` 1>/dev/null 2>/dev/null
+if [ -z $ret ];then
+    echo "[ERR] 日终结算失败，请检查后台数据"
+	echo "------日终结算结束-------"
+    exit 1
+else
+    ret=`echo $ret | awk -F "," '{print $2}' | awk -F ":" '{print $2}'` 
+    if [ $ret == 0 ];then
+        echo "[OK] 日终结算成功"
+		echo "------日终结算结束-------"
+    else
+        echo "[ERR] 日终结算失败，请检查后台数据"
+		echo "------日终结算结束-------"
+        exit 1
+    fi
+fi
+exit 0
