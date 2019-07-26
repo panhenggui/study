@@ -1,0 +1,151 @@
+<link rel="stylesheet" href="riskparam/positionLimit.css" />
+<div class="row" ng-controller="PositionLimitController">
+    <form class="form-12">
+		<div class="form-row">
+		    <div class="row-col-one" >
+	        	<label class="word-style">所属机构</label>
+				<select class="value-style" ng-disabled="isInstClient" ng-model="queryEntity.instClientID" ng-change="instChange()"
+		            ng-options="op.instClientID as op.instClientID+'_'+ op.instClientAbbrName for op in instClients">
+		            <option value="">全部</option>
+	            </select>
+			</div>
+			 <div class="row-col-one">
+             	<label class="word-style">交易所</label>
+             	<select ng-model="queryEntity.exchID" class="value-style"  
+                 ng-change="changeProductID()"
+                 ng-options="op.exchID as op.exchID+'_'+op.exchName for op in exchangeDatas">
+                 <option value="">全部</option>
+             	</select>
+        	</div>
+			<div class="row-col-one">
+               <label class="word-style">品种/合约</label>
+               <input type="text" class="value-style" ng-model="queryEntity.instrumentID">
+	        </div>
+	        <div class="row-col-one">
+	               <label class="word-style">合约类别</label>
+                   <select ng-model="queryEntity.productType" class="value-style"
+                           ng-options="op.key as op.text for op in productTypes">
+                           <option value="">全部</option>
+                   </select>
+	        </div>
+        </div>
+        <div class="btn-beyond-one-row"> 
+  	      		<button type="button" class="btn btn-query btn-word-two" ng-show="positionLimit_query"  ng-click="find(queryEntity)" ng-disabled="isQuery"> 查询</button>
+		</div>
+		<div class="row-form row-btn-operation" ng-show="true">
+			<div class="row-btn-icon">
+           		<span class="btn-add-icon"></span>
+				<input type="button" class="btn btn-add btn-icon-two" ng-show="positionLimit_add"   value="新增" ng-click="newAdd()" data-toggle="modal" data-target="#positionLimitModal">
+			</div>
+     	</div>
+ 	</form>
+
+	<div class="col-xs-12 clear-padding-right">
+        <div class="row">
+            <div class="col-xs-12 clear-padding-right">
+                    <table id="positionLimit_dynamic_table" class="cell-border stripe" cellspacing="0" width="100%"></table>
+            </div>
+        </div>
+    </div>
+
+	<!-- 模态框（Modal） -->
+	<div class="modal fade" id="positionLimitModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" data-backdrop="static" data-keyboard="false">
+		<div class="modal-dialog">
+			<div class="modal-content" style="width: 750px">
+				<div class="modal-header">
+					<button type="button" class="close" data-dismiss="modal"
+						aria-hidden="true">&times;</button>
+					<h4 class="modal-title" id="myModalLabel">限仓设置维护</h4>
+				</div>
+				<div class="modal-body">
+					<form class="form-horizontal" role="form" name="myForm" novalidate>
+						<div class="panel panel-default">
+							<div class="panel-body">
+								<div class="row">
+								    <div class="col-xs-6">	
+										 <div class="row form-group">
+											<label class="col-sm-5 control-label">机构代码<span style="color: red;">*</span></label>
+											<div class="col-xs-6">
+											<select class="form-control two-columns-modal-input" ng-disabled="isInstClient || isUpdate" ng-model="ModalEntity.instClientID" ng-change="newAddInstChange()"
+									            name="instClientID" ng-options="op.instClientID as op.instClientID+'_'+ op.instClientAbbrName for op in instClients" tab="0" required>
+								            </select>
+											</div>
+										</div>
+								    </div>	
+									<div class="col-xs-6">	
+										 <div class="row form-group">
+											<label class="col-sm-5 control-label">交易所代码<span style="color: red;">*</span></label>
+											<div class="col-xs-6">
+											<select class="form-control two-columns-modal-input" ng-disabled="isUpdate" ng-model="ModalEntity.exchID" ng-change="changeExchID(ModalEntity.exchID)"  
+									            name="exchID" ng-options="op.exchID as op.exchID+'_'+op.exchName for op in exchangeDatas" tab="1" required>
+								            </select>
+											</div>
+										</div>
+								    </div>	
+								</div>
+								<div class="row">
+								    <div class="col-xs-6">	
+										 <div class="row form-group">
+											<label class="col-sm-5 control-label">品种/合约代码<span style="color: red;">*</span></label>
+											<div class="col-xs-6">
+												<input type="text"  class="form-control two-columns-modal-input" 
+												name="instrumentID" ng-disabled="isUpdate" ng-model="ModalEntity.instrumentID" maxlength="20" tab="2"  required/> 
+												<span ng-show="myForm.instrumentID.$invalid && myForm.instrumentID.$dirty"
+													class="span-warning" style="color: red;">品种/合约代码必填项</span> 
+											</div>
+										</div>
+								    </div>	
+									<div class="col-xs-6">	
+										 <div class="row form-group">
+											<label class="col-sm-5 control-label">合约类别</label>
+											<div class="col-xs-6">
+											<select class="form-control two-columns-modal-input"  ng-model="ModalEntity.productType" ng-disabled="isUpdate || !isFour"
+									            name="productID" ng-options="op.key as op.text for op in productTypes" tab="2">
+								            </select>
+											</div>
+										</div>
+								    </div>	
+								</div>
+								<div class="row">
+								    <div class="col-xs-6">	
+										 <div class="row form-group">
+											<label class="col-sm-5 control-label">合约最大买持仓量</label>
+											<div class="col-xs-6">
+												<input type="text"   class="form-control two-columns-modal-input"
+												name="maxLongPosition" id="maxLongPosition" ng-model="ModalEntity.maxLongPosition" tab="4" maxlength="8"
+												ng-pattern="/^[0-9]+$/" /> 
+												<span ng-show="myForm.maxLongPosition.$invalid && myForm.maxLongPosition.$dirty "
+												class="span-warning" style="color: red;">合约最大买持仓量为整数,最多为8位整数</span>
+											</div>
+										</div>
+								    </div>	
+								     <div class="col-xs-6">	
+										 <div class="row form-group">
+											<label class="col-sm-5 control-label">合约最大卖持仓量</label>
+											<div class="col-xs-6">
+												<input type="text"   class="form-control two-columns-modal-input" 
+												name="maxShortPosition" ng-model="ModalEntity.maxShortPosition" tab="4" maxlength="8" 
+												ng-pattern="/^[0-9]+$/" /> 
+												<span ng-show="myForm.maxShortPosition.$invalid && myForm.maxShortPosition.$dirty "
+												    style="color: red;">合约最大卖持仓量为整数,最多为8位整数</span>
+											</div>
+										</div>
+										
+								    </div>	
+								</div>
+								<div><input type="hidden" ng-bind="ModalEntity.recordIndex"></div>
+							</div>
+						</div>
+					</form>
+				</div>
+                <div class="modal-footer">
+                     <span class="btn btn-info btn-sm popover-info" data-rel="popover" data-placement="bottom" title="确定"
+                      ng-click="myForm.instClientID.$invalid || myForm.exchID.$invalid || myForm.instrumentID.$invalid || save(ModalEntity)"
+                      ng-disabled = "myForm.instClientID.$invalid || myForm.exchID.$invalid || myForm.instrumentID.$invalid "
+                      >&nbsp;确定&nbsp;</span>
+                    <span class="btn btn-close btn-sm popover-info" data-rel="popover" data-placement="bottom" title="取消" data-dismiss="modal">&nbsp;取消&nbsp;</span>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

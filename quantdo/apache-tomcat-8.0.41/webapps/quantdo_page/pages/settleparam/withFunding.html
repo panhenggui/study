@@ -1,0 +1,169 @@
+<link rel="stylesheet" href="settleparam/withFunding.css"/>
+<title>配资管理</title>
+<div>
+    <ol class="breadcrumb">
+        <li><a>资金管理</a></li>
+        <li class="active">配资管理</li>
+    </ol>
+</div>
+<br>
+<div class="row" ng-controller="WithFundingController">
+    <!-- start 定义表单查询-->
+    <form class="form-horizontal">
+        <div class="row">
+            <div class=col-xs-12>
+                <div class="alert alert-success" ng-show="resultInfo">配资管理信息保存成功!</div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-xs-3">
+                <div class="form-group">
+                    <label class="col-sm-5 control-label">结算日期</label>
+
+                    <div class="col-sm-5">
+                        <input type="text" class="form-control" ng-model="queryEntity.settleDate" name="settleDate"/>
+                    </div>
+                </div>
+            </div>
+            <div class="col-xs-3">
+                <div class="form-group">
+                    <label class="col-sm-5 control-label">资金账号</label>
+
+                    <div class="col-sm-5">
+                        <select ng-model="queryEntity.innerAccountID" class="select-style"
+                                ng-options="op.innerAccountID as op.accountID for op in Accounts">
+                            <option value="">全部</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+            <div class="col-xs-2">
+                <div class="form-group">
+                    <button class="btn btn-success" id="bootbox-options1" ng-click="find(queryEntity)" ng-disabled="isQuery"> 查询</button>
+                </div>
+            </div>
+        </div>
+    </form>
+    <!--End 表单查询 -->
+
+    <!--PAGE CONTENT -->
+    <div class="col-xs-12">
+        <div class="row">
+            <div class="col-xs-12">
+                <div class="clearfix">
+                    <div class="pull-right tableTools-container"></div>
+                </div>
+                <div>
+                    <table id="dynamic-table" class="table table-striped table-bordered table-hover" datatable="ng">
+                        <thead>
+                        <tr>
+                            <th class="center">
+                                <label class="pos-rel">
+                                    <span class="ace"/>
+                                    <span class="lbl"></span>
+                                序号</label>
+                            </th>
+                            <th>结算日期</th>
+                            <th>资金账号</th>
+                            <th class="hidden-180">配资</th>
+                            <th class="hidden-480">操作员</th>
+                            <th class="hidden-480">操作日期</th>
+                            <th class="hidden-480">操作时间</th>
+                            <th>操作</th>
+                        </tr>
+                        </thead>
+
+                        <tbody>
+                        <tr ng-repeat="listEntity in listEntitys">
+                            <td class="center">
+                                {{($index+1)}}
+                            </td>
+                            <td ng-bind="listEntity.settleDate"></td>
+                            <td ng-bind="listEntity.innerAccountID"></td>
+                            <td>{{listEntity.withFunding|currency}}</td>
+                            <td ng-bind="listEntity.operatorID"></td>
+                            <td ng-bind="listEntity.operateDate"></td>
+                            <td ng-bind="listEntity.operateTime"></td>
+                            <div><input type="hidden" ng-bind="listEntity.recordIndex"></div>
+                            <td>
+                                <div class="hidden-sm hidden-xs action-buttons">
+                                    <a class="green" ng-click="initUpdateParam($index,listEntity)" data-toggle="modal"
+                                       data-target="#myModal"><i class="ace-icon fa fa-pencil bigger-130"></i>
+                                    </a>
+                                    <a class="red"><i class="ace-icon fa fa-trash-o bigger-130"
+                                                      ng-click="remove($index,listEntity)"></i>
+                                    </a>
+                                </div>
+                            </td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+            </div>
+        </div>
+        <button class="btn btn-success" id="bootbox-options" ng-click="initParameter()" data-toggle="modal"
+                data-target="#myModal">新增
+        </button>
+        <!-- PAGE CONTENT ENDS -->
+    </div>
+    <!-- /.col -->
+
+    <!-- 新增 修改 模态框（Modal） -->
+    <div class="modal fade" id="myModal" tabindex="-1" role="dialog"
+         aria-labelledby="myModalLabel" aria-hidden="true" data-backdrop="static" data-keyboard="false">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close"
+                            data-dismiss="modal" aria-hidden="true">
+                        &times;
+                    </button>
+                    <h4 class="modal-title" id="myModalLabel">
+                        配资信息维护
+                    </h4>
+                </div>
+                <div class="modal-body">
+                    <!-- 添加表单内容-->
+                    <form class="form-horizontal" role="form" name="myForm" novalidate>
+                        <div class="form-group">
+                            <label for="settleDate" class="col-sm-3 control-label">结算日期<span style="color: red;">*</span></label>
+                            <div class="col-sm-8">
+                                <input type="text" onchange="" class="Wdate value-style word-style" onfocus="WdatePicker({lang:'zh-cn',dateFmt:'yyyyMMdd'})"
+                                       id="settleDate" placeholder=""   ng-readonly="true"
+                                       ng-model="ModalEntity.settleDate" name="settleDate" maxlength="8" required>
+                                <span ng-show="myForm.settleDate.$dirty && myForm.settleDate.$invalid" style="color: red;">结算日期为必填项</span>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="innerAccountID" class="col-sm-3 control-label">资金账号</label>
+                            <div class="col-sm-8">
+                                <select ng-model="ModalEntity.innerAccountID"
+                                        ng-options="op.innerAccountID as op.innerAccountID for op in Accounts"
+                                        id="innerAccountID"></select>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="withFunding" class="col-sm-3 control-label">配资金额<span style="color: red;">*</span></label>
+                            <div class="col-sm-8">
+                                <input type="text" class="form-control" id="withFunding" placeholder="请输入资金限额"
+                                       ng-model="ModalEntity.withFunding" name="withFunding" maxlength="18" ng-pattern="/^[0-9]{1,15}(\.[0-9]{0,2})?$/"  required>
+                                <span ng-show="myForm.withFunding.$dirty && myForm.withFunding.$invalid" style="color: red;">配资金额为必填项，且为浮点数字型，最多录入15位整数，最多录入2位小数，例：98.66</span>
+                            </div>
+                        </div>
+                        <div><input type="hidden" ng-bind="ModalEntity.recordIndex"></div>
+                    </form>
+                    <!--End  添加表单内容-->
+                </div>
+                <div class="modal-footer">
+                    <span class="btn btn-info btn-sm popover-info" data-rel="popover" data-placement="bottom" title=""
+                          ng-click="save(ModalEntity)"
+                          ng-disabled="myForm.settleDate.$invalid || myForm.withFunding.$invalid">&nbsp;提交&nbsp;</span>
+                    <span class="btn btn-info btn-sm popover-info" data-rel="popover" data-placement="bottom" title=""
+                          data-dismiss="modal">&nbsp;关闭&nbsp;</span>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- /.modal -->
+</div>

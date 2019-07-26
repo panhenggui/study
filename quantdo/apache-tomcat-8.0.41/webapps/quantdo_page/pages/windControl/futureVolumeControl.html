@@ -1,0 +1,53 @@
+<!-- 期货数量控制 -->
+<link href="windControl/futureVolumeControl.css" rel="stylesheet">
+<div ng-controller="futureVolumeControlController" style="width: 100%;overflow: auto;">
+
+ <div style="height:10px;"></div>
+    <input type="button"  ng-show = "futureVolumeAddButtonIsShow" value = &nbsp;&nbsp;&nbsp;新&nbsp;&nbsp;增&nbsp;&nbsp;&nbsp; class="backFilter myNewBtn" name="RiskFutureVolumeControlService.updateData" ng-click = "showFutureVolumeControlDetail()">
+    <div style="height:15px;"></div>
+
+ 	<div>
+	    <table id="futureVolumeControl_table" class="cell-border stripe" cellspacing="0" width="100%">
+	    </table>
+	</div>
+	
+	<div ng-show = futureVolumeControlShow>
+	<label class="detail-header">期货数量控制</label>
+	<div class="controlDetail">
+    	<div style="float: left;">
+    		<div class="detailRow" >
+    		<!-- select 框默认值设置 -->
+    			<label >品种:</label>
+    			<select ng-disabled = selectIsCanUse ng-model="futureVolumeControlEntity.exhangeid_productid"  class="select-style" 
+    			ng-options="op.groupID as op.groupName for op in exchangeAndProducts">
+                </select>
+                <label >合约最大持仓量:</label>
+                <input type="text" class="futureVolumeControl-detail-text" ng-model="futureVolumeControlEntity.maxPositionVolumeInstrument" ng-keyup="futureVolumeControlnumberControl(futureVolumeControlEntity.maxPositionVolumeInstrument)">
+    			 <label class ="futureVolumeControllableFontSize" style="color: red;">(0表示不控制)</label>
+    			<label>合约最大撤单次数:</label>
+    			<input type="text" class="futureVolumeControl-detail-text" ng-model="futureVolumeControlEntity.maxKillOrderVolumeInstrument" ng-keyup="futureVolumeControlnumberControl(futureVolumeControlEntity.maxKillOrderVolumeInstrument)">
+    			 <label class ="futureVolumeControllableFontSize" style="color: red;">(0表示不控制)</label>
+    			<label >品种最大开仓量:</label>
+    			<input type="text" class="futureVolumeControl-detail-text" ng-model="futureVolumeControlEntity.maxOpenVolumeProduct" ng-keyup="futureVolumeControlnumberControl(futureVolumeControlEntity.maxOpenVolumeProduct)">
+    		 	 <label class ="futureVolumeControllableFontSize" style="color: red;">(0表示不控制)</label>
+    		</div>
+    	</div>
+	    <div class="operation-table">
+	    
+	        <div class="btn-add-left">
+	  			<input ng-show = futureVolumeControlEdit type="button" value="{{futureVolumeControl_save}}" class="backFilter myNewBtn" ng-click="saveData(futureVolumeControlEntity)">
+	        </div>
+	        <div class="btn-add-left">
+	  			<input ng-show = !futureVolumeControlEdit type="button" value="{{futureVolumeControl_update}}" class="backFilter myNewBtn" ng-click="updateData(futureVolumeControlEntity)">
+	        </div>
+	    
+   	    	<div class="btn-add-left">
+    			<input ng-show = futureVolumeControlEdit type="button" value={{futureVolumeControl_setPara}} class="backFilter myNewBtn" ng-click="repeatData()">
+	   		</div>
+	   		<div class="btn-add-left">
+    			<input ng-show = !futureVolumeControlEdit type="button" value={{futureVolumeControl_resetPara}} class="backFilter myNewBtn" ng-click="giveUpUpdate()">
+	   		</div>
+	   	</div>
+    </div>
+    </div>
+</div>

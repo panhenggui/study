@@ -1,0 +1,50 @@
+@font-face {
+    font-family: 'icomoon';
+    src:    url('../myfonts/icomoon.eot?1hv263');
+    src:    url('../myfonts/icomoon.eot?1hv263#iefix') format('embedded-opentype'),
+        url('../myfonts/icomoon.ttf?1hv263') format('truetype'),
+        url('../myfonts/icomoon.woff?1hv263') format('woff'),
+        url('../myfonts/icomoon.svg?1hv263#icomoon') format('svg');
+    font-weight: normal;
+    font-style: normal;
+}
+
+[class^="icon-"], [class*=" icon-"] {
+    /* use !important to prevent issues with browser extensions that change fonts */
+    font-family: 'icomoon' !important;
+    speak: none;
+    padding: 0 10px 0 10px;
+    font-style: normal;
+    font-weight: normal;
+    font-variant: normal;
+    text-transform: none;
+    line-height: 1;
+	font-size: 18px;
+
+    /* Better Font Rendering =========== */
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+}
+
+.icon-1account:before {
+    content: "\e900";
+}
+.icon-money:before {
+    content: "\e901";
+}
+.icon-system:before {
+    content: "\e902";
+}
+.icon-huilv:before {
+    content: "\e903";
+}
+.icon-huilv2:before {
+    content: "\e904";
+}
+.icon-data:before {
+    content: "\e905";
+}
+.icon-transaction:before {
+    content: "\e906";
+}
+

@@ -1,0 +1,196 @@
+<div class="row" ng-controller="HisFundNetValueController">
+	<!-- start 定义表单查询-->
+	<form class="form-12">
+		<div class="form-row">
+			<div class="row-col-one">
+				<label class="word-style">开始日期</label> <input
+					type="text"  onchange="" class="Wdate value-style word-style" onfocus="WdatePicker({lang:'zh-cn',dateFmt:'yyyyMMdd'})"
+					ng-model="queryEntity.beginDate" ng-readonly="true" id="settleDate"/>
+			</div>
+			<div class="row-col-one">
+				<label class="word-style">结束日期</label> <input
+					type="text"  onchange="" class="Wdate value-style word-style" onfocus="WdatePicker({lang:'zh-cn',dateFmt:'yyyyMMdd'})"
+					ng-model="queryEntity.endDate" ng-readonly="true" id="settleDate"
+					/>
+			</div>
+
+			<div class="row-col-one">
+				<label class="word-style">所属机构</label> <select
+					ng-model="queryEntity.instClientID"
+					class="value-style"  ng-disabled="noInst"
+					ng-options="op.instClientID as op.instClientAbbrName for op in instClientList"
+					ng-change="changeInstClient()">
+					<option value="">全部</option>
+				</select>
+			</div>
+
+			<div class="row-col-one">
+				<label class="word-style">产品</label> <select
+					ng-model="queryEntity.fundProductID" class="value-style"
+					ng-options="op.fundProductID  as op.instClientID+'_'+ op.fundProductID+'_'+op.shortProductName for op in queryFundProEntitys">
+					<option value="">全部</option>
+				</select>
+			</div>
+		</div>
+		<div class="btn-beyond-one-row">
+			<div class="form-group">
+				<button class="btn btn-query btn-word-two" id="bootbox-options1" ng-show="hisFundNetValue_query"
+					ng-click="find(queryEntity)" ng-disabled="isQuery" >查询</button>
+				<button class="btn btn-reset btn-beyond-two" id="bootbox-options2"
+					ng-click="exportExcelHFN(queryEntity)" ng-show="hisFundNetValue_export">导出excel</button>
+			</div>
+		</div>
+	</form>
+	<!--End 表单查询 -->
+
+	<!--PAGE CONTENT START-->
+	<div class="col-xs-12 clear-padding-right">
+        <div class="row">
+            <div class="col-xs-12 clear-padding-right">
+                <div>
+                    <table id="HisFundNetValue_dynamic_table" class="cell-border stripe" cellspacing="0" width="100%">
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!--PAGE CONTENT END-->	
+
+	<!-- 新增 修改 模态框（Modal） -->
+	<div class="modal fade" id="hisFundModal" tabindex="-1" role="dialog"
+		aria-labelledby="myModalLabel" aria-hidden="true"
+		data-backdrop="static" data-keyboard="false">
+		<div class="modal-dialog">
+			<div class="modal-content" style="width: 650px">
+				<div class="modal-header">
+					<button type="button" class="close" data-dismiss="modal"
+						aria-hidden="true">&times;</button>
+					<h4 class="modal-title" id="myModalLabel">资金账户信息维护</h4>
+				</div>
+				<div class="modal-body">
+					<!-- 添加表单内容-->
+					<form class="form-horizontal" role="form" name="capitalAccountForm"
+						novalidate>
+						<div class="panel panel-default">
+							<div class="panel-heading">
+								<h3 class="panel-title">基本信息</h3>
+							</div>
+							<div class="panel-body">
+								<div class="row">
+									<div class="col-xs-6">
+										<div class="row form-group">
+											<label for="fundProductType"
+												class="col-sm-4 control-label">机构代码<span
+												style="color: red;">*</span></label>
+											<div class="col-sm-8">
+												<select ng-model="capitalEntity.instClientID"
+													class="form-control two-columns-modal-input" ng-disabled="true"
+													class="form-control" id="instClientID" name="instClientID"
+													ng-change="isInstClientSelect(capitalEntity.instClientID)"
+													onkeydown="myKeyup(event,this)" tab="1"
+													ng-options="op.instClientID as op.instClientID+'_'+ op.instClientAbbrName for op in instClientlistEntitys">
+												</select>
+											</div>
+										</div>
+									</div>
+									<div class="col-xs-6">
+										<div class="row form-group">
+											<label for="settleDate"
+												class="col-sm-4 control-label">结算日期<span
+												style="color: red;">*</span></label>
+											<div class="col-sm-8">
+												<input type="text" class="form-control two-columns-modal-input"
+													id="settleDate" ng-disabled="true"
+													ng-model="capitalEntity.settleDate" forType="date"
+													name="settleDate" onkeydown="myKeyup(event,this)" tab="2">
+											</div>
+										</div>
+									</div>
+								</div>
+								<div class="row">
+									<div class="col-xs-6">
+										<div class="row form-group">
+											<label for="shortProductName"
+												class="col-sm-4 control-label">产品简称<span
+												style="color: red;">*</span></label>
+											<div class="col-sm-8">
+												<input type="text" class="form-control two-columns-modal-input"
+													id="shortProductName" placeholder="请输入账户名称"
+													ng-model="capitalEntity.shortProductName"
+													ng-disabled="true" name="shortProductName"
+													onkeydown="myKeyup(event,this)" tab="3">
+											</div>
+										</div>
+									</div>
+									<div class="col-xs-6">
+										<div class="row form-group">
+											<label for="fundNetValue"
+												class="col-sm-4 control-label">产品资产净值<span
+												style="color: red;">*</span></label>
+											<div class="col-sm-8">
+												<input type="text" class="form-control two-columns-modal-input"
+													id="fundNetValue" ng-model="capitalEntity.fundNetValue"
+													ng-pattern="/^\d{1,12}(\.\d{0,3})?$/" name="fundNetValue"
+													maxlength="16" required onkeydown="myKeyup(event,this)"
+													tab="4"> <span
+													ng-show="capitalAccountForm.fundNetValue.$dirty && capitalAccountForm.fundNetValue.$invalid"
+													style="color: red;">产品资产净值为必填项且最多12位整数和3位小数</span>
+											</div>
+										</div>
+									</div>
+								</div>
+								<div class="row">
+									<div class="col-xs-6">
+										<div class="row form-group">
+											<label for="unitNetValue"
+												class="col-sm-4 control-label">产品单位净值<span
+												style="color: red;">*</span></label>
+											<div class="col-sm-8">
+												<input type="text" class="form-control two-columns-modal-input"
+													id="unitNetValue" ng-model="capitalEntity.unitNetValue"
+													ng-pattern="/^\d{1,8}(\.\d{0,4})?$/" name="unitNetValue"
+													maxlength="13" required onkeydown="myKeyup(event,this)"
+													tab="5"> <span
+													ng-show="capitalAccountForm.unitNetValue.$dirty && capitalAccountForm.unitNetValue.$invalid"
+													style="color: red;">产品单位净值为必填项且最多8位整数和4位小数</span>
+											</div>
+										</div>
+									</div>
+									<div class="col-xs-6">
+										<div class="row form-group">
+											<label for="fundProductQuota"
+												class="col-sm-4 control-label">产品份额<span
+												style="color: red;">*</span></label>
+											<div class="col-sm-8">
+												<input type="text" class="form-control two-columns-modal-input"
+													id="fundProductQuota"
+													ng-model="capitalEntity.fundProductQuota"
+													ng-disabled="true" name="fundProductQuota"
+													onkeydown="myKeyup(event,this)" tab="6">
+											</div>
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+
+						<div>
+							<input type="hidden" ng-bind="capitalEntity.fundProductID">
+							<input type="hidden" ng-bind="capitalEntity.netDate"> <input
+								type="hidden" ng-bind="capitalEntity.netTime">
+						</div>
+					</form>
+					<!--End  添加表单内容-->
+				</div>
+				<div class="modal-footer">
+					<span class="btn btn-info btn-sm popover-info" data-rel="popover"
+						data-placement="bottom" title="" ng-click="capitalAccountForm.unitNetValue.$invalid || capitalAccountForm.fundNetValue.$invalid||save(capitalEntity)"
+						ng-disabled=" capitalAccountForm.unitNetValue.$invalid || capitalAccountForm.fundNetValue.$invalid">&nbsp;确定&nbsp;</span>
+					<span class="btn btn-close btn-sm popover-info" data-rel="popover"
+						data-placement="bottom" title="" data-dismiss="modal">&nbsp;取消&nbsp;</span>
+				</div>
+			</div>
+		</div>
+	</div>
+
+</div>

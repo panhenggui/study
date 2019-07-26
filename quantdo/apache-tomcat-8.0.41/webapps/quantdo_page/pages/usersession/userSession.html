@@ -1,0 +1,154 @@
+<link rel="stylesheet" href="dailysettle/dataToTrade.css"/>
+<div class="row" ng-controller="UserSessionController">
+    <!-- start 定义表单查询-->
+    <form class="form-12">
+		 <div class="form-row">
+
+			<div class="row-col-one" >
+				  <label class="word-style">开始日期</label>
+                <input type="text" onchange="" class="Wdate value-style word-style" onfocus="WdatePicker({lang:'zh-cn',dateFmt:'yyyyMMdd'})"
+                ng-model="queryEntity.startTime"   ng-readonly="true" id="startTime"  />
+			</div>
+			<div class="row-col-one" >
+				  <label class="word-style">结束日期</label>
+                  <input type="text" onchange="" class="Wdate value-style word-style" onfocus="WdatePicker({lang:'zh-cn',dateFmt:'yyyyMMdd'})"
+                  ng-model="queryEntity.endTime"   ng-readonly="true" id="endTime" />
+			</div>
+			
+			<div class="row-col-one" >
+				  <label class="word-style">机构代码</label>
+                 <select ng-model="queryEntity.brokerageFirmID" class="value-style" name="brokerageFirmID" ng-disabled="noInst"
+								ng-change="selectExchange(queryEntity.brokerageFirmID)"
+								ng-options="op.instClientID as op.instClientID + '-' + op.instClientAbbrName for op in instClientListEntitys">
+								<option value="">全部</option>
+							</select>
+			</div>
+			<div class="row-col-one" >
+				  <label class="word-style">用户代码</label>
+                 <select ng-model="queryEntity.userID" class="value-style" name="userID"
+								ng-options="op.userID as op.userID + '-' + op.userName for op in tradeUserListEntitys">
+								<option value="">全部</option>
+							</select>
+			</div>
+			<div class="row-col-one" >
+				  <label class="word-style">用户类型</label>
+                <select ng-model="queryEntity.userType" name="userType" class="value-style" ng-change="changRoleName(queryEntity.userType)"
+								ng-options="op.key as op.text for op in userTypeListEntitys">
+								<option value="">全部</option>
+							</select>
+			</div>
+			<div class="row-col-one" >
+				<label class="word-style">角色</label>
+                <select name="role" class="value-style" ng-model="queryEntity.role"
+                        	ng-options="op.id as op.roleName for op in roleListEntitys">
+                        	<option value="">全部</option>
+	            </select>
+			</div>
+			<div class="row-col-one" >
+				  <label class="word-style">登录次数 &nbsp;>=</label>
+                  <input type="text" class="value-style" ng-model="queryEntity.logintimes" name="logintimes"/>
+			</div>
+		</div>
+		<div class="btn-beyond-one-row" ng-show="userSession_query">
+			<button type="button" class="btn btn-query btn-word-two"   ng-click="find(queryEntity)" ng-disabled="isQuery">查询</button>
+    	</div>
+	</form>
+    
+    
+<!--End 表单查询 -->
+<div class="col-xs-12">
+        <div class="row">
+            <div class="col-xs-12">
+               <!--  <div class="table-body-scroll">
+					  <table class="cell-border stripe dataTable">
+	                    	<colgroup>
+	                    		<col style="width:10px;">
+	                    		<col style="width:100px;">
+	                    		<col style="width:50px;">
+	                    		<col style="width:50px;">
+	                    		<col style="width:100px;">
+	                    		<col style="width:50px;">
+	                    		<col style="width:50px;">
+	                    		<col style="width:100px;">
+	                    		<col style="width:150px;">
+	                    		<col style="width:150px;">
+	                    		<col style="width:110px;">
+	                    		<col style="width:230px;">
+	                    	</colgroup>
+	                        <thead>
+	                        <tr>
+	                            <th>序号</th>
+	                            <th>登录日期</th>
+	                            <th>所属机构</th>
+	                            <th>用户代码</th>
+	                            <th>用户名称</th>
+	                            <th>登录次数</th>
+	                            <th>用户类型</th>
+	                            <th>角色</th>
+	                            <th>登录IP</th>
+	                            <th>登录Mac</th>
+	                            <th>登录时间</th>
+	                            <th>产品信息</th>
+	                        </tr>
+	                        </thead>
+	                      </table>
+				</div> -->
+				<div class="table-body-scroll">
+					<table class="cell-border stripe dataTable angular-datatable">
+							<colgroup>
+	                    		<col style="width:10px;"/>
+	                    		<col style="width:100px;"/>
+	                    		<col style="width:100px;"/>
+	                    		<col style="width:100px;"/>
+	                    		<col style="width:100px;"/>
+	                    		<col style="width:100px;"/>
+	                    		<col style="width:100px;"/>
+	                    		<col style="width:100px;"/>
+	                    		<col style="width:100px;"/>
+	                    		<col style="width:100px;"/>
+	                    		<col style="width:110px;"/>
+	                    		<col style="width:100px;"/>
+	                    	</colgroup>
+	                    	 <thead>
+	                        <tr>
+	                            <th>序号</th>
+	                            <th>登录日期</th>
+	                            <th>所属机构</th>
+	                            <th>用户代码</th>
+	                            <th>用户名称</th>
+	                            <th>登录次数</th>
+	                            <th>用户类型</th>
+	                            <th>角色</th>
+	                            <th>登录IP</th>
+	                            <th>登录Mac</th>
+	                            <th>登录时间</th>
+	                            <th>产品信息</th>
+	                        </tr>
+	                        </thead>
+		                    <tbody>
+		                        <tr ng-repeat="listEntity in listEntitys">
+		                            <td class="center" ng-class="{'bg-even-color':listEntity.isEven,'bg-odd-color':listEntity.isOdd}">
+		                                {{($index+1)}}
+		                            </td>
+		                             <td ng-class="{'bg-even-color':listEntity.isEven,'bg-odd-color':listEntity.isOdd}" ng-bind="listEntity.settleDate"></td>
+		                            <td ng-class="{'bg-even-color':listEntity.isEven,'bg-odd-color':listEntity.isOdd}" style="vertical-align: middle;" rowspan="{{listEntity.spanNum}}" ng-show="listEntity.flag == true">{{transInstClient(listEntity.brokerageFirmID)}}</td>
+		                            <td ng-class="{'bg-even-color':listEntity.isEven,'bg-odd-color':listEntity.isOdd}" ng-bind="listEntity.userID" style="vertical-align: middle;" rowspan="{{listEntity.spanNum}}" ng-show="listEntity.flag == true"></td>
+		                            <td ng-class="{'bg-even-color':listEntity.isEven,'bg-odd-color':listEntity.isOdd}" ng-bind="listEntity.userName" style="vertical-align: middle;" rowspan="{{listEntity.spanNum}}" ng-show="listEntity.flag == true"></td>
+		                            <td ng-class="{'bg-even-color':listEntity.isEven,'bg-odd-color':listEntity.isOdd}" ng-bind="listEntity.spanNum" style="vertical-align: middle;" rowspan="{{listEntity.spanNum}}" ng-show="listEntity.flag == true"></td>
+		                            <td ng-class="{'bg-even-color':listEntity.isEven,'bg-odd-color':listEntity.isOdd}" style="vertical-align: middle;" rowspan="{{listEntity.spanNum}}" ng-show="listEntity.flag == true">{{transUserType(listEntity.userType)}}</td>
+		                            <td ng-class="{'bg-even-color':listEntity.isEven,'bg-odd-color':listEntity.isOdd}" style="vertical-align: middle;" rowspan="{{listEntity.spanNum}}" ng-show="listEntity.flag == true">{{transRole(listEntity.role)}}</td>
+		                            <td ng-class="{'bg-even-color':listEntity.isEven,'bg-odd-color':listEntity.isOdd}" ng-bind="listEntity.ipAddress"></td>
+		                            <td ng-class="{'bg-even-color':listEntity.isEven,'bg-odd-color':listEntity.isOdd}" ng-bind="listEntity.macAddress"></td>
+		                            <td ng-class="{'bg-even-color':listEntity.isEven,'bg-odd-color':listEntity.isOdd}" ng-bind="listEntity.loginTime"></td>
+		                            <td ng-class="{'bg-even-color':listEntity.isEven,'bg-odd-color':listEntity.isOdd}" ng-bind="listEntity.userProductInfo"></td>
+								</tr>
+		                    </tbody>
+	                     </table>
+                </div>
+            </div>
+        </div>
+    </div>
+   
+    <!-- PAGE CONTENT ENDS -->
+        
+</div><!-- /.row -->

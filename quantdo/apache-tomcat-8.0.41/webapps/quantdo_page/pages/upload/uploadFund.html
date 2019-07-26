@@ -1,0 +1,139 @@
+<!-- page specific plugin scripts -->
+
+<link rel="stylesheet" href="upload/uploadFund.css" />
+<!-- ajax layout which only needs content area -->
+<div class="row" ng-controller="uploadFundController">
+<form class="form-12">
+	<div class="form-row">
+	<div class="row-col-one" ng-show="uploadFund_import" style="margin-top:15px;margin-bottom:15px;margin-left:25px;">
+
+        <!--<div><label>导入日期:</label><input type="text" id="settleDate" forType="date" readonly="true" ng-model="startDate"></div>-->
+
+		 <div id="uploadFundloader">Upload</div>
+	</div>
+	
+	</div>
+	</form>
+	
+	<div class="col-xs-12 clear-padding-right">
+        <div class="row">
+            <div class="col-xs-12 clear-padding-right">
+                <div>
+                    <table id="uploadFund_dynamic_table" class="cell-border stripe" cellspacing="0" width="100%">
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+
+
+	<!-- <div class="col-xs-12">
+
+        <div><label>导入日期:</label><input type="text" id="settleDate" forType="date" readonly="true" ng-model="startDate"></div>
+		<br/>
+		<div id="uploadFundloader">Upload</div>
+
+		PAGE CONTENT ENDS
+	</div>/.col
+	 -->
+	<!-- <div class="row">
+			<div class="col-xs-12">
+
+				<div class="clearfix">
+					<div class="pull-right tableTools-container"></div>
+				</div>
+				div.table-responsive
+
+				div.dataTables_borderWrap
+				<div>
+					<table id="dynamic-table" class="table table-striped table-bordered table-hover" datatable="ng">
+						<thead>
+							<tr>
+								<th class="center">
+									<label class="pos-rel">
+										<span class="ace" />
+										<span class="lbl"></span>
+									序号</label>
+								</th>
+								<th>所属机构</th>
+								<th>交易员代码</th>
+								<th class="hidden-180">资金账号</th>
+								<th>上日结算准备金</th>
+								<th class="hidden-480">上日可用资金</th>
+								<th class="hidden-480">入金</th>
+								<th class="hidden-480">出金</th>
+								<th class="hidden-480">保证金</th>
+								<th class="hidden-480">权利金收支</th>
+								<th class="hidden-480">手续费</th>
+								<th class="hidden-480">冻结保证金</th>
+								<th class="hidden-480">冻结权利金收支</th>
+								<th class="hidden-480">冻结手续费</th>
+								<th class="hidden-480">平仓盈亏</th>
+								<th class="hidden-480">持仓盈亏</th>
+								<th class="hidden-480">可用资金</th>
+								<th class="hidden-480">结算准备金</th>
+								<th class="hidden-480">多头保证金</th>
+                                <th class="hidden-480">空头保证金</th>
+								<th class="hidden-480">多头冻结保证金</th>
+                                <th class="hidden-480">空头冻结保证金</th>
+                                <th class="hidden-480">动态权益</th>
+                                <th class="hidden-480">风险度</th>
+                                <th class="hidden-480">其他费用</th>
+                                <th class="hidden-480">质押金额</th>
+                                <th class="hidden-480">币种</th>
+                                <th class="hidden-480">总冻结持仓</th>
+                                <th class="hidden-480">进入出入金</th>
+                                <th class="hidden-480">当日释放保证金</th>
+							</tr>
+						</thead>
+
+						<tbody>
+							<tr ng-repeat="tradeEntity in tradeEntitys">
+								<td class="center">
+									{{($index+1)}}
+								</td>
+								<td  class="hidden-480" >{{transInstClient(tradeEntity.brokerageFirmID)}}</td>
+								
+								<td class="hidden-480">{{tradeEntity.traderID}}</td>
+								<td class="hidden-480">{{tradeEntity.accountID}}</td>
+								<td class="hidden-480">{{tradeEntity.preBalance}}</td>
+								<td class="hidden-480">{{tradeEntity.preAvailable}}</td>
+								<td class="hidden-480">{{tradeEntity.deposit}}</td>
+								<td class="hidden-480">{{tradeEntity.withdraw}}</td>
+								<td class="hidden-480">{{tradeEntity.margin}}</td>
+								<td class="hidden-480">{{tradeEntity.premium}}</td>
+								<td class="hidden-480">{{tradeEntity.fee}}</td>
+								<td class="hidden-480">{{tradeEntity.frozenMargin}}</td>
+								<td class="hidden-480">{{tradeEntity.frozenPremium}}</td>
+								<td class="hidden-480">{{tradeEntity.frozenFee}}</td>
+								<td class="hidden-480">{{tradeEntity.closeProfit}}</td>
+                                <td class="hidden-480">{{tradeEntity.positionProfit}}</td>
+                                <td class="hidden-480">{{tradeEntity.available}}</td>
+                                <td class="hidden-480">{{tradeEntity.balance}}</td>
+                                <td class="hidden-480">{{tradeEntity.longMargin}}</td>
+                                <td class="hidden-480">{{tradeEntity.shortMargin}}</td>
+                                <td class="hidden-480">{{tradeEntity.longFrozenMargin}}</td>
+                                <td class="hidden-480">{{tradeEntity.shortFrozenMargin}}</td>
+                                <td class="hidden-480">{{tradeEntity.dynamicRights}}</td>
+                                <td class="hidden-480">{{tradeEntity.risk}}</td>
+                                <td class="hidden-480">{{tradeEntity.otherFee}}</td>
+                                <td class="hidden-480">{{tradeEntity.mortgage}}</td>
+                                <td class="hidden-480">{{tradeEntity.currency}}</td>
+                                <td class="hidden-480">{{tradeEntity.totalFrozenPos}}</td>
+                                <td class="hidden-480">{{tradeEntity.todayInOut}}</td>
+                                <td class="hidden-480">{{tradeEntity.releaseMargin}}</td>
+							</tr>
+
+						</tbody>
+					</table>
+
+				</div>
+
+			</div>
+		</div> -->
+	
+</div><!-- /.row -->
+
+
+

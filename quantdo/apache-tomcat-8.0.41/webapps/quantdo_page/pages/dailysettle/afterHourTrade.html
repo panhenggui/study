@@ -1,0 +1,137 @@
+<link rel="stylesheet" href="dailysettle/afterHourTrade.css" />
+
+<div class="row" ng-controller="AfterHourTradeController">
+	<!-- start 定义表单查询-->
+	<form class="form-12">
+		<div class="form-row">
+			<div class="alert alert-success" ng-show="resultInfo">成交单批量维护成功!</div>
+		</div>
+		<div class="form-row">
+			<div class="row-col-one">
+				<label class="word-style">所属机构</label>
+				<select ng-model="queryEntity.instClientID" class="value-style" ng-disabled="noInst"
+					ng-options="op.instClientID as op.instClientAbbrName for op in instClientList" ng-change="changeInstClient()">
+					<option value="">全部</option>
+				</select>
+			</div>
+			<div class="row-col-one">
+	        	<label class="word-style">资产单元</label>
+	            <select ng-model="queryEntity.subAccountId" class="value-style"
+	            	ng-options="op.subAccountID as op.instClientID+'_'+op.subAccountID for op in querySubCapitalAccounts">
+	                <option value="">全部</option>
+	            </select>
+	        </div>
+			<div class="row-col-one">
+				<label class="word-style">合约代码</label>
+				<input type="text" class="value-style" ng-model="queryEntity.instrumentId" />
+			</div>
+			<div class="row-col-one">
+                <label class="word-style">策略代码</label>
+                <select ng-model="queryEntity.strategyID" class="value-style" name="strategyID"
+					ng-options="op.strategyID as op.strategyID+'_'+op.strategyAbbrName for op in strategys" >
+					<option value="">全部</option>
+				</select>
+            </div>
+            <div class="row-col-one">
+                <label class="word-style">策略批次</label>
+                <input class="value-style" ng-model="queryEntity.strategyBatch" type="text" placeholder="请输入策略批次" />
+            </div>
+		</div>
+		<div class="btn-beyond-one-row">
+      		<button type="button" class="btn btn-query btn-word-two"  ng-show="afterHourTrade_query" ng-click="find()" ng-disabled="isQuery || beforeSettle">查询</button>
+      	    <input type="button" class="btn btn-reset btn-word-two" ng-show="afterHourTrade_update"  
+      	    	ng-click="initUpdateParam()"  class="btn btn-add btn-icon-two" value="批量维护" data-toggle='modal' ng-disabled="beforeSettle">
+    	</div>
+	</form>
+	<!--End 表单查询 -->
+
+	<!--PAGE CONTENT START-->
+	<div class="col-xs-12 clear-padding-right">
+        <div class="row">
+            <div class="col-xs-12 clear-padding-right">
+                <div>
+                    <table id="afterHourTrade_dynamic_table" class="cell-border stripe" cellspacing="0" width="100%">
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!--PAGE CONTENT END-->	
+
+	<!-- 新增 修改 模态框（Modal） -->
+	<div class="modal fade" id="afterHourTradeModal" tabindex="-1" role="dialog"
+		aria-labelledby="myModalLabel" aria-hidden="true"
+		data-backdrop="static" data-keyboard="false">
+		<div class="modal-dialog">
+			<div class="modal-content" style="width:650px;">
+				<div class="modal-header">
+					<button type="button" class="close" data-dismiss="modal"
+						aria-hidden="true">&times;</button>
+					<h4 class="modal-title" id="myModalLabel">交易信息批量维护</h4>
+				</div>
+				<div class="modal-body">
+					<!-- 添加表单内容-->
+					<form class="form-horizontal" name="myForm" novalidate>
+						<div class="panel panel-default">
+							<div class="panel-heading">
+								<h3 class="panel-title">基本设置</h3>
+							</div>
+							<div class="panel-body">
+								<div class="row">
+									<!-- <div class="col-xs-6">
+										<div class="row form-group">
+											<label class="col-xs-6 control-label">资产单元<span
+												style="color: red;">*</span></label>
+
+											<div class="col-xs-6">
+												<select class=""
+												    ng-disabled="isUpdate" ng-model="ModalEntity.subAccountId" name="subAccountId" tab="515"
+													ng-options="op.subAccountID as op.instClientID+'_'+op.subAccountID for op in querySubCapitalAccounts"
+													onkeydown="tradeKeyup(event,this)">
+												</select>
+											</div>
+										</div>
+									</div> -->
+									<div class="col-xs-6">
+										<div class="row form-group">
+											<label class="col-xs-3 control-label">策略代码</label>
+
+											<div class="col-xs-6">
+												<select class=""
+													ng-model="ModalEntity.strategyID" name="strategyID"
+													ng-options="op.strategyID as op.strategyID+'_'+op.strategyAbbrName for op in strategysForModal"
+													onkeydown="tradeKeyup(event,this)">
+												</select>
+											</div>
+										</div>
+									</div>
+
+									<div class="col-xs-6">
+										<div class="row form-group">
+											<label class="col-xs-3 control-label">策略批次</label>
+
+											<div class="col-xs-6">
+												<input class="form-control two-columns-modal-input" type="text" placeholder="请输入策略批次"
+												    ng-model="ModalEntity.strategyBatch" name="strategyBatch" maxlength="20" 
+													onkeydown="tradeKeyup(event,this)" /> 
+											</div>
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+					</form>
+					<!--End  添加表单内容-->
+				</div>
+				<div class="modal-footer">
+					<span class="btn btn-info btn-sm popover-info" data-rel="popover"data-placement="bottom" title="" 
+						ng-click="canClick || save(ModalEntity)" ng-disabled="canClick">&nbsp;确定&nbsp;</span>
+					<span class="btn btn-close btn-sm popover-info" data-rel="popover"
+						data-placement="bottom" title="" data-dismiss="modal">&nbsp;取消&nbsp;</span>
+				</div>
+			</div>
+		</div>
+	</div>
+	<!-- /.modal -->
+	
+</div>

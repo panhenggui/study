@@ -1,0 +1,293 @@
+<link rel="stylesheet" href="syspecial/leverageCalculatorPosition.css" />
+<div class="row" ng-controller="LeverageCalculatorPositionController">
+    <form class="form-12">
+        <div class="row-col-one">
+            <label class="word-style">日期</label>                                           <!--OK-->
+            <input type="text" onchange="" class="Wdate value-style word-style" onfocus="WdatePicker({lang:'zh-cn',dateFmt:'yyyyMMdd'})"
+                   ng-model="queryEntity.tradeDate" ng-readonly="true" id="tradeDate" />
+        </div>
+        <div class="row-col-one" >
+            <label class="word-style">机构代码</label>                         <!--OK-->
+            <select ng-model="queryEntity.instClientID"
+                    ng-disabled="isInstClient " class="value-style" ng-change="changeInstClient()"
+                    ng-options="op.instClientID as op.instClientID+'_'+ op.instClientAbbrName for op in queryinstClientlists">     <!--这里会出现下拉栏-->
+                <option value="">全部</option>
+            </select>
+        </div>
+        <div class="row-col-one">
+            <label class="word-style">批次号</label>                    <!--这里设计为文本框的形式-->
+            <input type="text" class="value-style" ng-model="queryEntity.batch">
+        </div>
+        <div class="row-col-one" >
+            <label class="word-style">资产单元</label>                          <!--OK-->
+            <select ng-model="queryEntity.innerAccountID"  class="value-style"
+                    ng-options="op.subAccountID as op.instClientID+'_'+op.subAccountID+'_'+op.subAccountName for op in queryAccountEntitys">
+                <option value="">全部</option>
+            </select>
+        </div>
+        <div class="row-col-one" >
+            <label class="word-style">交易所</label>                          <!--OK-->
+            <select ng-model="queryEntity.exchID"  class="value-style"
+                    ng-options="op.exchID as op.exchID+'_'+op.exchName for op in exchangeData">
+                <option value="">全部</option>
+            </select>
+        </div>
+        <div class="row-col-one">
+            <label class="word-style">品种/合约代码</label>
+            <input type="text" class="value-style" ng-model="queryEntity.instrumentID">
+        </div>
+
+        <div class="row-col-one">
+            <label class="word-style">加仓/减仓</label>                                             <!--ok-->
+            <select ng-model="queryEntity.addorSub"  class="value-style"
+                    ng-options="op.key as op.text for op in addorsubs">
+                <option value="">全部</option>
+            </select>
+        </div>
+        <div class="btn-beyond-one-row"  ng-show="leverageCalculatorPosition_query">          <!--OK-->
+            <button type="button" class="btn btn-query btn-word-two"  ng-click="find()">查询</button>
+        </div>
+        <div class="row-form row-btn-operation"  ng-show="leverageCalculatorPosition_add">            <!--OK-->
+            <div class="row-btn-icon" >
+                <span class="btn-add-icon"></span>
+                <input type="button" class="btn btn-add btn-icon-two" value="新增" data-toggle='modal' ng-click="initParameter()">
+            </div>
+        </div>
+    </form>
+    <!--End 表单查询 -->
+    <!--PAGE CONTENT START-->
+    <div class="col-xs-12 clear-padding-right">
+        <div class="row">
+            <div class="col-xs-12 clear-padding-right">
+                <div>
+                    <table id="leverageCalculatorPosition_dynamic_table" class="cell-border stripe" cellspacing="0" width="100%">
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!--PAGE CONTENT END-->
+
+    <!--策略信息 新增和修改 模态框（Modal） -->
+    <div class="modal fade" id="leverageCalculatorPositionModal" tabindex="-1" role="dialog"
+         aria-labelledby="myModalLabel" aria-hidden="true"
+         data-backdrop="static" data-keyboard="false">
+        <div class="modal-dialog">
+            <div class="modal-content" style="width:650px">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal"
+                            aria-hidden="true">&times;</button>
+                    <h4 class="modal-title" id="myModalLabel">持仓变动表维护</h4>
+                </div>
+                <div class="modal-body">
+                    <!-- 添加表单内容-->
+                    <form class="form-horizontal" role="form" name="leverageCalculatorPositionForm" novalidate>
+                        <div class="panel panel-default panel-no-border">
+                            <div class="panel-body">
+                                <div class="row">
+                                    <div class="col-xs-6">
+                                        <div class="row form-group">
+                                            <label class="col-sm-4 control-label">日期<span style="color: red;">*</span></label>
+                                            <div class="col-sm-7">
+                                                <input  type="text"  class="form-control two-columns-modal-input"  onfocus="WdatePicker({lang:'zh-cn',dateFmt:'yyyyMMdd'})"
+                                                        placeholder="请选择日期"   ng-disabled="isUpdate"
+                                                        ng-model="modalEntity.tradeDate" name="tradeDate"
+                                                        maxlength="8" required />
+                                                <span ng-show="leverageCalculatorPositionForm.tradeDate.$dirty && leverageCalculatorPositionForm.tradeDate.$invalid"
+                                                    style="color: red;">日期为必填项</span>       <!--ng-readonly="true"-->
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-xs-6">
+                                        <div class="row form-group">       <!--OK-->
+                                            <label for="instClientID" class="col-sm-4 control-label">机构代码<span style="color: red;">*</span></label>
+                                            <div class="col-sm-7">
+                                                <select ng-model="modalEntity.instClientID" required class="form-control two-columns-modal-input"
+                                                        ng-disabled="isUpdate || isInstClient " class="form-control" required
+                                                        id="instClientID" name="instClientID" ng-change="changeInstClientModal()"
+                                                        ng-options="op.instClientID as op.instClientID+'_'+ op.instClientAbbrName for op in queryinstClientlists">
+                                                </select>
+                                                <span ng-show=" leverageCalculatorPositionForm.instClientID.$dirty &&  leverageCalculatorPositionForm.instClientID.$invalid"
+                                                      style="color: red;">机构代码为必填项</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-xs-6">
+                                        <div class="row form-group">
+                                            <label for="innerAccountID" class="col-sm-4 control-label">资产单元<span style="color: red;">*</span></label>
+                                            <div class="col-sm-7">
+                                                <select ng-model="modalEntity.innerAccountID"  class="form-control two-columns-modal-input"
+                                                        ng-disabled="isUpdate " class="form-control" id="innerAccountID" name="innerAccountID" required
+                                                        ng-options="op.subAccountID as op.instClientID+'_'+op.subAccountID+'_'+op.subAccountName for op in modalAccountEntitys">
+                                                </select>
+                                                <span ng-show="leverageCalculatorPositionForm.innerAccountID.$dirty && leverageCalculatorPositionForm.innerAccountID.$invalid"
+                                                      style="color: red;">资产单元为必填项</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-xs-6">
+                                        <div class="row form-group">
+                                            <label for="exchID"class="col-sm-4 control-label">交易所代码<span style="color: red;">*</span></label>
+                                            <div class="col-sm-7">
+                                                <select ng-model="modalEntity.exchID" id="exchID" name="exchID" ng-disabled="isUpdate"
+                                                        ng-options="op.exchID as op.exchID+'_'+op.exchName for op in exchangeData"
+                                                        class="form-control two-columns-modal-input"
+                                                        required ng-change="selectModalProduct(modalEntity.exchID)"
+                                                        onkeydown="myKeyup(event,this)" tab="1"></select>
+                                                <span ng-show=" leverageCalculatorPositionForm.exchID.$dirty &&  leverageCalculatorPositionForm.exchID.$invalid"
+                                                      style="color: red;">交易所代码为必填项</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-xs-6">
+                                        <div class="row form-group">
+                                            <label class="col-sm-4 control-label">品种代码<span style="color: red;">*</span></label>
+                                            <div class="col-sm-7">
+                                                <select ng-model="modalEntity.productID" id= "productID" name="productID" ng-disabled="isUpdate"
+                                                        class="form-control two-columns-modal-input"
+                                                        ng-change="selectFindInstrument(modalEntity.exchID,modalEntity.productID)"
+                                                        ng-options="op.productID as op.productID+'_'+op.productName for op in modalProducts">
+                                                </select>
+                                                <span ng-show=" leverageCalculatorPositionForm.productID.$dirty &&  leverageCalculatorPositionForm.productID.$invalid"
+                                                      style="color: red;">品种代码为必填项</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-xs-6">
+                                        <div class="row form-group">
+                                            <label for="instrumentID" class="col-sm-4 control-label">合约<span style="color: red;">*</span></label>
+                                            <div class="col-sm-7">
+                                                <select ng-model="modalEntity.instrumentID" required class="form-control two-columns-modal-input"
+                                                        ng-disabled="isUpdate " class="form-control" id="instrumentID" name="instrumentID"
+                                                        ng-options="op.instrumentID as op.instrumentID+'_'+op.instrumentName for op in modalInstruments">
+                                                </select>
+                                                <span ng-show=" leverageCalculatorPositionForm.instrumentID.$dirty &&  leverageCalculatorPositionForm.instrumentID.$invalid"
+                                                      style="color: red;">合约为必填项</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-xs-6">
+                                        <div class="row form-group">
+                                            <label class="col-sm-4 control-label">买卖方向<span style="color: red;">*</span></label>
+                                            <div class="col-sm-7">
+                                                <select ng-model="modalEntity.direction" ng-disabled="isUpdate" ng-options="op.key as op.text for op in tradeDirection"
+                                                        class="form-control two-columns-modal-input" onkeydown="myKeyup(event,this)" tab="2" required
+                                                        name="direction">
+                                                </select>
+                                                <span ng-show=" leverageCalculatorPositionForm.direction.$dirty &&  leverageCalculatorPositionForm.direction.$invalid"
+                                                      style="color: red;">买卖方向为必填项</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-xs-6">
+                                        <div class="row form-group">
+                                            <label class="col-sm-4 control-label">加仓/减仓<span style="color: red;">*</span></label>
+                                            <div class="col-sm-7">
+                                                <select ng-model="modalEntity.addorSub" ng-disabled="isUpdate" ng-options="op.key as op.text for op in addorsubs"
+                                                        class="form-control two-columns-modal-input" onkeydown="myKeyup(event,this)" tab="2" required
+                                                        name="addorSub">
+                                                </select>
+                                                <span ng-show=" leverageCalculatorPositionForm.addorSub.$dirty &&  leverageCalculatorPositionForm.addorSub.$invalid"
+                                                      style="color: red;">加减仓为必填项</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class ="row">
+                                    <div class="col-xs-6">
+                                        <div class="row form-group">
+                                            <label class="col-sm-4 control-label">倍数</label>
+                                            <div class="col-sm-7">
+                                                <input type="text" class="form-control two-columns-modal-input" id="Multiple" ng-disabled="true "
+                                                       ng-model="modalEntity.multiple" name="Multiple" maxlength="30"
+                                                       required  ng-pattern="/^[0-9]+(\.\d+)?$/">
+                                                <span ng-show=" leverageCalculatorPositionForm.Multiple.$dirty && leverageCalculatorPositionForm.Multiple.$invalid"
+                                                      style="color: red;">倍数必为非负数</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-xs-6">
+                                        <div class="row form-group">
+                                            <label class="col-sm-4 control-label">加减仓数量</label>
+                                            <div class="col-sm-7">
+                                                <input type="text" class="form-control two-columns-modal-input" id="calRealExchVolume" ng-disabled="true"
+                                                       ng-model="modalEntity.calRealExchVolume" name="calRealExchVolume" maxlength="30"
+                                                       required ng-pattern="/^[1-9]\d*$/">
+                                                <span ng-show=" leverageCalculatorPositionForm.calRealExchVolume.$dirty && leverageCalculatorPositionForm.calRealExchVolume.$invalid"
+                                                      style="color: red;">加减仓量必为正整数</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-xs-6">
+                                        <div class="row form-group">
+                                            <label class="col-sm-4 control-label">成交价格<span style="color: red;">*</span></label>
+                                            <div class="col-sm-7">
+                                                <input type="text" class="form-control two-columns-modal-input settle" id="exchPrice"
+                                                       ng-model="modalEntity.exchPrice" name="exchPrice" maxlength="16"
+                                                           required ng-pattern="/^([1-9]\d{0,8}|0)(\.\d{1,8})?$/" >
+                                                <span ng-show=" leverageCalculatorPositionForm.exchPrice.$dirty &&  leverageCalculatorPositionForm.exchPrice.$invalid"
+                                                      style="color: red;">成交价格为必填项，且最多为8位整数8位小数</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-xs-6">
+                                        <div class="row form-group">
+                                            <label class="col-sm-4 control-label">成交数量<span style="color: red;">*</span></label>
+                                            <div class="col-sm-7">
+                                                <input type="text" class="form-control two-columns-modal-input settle" id="exchVolume"
+                                                       ng-model="modalEntity.exchVolume" name="exchVolume" maxlength="6"
+                                                       required ng-pattern="/^[1-9]\d*$/">
+                                                <span ng-show=" leverageCalculatorPositionForm.exchVolume.$dirty &&  leverageCalculatorPositionForm.exchVolume.$invalid"
+                                                      style="color: red;">成交数量为必填项,最多6位且必为正整数</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-xs-6">           <!--成交倍数需要前端计算-->
+                                        <div class="row form-group">
+                                            <label class="col-sm-4 control-label">成交倍数<span style="color: red;">*</span></label>
+                                            <div class="col-sm-7">
+                                                <input type="text" class="form-control two-columns-modal-input" id="exchMultiple" ng-disabled="true "
+                                                       ng-model="modalEntity.exchMultiple" name="exchMultiple" maxlength="12">
+                                                <span ng-show=" leverageCalculatorPositionForm.exchMultiple.$dirty &&  leverageCalculatorPositionForm.exchMultiple.$invalid||isOK"
+                                                      style="color: red;">成交倍数为倍数为2位整数8位小数  </span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <input type="hidden" ng-bind="modalEntity.recordIndex">
+
+                            </div>
+                        </div>
+                    </form>
+
+                    <!--End  添加表单内容-->
+                </div>
+                <div class="modal-footer">
+                    <input class="btn btn-info btn-sm popover-info" data-rel="popover" type="button" value="确定"
+                           ng-disabled = "leverageCalculatorPositionForm.tradeDate.$invalid || leverageCalculatorPositionForm.instClientID.$invalid ||
+                           leverageCalculatorPositionForm.innerAccountID.$invalid || leverageCalculatorPositionForm.exchID.$invalid || leverageCalculatorPositionForm.productID.$invalid || leverageCalculatorPositionForm.instrumentID.$invalid
+                           || leverageCalculatorPositionForm.addorSub.$invalid || leverageCalculatorPositionForm.exchVolume.$invalid || leverageCalculatorPositionForm.exchPrice.$invalid ||
+                           leverageCalculatorPositionForm.exchMultiple.$invalid"
+                           data-placement="bottom" title="" ng-click="leverageCalculatorPositionForm.tradeDate.$invalid || leverageCalculatorPositionForm.instClientID.$invalid || leverageCalculatorPositionForm.innerAccountID.$invalid
+                           || leverageCalculatorPositionForm.exchID.$invalid ||
+                            leverageCalculatorPositionForm.exchVolume.$invalid || leverageCalculatorPositionForm.exchPrice.$invalid || leverageCalculatorPositionForm.exchMultiple.$invalid || leverageCalculatorPositionForm.addorSub.$invalid|| save(modalEntity)" tab="3111" onkeydown="myKeyup(event,this)">
+                    <input class="btn btn-close btn-sm popover-info" data-rel="popover" type="button" value="取消" tab="3112" onkeydown="myKeyup(event,this)"
+                           data-placement="bottom" title="" data-dismiss="modal">
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- modal end -->
+</div>
+

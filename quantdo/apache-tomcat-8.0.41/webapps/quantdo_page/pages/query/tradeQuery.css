@@ -1,0 +1,16 @@
+th{
+    text-align:center;
+    white-space:nowrap;
+}
+.col-sm-4{
+	white-space: nowrap;
+}
+.tradeQuery-select-style{
+    width:inherit;
+}
+.control-label{
+	white-space: nowrap;
+}
+#tradeDate{
+    width: 138px;
+}

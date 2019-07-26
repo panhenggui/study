@@ -1,0 +1,552 @@
+<link rel="stylesheet" href="dailysettle/trade.css" />
+<div class="row" ng-controller="OtherTradeMaintainController">
+    <!-- start 定义表单查询-->
+    <form class="form-12">
+        <div class="row">
+            <div class=col-xs-12>
+                <div class="alert alert-success" ng-show="resultInfo">成交单维护保存成功!</div>
+            </div>
+        </div>
+        <div class="form-row">
+
+
+            <div class="row-col-one">
+                <label class="word-style">资产类型</label>
+                <select ng-model="queryEntity.capitalType" name="" class="value-style" ng-change="changeTradeType()"
+                        ng-options="op.key as op.text for op in tradeMaintainType">
+                </select>
+            </div>
+            <div class="row-col-one">
+                <label class="word-style">机构</label>
+                <select ng-model="queryEntity.instClientID" ng-disabled="isInstClient" class="value-style" ng-change="changeInstClientID({'instClientID':queryEntity.instClientID})"
+                        ng-options="op.instClientID as op.instClientName for op in instClientlists">
+                    <option value="">全部</option>
+                </select>
+            </div>
+            <div class="row-col-one">
+                <label class="word-style">成交日期</label>
+                <input class="Wdate value-style word-style"   onfocus="WdatePicker({lang:'zh-cn',dateFmt:'yyyyMMdd'})" onChange="" type="text"
+                       ng-readonly="true" ng-model="queryEntity.tradeingDate" name="tradeingDate"/>
+            </div>
+
+            <div class="row-col-one">
+                <label class="word-style">资金账户</label>
+                <select ng-model="queryEntity.accountID" name="accountID"
+                        class="value-style" ng-change="changeAccountID(queryEntity.instClientID, queryEntity.accountID);">
+                    <option value="">全部</option>
+                    <option ng-repeat="account in Accounts" value="{{account.innerAccountID}}">
+                        {{account.innerAccountID}}_{{account.accountName}}</option>
+                </select>
+            </div>
+
+
+            <div class="row-col-one">
+                <label class="word-style">资产单元</label>
+                <select ng-model="queryEntity.subAccountID" name="subAccountID"
+                        class="value-style" ng-options="op.subAccountID as op.instClientID+'_'+op.subAccountID+'_'+op.subAccountName for op in subCapitalAccounts"
+                        ng-change="changeSubAccount(queryEntity.instClientID, queryEntity.subAccountID);" >
+                    <option value="">全部</option>
+                </select>
+            </div>
+
+            <div class="row-col-one">
+                <label class="word-style">交易员</label>
+                <select ng-model="queryEntity.userID" class="value-style"
+                        ng-options="op.userID as op.userID+'_'+op.userName for op in activeTraders">
+                    <option value="">全部</option>
+                </select>
+            </div>
+
+
+            <div class="row-col-one">
+                <label class="word-style">交易所</label>
+                <select ng-model="queryEntity.exchID" class="value-style"
+                        ng-change="selectExchange(queryEntity.exchangeId)"
+                        ng-options="op.exchID as op.exchID+'_'+op.exchName for op in exchangeDatas">
+                    <option value="">全部</option>
+                </select>
+            </div>
+
+            <div class="row-col-one">
+                <label class="word-style">买卖方向</label>
+                <select ng-model="queryEntity.direction" name="direction"
+                        class="value-style">
+                    <option value="">全部</option>
+                    <option ng-repeat="trader in tradeDirections"
+                            value="{{trader.key}}">{{trader.text}}</option>
+                </select>
+
+            </div>
+
+            <div class="row-col-one">
+                <label class="word-style" ng-show="queryEntity.capitalType == '7'">股票代码</label>
+                <label class="word-style" ng-show="queryEntity.capitalType == 'c'">合约代码</label>
+                <input class="value-style"
+                       ng-model="queryEntity.instrumentID" type="text" />
+            </div>
+
+
+            <div class="row-col-one">
+                <label class="word-style">成交编号</label>
+                <input class="value-style"
+                       ng-model="queryEntity.tradeID" type="text" />
+
+
+            </div>
+        </div>
+        <div class="btn-beyond-one-row" ng-show="otherTradeMaintain_query">
+            <button type="button" class="btn btn-query btn-word-two"  ng-click="find(queryEntity)"> 查询</button>
+        </div>
+
+        <div class="row-form row-btn-operation" ng-show="otherTradeMaintain_add">
+            <div class="row-btn-icon">
+                <span class="btn-add-icon"></span>
+                <button class="btn btn-add btn-icon-two" ng-click="initParameter()" data-toggle="modal">新增</button>
+            </div>
+        </div>
+    </form>
+    <!--End 表单查询 -->
+
+    <!-- PAGE CONTENT STARTS -->
+    <div class="col-xs-12 clear-padding-right">
+        <div class="row">
+            <div class="col-xs-12 clear-padding-right">
+                <div>
+                    <table id="otherTradeMaintainStock_dynamic_table" class="cell-border stripe" cellspacing="0" width="100%" ng-show="showStock">
+                    </table>
+                    <table id="otherTradeMaintainForward_dynamic_table" class="cell-border stripe" cellspacing="0" width="100%" ng-show="showForward">
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <!-- 新增 修改 模态框（Modal） -->
+    <div class="modal fade" id="otherTradeMaintainModal" tabindex="-1" role="dialog"
+         aria-labelledby="myModalLabel" aria-hidden="true"
+         data-backdrop="static" data-keyboard="false">
+        <div class="modal-dialog modal-width">
+            <div class="modal-content modal-width">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal"
+                            aria-hidden="true">&times;</button>
+                    <h4 class="modal-title" id="myModalLabel">其他资产类型成交信息维护</h4>
+                </div>
+                <div class="modal-body">
+                    <!-- 添加表单内容-->
+                    <form class="form-horizontal" name="myForm" novalidate>
+
+                        <div class="row">
+                            <div class="col-xs-6">
+                                <div class="row form-group">
+                                    <label class="col-sm-4 control-label">资产类型</label>
+                                    <div class="col-sm-7">
+                                        <select class="form-control two-columns-modal-input" ng-model="ModalEntity.capitalType"   ng-disabled="isUpdate" name="capitalType" ng-change="changeCapitalType()"
+                                                ng-options="op.key as op.text for op in tradeMaintainType" required></select>
+                                        <span ng-show="myForm.capitalType.$dirty && myForm.capitalType.$invalid"
+                                                style="color: red;">资产类型必填</span>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="col-xs-6" >
+                                <div class="row form-group" ng-show="isUpdate"  >
+                                    <label class="col-sm-4 control-label">成交编号<span
+                                            style="color: red;">*</span></label>
+
+                                    <div class="col-sm-7">
+                                        <input class="form-control two-columns-modal-input" type="text" ng-model="ModalEntity.tradeID" style="width:170px;"
+                                               name="tradeID" maxlength="11" required
+                                                ng-readonly="isUpdate"/> <span
+                                            ng-show="myForm.tradeID.$dirty && myForm.tradeID.$invalid"
+                                            style="color: red;">成交编号为必填项，且为数字型，列：1234567890</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="panel panel-default" ng-show="editParams">
+                            <div class="panel-heading">
+                                <h3 class="panel-title">基本信息</h3>
+                            </div>
+                            <div class="panel-body">
+                                <div class="row">
+                                    <div class="col-xs-6">
+                                        <div class="row form-group">
+                                            <label class="col-sm-4 control-label">机构代码<span
+                                                    style="color: red;">*</span></label>
+
+                                            <div class="col-sm-7">
+                                                <select ng-model="ModalEntity.instClientID" name="instClientID" ng-disabled="isInstClient || isUpdate"
+                                                        ng-options="op.instClientID as op.instClientID+'_'+op.instClientName for op in instClientlists"
+                                                        class="form-control two-columns-modal-input" required  	ng-change="changeModelInstClientID({'instClientID':ModalEntity.instClientID}, callback1)"
+                                                        tab="511" onkeydown="tradeKeyup(event,this)"></select> <span
+                                                    ng-show="myForm.instClientID.$dirty && myForm.instClientID.$invalid"
+                                                    style="color: red;">机构代码为必填项</span>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="col-xs-6">
+                                        <div class="row form-group">
+                                            <label class="col-sm-4 control-label">成交日期<span style="color: red;">*</span></label>
+
+                                            <div class="col-sm-7">
+                                                <input  type="text" class="form-control two-columns-modal-input" onclick="WdatePicker({lang:'zh-cn',dateFmt:'yyyyMMdd'})"
+                                                        placeholder="请选择成交日期"
+                                                        ng-model="ModalEntity.tradeingDate" name="tradeingDate" maxlength="8" ng-disabled="isUpdate"
+                                                        onChange="" required/>
+                                                <span ng-show="myForm.tradeingDate.$dirty && myForm.tradeingDate.$invalid"
+                                                    style="color: red;">结算日期为必填项</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-xs-6">
+                                        <div class="row form-group">
+                                            <label class="col-sm-4 control-label">成交时间</label>
+
+                                            <div class="col-sm-7">
+                                                <input class="form-control two-columns-modal-input" type="text" placeholder="请输入成交时间"
+                                                       ng-pattern="/^(?:[01]\d|2[0-3])(?::[0-5]\d){2}$/" title="时间格式:hh:mm:ss"
+                                                       ng-model="ModalEntity.tradeingTime" name="tradeingTime" ng-readonly="isUpdate"
+                                                       maxlength="8" required/>
+                                                <span ng-show="myForm.tradeingTime.$dirty && myForm.tradeingTime.$invalid"
+                                                      style="color: red;">成交时间为必填项，时间格式为：hh:mm:ss，列：13:56:58</span>
+                                            </div>
+                                        </div>
+                                    </div>
+
+
+                                    <div class="col-xs-6">
+                                        <div class="row form-group">
+                                            <label class="col-sm-4 control-label">资金账户<span
+                                                    style="color: red;">*</span></label>
+
+                                            <div class="col-sm-7">
+                                                <select class="form-control two-columns-modal-input"
+                                                        ng-disabled="isUpdate"
+                                                        ng-model="ModalEntity.accountID" name="accountID" tab="515"
+                                                        ng-options=" account.innerAccountID as account.innerAccountID +'_'+ account.accountName for  account in modalAccounts"
+                                                        ng-change="changeModalAccountID(ModalEntity.instClientID, ModalEntity.accountID, callback1)"
+                                                        onkeydown="tradeKeyup(event,this)" required>
+                                                </select>
+                                                <span ng-show="myForm.accountID.$dirty && myForm.accountID.$invalid"
+                                                    style="color: red;">资金账户为必填项</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="row">
+
+                                    <div class="col-xs-6">
+                                        <div class="row form-group">
+                                            <label class="col-sm-4 control-label">资产单元<span
+                                                    style="color: red;">*</span></label>
+
+                                            <div class="col-sm-7">
+                                                <select class="form-control two-columns-modal-input"
+                                                        ng-disabled="isUpdate"
+                                                        ng-model="ModalEntity.subAccountID" name="subAccountID" tab="515"
+                                                        ng-change="changeModalSubAccount(ModalEntity.instClientID, ModalEntity.subAccountID, callback1)"
+                                                        ng-options=" op.subAccountID as op.subAccountID +'_'+ op.subAccountName for op in modalSubCapitalAccounts"
+                                                        onkeydown="tradeKeyup(event,this)" required>
+                                                </select>
+                                                <span ng-show="myForm.subAccountID.$dirty && myForm.subAccountID.$invalid"
+                                                      style="color: red;">资产单元为必填项</span>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="col-xs-6">
+                                        <div class="row form-group">
+                                            <label class="col-sm-4 control-label">交易员<span
+                                                    style="color: red;">*</span></label>
+                                            <div class="col-sm-7">
+                                                <select ng-model="ModalEntity.userID" name="userID" ng-disabled="isUpdate"
+                                                        ng-options="op.userID as op.userID+'_'+op.userName for op in modalActiveTraders"
+                                                        class="form-control two-columns-modal-input" required  ></select> <span
+                                                    ng-show="myForm.userID.$dirty && myForm.userID.$invalid"
+                                                    style="color: red;">交易员为必填项</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+
+                                <div class="row">
+                                    <div class="col-xs-6">
+                                        <div class="row form-group">
+                                            <label class="col-sm-4 control-label">交易所代码<span
+                                                    style="color: red;">*</span></label>
+
+                                            <div class="col-sm-7">
+                                                <select ng-model="ModalEntity.exchID" name="exchID"
+                                                        ng-options="op.exchID as op.exchID+'_'+op.exchName for op in exchangeDatas"
+                                                        class="form-control two-columns-modal-input" required
+                                                        ng-disabled="isUpdate"
+                                                        tab="512" onkeydown="tradeKeyup(event,this)"></select> <span
+                                                    ng-show="myForm.exchID.$dirty && myForm.exchID.$invalid"
+                                                    style="color: red;">交易所代码为必填项</span>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="col-xs-6">
+                                        <div class="row form-group">
+                                            <label class="col-sm-4 control-label" ng-show="ModalEntity.capitalType == 'c'">合约代码<span style="color: red;">*</span></label>
+                                            <label class="col-sm-4 control-label" ng-show="ModalEntity.capitalType == '7'">股票代码<span style="color: red;">*</span></label>
+                                            <div class="col-sm-7">
+                                                <input class="form-control two-columns-modal-input" type="text" placeholder=""
+                                                       ng-model="ModalEntity.instrumentID" name="instrumentID"
+                                                       maxlength="30" required tab="518"
+                                                       ng-disabled="isUpdate"
+                                                       onkeydown="tradeKeyup(event,this)" required /> <span
+                                                    ng-show="myForm.instrumentID.$dirty && myForm.instrumentID.$invalid"
+                                                    style="color: red;">合约代码为必填项</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="row">
+                                    <div class="col-xs-6">
+                                        <div class="row form-group">
+                                            <label class="col-sm-4 control-label">买卖方向<span
+                                                    style="color: red;">*</span></label>
+
+                                            <div class="col-sm-7">
+                                                <select ng-model="ModalEntity.direction" name="direction"
+                                                        ng-options="op.key as op.text for op in tradeDirections"
+                                                        class="form-control two-columns-modal-input" tab="519"
+                                                        ng-disabled="isUpdate"
+                                                        onkeydown="tradeKeyup(event,this)" required></select> <span
+                                                    ng-show="myForm.direction.$dirty && myForm.direction.$invalid"
+                                                    style="color: red;">买卖方向为必填项</span>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <!--<div class="col-xs-6" ng-show="!editForwardParams">
+                                        <div class="row form-group">
+                                            <label class="col-sm-4 control-label">成交数量<span
+                                                    style="color: red;">*</span></label>
+
+                                            <div class="col-sm-7">
+                                                <input class="form-control two-columns-modal-input" type="text" placeholder="请输入成交数量"
+                                                       ng-pattern="/^[1-9][0-9]{0,7}$/" ng-model="ModalEntity.volume"
+                                                       name="volume" maxlength="8" required tab="521"
+                                                       onkeydown="tradeKeyup(event,this)" /> <span
+                                                    ng-show="myForm.volume.$dirty && myForm.volume.$invalid"
+                                                    style="color: red;">成交数量为必填项，且为整数数字型，例：100</span>
+                                            </div>
+                                        </div>
+                                    </div>-->
+
+                                    <div class="col-xs-6" ng-show="editForwardParams">
+                                        <div class="row form-group">
+                                            <label class="col-sm-4 control-label">到期日<span
+                                                    style="color: red;">*</span></label>
+
+                                            <div class="col-sm-7">
+                                                <input class="form-control two-columns-modal-input" type="text" placeholder="请输入到期日"
+                                                       onclick="WdatePicker({lang:'zh-cn',dateFmt:'yyyyMMdd'})" onChange=""
+                                                       ng-model="ModalEntity.expirationDate" name="expirationDate"
+                                                       maxlength="23" required tab="520"
+                                                       onkeydown="tradeKeyup(event,this)" /> <span
+                                                    ng-show="myForm.expirationDate.$dirty && myForm.expirationDate.$invalid"
+                                                    style="color: red;">到期日为必填项</span>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="col-xs-6" ng-show="editStockParams">
+                                        <div class="row form-group">
+                                            <label class="col-sm-4 control-label">成交价格<span
+                                                    style="color: red;">*</span></label>
+
+                                            <div class="col-sm-7">
+                                                <input class="form-control two-columns-modal-input" type="text" placeholder="请输入成交价格"
+                                                       ng-pattern="/^\d{1,14}(\.\d{0,8})?$/"
+                                                       ng-model="ModalEntity.tradePrice" name="tradePrice"
+                                                       maxlength="23" required tab="520"
+                                                       onkeydown="tradeKeyup(event,this)" /> <span
+                                                    ng-show="myForm.tradePrice.$dirty && myForm.tradePrice.$invalid"
+                                                    style="color: red;">成交数量为必填项，且为浮点数字型，最多录入14位整数8位小数，例：12345678901234.66666666</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="row">
+                                    <div class="col-xs-6" ng-show="editForwardParams">
+                                        <div class="row form-group">
+                                            <label class="col-sm-4 control-label">远期价格<span style="color: red;">*</span></label>
+
+                                            <div class="col-sm-7">
+                                                <input class="form-control two-columns-modal-input" type="text" placeholder="请输入远期价格"
+                                                       ng-pattern="/^\d{1,14}(\.\d{0,8})?$/"
+                                                       ng-model="ModalEntity.forwardPrice" name="forwardPrice"
+                                                       maxlength="23" required tab="520"
+                                                       onkeydown="tradeKeyup(event,this)" /> <span
+                                                    ng-show="myForm.forwardPrice.$dirty && myForm.forwardPrice.$invalid"
+                                                    style="color: red;">成交数量为必填项，且为浮点数字型，最多录入14位整数3位小数，例：12345678901234.66666666</span>
+                                            </div>
+                                        </div>
+                                    </div>
+
+
+                                    <div class="col-xs-6">
+                                        <div class="row form-group">
+                                            <label class="col-sm-4 control-label">成交数量<span
+                                                    style="color: red;">*</span></label>
+
+                                            <div class="col-sm-7">
+                                                <input class="form-control two-columns-modal-input" type="text" placeholder="请输入成交数量"
+                                                       ng-pattern="/^[1-9][0-9]{0,7}$/" ng-model="ModalEntity.volume"
+                                                       name="volume" maxlength="8" required tab="521"
+                                                       onkeydown="tradeKeyup(event,this)" /> <span
+                                                    ng-show="myForm.volume.$dirty && myForm.volume.$invalid"
+                                                    style="color: red;">成交数量为必填项，且为整数数字型，例：100</span>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="col-xs-6" ng-show="editStockParams">
+                                        <div class="row form-group">
+                                            <label class="col-sm-4 control-label">佣金<span
+                                                    style="color: red;">*</span></label>
+
+                                            <div class="col-sm-7">
+                                                <input class="form-control two-columns-modal-input" type="text" placeholder="请输入佣金"
+                                                       ng-pattern="/^\d{1,14}(\.\d{0,8})?$/"
+                                                       ng-model="ModalEntity.commission" name="commission"
+                                                       maxlength="23" required tab="520"
+                                                       onkeydown="tradeKeyup(event,this)" /> <span
+                                                    ng-show="myForm.commission.$dirty && myForm.commission.$invalid"
+                                                    style="color: red;">成交数量为必填项，且为浮点数字型，最多录入14位整数8位小数，例：12345678901234.66666666</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="row" ng-show="editForwardParams">
+                                    <div class="col-xs-6">
+                                        <div class="row form-group">
+                                            <label class="col-sm-4 control-label">交易币种<span
+                                                    style="color: red;">*</span></label>
+
+                                            <div class="col-sm-7">
+                                                <select ng-model="ModalEntity.currency" name="currency"
+                                                        ng-options="op.key as op.text for op in currencys"
+                                                        class="form-control two-columns-modal-input" required
+                                                        tab="512" onkeydown="tradeKeyup(event,this)"></select>
+                                                <span ng-show="myForm.currency.$dirty && myForm.currency.$invalid"
+                                                    style="color: red;">交易币种为必填项</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="row" ng-show="editForwardParams">
+
+                                </div>
+                            </div>
+                        </div>
+
+                        <div>
+                            <input type="hidden" ng-bind="ModalEntity.recordIndex">
+                        </div>
+                    </form>
+                    <!--End  添加表单内容-->
+                </div>
+                <div class="modal-footer" ng-show="editStockParams">
+                    <button class="btn btn-info btn-sm popover-info" data-rel="popover"
+                            data-placement="bottom" title=""
+                            ng-click="myForm.capitalType.$invalid || myForm.instClientID.$invalid || myForm.tradeingDate.$invalid || myForm.tradeingTime.$invalid || myForm.accountID.$invalid
+                            || myForm.subAccountID.$invalid || myForm.userID.$invalid || myForm.exchID.$invalid || myForm.instrumentID.$invalid || myForm.direction.$invalid
+                            || myForm.volume.$invalid || myForm.tradePrice.$invalid || myForm.commission.$invalid || save(ModalEntity)"
+                            onkeydown="tradeKeyup(event,this);"
+                            ng-disabled="myForm.capitalType.$invalid || myForm.instClientID.$invalid || myForm.tradeingTime.$invalid || myForm.accountID.$invalid
+                            || myForm.subAccountID.$invalid || myForm.userID.$invalid || myForm.exchID.$invalid || myForm.instrumentID.$invalid || myForm.direction.$invalid
+                            || myForm.volume.$invalid || myForm.tradePrice.$invalid || myForm.commission.$invalid">&nbsp;确定&nbsp;</button>
+                    <button ng-show="!isUpdate" class="btn btn-info btn-sm popover-info" data-rel="popover"
+                            data-placement="bottom" title=""
+                            ng-click="myForm.capitalType.$invalid || myForm.instClientID.$invalid || myForm.tradeingDate.$invalid || myForm.tradeingTime.$invalid || myForm.accountID.$invalid
+                            || myForm.subAccountID.$invalid || myForm.userID.$invalid || myForm.exchID.$invalid || myForm.instrumentID.$invalid || myForm.direction.$invalid
+                            || myForm.volume.$invalid || myForm.tradePrice.$invalid || myForm.commission.$invalid || continueSaveTrade(ModalEntity)" tab="526"
+                            onkeydown="tradeKeyup(event,this);"
+                            ng-disabled="myForm.capitalType.$invalid || myForm.instClientID.$invalid || myForm.tradeingDate.$invalid || myForm.tradeingTime.$invalid || myForm.accountID.$invalid
+                            || myForm.subAccountID.$invalid || myForm.userID.$invalid || myForm.exchID.$invalid || myForm.instrumentID.$invalid || myForm.direction.$invalid
+                            || myForm.volume.$invalid || myForm.tradePrice.$invalid || myForm.commission.$invalid">&nbsp;继续增加&nbsp;</button>
+                    <button class="btn btn-close btn-sm popover-info" data-rel="popover"
+                            data-placement="bottom" title="" data-dismiss="modal">&nbsp;取消&nbsp;</button>
+                </div>
+                <div class="modal-footer" ng-show="editForwardParams">
+                    <button class="btn btn-info btn-sm popover-info" data-rel="popover"
+                            data-placement="bottom" title=""
+                            ng-click="myForm.capitalType.$invalid || myForm.instClientID.$invalid || myForm.tradeingDate.$invalid || myForm.tradeingTime.$invalid || myForm.accountID.$invalid
+                            || myForm.subAccountID.$invalid || myForm.userID.$invalid || myForm.exchID.$invalid || myForm.instrumentID.$invalid || myForm.direction.$invalid
+                            || myForm.volume.$invalid || myForm.currency.$invalid || myForm.expirationDate.$invalid || myForm.forwardPrice.$invalid || save(ModalEntity)"
+                            onkeydown="tradeKeyup(event,this);"
+                            ng-disabled="myForm.capitalType.$invalid || myForm.instClientID.$invalid || myForm.tradeingDate.$invalid || myForm.tradeingTime.$invalid || myForm.accountID.$invalid
+                            || myForm.subAccountID.$invalid || myForm.userID.$invalid || myForm.exchID.$invalid || myForm.instrumentID.$invalid || myForm.direction.$invalid
+                            || myForm.volume.$invalid || myForm.currency.$invalid || myForm.expirationDate.$invalid || myForm.forwardPrice.$invalid">&nbsp;确定&nbsp;</button>
+                    <button ng-show="!isUpdate" class="btn btn-info btn-sm popover-info" data-rel="popover"
+                            data-placement="bottom" title=""
+                            ng-click="myForm.capitalType.$invalid || myForm.instClientID.$invalid || myForm.tradeingDate.$invalid || myForm.tradeingTime.$invalid || myForm.accountID.$invalid
+                            || myForm.subAccountID.$invalid || myForm.userID.$invalid || myForm.exchID.$invalid || myForm.instrumentID.$invalid || myForm.direction.$invalid
+                            || myForm.volume.$invalid || myForm.currency.$invalid || myForm.expirationDate.$invalid || myForm.forwardPrice.$invalid ||continueSaveTrade(ModalEntity)" tab="526"
+                            onkeydown="tradeKeyup(event,this);"
+                            ng-disabled="myForm.capitalType.$invalid || myForm.instClientID.$invalid || myForm.tradeingDate.$invalid || myForm.tradeingTime.$invalid || myForm.accountID.$invalid
+                            || myForm.subAccountID.$invalid || myForm.userID.$invalid || myForm.exchID.$invalid || myForm.instrumentID.$invalid || myForm.direction.$invalid
+                            || myForm.volume.$invalid || myForm.currency.$invalid || myForm.expirationDate.$invalid || myForm.forwardPrice.$invalid">&nbsp;继续增加&nbsp;</button>
+                    <button class="btn btn-close btn-sm popover-info" data-rel="popover"
+                            data-placement="bottom" title="" data-dismiss="modal">&nbsp;取消&nbsp;</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!---->
+    <div class="modal fade" id="uploadModal" tabindex="-1" role="dialog"
+         aria-labelledby="myModalLabel" aria-hidden="true"
+         data-backdrop="static" data-keyboard="false">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal"
+                            aria-hidden="true">&times;</button>
+                    <h4 class="modal-title" id="uploadtxt">成交导入</h4>
+                </div>
+                <div class="modal-body">
+                    <!-- 添加表单内容-->
+                    <form class="form-horizontal" role="form" name="uploadForm"
+                          novalidate>
+                        <div class="form-group">
+                            <label class="col-sm-3 control-label upload_lable">结算日期<span
+                                    style="color: red;">*</span></label>
+
+                            <div class="col-xs-8">
+                                <input class="date-style"
+                                       style="padding-top: 0px; padding-bottom: 0px;" id="uploadDate"
+                                       type="text" forType="date" ng-readonly="true"
+                                       placeholder="请选择结算日期" ng-model="UploadEntity.uploadDate"
+                                       name="uploadDate" maxlength="8" required />
+                            </div>
+                        </div>
+                        <div class="form-group upload_wedge">
+                            <div id="fileuploader">upload</div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- /.modal -->
+</div>
+<!-- /.row -->
+

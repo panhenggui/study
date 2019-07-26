@@ -1,0 +1,36 @@
+.uploadCombPositionDetailproduct-left{
+    float: left;
+  /*  // width: 20%; */
+    border: 1px;
+    border-top: none;
+}
+.uploadCombPositionDetailproduct-right{
+    float: left;
+    width: 3000px;
+    border: 1px;
+    border-top: none;
+}
+.ajax-file-upload-container{
+	display: none; !important;
+}
+
+#uploadCombPositionDetail{
+    float: right;
+    margin-right: 600px;
+    margin-top: -16px;
+     line-height: 25px;
+    padding-left: 15px;
+    padding-right: 15px;
+}
+
+.ajax-file-upload{
+    background-color: #dbe1e4 !important;
+	border: 1px solid #bac0c4 !important;
+	color: #444 !important;
+	border-radius: 5px;
+}
+
+.ajax-file-upload:hover,.ajax-file-upload:active{
+    background-color: #717476 !important; 
+    color: #ffffff !important;
+}

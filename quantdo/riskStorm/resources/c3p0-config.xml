@@ -1,0 +1,38 @@
+<c3p0-config>
+	<default-config>
+		<property name="user">qdam</property>
+		<property name="password">qdam</property>
+		<property name="driverClass">com.mysql.jdbc.Driver</property>
+		<property name="jdbcUrl">jdbc:mysql://127.0.0.1:3306/qdam?autoReconnect=true&amp;useUnicode=true&amp;characterEncoding=UTF-8
+		</property>
+		<property name="initialPoolSize">1</property>
+		<property name="maxIdleTime">1</property>
+		<property name="maxPoolSize">10</property>
+		<property name="minPoolSize">1</property>
+	</default-config>
+	<named-config name="sso">
+		<property name="user">sso</property>
+		<property name="password">sso</property>
+		<property name="driverClass">com.mysql.jdbc.Driver</property>
+		<property name="jdbcUrl">jdbc:mysql://127.0.0.1:3306/sso?autoReconnect=true&amp;useUnicode=true&amp;characterEncoding=UTF-8
+		</property>
+		<property name="initialPoolSize">1</property>
+		<property name="maxIdleTime">1</property>
+		<property name="maxPoolSize">10</property>
+		<property name="minPoolSize">1</property>
+	</named-config>
+<!-- 
+ mysql主从连接配置
+	<named-config name="standard">
+		<property name="user">framework</property>
+		<property name="password">framework</property>
+		<property name="driverClass">com.mysql.jdbc.ReplicationDriver</property>
+		<property name="jdbcUrl">jdbc:mysql:replication://主Ip:port,从ip:port,从ip:port/framework?autoReconnect=true&amp;roundRobinLoadBalance=true&amp;useUnicode=true&amp;characterEncoding=UTF-8
+		</property>
+		<property name="initialPoolSize">10</property>
+		<property name="maxIdleTime">30</property>
+		<property name="maxPoolSize">100</property>
+		<property name="minPoolSize">10</property>
+	</named-config>
+ -->	
+</c3p0-config> 

@@ -1,0 +1,57 @@
+#seatUser_dynamic_table_wrapper td .seatUser_update_row{
+	width:70px;
+}
+
+.seatUser-update-row2 {
+	display: inline-block;
+	width: 40px;
+	height: 25px;
+	line-height: 25px;
+	color: #8e8e8e;
+	border: 1px solid #8e8e8e;
+	-webkit-border-radius: 3px;
+	-moz-border-radius: 3px;
+	border-radius: 3px;
+	margin-left:5px;
+	cursor: pointer;
+}
+
+
+#seatUser_passStrength{
+	height:6px;
+	width:120px;
+	border:1px solid #ccc;
+}
+.strengthLv1{
+	background:red;
+	height:6px;
+	width:40px;
+}
+.strengthLv2{
+	background:orange;
+	height:6px;
+	width:80px;
+}
+.strengthLv3{
+	background:green;
+	 height:6px;
+	 width:120px;
+}
+#passText{
+	text-align:center;
+}
+#seatUser_passStrengthag{
+	height:6px;
+	width:120px;
+	border:1px solid #ccc;
+}
+#seatUser_passStrengthtwo{
+	height:6px;
+	width:120px;
+	border:1px solid #ccc;
+}
+#seatUser_passStrengthtwoag{
+	height:6px;
+	width:120px;
+	border:1px solid #ccc;
+}

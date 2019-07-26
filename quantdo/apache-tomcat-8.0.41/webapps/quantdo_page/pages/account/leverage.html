@@ -1,0 +1,172 @@
+<div class="row" ng-controller="leverageController">
+    <!-- start 定义表单查询-->
+    <form class="form-12">
+    	<div class="form-row">
+		    	<div class="row-col-one" >
+		                <label class="word-style">品种</label>
+		                <input type="text" class="value-style" ng-model="queryEntity.productID" />
+		        </div>
+		    	<div class="row-col-one" >
+		                <label class="word-style">合约</label>
+		                <input type="text" class="value-style" ng-model="queryEntity.instrumentID" />
+		        </div>
+        </div>
+        <div class="btn-beyond-one-row" ng-show="leverage_query">
+      	      <button type="button" class="btn btn-query btn-word-two"  ng-click="find()"  ng-disabled="isQuery"> 查询</button>
+    	</div>
+    	<div class="row-form row-btn-operation" ng-show="leverage_import">
+          	<div class="row-btn-icon">
+               <input type="button"  data-target="#leverageUploadModal"  class="btn btn-reset btn-word-two" value="导入" data-toggle='modal' >
+           </div>
+        </div>
+    </form>
+    <!--End 表单查询 -->
+	
+	<!--PAGE CONTENT START-->
+	<div class="col-xs-12 clear-padding-right">
+        <div class="row">
+            <div class="col-xs-12 clear-padding-right">
+                <div>
+                    <table id="leverage_dynamic_table" class="cell-border stripe" cellspacing="0" width="100%">
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!--PAGE CONTENT END-->	
+        
+	<!-- 新增 修改 模态框（Modal） -->
+	<div class="modal fade" id="leverageModal" tabindex="-1" role="dialog"
+		aria-labelledby="myModalLabel" aria-hidden="true"
+		data-backdrop="static" data-keyboard="false">
+		<div class="modal-dialog modal-width">
+			<div class="modal-content modal-width">
+				<div class="modal-header">
+					<button type="button" class="close" data-dismiss="modal"
+						aria-hidden="true">&times;</button>
+					<h4 class="modal-title" id="myModalLabel">杠杆基数信息</h4>
+				</div>
+				<div class="modal-body">
+					<!-- 添加表单内容-->
+					<form class="form-horizontal" name="leverageForm" novalidate>
+						<div class="row">
+							<div class="col-xs-6">
+								<div class="row form-group">
+									<label class="col-xs-6 control-label label-style">资金账号/组<span style="color: red;">*</span></label>
+									<div class="col-xs-6">
+										<input type="text" ng-model="modalEntity.accountID" 
+											class="form-control" name="accountID" placeholder="请输入资金账号/组"
+											ng-disabled="isUpdate" required class="form-control two-columns-modal-input">
+									</div>
+								</div>
+							</div>
+							<div class="col-xs-6">
+								<div class="row form-group">
+									<label class="col-xs-6 control-label label-style">内外盘<span style="color: red;">*</span></label>
+									<div class="col-xs-6">
+										<select ng-model="modalEntity.leverageType" name="leverageType" 
+											ng-disabled="isUpdate" required class=""
+											ng-options="op.key as op.text for op in leverageTypes"></select>
+									</div>
+								</div>
+							</div>
+						</div>
+						
+						<div class="row">
+							<div class="col-xs-6">
+								<div class="row form-group">
+									<label class="col-xs-6 control-label label-style">维度<span style="color: red;">*</span></label>
+									<div class="col-xs-6">
+										<select ng-model="modalEntity.dimension" name="dimension" ng-disabled="isUpdate" required
+											ng-options="op.key as op.value for op in dimensions" class=""
+											ng-change="dimensionChange(modalEntity.dimension)"></select>
+									</div>
+								</div>
+							</div>
+							<div class="col-xs-6">
+								<div class="row form-group">
+									<label class="col-xs-6 control-label label-style">品种<span style="color: red;">*</span></label>
+									<div class="col-xs-6">
+										<input type="text" ng-model="modalEntity.productID" 
+											class="form-control two-columns-modal-input" name="productID" placeholder="请输入品种"
+											ng-disabled="isUpdate" required>
+											<span ng-show="leverageForm.productID.$dirty && leverageForm.productID.$invalid" 
+											style="color: red;">品种为必填项</span>											
+									</div>
+								</div>
+							</div>
+						</div>
+						
+						<div class="row">
+							<div class="col-xs-6">
+								<div class="row form-group">
+									<label class="col-xs-6 control-label label-style">合约<span ng-show="isSetInstrument" style="color: red;">*</span></label>
+									<div class="col-xs-6">
+										<input type="text" ng-model="modalEntity.instrumentID" 
+											class="form-control two-columns-modal-input" name="instrumentID" placeholder="请输入合约"
+											ng-disabled="isUpdate || !isSetInstrument" required>
+											<span ng-show="isSetInstrument && leverageForm.instrumentID.$dirty && leverageForm.instrumentID.$invalid" 
+											style="color: red;">合约为必填项</span>											
+									</div>
+								</div>
+							</div>
+							<div class="col-xs-6">
+								<div class="row form-group">
+									<label class="col-xs-6 control-label label-style">杠杆基数<span style="color: red;">*</span></label>
+									<div class="col-xs-6">
+										<input class="form-control two-columns-modal-input" type="text" placeholder="请输入杠杆基数"
+											ng-model="modalEntity.leverageBase" name="leverageBase" required
+											ng-pattern="/^\d{1,8}(\.\d{0,3})?$/" maxlength="12"/> 
+											<span ng-show="leverageForm.leverageBase.$dirty && leverageForm.leverageBase.$invalid" 
+											style="color: red;">杠杆基数为正浮点数字型，最多录入8位整数、3位小数，例：12345678.999</span>
+									</div>
+								</div>
+							</div>
+						</div>
+
+						<div>
+							<input type="hidden" ng-bind="modalEntity.recordIndex">
+						</div>
+					</form>
+					<!--End  添加表单内容-->
+				</div>
+				<div class="modal-footer">
+					<span class="btn btn-info btn-sm popover-info" data-rel="popover"
+						data-placement="bottom" title="" 
+						ng-click="leverageForm.productID.$invalid || (isSetInstrument && leverageForm.instrumentID.$invalid) || save(modalEntity)"
+						ng-disabled="leverageForm.productID.$invalid || (isSetInstrument && leverageForm.instrumentID.$invalid) 
+						|| leverageForm.leverageBase.$invalid">&nbsp;确定&nbsp;</span>
+					<span class="btn btn-close btn-sm popover-info" data-rel="popover"
+						data-placement="bottom" title="" data-dismiss="modal">&nbsp;取消&nbsp;</span>
+				</div>
+			</div>
+		</div>
+	</div>
+	<!-- /.modal -->
+	
+	<!-- 导入模态框 -->
+	<div class="modal fade" id="leverageUploadModal" tabindex="-1" role="dialog"
+     		aria-labelledby="myModalLabel" aria-hidden="true" data-backdrop="static" data-keyboard="false">
+	    <div class="modal-dialog">
+	        <div class="modal-content" style="height:120px;">
+	            <div class="modal-header">
+	                <button type="button" class="close"
+	                        data-dismiss="modal" aria-hidden="true">
+	                    &times;
+	                </button>
+	                <h4 class="modal-title" id="uploadtxt">
+	                    杠杆基数导入
+	                </h4>
+	            </div>
+	            <div class="modal-body">
+	                <!-- 添加表单内容-->
+	                <form class="form-horizontal" role="form" name="uploadForm" novalidate>
+	                    <div class="form-group upload_wedge" style="margin-left:10px;margin-top:10px">
+	                        <div id="leverageFileuploader">upload</div>
+	                    </div>
+	                </form>
+	            </div>
+	        </div>
+	    </div>
+	</div>
+</div><!-- /.row -->

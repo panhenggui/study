@@ -1,0 +1,172 @@
+<link rel="stylesheet" href="account/instParameter.css" />
+<div class="row" ng-controller="InstParameterController">
+	<!-- start 定义表单查询-->
+	<form class="form-12">
+	    <div class="row-col-one" >
+        	<label class="word-style">机构代码</label>
+            <select ng-model="queryEntity.instClientID" required 
+				ng-disabled="isInstClient " class="value-style"
+				ng-options="op.instClientID as op.instClientID+'_'+ op.instClientAbbrName for op in queryinstClientlists">
+				<option value="">全部</option>
+			</select>
+        </div>
+		<div class="btn-beyond-one-row"  ng-show="instParameter_query">
+      	      <button type="button" class="btn btn-query btn-word-two"  ng-click="find()"> 查询</button>
+    	</div>
+		<div class="row-form row-btn-operation"  ng-show="instParameter_add">
+          	<div class="row-btn-icon" >
+               <span class="btn-add-icon"></span>
+               <input type="button" class="btn btn-add btn-icon-two" value="新增" data-toggle='modal'
+                      data-target='#instParameterModal' ng-click="initParameter()">
+           </div>
+        </div>
+	</form>
+	<!--End 表单查询 -->
+	
+	
+	<!--PAGE CONTENT START-->
+	<div class="col-xs-12 clear-padding-right">
+        <div class="row">
+            <div class="col-xs-12 clear-padding-right">
+                <div>
+                    <table id="instParameter_dynamic_table" class="cell-border stripe" cellspacing="0" width="100%">
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!--PAGE CONTENT END-->
+
+	<!--机构参数管理 新增 修改 模态框（Modal） -->
+	<div class="modal fade" id="instParameterModal" tabindex="-1" role="dialog"
+		aria-labelledby="myModalLabel" aria-hidden="true"
+		data-backdrop="static" data-keyboard="false">
+		<div class="modal-dialog">
+			<div class="modal-content" style="width:650px">
+				<div class="modal-header">
+					<button type="button" class="close" data-dismiss="modal"
+						aria-hidden="true">&times;</button>
+					<h4 class="modal-title" id="myModalLabel">机构参数管理信息维护</h4>
+				</div>
+				<div class="modal-body">
+					<!-- 添加表单内容-->
+					<form class="form-horizontal" role="form" name="instParameterForm" novalidate>
+						<div class="row">
+							<div class="col-xs-6">
+								<div class="row form-group">
+									<label for="instClientID" class="col-sm-4 control-label">机构代码<span
+										style="color: red;">*</span></label>
+									<div class="col-sm-8">
+										<select ng-model="modalEntity.instClientID" required class="form-control two-columns-modal-input"
+											ng-disabled="isUpdate || isInstClient " class="form-control"
+											id="instClientID" name="instClientID" 
+											ng-change="changeInstClientAbbrName(modalEntity.instClientID)"
+											onkeydown="myKeyup(event,this)" tab="3101"
+											ng-options="op.instClientID as op.instClientID+'_'+ op.instClientAbbrName for op in queryinstClientlists">
+										</select> 
+										<span ng-show=" instParameterForm.instClientID.$dirty &&  instParameterForm.instClientID.$invalid" 
+											style="color: red;">机构代码为必填项</span>
+									</div>
+								</div>
+							</div>
+							<div class="col-xs-6">
+								<div class="row form-group">
+									<label for="instClientAbbrName"
+										class="col-sm-4 control-label">机构简称<span
+										style="color: red;">*</span></label>
+									<div class="col-sm-8">
+										<input type="text" class="form-control two-columns-modal-input" id="instClientAbbrName"
+											placeholder="请输入机构简称" ng-model="modalEntity.instClientAbbrName"
+											name="instClientAbbrName" maxlength="6" required ng-disabled="true"
+											onkeydown="myKeyup(event,this)" tab="3102"> <span
+											ng-show="instParameterForm.instClientAbbrName.$dirty && instParameterForm.instClientAbbrName.$invalid"
+											style="color: red;">机构简称为必填项</span>
+									</div>
+								</div>
+							</div>
+						</div>
+						<div class="row">
+							<div class="col-xs-6">
+								<div class="row form-group">
+									<label for="accountNumber"
+										class="col-sm-4 control-label control-label-more">资金账户最大数量限制<span
+										style="color: red;">*</span></label>
+									<div class="col-sm-8">
+										<input type="text" class="form-control two-columns-modal-input" id="accountNumber"
+											placeholder="请输入资金账户最大数量限制" ng-model="modalEntity.accountNumber"
+											name="accountNumber" maxlength="3" required ng-pattern="/^[0-9]+$/"
+											onkeydown="myKeyup(event,this)" tab="3103"> <span
+											ng-show="instParameterForm.accountNumber.$dirty && instParameterForm.accountNumber.$invalid"
+											style="color: red;">资金账户最大数量限制为必填项，且为自然数，零表示不限制!</span>
+									</div>
+								</div>
+							</div>
+							<div class="col-xs-6">
+								<div class="row form-group">
+									<label for="traderNumber"
+										class="col-sm-4 control-label control-label-more">交易员最大数量限制<span
+										style="color: red;">*</span></label>
+									<div class="col-sm-8">
+										<input type="text" class="form-control two-columns-modal-input" id="traderNumber"
+											placeholder="请输入交易员最大数量限制" ng-model="modalEntity.traderNumber"
+											name="traderNumber" maxlength="6" required ng-pattern="/^[0-9]+$/"
+											onkeydown="myKeyup(event,this)" tab="3105"> <span
+											ng-show="instParameterForm.traderNumber.$dirty && instParameterForm.traderNumber.$invalid"
+											style="color: red;">交易员最大数量限制为必填项，且为自然数，零表示不限制!</span>
+									</div>
+								</div>
+							</div>
+						</div>
+						<div class="row" ng-show ="isMom" >
+						<div class="col-xs-6">
+								<div class="row form-group">
+									<label for="subAccountNumber"
+										class="col-sm-4 control-label control-label-more">资产单元最大数量限制<span
+										style="color: red;">*</span></label>
+									<div class="col-sm-8">
+										<input type="text" class="form-control two-columns-modal-input" id="subAccountNumber"
+											placeholder="请输入资产单元最大数量限制" ng-model="modalEntity.subAccountNumber"
+											name="subAccountNumber" maxlength="4" required ng-pattern="/^[0-9]+$/"
+											onkeydown="myKeyup(event,this)" tab="3104"> <span
+											ng-show="instParameterForm.subAccountNumber.$dirty && instParameterForm.subAccountNumber.$invalid"
+											style="color: red;">资产单元最大数量限制为必填项，且为自然数，零表示不限制!</span>
+									</div>
+								</div>
+							</div>
+
+						</div>
+						<div class="row">
+							<div class="col-xs-6">
+								<div class="row form-group">
+									<label for="remark"
+										class="col-sm-4 control-label">备注</label>
+									<div class="col-sm-8">
+										<textarea class="form-control" id="remark" style="width: 435px; height: 50px; resize: none;"
+											placeholder="请输入备注" ng-model="modalEntity.remark"
+											name="remark" maxlength="255" tab="3106"
+											onkeydown="myKeyup(event,this)">
+										</textarea>
+									</div>
+								</div>
+							</div>
+						</div>
+						<input type="hidden" ng-bind="modalEntity.recordIndex">
+					</form>
+					<!--End  添加表单内容-->
+				</div>
+				<div class="modal-footer">
+					<input class="btn btn-info btn-sm popover-info" data-rel="popover" type="button" value="确定"
+						ng-disabled = "instParameterForm.instClientID.$invalid || instParameterForm.instClientAbbrName.$invalid || instParameterForm.accountNumber.$invalid 
+						|| (isMom && instParameterForm.subAccountNumber.$invalid ) || instParameterForm.traderNumber.$invalid"
+						data-placement="bottom" title="" ng-click="instParameterForm.instClientID.$invalid || instParameterForm.instClientAbbrName.$invalid 
+						|| instParameterForm.accountNumber.$invalid || ( isMom && instParameterForm.subAccountNumber.$invalid) || instParameterForm.traderNumber.$invalid 
+						|| save(modalEntity)" tab="3111" onkeydown="myKeyup(event,this)">
+					<input class="btn btn-close btn-sm popover-info" data-rel="popover" type="button" value="取消" tab="3112" onkeydown="myKeyup(event,this)"
+						data-placement="bottom" title="" data-dismiss="modal">
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<!-- modal end -->
+</div>

@@ -1,0 +1,57 @@
+.label-style{
+    width: 100px;
+    white-space: nowrap;
+}
+
+.operWFTrade-select-style{
+     width:inherit;
+}
+
+th{
+    text-align:center;
+    white-space:nowrap;
+}
+td{
+    text-align:center;
+    white-space:nowrap;
+}
+.modal-width{
+    width: 650px;
+    text-align:center;
+}
+
+.date-style{
+    padding-top: 0px;
+    padding-bottom: 0px;
+    width: 170px;
+}
+.closeMonitor{
+    background: #ffffff;
+    color: #B7B7B7;
+    border-radius: 10px;
+    line-height: 20px;
+    text-align: center;
+    height: 20px;
+    width: 20px;
+    font-size: 10px;
+    top: 9px;
+    right: 60px;
+    position: absolute;
+    cursor: pointer;
+    opacity: 0.6;
+}
+.closeMonitor::after {
+    content: "\2716";
+}
+.closeMonitor:hover{
+    background: #E6E6E6;
+    opacity: 1;
+    /*color: #ffffff;*/
+}
+.modal-content{
+	position:absolute;
+	top:50%;
+	left:50%;
+	margin-top:-120px;
+	margin-left:-620px;
+}

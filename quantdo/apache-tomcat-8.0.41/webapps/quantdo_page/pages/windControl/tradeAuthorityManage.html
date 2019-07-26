@@ -1,0 +1,38 @@
+<!-- 交易权限设置 -->
+<link href="windControl/tradeAuthorityManage.css" rel="stylesheet">
+<div ng-controller="tradeAuthorityManageController" style="width: 100%;">
+	<label class="detail-header">当前交易权限</label>
+ 	<div class="controlDetail">
+ 		<div class="detailRow" style="height:auto;">
+ 		        机构代码：<input type="text" ng-model="tradeAuthorityQueryEntity.brokerID">
+ 			投资者编号：<input type="text" ng-model="tradeAuthorityQueryEntity.traderID">
+ 			交易所：<input type="text" ng-model="tradeAuthorityQueryEntity.exchID" >
+ 			品种/合约：<input type="text" ng-model="tradeAuthorityQueryEntity.instrumentID" >
+ 			<input type="button" value="查询交易权限" class="mybtn smlbtn" title="查询交易权限" ng-click="queryTradeAuthority()">
+ 		</div>
+ 		<div id = "tradeManageOutID" style="margin-top:15px">
+ 		<div id = "tradeManageInnerID" class="detailRow">
+ 			<table id="tradeAuthorityManage_table" class="cell-border stripe" cellspacing="0" width="100%">
+	    	</table>
+ 		</div>
+ 		</div>
+ 	</div>
+ 	
+ 	<label class="detail-header">交易权限变更上场流水</label>
+ 	<div class="controlDetail">
+ 		<div class="detailRow" style="height:auto;">
+ 		        机构代码：<input type="text" ng-model="tradeAuthorityStreamQueryEntity.brokerID">
+ 			投资者编号：<input type="text" ng-model="tradeAuthorityStreamQueryEntity.traderID">
+ 			交易所：<input type="text" ng-model="tradeAuthorityStreamQueryEntity.exchID">
+ 			品种/合约：<input type="text" ng-model="tradeAuthorityStreamQueryEntity.instrumentID">
+ 			<input type="button" value="查询上场流水" class="mybtn smlbtn" title="查询上场流水" ng-click="queryTradeAuthorityStream()">
+ 		</div>
+ 		<div id="tradeManageOutStreamID" style="margin-top:15px">
+ 		<div id = "tradeManageInnerStreamID" class="detailRow">
+ 			<table id="tradeAuthorityManageStream_table" class="cell-border stripe" cellspacing="0" width="100%">
+	    	</table>
+ 		</div>
+ 		</div>
+ 	</div>
+</div>
+

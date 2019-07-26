@@ -1,0 +1,15 @@
+<!--  交易所报单频率控制 -->
+<link href="windControl/exchangeOrderControl.css" rel="stylesheet">
+<div ng-controller="exchangeOrderControlController" style="width: 100%;overflow: auto;">
+    <div style="height:20px;"></div>
+    <table id="riskExchOrderControl_table" class="cell-border stripe" cellspacing="0" width="100%"></table>
+     <div class="operation-table">
+          <div class="btn-add-left">
+          		<!-- 保存 -->
+              <input name="RiskExchangeOrderControlService.saveRiskExchangeOrderControl"  type="button"  ng-show = "isCanUser" value=&nbsp;&nbsp;&nbsp;保&nbsp;&nbsp;存&nbsp;&nbsp;&nbsp; class="backFilter myNewBtn" ng-click="saveRiskExchOrderControl()">
+              <!-- 重置 -->
+              <input name="RiskExchangeOrderControlService.saveRiskExchangeOrderControl"  type="button"  ng-show = "isCanUser" value=&nbsp;&nbsp;&nbsp;重&nbsp;&nbsp;置&nbsp;&nbsp;&nbsp; class="backFilter myNewBtn" ng-click="resetRiskExchOrderControl()">
+          </div>
+      </div>
+    
+</div>

@@ -1,0 +1,148 @@
+<link rel="stylesheet" href="query/operClientPositionQuery.css" />
+<title>客户实时账户资金查询</title>
+<div>
+	<ol class="breadcrumb">
+		<li><a>报表管理</a></li>
+		<li class="active">客户实时账户资金查询</li>
+	</ol>
+</div>
+<br>
+<div class="row" ng-controller="OperInvestorAccountQueryController">
+	<!-- start 定义表单查询-->
+	<form class="form-horizontal">
+		<div class="row">
+			<div class=col-xs-12>
+				<div class="alert alert-success" ng-show="resultFlag">
+					<span ng-bind="resultInfo"></span>
+				</div>
+			</div>
+		</div>
+		<div class="row">
+			<div class="col-xs-3" style="margin-left:-40px;">
+				<div class="form-group">
+					<label class="col-sm-5 control-label">经纪公司代码</label>
+
+					<div class="col-sm-5">
+						<input type="text" class="form-control"
+							ng-model="queryEntity.brokerageFirmID" />
+					</div>
+				</div>
+			</div>
+			<div class="col-xs-2">
+				<div class="form-group">
+					<label class="col-sm-5 control-label">交易员代码</label>
+
+					<div class="col-sm-5">
+						<input type="text" class="form-control"
+							ng-model="queryEntity.traderID" />
+					</div>
+				</div>
+			</div>
+			<div class="col-xs-2">
+				<div class="form-group">
+					<label class="col-sm-5 control-label">资金账号</label>
+
+					<div class="col-sm-5">
+						<input type="text" class="form-control"
+							ng-model="queryEntity.accountID" />
+					</div>
+				</div>
+			</div>			
+			<div class="col-xs-2">
+				<div class="form-group">
+					<button class="btn btn-success" id="bootbox-options1"
+						ng-click="find(queryEntity)" ng-disabled="isQuery">查询</button>
+				</div>
+			</div>
+		</div>
+	</form>
+	<!--End 表单查询 -->
+
+	<!--PAGE CONTENT -->
+	<div class="col-xs-12">
+		<div class="row">
+			<div class="col-xs-12">
+				<div class="clearfix">
+					<div class="pull-right tableTools-container"></div>
+				</div>
+				<div>
+					<table id="dynamic-table"
+						class="table table-striped table-bordered table-hover"
+						datatable="ng">
+						<thead>
+							<tr>
+								<th class="center"><label class="pos-rel"> <span
+										class="ace" /> <span class="lbl"></span>
+								序号</label></th>
+								<th class="hidden-180">经纪公司代码</th>
+								<th class="hidden-180">交易员代码</th>
+								<th class="hidden-180">资金账号</th>
+								<th class="hidden-180">上日结算准备金</th>
+								<th class="hidden-180">上日可用资金</th>
+								<th class="hidden-180">入金</th>
+								<th class="hidden-180">出金</th>
+								<th class="hidden-180">保证金</th>
+								<th class="hidden-480">权利金收支</th>
+								<th class="hidden-480">手续费</th>
+								<th class="hidden-480">冻结保证金</th>
+								<th class="hidden-480">冻结权利金收支</th>
+								<th class="hidden-480">冻结手续费</th>
+								<th class="hidden-480">平仓盈亏</th>
+								<th class="hidden-480">持仓盈亏</th>
+								<th class="hidden-480">可用资金</th>
+								<th class="hidden-480">结算准备金</th>
+								<th class="hidden-480">多头保证金</th>
+								<th class="hidden-480">空头保证金</th>
+								<th class="hidden-480">多头冻结保证金</th>
+								<th class="hidden-480">空头冻结保证金</th>
+								<th class="hidden-480">动态权益</th>
+								<th class="hidden-480">风险度</th>
+								<th class="hidden-480">其他费用</th>
+								<th class="hidden-480">质押金额</th>
+								<th class="hidden-480">币种</th>												
+							</tr>
+						</thead>
+
+						<tbody>
+							<tr ng-repeat="listEntity in listEntitys">
+								<td class="center">{{($index+1)}}</td>
+								<td ng-bind="listEntity.brokerageFirmID"></td>
+								<td ng-bind="listEntity.traderID"></td>
+								<td ng-bind="listEntity.accountID"></td>
+								<td ng-bind="listEntity.preBalance"></td>
+								<td ng-bind="listEntity.preAvailable"></td>
+								<td ng-bind="listEntity.deposit"></td>
+								<td ng-bind="listEntity.withdraw"></td>
+								<td ng-bind="listEntity.margin"></td>
+								<td ng-bind="listEntity.premium"></td>
+								<td ng-bind="listEntity.fee"></td>
+								<td ng-bind="listEntity.frozenMargin"></td>
+								<td ng-bind="listEntity.frozenPremium"></td>
+								<td ng-bind="listEntity.frozenFee"></td>
+								<td ng-bind="listEntity.closeProfit"></td>
+								<td ng-bind="listEntity.positionProfit"></td>
+								<td ng-bind="listEntity.available"></td>
+								<td ng-bind="listEntity.balance"></td>
+								<td ng-bind="listEntity.longMargin"></td>
+								<td ng-bind="listEntity.shortMargin"></td>
+								<td ng-bind="listEntity.longFrozenMargin"></td>
+								<td ng-bind="listEntity.shortFrozenMargin"></td>
+								<td ng-bind="listEntity.dynamicRights"></td>
+								<td ng-bind="listEntity.risk"></td>
+								<td ng-bind="listEntity.otherFee"></td>
+								<td ng-bind="listEntity.mortgage"></td>
+								<td ng-bind="listEntity.currency"></td>											
+							</tr>
+						</tbody>
+					</table>
+				</div>
+
+			</div>
+		</div>		 
+		<!-- PAGE CONTENT ENDS -->
+	</div>
+	<!-- /.col -->
+
+	 
+
+</div>

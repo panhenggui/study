@@ -1,0 +1,38 @@
+.fundProductRiskParam-label-style{
+    width: 150px;
+    white-space: nowrap;
+}
+.fundProductRiskParam-select-style{
+    width:170px;
+}
+.fundProductRiskParam-select-style1{
+    width:170px;
+    margin-left: 30px;
+}
+th{
+    text-align:center;
+    white-space:nowrap;
+}
+td{
+    text-align:center;
+    white-space:nowrap;
+}
+.fundProductRiskParam-radio-style1{
+	float:left;
+	margin : 10px 0 0 0 !important;
+	margin-left : 10px !important;
+}
+.fundRiskParam-control-label{
+	white-space: nowrap;
+	margin-right: -40px;
+	padding-top: 5px;
+}
+.fundrisk-date-style{
+	width:120px!important;
+}
+.fundrisk-time-style{
+	width:120px!important;
+}
+label{
+	white-space: nowrap;
+}

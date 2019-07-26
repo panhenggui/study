@@ -1,0 +1,148 @@
+.productRiskTable{
+    /*height: 500px;*/
+}
+.detail-header{
+    margin-top: 12px;
+    margin-bottom: -1px;
+    padding: 6px 8px;
+    font-family: monospace;
+    color: #2745ce;
+    border: 1px solid #B7C2F1;
+    border-bottom: none;
+    background-color: #f5f7fe;
+}
+.controlDetail{
+    display: inline-block;
+    width: 99%;
+    border: 1px solid #B7C2F1;
+}
+.detailRow{
+    height: 35px;
+    margin-left: 12px;
+    /*display: inline-block;*/
+}
+.product-time{
+    width: 120px !important;
+    margin-left: 5px;
+    margin-right: 5px;
+}
+.detail-text,.detail-select{
+    width: 60px !important;
+}
+.value-select{
+    width: 100px;
+}
+.detail-text,.detail-select,.value-select{
+    padding-left: 5px;
+}
+.detailRow,.aboutDetail{
+    margin-top: 12px;
+}
+.multi-label{
+    margin-right: 15px;
+    width: 110px !important;
+}
+.mysave{
+    margin-top: 2%;
+    margin-right: 2%;
+    margin-bottom: 2%;
+}
+.add-left{
+    float: left;
+}
+.deleteIndex{
+    -webkit-transition: 1s;
+    -moz-transition: 1s;
+    -ms-transition: 1s;
+    -o-transition: 1s;
+    transition: 1s;
+}
+.deleteIndex:hover{
+    -webkit-transform: scale(1.2);
+    -moz-transform: scale(1.2);
+    -ms-transform: scale(1.2);
+    -o-transform: scale(1.2);
+    transform: scale(1.2);
+}
+.detail-add{
+    display: block;
+    width: 72px;
+    padding: 4px 6px;
+    margin-top: -1px;
+    border: 1px solid #6477CC;
+    border-top: none;
+    background-color: #6477CC;
+    text-align: center;
+    color: #ffffff;
+    border-bottom-left-radius: 3px;
+    border-bottom-right-radius: 3px;
+}
+.addIndex{
+    margin-right: 12px;
+}
+.product-risk-left{
+    float: left;
+    /*width: 6%;*/
+    height: 800px;
+    overflow: auto;
+    margin-left: 12px;
+    border: 1px solid #B7C2F1;
+    border-top: none;
+}
+.product-risk-center{
+    float: left;
+    /*width: 11%;*/
+    padding-left: 1.5rem;
+    padding-right: 1.5rem;
+    border: 1px solid #B7C2F1;
+    border-left: none;
+    height: 800px;
+    overflow: auto;
+}
+.product-risk-right{
+    float: right;
+    /*width: 82%;*/
+}
+.product-risk-left span{
+    display: block;
+}
+.fund-name,.product-risk-left span{
+    line-height: 25px;
+    padding: 4px 6px;
+    /*font-size: 14px;*/
+    border-top: 1px solid #B7C2F1;
+    text-align: center;
+}
+.fund-name:last-child{
+    border-bottom: 1px solid #B7C2F1;
+}
+.fund-name a,.product-risk-left span{
+    color: #444;
+}
+.fund-name a:hover{
+    color: #2E4DD9;
+}
+.product-menus{
+    /*font-family: sans-serif, monospace;*/
+}
+.menu-title,.menu-li{
+    line-height: 25px;
+}
+.submenu-title{
+    margin-left: 1.6rem;
+}
+.last-menu{
+    margin-left: 3.2rem;
+}
+.menu-href{
+    color: #000;
+}
+.menu-href:hover{
+    color: #2948F4;
+}
+#indexDetail_table tbody tr td,#productRisk_table tbody tr td{
+    white-space: nowrap;
+}
+.mypercent{
+    margin-left: 5px;
+}

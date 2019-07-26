@@ -1,0 +1,197 @@
+<link rel="stylesheet" href="riskparam/revokeTradeLimit.css" />
+<div class="row" ng-controller="RevokeTradeLimitController">
+	<!-- start 定义表单查询-->
+	<form class="form-12">
+	    <div class="row">
+	        <div class=col-xs-12>
+	            <div class="alert alert-success" ng-show="resultInfo">报撤单比例设置保存成功!</div>
+	        </div>
+	    </div>
+	    <div class="form-row">
+	    	<div class="row-col-one"  >
+				<label class="word-style">所属机构</label>
+	            <select ng-model="queryEntity.instClientID" class="value-style" ng-disabled="noInst"
+					ng-options="op.instClientID as op.instClientAbbrName for op in instClientList">
+					<option value="">全部</option>
+				</select>
+			</div>
+	    	<div class="row-col-one">
+	        	<label class="word-style">交易所代码</label>
+	            	<select ng-model="queryEntity.exchID" class="value-style"  ng-change="changeProductID()"
+	                	ng-options="op.exchID as op.exchID+'_'+op.exchName for op in exchangeDatas">
+	                <option value="">全部</option>
+	            </select>
+	        </div>
+	        <div class="row-col-one">
+	        	<label class="word-style">品种代码</label>               
+	            <select ng-model="queryEntity.productID" class="value-style"
+	            	ng-options="op.productID as op.productID+'_'+op.productName for op in productDatas">
+	                <option value="">全部</option>
+	            </select>
+		    </div>    
+	    </div>
+	    	
+	    <div class="btn-beyond-one-row">
+	    	<button type="button" class="btn btn-query btn-word-two"  ng-show="revokeTradeLimit_query"  ng-click="find(queryEntity)" ng-disabled="isQuery"> 查询</button>
+	    </div>
+		<div class="row-form row-btn-operation" ng-show="revokeTradeLimit_add">
+		    <div class="row-btn-icon">
+		        <span class="btn-add-icon"></span>
+				<button class="btn btn-add btn-icon-two" id="bootbox-options2" ng-click="initParameter()" 
+					data-toggle="modal">新增</button>
+			</div>
+	    </div>
+	</form>
+	<!--End 表单查询 -->
+
+	<!--PAGE CONTENT -->
+
+	<div class="col-xs-12 clear-padding-right">
+        <div class="row">
+            <div class="col-xs-12 clear-padding-right">
+                <div>
+                    <table id="revokeTradeLimit_dynamic_table" class="cell-border stripe" cellspacing="0" width="100%">
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+<!-- /.col -->
+
+<!-- 新增 修改 模态框（Modal） -->
+	<div class="modal fade" id="revokeTradeLimitModal" tabindex="-1" role="dialog"
+	     aria-labelledby="myModalLabel" aria-hidden="true" data-backdrop="static" data-keyboard="false">
+		<div class="modal-dialog" >
+			<div class="modal-content"   style="width:800px">
+				<div class="modal-header">
+	    			<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+	    			<h4 class="modal-title" id="myModalLabel">报撤单比例设置</h4>
+				</div>
+				<div class="modal-body">
+				<!-- 添加表单内容-->
+					<form class="form-horizontal" role="form" name="myForm" novalidate>
+						<div class="panel panel-default panel-no-border">
+							<div class="panel-body">
+								<div class="row">
+									<div class="col-xs-6">
+								        <div class="row form-group">
+								            <label class="col-sm-4 control-label">机构代码<span style="color: red;">*</span></label>
+								
+								            <div class="col-sm-8">
+								                <select ng-model="ModalEntity.instClientID" name="instClientID" ng-disabled="isUpdate || noInst"
+								                    ng-options="op.instClientID as op.instClientAbbrName for op in instClientList"
+								                    class="form-control two-columns-modal-input" 
+								                    required onkeydown="myKeyup(event,this)" tab="1"></select>
+								                <span ng-show=" myForm.instClientID.$dirty &&  myForm.instClientID.$invalid"
+													style="color: red;">机构代码为必填项</span>
+								            </div>
+								        </div>
+								    </div>
+									<div class="col-xs-6">
+								        <div class="row form-group">
+								            <label class="col-sm-4 control-label">交易所代码<span style="color: red;">*</span></label>
+								
+								            <div class="col-sm-8">
+								                <select ng-model="ModalEntity.exchID" name="exchID" ng-disabled="isUpdate"
+								                    ng-options="op.exchID as op.exchID+'_'+op.exchName for op in exchangeDatas"
+								                    class="form-control two-columns-modal-input" 
+								                    required ng-change="changeModalProductID(ModalEntity.exchID);"
+								                    onkeydown="myKeyup(event,this)" tab="1"></select>
+								                <span ng-show=" myForm.exchID.$dirty &&  myForm.exchID.$invalid"
+													style="color: red;">交易所代码为必填项</span>
+								            </div>
+								        </div>
+								    </div>
+								</div>
+							    <div class="row">
+							    	<div class="col-xs-6">
+								        <div class="row form-group">
+								            <label class="col-sm-4 control-label">品种代码</label>
+								
+								            <div class="col-sm-8">
+								                <select ng-model="ModalEntity.productID" ng-options="op.productID as op.productID+'_'+op.productName for op in products"
+								                    class="form-control two-columns-modal-input"  onkeydown="myKeyup(event,this)" tab="2" 
+								                    name="productID" ng-disabled="isUpdate">
+								                    <option value="">全部</option>
+								                </select>
+								            </div>
+								        </div>
+								    </div>
+								    <div class="col-xs-6">
+								        <div class="row form-group">
+								            <label class="col-sm-4 control-label">合约类别</label>
+								
+								            <div class="col-sm-8">
+								                <select ng-model="ModalEntity.productType" ng-options="op.key as op.text for op in productTypes"
+								                    class="form-control two-columns-modal-input"  onkeydown="myKeyup(event,this)" tab="2" 
+								                    name="productType" ng-disabled="isUpdate || !isFour">
+								                </select>
+								            </div>
+								        </div> 
+								    </div>
+								</div>
+								<div class="row">
+									<div class="col-xs-6">
+								        <div class="row form-group">
+								            <label class="col-sm-4 control-label">合约报单手数上限</label>
+								
+								            <div class="col-sm-6">
+								                <input type="text" class="form-control two-columns-modal-input" id="maxTradeLimit" 
+								                    ng-model="ModalEntity.maxTradeLimit" name="maxTradeLimit" maxlength="8" ng-pattern="/^\d{0,8}$/">
+								                <span ng-show="myForm.maxTradeLimit.$dirty && myForm.maxTradeLimit.$invalid" 
+													style="color: red;">最大报单上限最大为8位整数，可以为空</span>
+								            </div>
+								            <label class="col-sm-2 control-label" style="position:relative;left:-40px;">手/每笔</label>
+								        </div>
+								    </div>
+								    <div class="col-xs-6">
+								        <div class="row form-group">
+								            <label class="col-sm-4 control-label">合约撤单笔数上限</label>
+								
+								            <div class="col-sm-6">
+								                <input type="text" class="form-control two-columns-modal-input" id="maxRevokeLimit" 
+								                    ng-model="ModalEntity.maxRevokeLimit" name="maxRevokeLimit" maxlength="8" ng-pattern="/^\d{0,8}$/">
+								                <span ng-show="myForm.maxRevokeLimit.$dirty && myForm.maxRevokeLimit.$invalid" 
+													style="color: red;">最大撤单上限最大为8位整数，可以为空</span>
+								            </div>
+								            <label class="col-sm-2 control-label" style="position:relative;left:-40px;">笔/每天</label>
+								        </div>
+								    </div>
+								</div>
+								<!-- <div class="row">
+									<div class="col-xs-6">
+								        <div class="row form-group">
+								            <label class="col-sm-4 control-label">报撤单比例上限</label>
+								
+								            <div class="col-sm-7">
+								                <input type="text" class="form-control two-columns-modal-input" id="maxTradeRevoke" 
+								                    ng-model="ModalEntity.maxTradeRevoke" name="maxTradeRevoke" maxlength="6" 
+								                    ng-pattern="/^((\d{0,2})(\.\d{1,2})?|100(.0{1,2})?)$/">
+								                <span ng-show="myForm.maxTradeRevoke.$dirty && myForm.maxTradeRevoke.$invalid" 
+													style="color: red;">报撤单比例上限最大为100%，最多为两位小数</span>
+								            </div>
+								            <label for="setValue"  class="col-sm-1 control-label behind-input">%</label>
+								        </div>
+								    </div>
+								</div> -->
+		
+							<div><input type="hidden" ng-bind="ModalEntity.recordIndex"></div>
+							</div>
+						</div>
+					</form>
+				</div>
+				<!--End  添加表单内容-->
+				<div class="modal-footer">
+	           		<span class="btn btn-info btn-sm popover-info" data-rel="popover" data-placement="bottom" title="" id="confirm"
+	                    ng-click="myForm.instClientID.$invalid || myForm.exchID.$invalid || myForm.maxTradeLimit.$invalid || 
+	                    myForm.maxRevokeLimit.$invalid || myForm.maxTradeRevoke.$invalid || save(ModalEntity)" 
+	                    ng-disabled="myForm.instClientID.$invalid || myForm.exchID.$invalid || myForm.maxTradeLimit.$invalid || 
+	                    myForm.maxRevokeLimit.$invalid || myForm.maxTradeRevoke.$invalid ">&nbsp;确定&nbsp;</span>
+	                <span class="btn btn-close btn-sm popover-info" data-rel="popover" data-placement="bottom" title="" 
+	                    data-dismiss="modal">&nbsp;取消&nbsp;</span>
+				</div>
+			</div>
+		</div>
+	</div>
+<!-- /.modal -->
+</div>

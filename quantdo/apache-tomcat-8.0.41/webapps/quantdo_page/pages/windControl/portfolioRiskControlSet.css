@@ -1,0 +1,21 @@
+.controlDetail{
+	padding-left: 5px;
+	padding-bottom:1px;
+}
+.indexCalculationclass{
+	margin-left:40%;
+	margin-top:20px;
+}
+.descrclass{
+	margin-top:15px;
+	margin-bottom:15px;
+	text-align: center;
+}
+.indexCalculation{
+	border: 1px solid #B7C2F1;
+	
+	margin-right:14px;
+}
+.dataTables_scroll{
+	margin-left:5px;
+}

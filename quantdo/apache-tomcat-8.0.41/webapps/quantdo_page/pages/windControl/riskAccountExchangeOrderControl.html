@@ -1,0 +1,23 @@
+<!--  资产单元交易所报单频率控制 -->
+<link href="windControl/riskAccountExchangeOrderControl.css" rel="stylesheet">
+<div ng-controller="riskAccountExchOrderControlController" style="width: 100%;overflow: auto;">
+    <div style="height:20px;"></div>
+    
+    <label style="padding-left: 10px;">资产单元:</label>
+				<select ng-model="riskAccountExchOrderControlEntity.riskAccount" class="select-style" ng-change = "riskAccountExchOrderControlChangSelect(riskAccountExchOrderControlEntity)"
+						ng-options="cf.subAccountID as cf.subAccountName for cf in subAccountList">
+                </select>
+                
+     <div style="height:20px;"></div>
+                
+    <table id="riskAccountExchOrderControl_table" class="cell-border stripe" cellspacing="0" width="100%"></table>
+     <div class="operation-table">
+          <div class="btn-add-left">
+          		<!-- 保存 -->
+              <input name = "RiskAccountExchangeOrderControlService.saveRiskAccountExchangeOrderControl"  type="button" ng-show = "riskAccountisCanUser" value={{riskAccountExchOrderControl_buttonName_save}} class="backFilter myNewBtn" ng-click="saveRiskAccountExchOrderControl()">
+              <!-- 重置 -->
+              <input name = "RiskAccountExchangeOrderControlService.saveRiskAccountExchangeOrderControl"  type="button" ng-show = "riskAccountisCanUser" value={{riskAccountExchOrderControl_buttonName_reset}}  class="backFilter myNewBtn" ng-click="resetRiskAccountExchOrderControl()">
+          </div>
+      </div>
+    
+</div>

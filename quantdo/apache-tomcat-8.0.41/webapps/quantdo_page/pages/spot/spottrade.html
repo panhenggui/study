@@ -1,0 +1,171 @@
+<link rel="stylesheet" href="spot/spottrade.css" />
+<div class="row" ng-controller="spotTradeController">
+	<!-- start 定义表单查询-->
+	<form class="form-12">
+		<div class="form-row">
+			<div class="row-col-one">
+				<label class="word-style">开始日期</label> <input type="text"
+					onchange="" class="Wdate value-style word-style" onfocus="WdatePicker({lang:'zh-cn',dateFmt:'yyyyMMdd'})"
+					ng-model="queryEntity.beginDate"
+					ng-readonly="true"  />
+			</div>
+			<div class="row-col-one">
+				<label class="word-style">结束日期</label> <input type="text"
+					onchange="" class="Wdate value-style word-style" onfocus="WdatePicker({lang:'zh-cn',dateFmt:'yyyyMMdd'})"
+					ng-model="queryEntity.endDate"
+					ng-readonly="true"   />
+			</div>
+			<div class="row-col-one">
+				<label class="word-style">资产单元</label>
+				 <select ng-model="queryEntity.trader" 
+						class="value-style"
+						ng-options=" op.subAccountID as op.subAccountID+'_'+op.subAccountName for op in queryCapitalAccounts">
+						<option value="">全部</option>
+					</select>
+			</div>
+			<div class="row-col-one">
+				<label class="word-style">品种</label> <select
+					ng-model="queryEntity.productID" class="value-style"
+					ng-options="op.productID as op.productID+'_'+op.productName for op in products">
+					<option value="">全部</option>
+				</select>
+			</div>
+			<div class="row-col-one">
+				<label class="word-style">合同类型</label> <select
+					ng-model="queryEntity.contractType" class="value-style"
+					ng-options="op.key as op.text for op in spotContractTypes">
+					<option value="">全部</option>
+				</select>
+			</div>
+			<div class="row-col-one">
+				<label class="word-style">公司</label> <input type="text"
+					class="value-style" ng-model="queryEntity.companyTitle" />
+			</div>
+			<div class="row-col-one">
+				<label class="word-style">客户</label> <input type="text"
+					class="value-style" ng-model="queryEntity.customerName" />
+			</div>
+			<div class="row-col-one">
+				<label class="word-style">货</label> <select
+					ng-model="queryEntity.goodsStatus" class="value-style"
+					ng-options="op.key as op.text for op in spotValidateStatus">
+					<option value="">全部</option>
+				</select>
+			</div>
+			<div class="row-col-one">
+				<label class="word-style">票</label> <select
+					ng-model="queryEntity.ticketStatus" class="value-style"
+					ng-options="op.key as op.text for op in spotValidateStatus">
+					<option value="">全部</option>
+				</select>
+			</div>
+			<div class="row-col-one">
+				<label class="word-style">点</label> <select
+					ng-model="queryEntity.tallyStatus" class="value-style"
+					ng-options="op.key as op.text for op in spotValidateStatus">
+					<option value="">全部</option>
+				</select>
+			</div>
+			<div class="row-col-one">
+				<label class="word-style">保</label> <select
+					ng-model="queryEntity.hedgeStatus" class="value-style"
+					ng-options="op.key as op.text for op in spotValidateStatus">
+					<option value="">全部</option>
+				</select>
+			</div>
+
+			<div class="row-col-one">
+				<label class="word-style">资</label> <select
+					ng-model="queryEntity.capitalStatus" class="value-style"
+					ng-options="op.key as op.text for op in spotValidateStatus">
+					<option value="">全部</option>
+				</select>
+			</div>
+		</div>
+		<div class="btn-beyond-one-row">
+			<button type="button" class="btn btn-query btn-word-two"
+				ng-show="spottrade_query"
+				ng-click="find()" ng-disabled="isQuery">查询</button>
+		</div>
+		<div class="row-form row-btn-operation" ng-show="spottrade_uploadExcel">
+			<div class="row-btn-icon">
+			<input type="button"
+					data-target="#spottradeUploadModal"
+					class="btn btn-reset btn-word-two" value="导入" data-toggle='modal'>
+			</div>
+		</div>
+	</form>
+	<!--End 表单查询 -->
+
+
+	<!--PAGE CONTENT START-->
+	<div class="col-xs-12 clear-padding-right">
+        <div class="row">
+            <div class="col-xs-12 clear-padding-right">
+                <div>
+                    <table id="spotTrade_dynamic_table" class="cell-border stripe" cellspacing="0" width="100%">
+                    	<tfoot>
+							<tr>
+								<th style="text-align:center">合计</th>
+								<th style="text-align:center"></th>
+								<th style="text-align:center"></th>
+								<th style="text-align:center"></th>
+								<th style="text-align:center"></th>
+								<th style="text-align:center"></th>
+								<th style="text-align:center"></th>
+								<th style="text-align:center"></th>
+								<th style="text-align:center"></th>
+								<th style="text-align:center"></th>
+								<th style="text-align:center"></th>
+								<th style="text-align:center"></th>
+								<th style="text-align:center"></th>
+								<th style="text-align:center"></th>
+								<th style="text-align:center"></th>
+								<th style="text-align:center"></th>
+								<th style="text-align:center"></th>
+								<th style="text-align:center"></th>
+								<th style="text-align:center"></th>
+								<th style="text-align:center"></th>
+								<th style="text-align:center"></th>
+								<th style="text-align:center"></th>
+								<th style="text-align:center"></th>
+								<th style="text-align:center"></th>
+								<th style="text-align:center"></th>
+								<th style="text-align:center"></th>
+								<th style="text-align:center"></th>
+								<th style="text-align:center"></th>
+							</tr>
+					 </tfoot>
+                  </table>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!--PAGE CONTENT END-->	
+					
+
+	<!-- 导入 -->
+	<div class="modal fade" id="spottradeUploadModal" tabindex="-1"
+		role="dialog" aria-labelledby="myModalLabel" aria-hidden="true"
+		data-backdrop="static" data-keyboard="false">
+		<div class="modal-dialog">
+			<div class="modal-content" style="height:100px;">
+				<div class="modal-header">
+					<button type="button" class="close" data-dismiss="modal"
+						aria-hidden="true">&times;</button>
+					<h4 class="modal-title" id="uploadtxt">导入</h4>
+				</div>
+				<div class="modal-body">
+					<!-- 添加表单内容-->
+					<form class="form-horizontal" role="form" name="uploadForm"
+						novalidate>
+						<div class="form-group upload_wedge">
+							<div id="spottradeUploader">upload</div>
+						</div>
+					</form>
+				</div>
+			</div>
+		</div>
+	</div>
+
+</div>

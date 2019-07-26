@@ -1,0 +1,507 @@
+<link rel="stylesheet" href="user/userManage.css" />
+<div class="row" ng-controller="UserManageController">
+	<!-- start 定义表单查询-->
+	<form class="form-12">
+		<div class="form-row">
+			<div class="row-col-one">
+				<label class="word-style">所属机构</label> 
+				<select ng-model="queryEntity.instClientID" class="value-style" ng-disabled="isInstClient"
+							ng-options="op.instClientID as op.instClientID+'_'+ op.instClientAbbrName for op in instClientListEntitys">
+							<option value="">全部</option>
+					</select>
+			</div>
+			<div class="row-col-one">
+				<label class="word-style">用户代码</label> 
+				<input type="text"  class="value-style" ng-model="queryEntity.userID" name="userID" />
+			</div>
+			<div class="row-col-one">
+				<label class="word-style">用户类型</label>
+				<select ng-model="queryEntity.userType" class="value-style" ng-change="changRoleName()"
+							ng-options="op.key as op.key+'_'+op.text for op in userTypeListEntitys">
+							<option value="">全部</option>
+				</select>
+			</div>
+			<div class="row-col-one">
+				<label class="word-style">角色</label>
+				<select ng-model="queryEntity.roleName" class="value-style"
+							ng-options="op.id as op.id+'_'+op.roleName for op in listRoles">
+							<option value="">全部</option>
+				</select>
+			</div>
+			<div class="row-col-one">
+				<label class="word-style">状态</label>
+				<select ng-model="queryEntity.isActive" class="value-style" >
+							<option value="">全部</option>
+							<option value="0">注销</option>
+							<option value="1">正常</option>
+							<option value="2">冻结</option>
+				</select>
+			</div>
+			<div class="btn-beyond-one-row" ng-show="userManage_query">
+			<button type="button" class="btn btn-query btn-word-two"
+				ng-click="find(queryEntity)">查询</button>
+			</div>
+			<div class="row-form row-btn-operation" ng-show="userManage_add">
+				<div class="row-btn-icon">
+					<span class="btn-add-icon"></span> <input type="button"
+						class="btn btn-add btn-icon-two" value="新增" data-toggle='modal'
+						ng-show=" !isInstClient || (isInstClient && isAllowControl )"
+						data-target='#userModal' ng-click="initUser()">
+				</div>
+			</div>
+		</div>
+	</form>
+	<!--End 表单查询 -->
+
+	<!--PAGE CONTENT START-->
+	<div class="col-xs-12 clear-padding-right">
+		<div class="row">
+			<div class="col-xs-12 clear-padding-right">
+				<div>
+					<table id="userManage_dynamic_table" class="cell-border stripe"
+						cellspacing="0" width="100%">
+					</table>
+				</div>
+			</div>
+		</div>
+	</div>
+	<!--PAGE CONTENT END-->
+
+	<!-- 用户Modal BEG-->
+	<div class="modal fade" id="userModal" tabindex="-1" role="dialog"
+		aria-labelledby="myModalLabel" aria-hidden="true"
+		data-backdrop="static" data-keyboard="false">
+		<div class="modal-dialog">
+			<div class="modal-content" style="width: 700px;">
+				<div class="modal-header">
+					<button type="button" class="close" data-dismiss="modal"
+						aria-hidden="true">&times;</button>
+					<h4 class="modal-title">用户管理</h4>
+				</div>
+				<div class="modal-body">
+					<!-- 添加表单内容-->
+					<form class="form-horizontal" role="form" name="myFormUserManage"
+						ng-submit="signupForm(ModalEntity)" novalidate>
+						<div class="panel panel-default">
+							<div class="panel-body">
+								<div class="row">
+									<div class="col-xs-6">
+										<div class="row form-group">
+											<label class="col-sm-6 control-label">机构代码</label>
+											<div class="col-xs-6">
+												<select ng-model="ModalEntity.instClientID"
+													class="form-control two-columns-modal-input" 
+													name="instClientID"
+													ng-change="changInstClientId()"
+													value="instClient.instClientID"
+													ng-disabled="isInstClient || isUpdate" tab="111"
+													ng-options="op.instClientID as op.instClientID + '-' + op.instClientAbbrName for op in instClientListEntitys">
+													<option value="">全部</option>
+												</select>
+											</div>
+										</div>
+									</div>
+									
+								</div>
+								<div class="row">
+									<div class="col-xs-6">
+										<div class="row form-group">
+											<label class="col-sm-6 control-label">用户名称<span
+												style="color: red;">*</span></label>
+											<div class="col-xs-6">
+												<input type="text" class="form-control two-columns-modal-input" placeholder="请输入用户名称"
+													name="userName" ng-model="ModalEntity.userName" required
+													maxlength="20" onkeydown="myKeyup(event,this)"
+													onkeyup="kEvent(event,this)" tab="112" />
+													<span
+												ng-show="myFormUserManage.userName.$invalid && myFormUserManage.userName.$dirty"
+												class="span-warning" style="color: red;">用户名称为必填项</span> 
+											</div>
+											
+										</div>
+									</div>
+									<div class="col-xs-6">
+									<div class="row form-group">
+										<label class="col-sm-6 control-label">用户代码<span
+											style="color: red;">*</span></label>
+										<div class="col-xs-6">
+											<input type="text" class="form-control two-columns-modal-input" placeholder="请输入用户代码"
+												id="userID" name="userID" ng-model="ModalEntity.userID"
+												ng-maxlength="18" ng-minlength="2"
+												ng-pattern="/^[a-zA-Z0-9_]+$/" ng-disabled="isUpdate"
+												maxlength="18" tab="113" onkeydown="myKeyup(event,this)"
+												onkeyup="kEvent(event,this)" required />
+												<span
+											ng-show="myFormUserManage.userID.$invalid && myFormUserManage.userID.$dirty "
+											class="span-warning" style="color: red;">用户代码为必填项且至少两个字符，支持数字和字母</span>
+										</div>
+										
+										</div>
+									</div>
+									
+									
+								</div>
+								<div class="row">
+								<div class="col-xs-6">
+									<div class="row form-group">
+										<label class="col-sm-6 control-label">用户类型<span
+											style="color: red;">*</span></label>
+										<div class="col-xs-6">
+											<select ng-model="ModalEntity.userType" required
+												name="userType" class="form-control two-columns-modal-input" ng-disabled="isUpdate"
+												ng-change="changUserType(ModalEntity.userType)" tab="114"
+												ng-options="op.key as op.text for op in userTypeListEntitys">
+											</select> <span
+												ng-show="myFormUserManage.userType.$invalid && myFormUserManage.userType.$dirty"
+												class="span-warning" style="color: red;">用户类型为必填项</span>
+										</div>
+										</div>
+									</div>
+									<div class="col-xs-6">
+									<div class="row form-group">
+										<label class="col-sm-6 control-label">角色<span style="color: red;">*</span></label>
+										<div class="col-xs-6">
+											<select required name="role" class="form-control two-columns-modal-input" 
+												ng-model="ModalEntity.role" tab="115"
+												 ng-options="select.id as select.roleName for select in roleListEntitys"  >
+												
+											</select> <span
+												ng-show="myFormUserManage.role.$invalid && myFormUserManage.role.$dirty "
+												class="span-warning" style="color: red;">角色为必填项</span>
+										</div>
+									</div>
+									</div>
+									
+								</div>
+								<div class="row" ng-show="ModalEntity.userType=='1'||ModalEntity.userType=='2'">
+								<div class="col-xs-6">
+									<div class="row form-group">	
+										<label class="col-sm-6 control-label" style="white-space: pre-wrap;">错误登录次数限制<span
+											style="color: red;">*</span></label>
+										<div class="col-xs-6">
+											<input type="text" class="form-control two-columns-modal-input"
+												placeholder="请输入错误登录次数限制" ng-pattern="/^[0-9]*$/"
+												name="loginErrorLimit" id="loginErrorLimit"
+												ng-model="ModalEntity.loginErrorLimit" required
+												maxlength="8" onkeydown="myKeyup(event,this)"
+												onkeyup="kEvent(event,this)" tab="118" />
+										</div>
+										<span
+											ng-show="myFormUserManage.loginErrorLimit.$dirty && myFormUserManage.loginErrorLimit.$invalid"
+											class="span-warning" style="color: red;">错误登录次数限制为必填项且为自然数，设置为0时，默认为不限制！</span>
+									</div>
+									</div>
+									<div class="col-xs-6">
+									<div class="row form-group">	
+										<label class="col-sm-6 control-label">最大在线数<span
+											style="color: red;">*</span></label>
+										<div class="col-xs-6">
+											<input type="text" class="form-control two-columns-modal-input" placeholder="请输入最大在线数"
+												ng-pattern="/^[0-9]*$/" name="maxOnline" id="maxOnline"
+												ng-model="ModalEntity.maxOnline" required maxlength="8"
+												onkeydown="myKeyup(event,this)" onkeyup="kEvent(event,this)"
+												tab="123" />
+										</div>
+										<span
+											ng-show="myFormUserManage.maxOnline.$dirty && myFormUserManage.maxOnline.$invalid"
+											class="span-warning" style="color: red;">最大在线数为自然数，设置为0时，默认为不限制！</span>
+									</div>
+									</div>
+									
+								</div>
+								<div class="row" ng-show="ModalEntity.userType=='1'||ModalEntity.userType=='2'">
+									<div class="col-xs-6">
+										<div class="row form-group">	
+										<label class="col-sm-6 control-label" style="white-space: pre-wrap;">是否检查IP,Mac<span
+											style="color: red;">*</span></label>
+										<div class="col-xs-6">
+											<select required name="checkIPMacAddr" class="form-control two-columns-modal-input" 
+												ng-model="ModalEntity.checkIPMacAddr" tab="116"
+												ng-options="op.key as op.text for op in isChecks">
+											</select>
+										</div>
+									</div>
+									</div>
+									<div class="col-xs-6">
+									<div class="row form-group">	
+										<label class="col-sm-6 control-label"
+											style="white-space: pre-wrap;">是否检查交易端认证码<span
+											style="color: red;">*</span></label>
+										<div class="col-xs-6">
+											<select required name="checkProductInfo" class="form-control two-columns-modal-input" 
+												ng-model="ModalEntity.checkProductInfo" tab="117"
+												ng-options="op.key as op.text for op in isChecks">
+											</select>
+										</div>
+									</div>
+									</div>
+									
+								</div>
+								<div class="row">
+									<div class="col-xs-6">
+									<div class="row form-group">	
+										<label class="col-sm-6 control-label">手机号码</label>
+										<div class="col-xs-6">
+											<input type="text" class="form-control two-columns-modal-input" placeholder="请输入手机号码"
+												name="telephone" ng-model="ModalEntity.telephone"
+												maxlength="20" onkeydown="myKeyup(event,this)"
+												onkeyup="kEvent(event,this)" tab="119" />
+										</div>
+									</div>
+									</div>
+									<div class="col-xs-6">
+									<div class="row form-group">	
+										<label class="col-sm-6 control-label">邮箱</label>
+										<div class="col-xs-6">
+											<input type="text" class="form-control two-columns-modal-input" placeholder="请输入邮箱"
+												name="email" ng-model="ModalEntity.email" maxlength="40"
+												onkeydown="myKeyup(event,this)" onkeyup="kEvent(event,this)"
+												tab="120" />
+										</div>
+									</div>
+								</div>
+								</div>
+								<div class="row" ng-show="!isUpdate">
+									<div class="col-xs-6">
+									<div class="row form-group">	
+										<label class="col-sm-6 control-label">密码<span style="color: red;">*</span></label>
+										<div class="col-xs-6">
+											<input type="password" class="form-control two-columns-modal-input"
+												placeholder="请输入密码" required
+												ng-change="showLow(ModalEntity.password)" name="password" maxlength="20" 
+												ng-pattern="/^[^\u4e00-\u9fa5\uFF00-\uFFFF\'\u0022,]{1,20}?$/" 
+												ng-model="ModalEntity.password"
+												onkeydown="myKeyup(event,this)" onkeyup="kEvent(event,this)"
+												tab="121" />
+											<span ng-show="myFormUserManage.password.$dirty && myFormUserManage.password.$invalid" style="color: red;">
+												密码为必填项，且密码不可为汉字，全角字符，单引号，双引号，逗号,最大长度为20</span>
+											<div class="pass-wrap" style="margin-top: 16px;">
+												<em id="passText">密码强度：</em>
+												<div id="passStrength"></div>
+											</div>
+
+										</div>
+										</div>
+									</div>
+									<div class="col-xs-6">
+									<div class="row form-group">	
+										<label class="col-sm-6 control-label">确认密码<span
+											style="color: red;">*</span></label>
+										<div class="col-xs-6">
+											<input type="password" class="form-control two-columns-modal-input"
+												placeholder="请输入确认密码" required
+												ng-change="showLowag(ModalEntity.rePassword)" maxlength="20"
+												name="rePassword" ng-model="ModalEntity.rePassword"
+												ng-pattern="/^[^\u4e00-\u9fa5\uFF00-\uFFFF\'\u0022,]{1,20}?$/"
+												onkeydown="myKeyup(event,this)"
+												onkeyup="kEvent(event,this)" tab="122" />
+											<span ng-show="myFormUserManage.rePassword.$dirty && myFormUserManage.rePassword.$invalid" style="color: red;">
+												确认密码为必填项，且密码不可为汉字，全角字符，单引号，双引号，逗号,最大长度为20</span>
+											<div class="pass-wrap" style="margin-top: 16px;">
+												<em id="passText">密码强度：</em>
+												<div id="passStrengthag"></div>
+											</div>
+										</div>
+									</div>
+									</div>
+									<div class="form-group" ng-show="checkPwd !='false'">
+										<div class="row form-group">
+											<label class="col-sm-8 control-label" ><span style="color: red;">密码格式：密码必须大于等于8位字符且包含数字、字母、特殊字符！</span></label>
+											
+										</div>
+									</div>
+								</div>
+								
+								
+								<div class="row">
+									<div class="col-xs-6" ng-show="!isUpdate"  >
+											<div class="row form-group">
+												<label class="col-sm-6 control-label" >验证码</label>
+												<div class="col-xs-6">
+													<span class="input-icon input-icon-right">
+														<input type="text" class="form-control two-columns-modal-input" style="padding-right:0px;" placeholder="请输入验证码" 
+														name="validcode" ng-model="ModalEntity.validcode" maxlength="4" id="addUserValidcode" onkeydown="myKeyup(event,this)"  tab="3"/>
+													</span>
+												</div>
+											</div>
+										</div>
+									<div class="col-xs-6" ng-show="!isUpdate"  >
+													<span>
+														<img id="addUserValidImg" src="" style="width:100px;height:34px;margin-left:30px;"/>
+													</span>
+									</div>
+								</div>
+								<div class="col-xs-6">
+									<div class="row">
+										<div class="col-sm-5">
+											<input type="hidden" ng-model="ModalEntity.id" />
+										</div>
+										<div>
+											<input type="hidden" ng-bind="ModalEntity.recordIndex">
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+						<div class="modal-footer">
+							<input type="submit" class="btn btn-info btn-sm popover-info" value="确定"
+								data-rel="popover" data-placement="bottom" title=""
+								ng-disabled="myFormUserManage.loginErrorLimit.$invalid 
+							   || myFormUserManage.userName.$invalid  || myFormUserManage.userID.$invalid  || myFormUserManage.userType.$invalid 
+							   || myFormUserManage.role.$invalid  
+							  || myFormUserManage.maxOnline.$invalid || (myFormUserManage.password.$invalid && !isUpdate) || (myFormUserManage.rePassword.$invalid && !isUpdate) ">
+							<input type="button" class="btn btn-close btn-sm popover-info" value="取消"
+								data-rel="popover" data-placement="bottom" title=""
+								data-dismiss="modal">
+						</div>
+					</form>
+					<!--End  添加表单内容-->
+				</div>
+			</div>
+		</div>
+	</div>
+	<!-- 用户Modal END-->
+
+	<!-- 权限设置（Modal） -->
+	<div class="modal fade" id="userSetting_setModal" tabindex="-1" role="dialog"
+	         aria-labelledby="myModalLabel" aria-hidden="true" data-backdrop="static" data-keyboard="false">
+	        <div class="modal-dialog">
+	            <div class="modal-content">
+	                <div class="modal-header">
+	                    <button type="button" class="close"
+	                            data-dismiss="modal" aria-hidden="true">
+	                        &times;
+	                    </button>
+	                    <h4 class="modal-title" id="setModalLabel">
+	                        用户权限设置
+	                    </h4>
+	                </div>
+	                <div class="modal-body treeStyle" style="height:550px;">
+	                    <!-- 添加表单内容-->
+	                    <form class="form-horizontal" role="form" name="myForm" novalidate>
+	                        <div class="zTreeDemoBackground left" style="height:500px;width:450px;overflow-y:scroll;">
+	                            <ul id="userRightTree" class="ztree"></ul>
+	                        </div>
+	                    </form>
+	                    <!--End  添加表单内容-->
+	                </div>
+	                <div class="modal-footer">
+	                    <span class="btn btn-info btn-sm popover-info" data-rel="popover" data-placement="bottom" title=""
+	                          ng-click="saveUserMenuList()"
+	                          ng-disabled="">&nbsp;确定&nbsp;</span>
+	                    <span class="btn btn-close btn-sm popover-info" data-rel="popover" data-placement="bottom" title=""
+	                          data-dismiss="modal">&nbsp;取消&nbsp;</span>
+	                </div>
+	            </div>
+	        </div>
+	</div>
+
+	<!-- 密码重置 -->
+	<div class="modal fade" id="myModalUserPwdReset" tabindex="-1"
+		role="dialog" aria-labelledby="myModalLabel" aria-hidden="true"
+		data-backdrop="static" data-keyboard="false">
+		<div class="modal-dialog">
+			<div class="modal-content">
+				<div class="modal-header">
+					<button type="button" class="close" data-dismiss="modal"
+						aria-hidden="true">&times;</button>
+					<h4 class="modal-title">操作员管理</h4>
+				</div>
+				<div class="modal-body">
+					<!-- 添加表单内容-->
+					<form class="form-horizontal" role="form" name="myFormUserPwdReset"
+						novalidate>
+						<div class="panel panel-default">
+							<!-- <div class="panel-heading">
+								<h3 class="panel-title">密码重置</h3>
+							</div> -->
+							<div class="panel-body">
+								<div class="form-group">
+									<div class="row" style="margin-left: 20px;">
+										<label class="col-sm-3 control-label"
+											>密码<span style="color: red;">*</span></label>
+										<div class="col-sm-5">
+											<input type="password" class="form-control"
+												placeholder="请输入密码"
+												ng-change="showLowtwo(pwdEntity.password)" name="password" maxlength="20"
+												ng-model="pwdEntity.password" required 
+												ng-pattern="/^[^\u4e00-\u9fa5\uFF00-\uFFFF\'\u0022,]{1,20}?$/" 
+												ng-disabled="forceRisk.disabled"
+												onkeydown="myKeyup(event,this)" onkeyup="kEvent(event,this)"
+												tab="9" /> 
+											<span ng-show="myFormUserPwdReset.password.$dirty && myFormUserPwdReset.password.$invalid"
+												style="color: red;">密码不可为汉字，全角字符，单引号，双引号，逗号,最大长度为20</span>
+											<div class="pass-wrap">
+												<em id="passText">密码强度：</em>
+												<div id="passStrengthtwo"></div>
+											</div>
+										</div>
+									</div>
+								</div>
+								<div class="form-group">
+									<div class="row" style="margin-left: 20px;">
+										<label class="col-sm-3 control-label"
+											>确认密码<span
+											style="color: red;">*</span></label>
+										<div class="col-sm-5">
+											<input type="password" class="form-control"
+												placeholder="请输入确认密码"
+												ng-change="showLowtwoag(pwdEntity.rePassword)"
+												name="rePassword" ng-model="pwdEntity.rePassword" required maxlength="20"
+												ng-pattern="/^[^\u4e00-\u9fa5\uFF00-\uFFFF\'\u0022,]{1,20}?$/" ng-disabled="forceRisk.disabled"
+												onkeydown="myKeyup(event,this)" onkeyup="kEvent(event,this)"
+												tab="10" /> 
+											<span ng-show="myFormUserPwdReset.rePassword.$dirty && myFormUserPwdReset.rePassword.$invalid"
+												style="color: red;">确认密码不可为汉字，全角字符，单引号，双引号，逗号,最大长度为20</span>
+											<div class="pass-wrap">
+												<em id="passText">密码强度：</em>
+												<div id="passStrengthtwoag"></div>
+											</div>
+										</div>
+									</div>
+								</div>
+								<div class="form-group" ng-show="checkPwd !='false'">
+									<div class="row form-group" style="text-align:center">
+										<label class=" control-label" ><span style="color: red;">密码格式：密码必须大于等于8位字符且包含数字、字母、特殊字符！</span></label>
+										
+									</div>
+								</div>
+								<div class="form-group">
+									<label class="col-sm-3 control-label">验证码</label>
+									<label class="col-sm-4" style="margin-left:-10px;">
+										<span class="input-icon input-icon-right" >
+											<input type="text" class="form-control" style="padding-right:6px; width:120px" placeholder="请输入验证码"
+											name="validcode" ng-model="pwdEntity.validcode" maxlength="4" required id="userMangeValidcode" onkeydown="myKeyup(event,this)" tab="3"/>
+											
+										</span>
+									</label>
+									<label class="col-sm-4">
+										<img id="userMangeValidImg" src="" style="width:100px;height:34px;"/>
+									</label>
+								</div>
+								<div class="form-group">
+									<div class="col-sm-5">
+										<input type="hidden" ng-model="pwdEntity.id" /> <input
+											type="hidden" ng-model="pwdEntity.userID" /> <input
+											type="hidden" ng-model="pwdEntity.userName" /> <input
+											type="hidden" ng-model="pwdEntity.userType" />
+									</div>
+								</div>
+							</div>
+						</div>
+						<div class="modal-footer">
+							<span class="btn btn-info btn-sm popover-info" data-rel="popover"
+								data-placement="bottom" title=""
+								ng-disabled="myFormUserPwdReset.password.$invalid ||myFormUserPwdReset.rePassword.$invalid "
+								ng-click="myFormUserPwdReset.password.$invalid ||myFormUserPwdReset.rePassword.$invalid ||updatePwd(pwdEntity)">&nbsp;确定&nbsp;</span> <span
+								class="btn btn-close btn-sm popover-info" data-rel="popover"
+								data-placement="bottom" title="" data-dismiss="modal">&nbsp;取消&nbsp;</span>
+						</div>
+					</form>
+					<!--End  添加表单内容-->
+				</div>
+			</div>
+		</div>
+	</div>
+	<!-- end 密码重置 -->
+</div>

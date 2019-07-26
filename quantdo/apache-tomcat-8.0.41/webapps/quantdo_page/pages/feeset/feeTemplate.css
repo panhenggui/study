@@ -1,0 +1,105 @@
+th{
+    text-align:center;
+    white-space:nowrap;
+}
+
+td{
+    text-align:center;
+    white-space:nowrap;
+}
+.modal-width{
+    width: 800px;
+}
+
+.date-style{
+    padding-top: 0px;
+    padding-bottom: 0px;
+    width: 170px;
+}
+
+.label-style{
+    width: 115px;
+}
+
+.input-style{
+    width:170px;
+    padding-left: 2px;
+    padding-right: 2px;
+}
+.select-style{
+    width:170px;
+}
+label{
+	white-space: nowrap;
+}
+.input-sm{
+	width: 70px !important;
+}
+.trBgColor{
+   background-color: #00b3ee !important;
+}
+.my-update{
+    display: inline-block;
+    width: 40px;
+    height: 25px;
+    line-height: 25px;
+    border: 1px solid #519e67;
+    border-radius: 3px;
+    text-align: center;
+    color: #519e67;
+    margin-right: 5px;
+    cursor: pointer;
+}
+.my-update:hover{
+    background-color: #519e67;
+    color: #ffffff;
+}
+.my-set{
+    display: inline-block;
+    width: 40px;
+    height: 25px;
+    line-height: 25px;
+    border: 1px solid #F08A86;
+    border-radius: 3px;
+    text-align: center;
+    color: #F08A86;
+    margin-right: 5px;
+    cursor: pointer;
+}
+.my-set:hover{
+    background-color: #F08A86;
+    color: #ffffff;
+}
+.form-multi-table{
+    position: relative;
+    margin-left: 12px;
+    background-color: #ffffff;
+    margin-top: -15px;
+}
+.clear-margin-left{
+    margin-left: 0;
+}
+.fee-form-row{
+	width:80%;
+}
+.top-10{
+    margin-top: 12px;
+}
+#feeTemplateUploader .ajax-file-upload{
+	padding-left:15px;
+	padding-right:15px;
+	width:95px;
+	margin-left:15px;
+}
+
+.ajax-file-upload{
+    background-color: #dbe1e4 !important;
+	border: 1px solid #bac0c4 !important;
+	color: #444 !important;
+	border-radius: 5px;
+}
+
+.ajax-file-upload:hover,.ajax-file-upload:active{
+    background-color: #717476 !important; 
+    color: #ffffff !important;
+}

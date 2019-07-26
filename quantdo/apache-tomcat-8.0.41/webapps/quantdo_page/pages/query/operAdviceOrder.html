@@ -1,0 +1,59 @@
+<div class="row" ng-controller="OperAdviceOrderController">
+	<!-- start 定义表单查询-->
+	<form class="form-12">
+		<div class="form-row">
+				<div class="alert alert-success" ng-show="resultFlag">
+					<span ng-bind="resultInfo"></span>
+				</div>
+		</div>
+			<div class="form-row">
+			<div class="row-col-one">				
+						<label class="word-style">所属机构</label>
+						<select ng-model="queryEntity.instClientID" class="value-style" ng-disabled="noInst"
+						ng-options="op.instClientID as op.instClientAbbrName for op in instClientList"  ng-change="changeInstClient()">
+						<option value="">全部</option>
+						</select>
+				</div>
+				<div class="row-col-one">
+						<label class="word-style">产品</label>
+						<select ng-model="queryEntity.fundProductID" class="value-style" 
+						ng-options="op.fundProductID  as op.instClientID+'_'+ op.fundProductID+'_'+op.shortProductName for op in queryFundProEntitys">
+						<option value="">全部</option>
+						</select>
+				</div>
+				<div class="row-col-one">
+						<label class="word-style">指令状态</label>
+							<select ng-model="queryEntity.orderStatus" class="value-style" 
+							ng-options="op.key as op.text for op in orderStatus">
+							<option value="">全部</option>
+							</select>
+				</div>
+				<div class="btn-beyond-one-row">
+						<button class="btn btn-query btn-word-two"  ng-show="operAdviceOrder_query"  id="bootbox-options1"
+							ng-click="find(queryEntity)" ng-disabled="isQuery">查询</button>
+						<button class="btn btn-reset btn-beyond-two"  ng-show="operAdviceOrder_export"  id="bootbox-options1" 
+							ng-click="exportExcelOperAdviceOrder(queryEntity)">导出excel</button>					
+				</div>
+			</div>
+	</form>
+	<!--End 表单查询 -->
+
+	<!--PAGE CONTENT -->
+	<div class="col-xs-12">
+		<div class="row">
+			<div class="col-xs-12">
+				<div class="clearfix">
+					<div class="pull-right tableTools-container"></div>
+				</div>
+				<div>				
+					<div ng-show ="true" >
+						<table id="operAdviceOrder_table" class="cell-border stripe" cellspacing="0" width="100%">
+						</table>
+					</div>
+			</div>
+		</div>		 
+		<!-- PAGE CONTENT ENDS -->
+	  </div>
+	<!-- /.col -->
+	</div>
+</div>

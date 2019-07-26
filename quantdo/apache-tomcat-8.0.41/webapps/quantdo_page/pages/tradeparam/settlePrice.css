@@ -1,0 +1,47 @@
+th{
+    text-align:center;
+    white-space:nowrap;
+}
+
+td{
+    white-space:nowrap;
+}
+.modal-width{
+	height:auto;
+    width: 800px;
+}
+
+.date-style{
+    padding-top: 0px;
+    padding-bottom: 0px;
+    width: 170px;
+}
+
+.label-style{
+    width: 115px;
+}
+
+.input-style{
+    width:170px;
+    padding-left: 2px;
+    padding-right: 2px;
+}
+.select-style{
+    width:170px;
+}
+.label-style{
+	white-space: nowrap;
+}
+.upload_label{
+    width: 90px;
+}
+
+.upload_wedge{
+    margin-left: 5px !important;
+}
+
+
+.selectActive{
+
+	width:500px;
+}

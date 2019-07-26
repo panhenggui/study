@@ -1,0 +1,157 @@
+<link rel="stylesheet" href="FOFRisk/fofriskoperClientPosition.css" />
+<title>风控持仓查询</title>
+<div>
+	<ol class="breadcrumb">
+		<li><a>成交查询</a></li>
+		<li><a>委托查询</a></li>
+		<li><a>资金查询</a></li>
+		<li><a>风控参数查询</a></li>
+		<li><a>风控结果查询</a></li>
+		<li><a>产品基本信息查询</a></li>
+		<li class="active">持仓查询</li>
+	</ol>
+</div>
+<br>
+<div class="row" ng-controller="FofriskoperClientPositionController">
+	<!-- start 定义表单查询-->
+	<form class="form-horizontal">
+
+		<div class="row">
+			<div class=col-xs-12>
+				<div class="alert alert-success" ng-show="resultFlag">
+					<span ng-bind="resultInfo"></span>
+				</div>
+			</div>
+		</div>
+		<div class="row header-information">
+			<div class="col-xs-12">
+				<div class="col-xs-3">
+					<div class="form-group">
+						<label class="col-sm-5 control-label">产品组名称</label>
+
+						<div class="col-sm-5">
+							<select ng-model="queryEntity.productgroupID" class=""
+								ng-options="op.fundGroupID as op.fundGroupID+'_'+op.fundGroupName  for op in productgroup">
+								<option value="">全部</option>
+							</select>
+						</div>
+					</div>
+
+				</div>
+
+				<div class="col-xs-3" ng-show="false">
+					<div class="form-group">
+						<label class="col-sm-5 control-label">机构名称</label>
+
+						<div class="col-sm-5">
+							<select ng-model="queryEntity.instclienID" class=""
+								ng-options="op.instClientID as op.instClientID+'_'+op.instClientAbbrName  for op in instClient">
+								<option value="">全部</option>
+							</select>
+						</div>
+					</div>
+
+				</div>
+
+				<div class="col-xs-3">
+					<div class="form-group">
+						<label class="col-sm-5 control-label">合约代码</label>
+
+						<div class="col-sm-5">
+							<input type="text" class="form-control"
+								ng-model="queryEntity.instrumentId" />
+						</div>
+					</div>
+				</div>
+				<div class="col-xs-3" ng-show="false">
+					<div class="form-group">
+						<label class="col-sm-5 control-label">更新时间</label>
+
+						<div class="col-sm-5">
+							<input class="form-control" type="text" forType="date"
+								ng-readonly="true" placeholder="请选择更新时间"
+								ng-model="queryEntity.updateDate" name="updateDate"
+								id="updateDate" onkeydown="myKeyup(event,this)" maxlength="8" />
+
+						</div>
+					</div>
+				</div>
+				<div class="btn-beyond-one-row">
+		      	      <button type="button" class="btn btn-query btn-word-two"  ng-click="find(queryEntity)"> 查询</button>
+		    	</div>
+			</div>
+		</div>
+	</form>
+	<!--End 表单查询 -->
+
+	<!--PAGE CONTENT -->
+	<div class="col-xs-12">
+		<div class="row">
+			<div class="col-xs-12">
+				<div class="clearfix">
+					<div class="pull-right tableTools-container"></div>
+				</div>
+				<div>
+					<table id="dynamic-table"
+						class="table table-striped table-bordered table-hover"
+						datatable="ng">
+						<thead>
+							<tr>
+								<th class="center"><label class="pos-rel"> <span
+										class="ace" /> <span class="lbl"></span> 序号
+								</label></th>
+								<th>产品组名称</th>
+								<th>机构名称</th>
+								<th>资金账号</th>
+								<th>资金账号名称</th>
+								<th>交易所代码</th>
+								<th>合约代码</th>
+								<th>买卖</th>
+								<th>持仓量</th>
+								<th>交易类型</th>
+								
+
+							</tr>
+						</thead>
+
+						<tbody>
+							<tr ng-repeat="listEntity in listEntitys">
+								<td class="center">{{($index+1)}}</td>
+								<td ng-bind="listEntity.fundGroupName"></td>
+								<td ng-bind="listEntity.brokerageFirmID"></td>
+								<td ng-bind="listEntity.accountID"></td>
+								<td ng-bind="listEntity.accountName"></td>
+								<td ng-bind="listEntity.exchID"></td>
+								<td ng-bind="listEntity.instrumentID"></td>
+								<td>{{transDirection(listEntity.direction)}}</td>
+								<td ng-bind="listEntity.position"></td>
+								<td>{{transTradeType(listEntity.hedgeFlag)}}</td>
+                                
+							</tr>
+						</tbody>
+						<tfoot>
+							<tr>
+								<td>合计</td>
+								<td>共{{listEntitys.length}}笔</td>
+								<td></td>
+								<td></td>
+								<td></td>
+								<td></td>
+								<td></td>
+								<td></td>
+								<td></td>
+                                <td></td>
+							</tr>
+						</tfoot>
+					</table>
+				</div>
+
+			</div>
+		</div>
+		<!-- PAGE CONTENT ENDS -->
+	</div>
+	<!-- /.col -->
+
+
+
+</div>

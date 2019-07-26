@@ -1,0 +1,115 @@
+<link rel="stylesheet" href="query/dueSubPositionQuery.css"/>
+<title>到期合约持仓查询</title>
+<div>
+    <ol class="breadcrumb">
+        <li><a>结算数据查询</a></li>
+        <li class="active">到期合约持仓查询</li>
+    </ol>
+</div>
+<br>
+<div class="row" ng-controller="DueSubPositionQueryController">
+    <!-- start 定义表单查询-->
+    <form class="form-horizontal">
+        <div class="row">
+            <div class="col-xs-2">
+                <div class="form-group">
+                    <label class="col-sm-5 control-label">结算日期</label>
+
+                    <div class="col-sm-5">
+                        <input type="text"  onchange="" class="Wdate value-style word-style" onfocus="WdatePicker({lang:'zh-cn',dateFmt:'yyyyMMdd'})" ng-model="queryEntity.settleDate" 
+                        ng-readonly="true" id="settleDate"  />
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-xs-2">
+                <div class="form-group">
+                    <label class="col-sm-5 control-label">产品</label>
+
+                    <div class="col-sm-5">
+                        <select ng-model="queryEntity.productID" class="select-style">
+                            <option value="">全部</option>
+                            <option ng-repeat="product in ProductDates"
+                                value="{{product.productID}}">
+                                {{product.productID}}_{{product.productName}}
+                            </option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="col-xs-2">
+                <div class="form-group">
+                    <label class="col-sm-5 control-label">交割期</label>
+
+                    <div class="col-sm-5">
+                        <input type="text" class="form-control" ng-model="queryEntity.delivDate" id="delivDate"/>
+                    </div>
+                </div>
+            </div>
+            <div class="col-xs-2">
+                <div class="form-group">
+                    <button class="btn btn-success" id="bootbox-options1" ng-click="find(queryEntity)" ng-disabled="isQuery"> 查询</button>
+                </div>
+            </div>
+        </div>
+    </form>
+    <!--End 表单查询 -->
+
+    <!--PAGE CONTENT -->
+    <div class="col-xs-12">
+        <div class="row">
+            <div class="col-xs-12">
+                <div class="clearfix">
+                    <div class="pull-right tableTools-container"></div>
+                </div>
+                <div style="overflow:auto; width: 100%;">
+                    <table id="dynamic-table" class="table table-striped table-bordered table-hover"
+                           datatable="ng">
+                        <thead>
+                        <tr>
+                            <th class="sorting_disabled">&nbsp;</th>
+                            <th class="hidden-480  sorting_disabled">结算日期</th>
+                            <th class="hidden-480  sorting_disabled">交易所代码</th>
+                            <th class="hidden-480  sorting_disabled">产品代码</th>
+                            <th class="hidden-480  sorting_disabled">产品名称</th>
+                            <th class="hidden-480  sorting_disabled">交割期</th>
+                            <th class="hidden-480  sorting_disabled">经纪公司代码</th>
+                            <th class="hidden-480  sorting_disabled">经纪公司名称</th>
+                            <th class="hidden-480  sorting_disabled">资金账号</th>
+                            <th class="hidden-480  sorting_disabled">交易员代码</th>
+                            <th class="hidden-480  sorting_disabled">交易员名称</th>
+                            <th class="hidden-480  sorting_disabled">买持仓量</th>
+                            <th class="hidden-480  sorting_disabled">卖持仓量</th>
+                        </tr>
+                        </thead>
+
+                        <tbody>
+                        <tr ng-repeat="listEntity in listEntitys">
+                            <td class="center">
+                                {{($index+1)}}
+                            </td>
+                            <td ng-bind="listEntity.settleDate"></td>
+                            <td ng-bind="listEntity.exchID"></td>
+                            <td ng-bind="listEntity.productID"></td>
+                            <td ng-bind="listEntity.productName"></td>
+                            <td ng-bind="listEntity.delivDate"></td>
+                            <td ng-bind="listEntity.brokerageFirmID"></td>
+                            <td ng-bind="listEntity.brokerageFirmName"></td>
+                            <td ng-bind="listEntity.accountID"></td>
+                            <td ng-bind="listEntity.traderID"></td>
+                            <td ng-bind="listEntity.traderName"></td>
+                            <td ng-bind="listEntity.longPosition" align="right"></td>
+                            <td ng-bind="listEntity.shortPosition" align="right"></td>
+                            <div><input type="hidden" ng-bind="listEntity.recordIndex"></div>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+            </div>
+        </div>
+        <!-- PAGE CONTENT ENDS -->
+    </div>
+    <!-- /.col -->
+</div>

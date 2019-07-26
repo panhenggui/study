@@ -1,0 +1,195 @@
+<link rel="stylesheet" href="riskparam/riskControl.css" />
+<title>产品级风控界面</title>
+<div class="row" ng-controller="RiskWarnResultController">
+	<!-- start 定义表单查询-->
+	<form class="form-horizontal">
+		 <div class="row header-information">
+		    <div class="col-xs-3" >
+                <div class="form-group">
+                    <label class="col-sm-5 control-label">机构代码<span
+							style="color: red;">*</span></label>
+					<div class="col-xs-3">
+						<select ng-model="queryEntity.instClientID" required
+							class="fundProduct-select-style" ng-disabled="isInstClient "
+							id="instClientID" name="instClientID" ng-change="isInstClientSelect(queryEntity.instClientID)"
+							onkeydown="myKeyup(event,this)"
+							ng-options="op.instClientID as op.instClientID+'_'+ op.instClientAbbrName for op in instClientlistEntitys">
+							<option value="">全部</option>
+						</select> 
+					</div>
+				</div>
+			</div>
+			<div class="col-xs-3">
+				<div class="form-group">
+					<label class="col-sm-5 capitalAccount-control-label">产品</label>
+					<div class="col-sm-5">
+						<select class="select-style" ng-model="queryEntity.fundProductID" ng-change="findFundNetValueByProId(queryEntity)" >
+							<option value="">全部</option>
+							<option ng-repeat="fundProduct in fundProductTems"
+								value="{{fundProduct.fundProductID}}">
+								{{fundProduct.fundProductID}}_{{fundProduct.shortProductName}}</option>
+						</select>
+					</div>
+				</div>
+			</div>
+			<div class="col-xs-3">
+			    <div class="form-group button-left-style">
+					<button class="btn btn-success" id="bootbox-options1"
+						ng-click="start()"  ng-disabled="isStart">开始刷新</button>
+					<button class="btn btn-success" id="bootbox-options1"
+						ng-click="stop()"  ng-disabled="isStop">停止刷新</button>
+					<button class="btn btn-success" id="bootbox-options1"
+					style="width: 115px;"
+					ng-click="exportExcel(queryEntity)">导出预警结果</button>
+				</div>
+			</div>
+			<div class="col-xs-2" style="padding-top:5px">
+				<label class="col-xs-5" style="color: red;">{{status}}</label>
+			</div>
+		</div>
+	</form>
+	<!--End 表单查询 -->
+
+	<!--PAGE CONTENT -->
+	<div class="col-xs-12">
+		<div class="panel panel-default">
+			<div class="panel-heading">
+				<h3 class="panel-title">产品净值</h3>
+			</div>
+			<div class="panel-body">
+				<div class="row">
+					<div class="col-xs-12">
+						<div class="clearfix">
+							<div class="pull-right tableTools-container"></div>
+						</div>
+						<div>
+							<table id="dynamic-table"
+								class="table table-striped table-bordered table-hover"
+								 style="display: block;overflow: scroll;" >
+								<thead>
+									<tr>
+										<th class="center"><label class="pos-rel"> <span
+												class="ace" /> <span class="lbl"></span>
+										序号</label></th>
+										<th>所属机构</th>
+										<th>产品简称</th>
+										<th>单位净值</th>
+										<th>资产净值</th>
+										<th>单位净值所处档位</th>
+										<th>期货保证金占比阈值</th>
+										<th>期货保证金占比</th>
+										<th>净头寸保证金占比阈值</th>
+										<th>净头寸保证金占比</th>
+										<th>单品种保证金占比阈值</th>
+										<th>单品种保证金占比</th>
+										<th>股指品种保证金占比阈值</th>
+										<th>股指品种保证金占比</th>
+										<th>期货合约价值占比阈值</th>
+										<th>期货合约价值占比</th>
+										<th>合约价值多空轧差阈值</th>
+										<th>合约价值多空轧差</th>
+									</tr>
+								</thead>
+
+								<tbody>
+									<tr ng-repeat="listEntity in listEntitys ">
+										<td class="center">{{($index+1)}}</td>
+										 <td>{{transInstClient(listEntity.instClientID)}}</td>
+										<td ng-bind="listEntity.shortProductName"></td>
+										<td ng-bind="listEntity.unitNetValue"></td>
+										<td ng-bind="listEntity.fundNetValue"></td>
+										<td ng-bind="listEntity.netValueLevel"></td>
+										<td ng-bind="listEntity.marginRatioThreshold" style="background-color: #EDEDED"></td>
+										<td ng-class="{riskControlpink:listEntity.marginRatioFlag}" 
+											ng-bind="listEntity.marginRatio"></td>
+										<td ng-bind="listEntity.netMarginRatioThreshold" style="background-color: #EDEDED"></td>
+										<td ng-class="{riskControlpink:listEntity.netMarginRatioFlag}" 
+											ng-bind="listEntity.netMarginRatio"></td>
+										<td ng-bind="listEntity.singleMarginRatioThreshold" style="background-color: #EDEDED"></td>
+										<td ng-class="{riskControlpink:listEntity.singleMarginRatioFlag}" 
+											ng-bind="listEntity.singleMarginRatio"></td>
+										<td ng-bind="listEntity.productGroupMarginRatioThreshold" style="background-color: #EDEDED"></td>
+										<td ng-class="{riskControlpink:listEntity.productGroupMarginRatioFlag}" 
+											ng-bind="listEntity.productGroupMarginRatio"></td>
+										<td ng-bind="listEntity.positionCostRatioThreshold" style="background-color: #EDEDED"></td>
+										<td ng-class="{riskControlpink:listEntity.positionCostRatioFlag}" 
+											ng-bind="listEntity.positionCostRatio"></td>
+										<td ng-bind="listEntity.netPosCostRatioThreshold" style="background-color: #EDEDED"></td>
+										<td ng-class="{riskControlpink:listEntity.netPosCostRatioFlag}" 
+											ng-bind="listEntity.netPosCostRatio"></td>
+									</tr>
+								</tbody>
+							</table>
+						</div>
+
+					</div>
+				</div>
+				<!-- PAGE CONTENT ENDS -->
+			</div>
+		</div>
+
+		<!--  预警结果 -->
+
+		<div class="panel panel-default">
+			<div class="panel-heading">
+				<h3 class="panel-title">预警结果</h3>
+			</div>
+			<div class="panel-body">
+				<div class="row">
+					<div class="col-xs-12">
+						<div class="clearfix">
+							<div class="pull-right tableTools-container"></div>
+						</div>
+						<div>
+							<table id="dynamic-table"
+								class="table table-striped table-bordered table-hover"
+								>
+								<thead>
+									<tr>
+										<th class="center"><label class="pos-rel"> <span
+												class="ace" /> <span class="lbl"></span>
+										序号</label></th>
+										<th>预警日期</th>
+										<th>预警时间</th>
+										<th>所属机构</th>
+										<th>产品简称</th>
+										<th>风控指标</th>
+										<th>预警信息</th>
+										<th>状态</th>
+										<th>操作</th>
+									</tr>
+								</thead>
+								<tbody>
+									<tr ng-repeat="listEntity in resultListEntitys" 
+									ng-class="{riskControlpink:listEntity.warnLevel == 1&&listEntity.isHandled == 0,
+									riskControlyellow:listEntity.warnLevel == 1&&listEntity.isHandled == 1}">
+										<td class="center">{{($index+1)}}</td>
+										<td ng-bind="listEntity.warnDate"></td>
+										<td ng-bind="listEntity.warnTime"></td>
+				                        <td ng-bind="listEntity.instClientAbbrName"></td>
+										<td ng-bind="listEntity.shortProductName"></td>
+										<td >{{transRiskType(listEntity.riskType)}}</td>
+										<td style="text-align: left;" ng-bind="listEntity.warnInfo"></td>
+										<td><span ng-if="listEntity.isHandled==0">未处理</span>
+										    <span ng-if="listEntity.isHandled==1">已处理</span>
+										 </td>
+										<td>
+											<div class="hidden-sm hidden-xs action-buttons">
+												<a class="blue" style="cursor: pointer;"  ng-if="listEntity.isHandled==0"
+													ng-click="dealRisk($index,listEntity)" data-toggle="modal">[处理]</a>
+											</div>
+										</td>
+									</tr>
+								</tbody>
+							</table>
+						</div>
+
+					</div>
+				</div>
+				<!-- PAGE CONTENT ENDS -->
+			</div>
+		</div>
+	</div>
+
+
+</div>

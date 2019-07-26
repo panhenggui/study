@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>  
+<beans xmlns="http://www.springframework.org/schema/beans"  
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"  
+    xmlns:context="http://www.springframework.org/schema/context"
+    xmlns:dubbo="http://code.alibabatech.com/schema/dubbo"  
+    xsi:schemaLocation="http://www.springframework.org/schema/beans  
+        http://www.springframework.org/schema/beans/spring-beans.xsd
+        http://www.springframework.org/schema/context
+        http://www.springframework.org/schema/context/spring-context.xsd  
+        http://code.alibabatech.com/schema/dubbo  
+        http://code.alibabatech.com/schema/dubbo/dubbo.xsd  
+        ">                     
+          
+    <!-- 使用通配符暴露Gateway服务接口 -->
+	<bean class="com.dev.framework.service.rpc.dubbo.DubboServiceScannerConfigurer">
+		<property name="basePackage" value="com.quantdo.standard;com.dev.framework.sso;com.dev.framework.service.export" />
+		<property name="properties">
+			<props>
+				<prop key="delay">-1</prop>
+				<prop key="protocol">dubbo</prop>
+				<prop key="filter">sessionFilter</prop>				
+			</props>
+		</property>
+     </bean>
+     
+    <!-- 使用通配符暴露FileGateway服务接口 -->
+	<bean class="com.dev.framework.service.rpc.dubbo.DubboFileServiceScannerConfigurer">
+		<property name="basePackage" value="com.quantdo.standard;com.dev.framework.service.export" />
+		<property name="properties">
+			<props>
+				<prop key="delay">-1</prop>
+				<prop key="protocol">hessian</prop>
+				<prop key="filter">sessionFilter</prop>
+			</props>
+		</property>
+     </bean>
+     
+</beans>  

@@ -1,0 +1,51 @@
+export PATH=$PATH:.:$HOME
+LD_LIBRARY_PATH=/lib:/usr/lib:.
+export LD_LIBRARY_PATH
+#export LD_PRELOAD="libonload.so"
+ulimit -c unlimited
+ulimit  unlimited
+umask 0027
+ININAME=$1
+if [ $# -eq 1 ]
+then
+	rm $ININAME/flow/* > /dev/null 2>/dev/null
+	cd $ININAME/bin
+	rm *.con 2>/dev/null
+	rm *.id 2>/dev/null
+#	rm *.dat 2>/dev/null
+	> .NotRun
+ 	if [ ! -e ${ININAME}.ini ]
+        then
+		ININAME="app"	
+        fi
+	../../GenMD5 -c $ININAME.ini &&  rm .NotRun
+	if [ -r .NotRun ]
+	then
+		echo $1:$ININAME.ini had been changed!
+	else
+		nohup ./$1 2>&1  &
+	fi
+else
+	rm $ININAME$2/flow/* > /dev/null 2>/dev/null
+	cd $ININAME$2/bin
+	rm *.con 2>/dev/null
+	rm *.id 2>/dev/null
+#	rm *.dat 2>/dev/null
+	> .NotRun
+ 	if [ ! -e ${ININAME}.ini ]
+        then
+		$ININAME="app"	
+        fi
+	../../GenMD5 -c $ININAME.ini &&  rm .NotRun
+	if [ -r .NotRun ]
+	then
+		echo "$1$2:$ININAME.ini had been changed!"
+	else
+		if [ $# -eq 2 ]
+		then
+			nohup ./$1 $2 2>&1 &
+		else
+			nohup ./$* 2>&1 &
+		fi
+	fi
+fi

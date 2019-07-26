@@ -1,0 +1,34 @@
+th{
+    text-align:center;
+    white-space:nowrap;
+}
+td{
+    text-align:center;
+    white-space:nowrap;
+}
+.modal-width{
+	text-align:center;
+    width: 800px;
+}
+
+.date-style{
+    padding-top: 0px;
+    padding-bottom: 0px;
+    width: 170px;
+}
+
+.label-style{
+    width: 115px;
+}
+
+.input-style{
+    width:200px;
+    padding-left: 2px;
+    padding-right: 2px;
+}
+.work-select-style{
+    width:200px;
+}
+.control-label{
+	white-space: nowrap;
+}

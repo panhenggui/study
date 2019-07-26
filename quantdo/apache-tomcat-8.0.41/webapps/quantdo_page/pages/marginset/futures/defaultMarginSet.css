@@ -1,0 +1,50 @@
+th{
+    text-align:center;
+    white-space:nowrap;
+}
+td{
+    text-align:center;
+    white-space:nowrap;
+}
+.modal-width{
+    width: 700px;
+}
+
+.date-style{
+    padding-top: 0px;
+    padding-bottom: 0px;
+    width: 170px;
+}
+
+.label-style{
+    width: 125px;
+    
+}
+
+.input-style{
+    width:170px;
+    padding-left: 2px;
+    padding-right: 2px;
+}
+.select-style{
+    width:170px;
+}
+
+#defaultMarginSetUploader .ajax-file-upload{
+	padding-left:15px;
+	padding-right:15px;
+	width:95px;
+	margin-left:15px;
+}
+
+.ajax-file-upload{
+    background-color: #dbe1e4 !important;
+	border: 1px solid #bac0c4 !important;
+	color: #444 !important;
+	border-radius: 5px;
+}
+
+.ajax-file-upload:hover,.ajax-file-upload:active{
+    background-color: #717476 !important; 
+    color: #ffffff !important;
+}

@@ -1,0 +1,235 @@
+<link rel="stylesheet" href="monitor/runMonitor.css" />
+<div class="row" ng-controller="RunMonitorController">
+    <form class="form-12">
+        <div class="form-row">
+            <div class="row-col-one">
+                <label class="word-style word-bottom-clear">当前服务器为</label>
+                <select class="value-style" ng-model="selected" ng-options="server.serverName for server in serverMachine" ng-change="changeServer(selected.serverID,selected)">
+                    <option value="">-- 请选择 --</option>
+                </select>
+            </div>
+        </div>
+    </form>
+    <div class="col-xs-12 clear-padding-right">
+        <div class="row">
+            <div class="col-xs-12 clear-padding-right">
+                <div class="table-description">基础服务</div>
+                <div class="monitor-table-distance">
+                    <table class="cell-border stripe dataTable">
+                        <thead>
+                        <tr>
+                            <th style="width: 150px">进程ID</th>
+                            <th style="width: 150px">进程描述</th>
+                            <th style="width: 150px">进程名称</th>
+                            <th style="width: 150px">运行状态</th>
+                            <th style="width: 150px">运行时间</th>
+                            <th style="width: 150px">CPU使用率（%）</th>
+                            <th style="width: 150px">内存占用(M)</th>
+                            <th>运行参数</th>
+                            <th style="width: 150px">操作</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr ng-repeat="userInfo in userInfos | filter:{type:'1'}">
+                            <td>{{userInfo.processID}}</td>
+                            <td>{{userInfo.processDesc}}</td>
+                            <td>{{userInfo.processName}}</td>
+                            <td>{{userInfo.runingState}}</td>
+                            <td>{{userInfo.runingTime}}</td>
+                            <td>{{userInfo.cpuUser}}</td>
+                            <td>{{userInfo.memoryUse}}</td>
+                            <td>{{userInfo.runParam}}</td>
+                            <td><a style="cursor:pointer" ng-click="proCpuPic(userInfo.processID)">CPU状态图</a>/<a style="cursor:pointer" ng-click="proMemoryPic(userInfo.processID)">内存状态图</a></td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-xs-12 clear-padding-right">
+        <div class="row">
+            <div class="col-xs-12 clear-padding-right">
+                <div class="table-description">系统状态</div>
+                <div class="table-description">CPU状态</div>
+                <div class="monitor-table-distance">
+                    <table class="cell-border stripe dataTable">
+                        <thead>
+                        <tr>
+                            <th style="width: 250px">总计（%）</th>
+                            <th style="width: 250px">空闲占比（%）</th>
+                            <th style="width: 250px">用户占比（%）</th>
+                            <th style="width: 250px">内核占比（%）</th>
+                            <th style="width: 250px">等待占比（%）</th>
+                            <th style="width: 250px">报警阈值（%）</th>
+                            <th>操作</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr ng-repeat="userInfo in userInfos | filter:{type:'0'}">
+                            <td>100</td>
+                            <td ng-class="{'fontred':userInfo.cpuUser>userInfo.cpuValue}">{{userInfo.cpuFree}}</td>
+                            <td ng-class="{'fontred':userInfo.cpuUser>userInfo.cpuValue}">{{userInfo.cpuUser}}</td>
+                            <td ng-class="{'fontred':userInfo.cpuUser>userInfo.cpuValue}">{{userInfo.cpuCore}}</td>
+                            <td ng-class="{'fontred':userInfo.cpuUser>userInfo.cpuValue}">{{userInfo.cpuWait}}</td>
+                            <td><input class="value-style content-bottom-clear content-top-clear" ng-model="userInfo.cpuValue" ng-change="changeNum(userInfo,'cpu')"/></td>
+                            <td><a style="cursor:pointer" ng-click="cpuPicture()" ng-show="runMonitor_cpu">状态图</a></td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-xs-12 clear-padding-right">
+        <div class="row">
+            <div class="col-xs-12 clear-padding-right">
+                <div class="table-description">内存状态</div>
+                <div class="monitor-table-distance">
+                    <table class="cell-border stripe dataTable">
+                        <thead>
+                        <tr>
+                            <th style="width: 417px">总计</th>
+                            <th style="width: 416px">空闲</th>
+                            <th style="width: 416px">已用(M)</th>
+                            <th style="width: 250px">报警阈值(M)</th>
+                            <th>操作</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr ng-repeat="userInfo in userInfos | filter:{type:'0'}">
+                            <td ng-class="{'fontred':userInfo.memoryUse>userInfo.memoryValue}">{{userInfo.memoryTotal}}</td>
+                            <td ng-class="{'fontred':userInfo.memoryUse>userInfo.memoryValue}">{{userInfo.memoryFree}}</td>
+                            <td ng-class="{'fontred':userInfo.memoryUse>userInfo.memoryValue}">{{userInfo.memoryUse}}</td>
+                            <td><input class="value-style content-bottom-clear content-top-clear" ng-model="userInfo.memoryValue" ng-change="changeNum(userInfo,'memory')"/></td>
+                            <td><a style="cursor:pointer" ng-click="memoryPicture()"  ng-show="runMonitor_storage">状态图</a></td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-xs-12 clear-padding-right">
+        <div class="row">
+            <div class="col-xs-12 clear-padding-right">
+                <div class="table-description">磁盘状态</div>
+                <div class="monitor-table-distance">
+                    <table class="cell-border stripe dataTable">
+                        <thead>
+                        <tr>
+                            <th style="width: 250px">文件系统</th>
+                            <th style="width: 250px">持载点</th>
+                            <th style="width: 250px">大小</th>
+                            <th style="width: 250px">可用</th>
+                            <th style="width: 250px">使用率（%）</th>
+                            <th style="width: 250px">报警阈值（%）</th>
+                            <th>操作</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr ng-repeat="userInfo in userInfos | filter:{type:'2'}">
+                            <td ng-class="{'fontred':userInfo.discUsePercent>userInfo.discValue}">{{userInfo.filePath}}</td>
+                            <td ng-class="{'fontred':userInfo.discUsePercent>userInfo.discValue}">{{userInfo.rootDirectory}}</td>
+                            <td ng-class="{'fontred':userInfo.discUsePercent>userInfo.discValue}">{{userInfo.discTotal}}</td>
+                            <td ng-class="{'fontred':userInfo.discUsePercent>userInfo.discValue}">{{userInfo.discUse}}</td>
+                            <td ng-class="{'fontred':userInfo.discUsePercent>userInfo.discValue}">{{userInfo.discUsePercent}}</td>
+                            <td><input class="value-style content-bottom-clear content-top-clear" ng-model="userInfo.discValue" ng-change="changeNum(userInfo,'disc')"/></td>
+                            <td><a style="cursor:pointer" ng-click="discPic(userInfo.filePath)">状态图</a></td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-xs-12 clear-padding-right">
+        <div class="row">
+            <div class="col-xs-12 clear-padding-right">
+                <div class="table-description">网络状态</div>
+                <div class="monitor-table-distance">
+                    <table class="cell-border stripe dataTable">
+                        <thead>
+                        <tr>
+                            <th style="width: 625px">上传流量(KB/s)</th>
+                            <th style="width: 625px">下载流量(KB/s)</th>
+                            <th style="width: 250px">网速阈值(KB/s)</th>
+                            <th>操作</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr ng-repeat="userInfo in userInfos | filter:{type:'0'}">
+                            <td ng-class="{'fontred':userInfo.uploadFlow>userInfo.speedValue}">{{userInfo.uploadFlow}}</td>
+                            <td ng-class="{'fontred':userInfo.downloadFlow>userInfo.speedValue}">{{userInfo.downloadFlow}}</td>
+                            <td><input class="value-style content-bottom-clear content-top-clear" ng-model="userInfo.speedValue"  ng-change="changeNum(userInfo,'speed')"/></td>
+                            <td><a style="cursor:pointer" ng-click="cardUploadPicture()"  ng-show="runMonitor_upFlow">上传流量</a>/<a style="cursor:pointer" ng-click="cardDownloadPicture()"  ng-show="runMonitor_downFlow">下载流量</a></td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-xs-12 clear-padding-right">
+        <div class="row">
+            <div class="col-xs-12 clear-padding-right">
+                <div class="table-description" ng-show="showConnect">连接状态</div>
+                <div class="monitor-table-distance" ng-show="showConnect">
+                    <table class="cell-border stripe dataTable">
+                        <thead>
+                        <tr>
+                            <th style="width: 625px">总数</th>
+                            <th style="width: 625px">连接数</th>
+                            <th>操作</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr ng-repeat="userInfo in userInfos | filter:{type:'0'}">
+                            <td>{{seatAllNum}}</td>
+                            <td>{{seatSucessNum}}</td>
+                            <td><a style="cursor:pointer" ng-click="showSeatDetail()">详情</a></td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div ng-show = "runMonitor_saveValue">
+        <button ng-click="saveValue()">保存阈值</button>
+    </div>
+    <div class="col-xs-12 clear-padding-right" ng-show="seatDetailFlag">
+        <div class="row">
+            <div class="col-xs-12 clear-padding-right" ng-click="hideSeatDeatail()">
+                <div class="table-description">连接详情</div>
+                <div class="monitor-table-distance">
+                    <table class="cell-border stripe dataTable">
+                        <thead>
+                        <tr>
+                            <th style="width: 200px">ApiID</th>
+                            <th style="width: 200px">SeatID</th>
+                            <th>是否连接</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr ng-repeat="seatInfo in seatInfos ">
+                            <td>{{seatInfo.apiID}}</td>
+                            <td>{{seatInfo.seatID}}</td>
+                            <td ng-show="seatInfo.connectFlag" style="color: green">√</td>
+                            <td ng-hide="seatInfo.connectFlag" style="color: red">×</td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+    <section>
+        <div style="position: absolute;left: 0;top: 0px;z-index: 999;height: 100%;width:100%;background-color: white" ng-show="picShow">
+            <div style="text-align: right;padding-right: 50px;margin-top: 10px;height: 20px;" ng-click="hidePicture()">
+                <div class="closeMonitor"></div>
+            </div>
+            <div id="container" style="min-width:700px;height:700px;width:1600px;margin-top: 1%"></div>
+        </div>
+    </section>
+</div>

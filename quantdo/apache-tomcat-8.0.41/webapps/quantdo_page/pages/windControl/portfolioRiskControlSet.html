@@ -1,0 +1,166 @@
+<!-- 资产组合风控设置 -->
+<link href="windControl/portfolioRiskControlSet.css" rel="stylesheet">
+<div ng-controller="portfolioRiskControlSetController" style="width: 100%;overflow: auto;">
+ 	    <div style="height:10px;"></div>
+ 	    <input type="button" ng-show = "portfolioRIskControlSetShow" value="新增资产组合风控设置" class="backFilter myNewBtn" title="添加资产组合风控设置" ng-click="showAllShow()"
+    	name="PortfolioRiskControlSetService.savePortfolioRiskControlSet">
+    	<div style="height:15px;"></div>
+    	
+ 	   <div>
+	    <table id="portfolioRiskControlSet_table" class="cell-border stripe" cellspacing="0" width="100%"></table>
+	   </div>
+	   
+        <div ng-show="portfolioRiskControlSetShowAll">
+	    <div class="controlDetail">
+		<div class="detailRow" >
+			指标名称：<input type="text" ng-model="indexName" max-length="200" ng-disabled = "indexNameISUser">
+    	</div>
+		<label class="detail-header" ng-show = "false">指标生效条件</label>
+		<div class="controlDetail" ng-show = "false">
+			<div class="detailRow">
+                 <input style='cursor:pointer;' type="checkbox" ng-click="changeIndexDateState()" ng-checked="buttonStatus.indexDateStatus" ng-model="buttonStatus.indexDateStatus">
+                 <label>生效日期</label>
+                 <input forType="date" type="text" ng-readonly="true" class="product-time" ng-disabled="dateIndexNotEdit" ng-model="index.startDate">至
+                 <input forType="date" type="text" ng-readonly="true" class="product-time" ng-disabled="dateIndexNotEdit" ng-model="index.endDate">
+                 <input style='cursor:pointer;' type="checkbox" ng-click="changeIndexTimeState()" ng-checked="buttonStatus.indexTimeStatus" ng-model="buttonStatus.indexTimeStatus">
+                 <label>生效时间</label>
+                 <input type="text" ng-disabled="timeIndexNotEdit" ng-readonly="true" name="startTime" class="product-time" id="indexStartTime"
+                        onClick="WdatePicker({skin:'whyGreen',dateFmt:'HH:mm:ss',isShowClear:false,readOnly:true})">至
+                 <input type="text" ng-disabled="timeIndexNotEdit" ng-readonly="true" name="endTime" class="product-time" id="indexEndTime"
+                        onClick="WdatePicker({skin:'whyGreen',dateFmt:'HH:mm:ss',isShowClear:false,readOnly:true})">
+             </div>
+
+             <div class="detailRow">
+                 <input style='cursor:pointer;' type="checkbox" ng-click="changeIndexRuleState()" ng-checked="buttonStatus.indexRuleStatus" ng-model="buttonStatus.indexRuleStatus">
+             	<label>生效条件</label>
+                 <input style="width:120px;" type="text" ng-disabled="ruleIndexNotEdit" ng-model="index.leftValue">
+                 <select ng-model="index.leftSymbol" ng-disabled="ruleIndexNotEdit" class="detail-select"
+                         ng-options="cf.key as cf.text for cf in compareFlag">
+                         <option value=''></option>
+                 </select>
+                 <select ng-disabled="ruleIndexNotEdit" ng-model="index.centerValue" 
+                        ng-options="op.dictId as op.dictName for op in indexConditionList">
+                        <option value=''></option>
+                	</select>
+                 <select ng-model="index.rightSymbol" ng-disabled="ruleIndexNotEdit" class="detail-select"
+                         ng-options="cf.key as cf.text for cf in compareFlag">
+                         <option value=''></option>
+                 </select>
+                 <input type="text" style="width:120px;" ng-disabled="ruleIndexNotEdit" ng-model="index.rightValue">
+             </div>
+		</div>
+		<label class="detail-header">指标计算公式</label>
+		<div class="" >
+			<div class="indexCalculation" >
+				<table id="indexCalculationFormula_table" class="cell-border stripe" cellspacing="0" width="100%">
+                </table>
+                <!-- <input type="button" value="新增" class="mybtn smlbtn" title="添加指标计算公式" ng-click="addIndexCalculationFormulal()"> -->
+    		</div>
+    		<div>
+        		 <div class="indexCalculationclass">
+		    			<input style='cursor:pointer;' type="checkbox" ng-click="changeDenominatorState()" ng-checked="buttonStatus.denominatorStatus" ng-model="buttonStatus.denominatorStatus">分母:
+		                <select ng-disabled="denominatorNotEdit" ng-model="indexCalculation.denominator"  class="select-style" ng-change="changeDescr()" name="positionProportionSet_riskgroup"
+		                        ng-options="op.dictId as op.dictName for op in denominatorList">
+		                        <option value=''></option>
+		                </select>
+             	 </div>
+	             <div class="descrclass"> 
+	               		公式描述：<span>{{index.descr}}</span>
+	             </div>
+			 </div>
+		</div>
+		
+		<label class="detail-header">指标阈值</label>
+		 
+		<div class="controlDetail">
+		
+		     <div class="detailRow">
+             	<input type="button" value="新增指标阈值" class="backFilter myNewBtn" title="添加指标阈值" name="PortfolioRiskControlSetService.savePortfolioRiskControlSet" ng-click="addShowDetail()">	
+             </div>
+		
+				<table id="indicatorThreshold_table" class="cell-border stripe" cellspacing="0" width="100%"></table>
+                
+                
+              
+            
+         	<!-- <label class="detail-header">指标明细阈值设置</label> -->
+         	<div ng-show="portfolioRiskControlSetShow"> 
+            <!-- <div class="controlDetail"> -->
+                <div class="detailRow">
+                    <input style='cursor:pointer;' type="checkbox" ng-click="changeDateState()" ng-checked="buttonStatus.indicatorDateStatus" ng-model="buttonStatus.indicatorDateStatus">
+                    <label>生效日期</label>
+                    <input forType="date" type="text" ng-readonly="true" class="product-time" ng-disabled="dateNotEdit" ng-model="indicatorThreshold.startDate">至
+                    <input forType="date" type="text" ng-readonly="true" class="product-time" ng-disabled="dateNotEdit" ng-model="indicatorThreshold.endDate">
+                    <input style='cursor:pointer;' type="checkbox" ng-click="changeTimeState()" ng-model="buttonStatus.indicatorTimeStatus" ng-checked="buttonStatus.indicatorTimeStatus">
+                    <label>生效时间</label>
+                    <input type="text" ng-disabled="timeNotEdit" ng-readonly="true" name="startTime" class="product-time" id="indicatorThresholdStartTime"
+                           onClick="WdatePicker({skin:'whyGreen',dateFmt:'HH:mm:ss',isShowClear:false,readOnly:true})">至
+                    <input type="text" ng-disabled="timeNotEdit" ng-readonly="true" name="endTime" class="product-time" id="indicatorThresholdEndTime"
+                           onClick="WdatePicker({skin:'whyGreen',dateFmt:'HH:mm:ss',isShowClear:false,readOnly:true})">
+                </div>
+
+                <div class="detailRow">
+                    <input style='cursor:pointer;' type="checkbox" ng-click="changeRuleState()" ng-model="buttonStatus.ruleStatus" ng-checked="buttonStatus.ruleStatus">
+                	<label>生效条件</label>
+                    <input type="text" style="width:120px;" ng-disabled="ruleNotEdit" ng-model="indicatorThreshold.lconval1">
+                    <select ng-disabled="ruleNotEdit" ng-model="indicatorThreshold.lcontag1" class="detail-select"
+                            ng-options="cf.key as cf.text for cf in compareFlag">
+                            <option value=''></option>
+                    </select>
+                    <select ng-disabled="ruleNotEdit" ng-model="indicatorThreshold.condfield1"  class="select-style" ng-change="selctChange()" name="positionProportionSet_riskgroup"
+                        ng-options="op.dictId as op.dictName for op in indexConditionList">
+                        <option value=''></option>
+                	</select>
+                    <select ng-disabled="ruleNotEdit" ng-model="indicatorThreshold.rcontag1" class="detail-select"
+                            ng-options="cf.key as cf.text for cf in compareFlag">
+                            <option value=''></option>
+                    </select>
+                    <input ng-disabled="ruleNotEdit" type="text" style="width:120px;" ng-model="indicatorThreshold.rconval1">
+                </div>
+                <div class="detailRow">
+                    <input type="text" style="width:120px;" ng-model="indicatorThreshold.lconval2">
+                    <select ng-model="indicatorThreshold.lcontag2" class="detail-select"
+                            ng-options="cf.key as cf.text for cf in compareFlag">
+                            <option value=''></option>
+                    </select>
+                  	 指标
+                    <select ng-model="indicatorThreshold.rcontag2" class="detail-select"
+                            ng-options="cf.key as cf.text for cf in compareFlag">
+                            <option value=''></option>
+                    </select>
+                    <input type="text" style="width:120px;" ng-model="indicatorThreshold.rconval2">
+                </div>
+                <div class="detailRow">
+                    <label>控制方式:</label>
+                    <select ng-disabled="portfolioRiskControlSetActionCode" ng-model="indicatorThreshold.actionCode"
+                            ng-options="cf.key as cf.text for cf in riskWay">
+                            <!-- <option value=''></option> -->
+                    </select>
+                </div>
+            	<div class="operation-table">
+            		<div class="btn-add-left">
+            		<!-- 保存指标阈值 -->
+	  					<input type="button" value="保存指标阈值" class="backFilter myNewBtn" name="PortfolioRiskControlSetService.savePortfolioRiskControlSet" ng-show="indicatorButtonShow" ng-click="saveIndicatorThreshold(indicatorThreshold)">
+			  			<input type="button" value="修改指标阈值" class="backFilter myNewBtn" name="PortfolioRiskControlSetService.updateRiskIndexSet" ng-show="!indicatorButtonShow" ng-click="updateIndicatorThreshold(indicatorThreshold)">
+			  			<input type="button" value="&nbsp;&nbsp;&nbsp;重&nbsp;&nbsp;&nbsp;置&nbsp;&nbsp;&nbsp;" class="backFilter myNewBtn" name="PortfolioRiskControlSetService.savePortfolioRiskControlSet" ng-show="indicatorButtonShow" ng-click="addIndicatorThreshold()">
+			  			<input type="button" value="&nbsp;&nbsp;&nbsp;取&nbsp;&nbsp;&nbsp;消&nbsp;&nbsp;&nbsp;" class="backFilter myNewBtn" name="PortfolioRiskControlSetService.updateRiskIndexSet" ng-show="!indicatorButtonShow" ng-click="giveUpUpdate()">
+	        			
+	        		</div>
+                </div>
+            <!-- </div> -->
+            </div> 
+		</div>
+		
+		
+	    <div class="operation-table">
+	    	<div class="btn-add-right">
+	  			<input type="button" value="保存资产组合风控设置" name="PortfolioRiskControlSetService.savePortfolioRiskControlSet" class="backFilter myNewBtn" ng-show="buttonEdit" ng-click="savePortfolioRisk()">
+	  			<input type="button" value="修改资产组合风控设置" name="PortfolioRiskControlSetService.updateRiskIndexSet" class="backFilter myNewBtn" ng-show="!buttonEdit" ng-click="updatePortfolioRisk()">
+	  			<input type="button" value="&nbsp;&nbsp;&nbsp;重&nbsp;&nbsp;&nbsp;置&nbsp;&nbsp;&nbsp;" name="PortfolioRiskControlSetService.savePortfolioRiskControlSet" class="backFilter myNewBtn" ng-show="buttonEdit" ng-click="addInit()">
+	  			<input type="button" value="&nbsp;&nbsp;&nbsp;取&nbsp;&nbsp;&nbsp;消&nbsp;&nbsp;&nbsp;" name="PortfolioRiskControlSetService.updateRiskIndexSet" class="backFilter myNewBtn" ng-show="!buttonEdit" ng-click="giveUpShowAllShow()">
+	  			
+	        </div>
+	   	</div>
+    </div>
+    </div>
+</div>

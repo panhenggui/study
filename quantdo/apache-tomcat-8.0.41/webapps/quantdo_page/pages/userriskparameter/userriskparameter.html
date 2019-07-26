@@ -1,0 +1,585 @@
+<link rel="stylesheet" href="userriskparameter/userriskparameter.css" />
+<title>风险参数设置</title>
+<div>
+	<ol class="breadcrumb">
+		<li><a>资产单元管理</a></li>
+		<li class="active">资产单元风险参数设置</li>
+	</ol>
+</div>
+<br>
+<div class="row" ng-controller="Userriskparameter">
+	<!-- start-->
+		<form class="form-horizontal">
+			<div class="row header-information">
+            <div class="col-xs-3" style="margin-left:10px">
+                <div class="form-group">
+                    <label class="col-sm-5 control-label">资产单元</label>
+						<div class="col-sm-5">
+							<select ng-model="QuerySubAccount.subAccountID" id="subAccount" name="subAccount"
+								ng-options="op.subAccountID as op.subAccountID+'_'+op.subAccountName for op in subAccountRiskParam" style="width:200px;">
+								<option value="">全部</option>
+							</select>
+						</div>
+					</div>
+				</div>
+			<div class="col-xs-3">
+				<div class="form-group button-left-style">
+						<button class="btn btn-success" id="bootbox-options1"
+							ng-click="find(QuerySubAccount)">查询</button>
+						<!-- <button class="btn btn-success" ng-click="del()"
+							ng-disabled="isQuery">批量删除</button> -->
+					</div>
+				</div>
+			</div>
+		</form>
+	<!--End 琛ㄥ崟鏌ヨ -->
+	<div class="col-xs-12">
+		<div class="row">
+			<div class="col-xs-12">
+				<div class="col-xs-12">
+					<button data-toggle="modal" class="btn btn-success"  id="bootbox-options"
+						data-target="#userriskparameterEditModal" ng-click="insert()">新增</button>
+				</div>
+				<div class="clearfix">
+					<div class="pull-right tableTools-container"></div>
+				</div>
+				<div>
+					<table id="userriskparameter_edit_dynamic-table"
+						class="table table-striped table-bordered table-hover"
+						datatable="ng">
+						<thead>
+							<tr>
+								<!-- <th class="center">
+									<input type="checkbox" ng-model="allChecked" ng-click="allCheckedAdd(allChecked)" ng-checked="isSelected"/>
+								</th> -->
+								<th class="center">序号</th>
+								<th class="center">资产单元</th>
+								<th class="center">资产单元名称</th>
+								<th class="center">初始资金</th>
+							<!-- 	<th class="center">最大撤单次数</th> -->
+								<th class="center">追保风险度</th>
+								<th class="center">强平风险度</th>
+								<th class="center">操作</th>
+							</tr>
+						</thead>
+						<tbody>
+							<tr ng-repeat="listEntity in listEntitys">
+								<td class="center">{{($index+1)}}</td>
+								<!-- <td class="center">
+									<input type="checkbox" ng-model="flag" ng-click="checkAdd(flag,listEntity)" ng-checked="isSelected" />
+								</td> -->
+								<td class="center" ng-bind="listEntity.subAccountID"></td>
+								<td class="center" ng-bind="listEntity.subAccountName"></td>
+								<td class="center">{{listEntity.initFund | number:3}}</td>
+					<!-- 			<td class="center">{{listEntity.maxCancelAmt | number:0}}</td> -->
+								<td class="center">{{listEntity.callRisk | number:3}}</td>
+								<td class="center">{{listEntity.forceRisk | number:3}}</td>
+								<td class="center">
+									<div class="hidden-sm hidden-xs action-buttons">
+										<a class="blue" ng-click="edit($index,listEntity)" style="cursor:pointer;"
+											data-toggle="modal" data-target="#userriskparameterEditModal" title="修改">[修改]</a>
+										<!-- <a class="blue" ng-click="riskDegree($index,listEntity)" style="cursor:pointer;"
+											data-toggle="modal" data-target="#userriskparameterDegreeModal" title="风险度">[风险度]</a>
+										<a class="blue" ng-click="tradeCompliance($index,listEntity)" style="cursor:pointer;"
+											data-toggle="modal" data-target="#tradeComplianceModal" title="交易合规">[交易合规]</a> -->
+									</div>
+								</td>
+							</tr>
+						</tbody>
+					</table>
+				</div>
+			</div>
+		</div>
+		<!-- PAGE CONTENT ENDS -->
+	</div>
+	<!-- /.col -->
+
+	<!-- 修改-->
+	<div class="modal fade" id="userriskparameterEditModal" tabindex="-1" role="dialog"
+		aria-labelledby="myModalLabel" aria-hidden="true"
+		data-backdrop="static" data-keyboard="false">
+		<div class="modal-dialog userriskparameter-modal-width">
+			<div class="modal-content odal-width">
+				<div class="modal-header">
+					<button type="button" class="close" data-dismiss="modal"
+						aria-hidden="true">&times;</button>
+					<h4 class="modal-title" id="myModalLabel">风险参数维护</h4>
+				</div>
+				<div class="modal-body">
+					<!-- 娣诲姞琛ㄥ崟鍐呭-->
+					<form class="form-horizontal" role="form" name="EditForm" novalidate>
+				
+								<div class="row">
+								<div class="col-xs-6">
+								<div class="form-group">
+									<label class="col-xs-6 control-label label-style">资产单元</label>
+									<div class="col-xs-6">
+										<select ng-model="ModalEntity.subAccountID" id="subAccountID" class="userriskparameter-select-style"
+											name="subAccountID" ng-disabled = "stauts==1"
+											ng-options="subAccount.subAccountID as subAccount.subAccountID+'_'+subAccount.subAccountName for subAccount in subAccounts">
+											<option value="">请选择</option>
+										</select>
+									</div>
+									</div>
+									</div>
+									<div class="col-xs-6" >
+										<div class="form-group">
+											<label class="col-xs-6 control-label label-style">初始资金
+											<span style="color: red;">*</span></label>
+											<div class="col-xs-8 ">
+												<input type="text" class="userriskparameter-select-style"
+													placeholder="请输入初始资金" id="initFund" name="initFund"
+													ng-model="ModalEntity.initFund" required maxlength="11"
+													ng-pattern="/^[0-9]{1}\d*(\.\d{1,3})?$/"
+													required ng-change="toChinaNum(ModalEntity.initFund,0)" 
+													onkeydown="myKeyup(event,this)" tab="1251" > 
+													<label style="padding-top: 5px;">（元）</label>
+													<span style="color:red;float:right;text-align: right" ng-bind="initFundText"></span>
+											<br/>
+											<span ng-show="EditForm.initFund.$dirty && EditForm.initFund.$invalid" 
+											style="color:red;float:right;text-align: right">请输入初始资金,小数位最大只能输入3位</span>										
+											</div>
+											
+										</div>
+									</div>
+									
+								<!-- 	<div class="col-xs-6" style="white-space: nowrap;">
+										<div class="form-group">
+											<label class="col-sm-3 control-label label-style">最大撤单次数
+											<span style="color: red;">*</span></label>
+											<div class="col-sm-6">
+												<input type="text" class="form-control input-style-w"
+													placeholder="请输入最大撤单次数" id="maxCancelAmt" name="maxCancelAmt"
+													ng-model="ModalEntity.maxCancelAmt" required maxlength="11"
+													ng-pattern="/^[0-9]{1}\d*?$/"
+													required
+													onkeydown="myKeyup(event,this)" tab="1252" > 
+													<label style="padding-top: 5px;">（次）</label>											
+											</div>
+											
+										</div>
+									</div> -->
+									<!-- <div class="col-xs-6" style="white-space: nowrap;">
+										<div class="form-group">
+											<label class="col-sm-3 control-label label-style">最大持仓保证金
+											<span style="color: red;">*</span></label>
+											<div class="col-sm-6 ">
+												<input type="text" class="form-control input-style-w"
+													placeholder="请输入最大持仓保证金" id="maxMargin" name="maxMargin"
+													ng-model="ModalEntity.maxMargin" required maxlength="11"
+													ng-pattern="/^[0-9]{1}\d*(\.\d{1,3})?$/"
+													required ng-change="toChinaNum(ModalEntity.maxMargin,3)" 
+													onkeydown="myKeyup(event,this)" tab="1252" > 
+													<label style="padding-top: 5px;">（元）</label>											
+											</div>
+											
+										</div>
+									</div> -->
+								</div>
+					
+							<div class="row">
+							<div class="col-xs-6" >
+								<div class="form-group">
+									<label class="col-xs-6 control-label label-style">追保风险度
+									<span style="color: red;">*</span></label>
+									<div class="col-xs-8 " >
+										<input type="text" class="userriskparameter-select-style"
+											placeholder="请输入追保风险度" id="callRisk" name="callRisk"
+											ng-model="ModalEntity.callRisk" required maxlength="11"
+											ng-pattern="/^[0-9]{1}\d*(\.\d{1,3})?$/"
+											required ng-change="toChinaNum(ModalEntity.callRisk,1)" 
+											onkeydown="myKeyup(event,this)" tab="1254" > 
+											<label style="padding-top: 5px;">（元）</label>	
+											<span style="color:red;float:right;text-align: right" ng-bind="callRiskText"></span>
+									<br/>
+									<span ng-show="EditForm.callRisk.$dirty && EditForm.callRisk.$invalid" 
+									style="color:red;float:right;text-align: right">请输入追保风险度,小数位最大只能输入3位</span>									
+									</div>
+									
+								</div>
+							</div>
+							
+							<div class="col-xs-6" style="white-space: nowrap;">
+								<div class="form-group">
+									<label class="col-xs-6 control-label label-style">强平风险度
+									<span style="color: red;">*</span></label>
+									<div class="col-xs-8 ">
+										<input type="text" class="userriskparameter-select-style"
+											placeholder="请输入强平风险度" id="forceRisk" name="forceRisk"
+											ng-model="ModalEntity.forceRisk" required maxlength="11"
+											ng-pattern="/^[0-9]{1}\d*(\.\d{1,3})?$/"
+											required ng-change="toChinaNum(ModalEntity.forceRisk,2)" 
+											onkeydown="myKeyup(event,this)" tab="1255" > 
+											<label style="padding-top: 5px;">（元）</label>	
+												<span style="color: red;float:right;text-align: right" ng-bind="forceRiskText"></span>
+									<br/>
+									<span ng-show="EditForm.forceRisk.$dirty && EditForm.forceRisk.$invalid" 
+									style="color: red;float:right;text-align: right">请输入强平风险度,小数位最大只能输入3位</span>
+																			
+									</div>
+									
+								</div>
+							</div>
+						</div>
+						<div class="form-group">
+							<div class="col-sm-5">
+								<input type="hidden" ng-model="ModalEntity.id" />
+							</div>
+						</div>
+					</form>
+					<!--End  娣诲姞琛ㄥ崟鍐呭-->
+				</div>
+				<div class="modal-footer">
+					<span class="btn btn-info btn-sm popover-info" data-rel="popover"
+						data-placement="bottom" title=""
+						ng-disabled=" canClick || EditForm.initFund.$invalid || EditForm.callRisk.$invalid||EditForm.forceRisk.$invalid"
+						ng-click="save(ModalEntity)">&nbsp;确定&nbsp;</span>
+					<span class="btn btn-info btn-sm popover-info" data-rel="popover"
+						  data-placement="bottom" title="" data-dismiss="modal">&nbsp;取消&nbsp;</span>
+				</div>
+			</div>
+		</div>
+	</div>
+	
+	<!-- 风险度 -->
+	<!-- <div class="modal fade" id="userriskparameterDegreeModal" tabindex="-1" role="dialog"
+		aria-labelledby="myModalLabel" aria-hidden="true"
+		data-backdrop="static" data-keyboard="false">
+		<div class="modal-dialog modal-width">
+			<div class="modal-content odal-width">
+				<div class="modal-header">
+					<button type="button" class="close" data-dismiss="modal"
+						aria-hidden="true">&times;</button>
+					<h4 class="modal-title" id="myModalLabel">风险度维护</h4>
+				</div>
+				<div class="modal-body">
+					娣诲姞琛ㄥ崟鍐呭
+					<form class="form-horizontal" role="form" name="degreeForm" novalidate>
+						<div class="row">
+							<div class="col-xs-6" style="white-space: nowrap;">
+								<div class="form-group">
+									<label class="col-sm-3 control-label label-style">追保风险度
+									<span style="color: red;">*</span></label>
+									<div class="col-sm-6 ">
+										<input type="text" class="form-control input-style-w"
+											placeholder="请输入追保风险度" id="callRisk" name="callRisk"
+											ng-model="degreeEntity.callRisk" required maxlength="11"
+											ng-pattern="/^[0-9]{1}\d*(\.\d{1,3})?$/"
+											required ng-change="toChinaNum(degreeEntity.callRisk,1)" 
+											onkeydown="myKeyup(event,this)" tab="1254" > 
+											<label style="padding-top: 5px;">（元）</label>											
+									</div>
+									
+								</div>
+							</div>
+							
+							<div class="col-xs-6" style="white-space: nowrap;">
+								<div class="form-group">
+									<label class="col-sm-3 control-label label-style">强平风险度
+									<span style="color: red;">*</span></label>
+									<div class="col-sm-6 ">
+										<input type="text" class="form-control input-style-w"
+											placeholder="请输入强平风险度" id="forceRisk" name="forceRisk"
+											ng-model="degreeEntity.forceRisk" required maxlength="11"
+											ng-pattern="/^[0-9]{1}\d*(\.\d{1,3})?$/"
+											required ng-change="toChinaNum(degreeEntity.forceRisk,2)" 
+											onkeydown="myKeyup(event,this)" tab="1255" > 
+											<label style="padding-top: 5px;">（元）</label>											
+									</div>
+									
+								</div>
+							</div>
+						</div>
+							
+							<div class="row">
+								<div class="col-xs-6" style="padding-right: 100px;">
+									<span style="color:red;float:right;text-align: right" ng-bind="callRiskText"></span>
+									<br/>
+									<span ng-show="degreeForm.callRisk.$dirty && degreeForm.callRisk.$invalid" 
+									style="color:red;float:right;text-align: right">请输入追保风险度,小数位最大只能输入3位</span>
+								</div>
+								<div class="col-xs-6" style="padding-right: 100px;">
+									<span style="color: red;float:right;text-align: right" ng-bind="forceRiskText"></span>
+									<br/>
+									<span ng-show="degreeForm.forceRisk.$dirty && degreeForm.forceRisk.$invalid" 
+									style="color: red;float:right;text-align: right">请输入强平风险度,小数位最大只能输入3位</span>
+								</div>
+							</div>
+						<div class="form-group">
+							<div class="col-sm-5">
+								<input type="hidden" ng-model="degreeEntity.id" />
+							</div>
+						</div>
+					</form>
+				</div>
+				<div class="modal-footer">
+					<span class="btn btn-info btn-sm popover-info" data-rel="popover"
+						data-placement="bottom" title=""
+						ng-disabled="degreeForm.callRisk.$invalid || degreeForm.forceRisk.$invalid"
+						ng-click="saveDegree(degreeEntity)">&nbsp;确定&nbsp;</span>
+					<span class="btn btn-info btn-sm popover-info" data-rel="popover"
+						  data-placement="bottom" title="" data-dismiss="modal">&nbsp;取消&nbsp;</span>
+				</div>
+			</div>
+		</div>
+	</div> -->
+	<!-- /.modal -->
+	
+	<!--  交易合规 
+	<div class="modal fade" id="tradeComplianceModal" tabindex="-1" role="dialog"
+		aria-labelledby="myModalLabel" aria-hidden="true"
+		data-backdrop="static" data-keyboard="false">
+		<div class="modal-dialog modal-width" style="width:900px">
+			<div class="modal-content odal-width">
+				<div class="modal-header">
+					<button type="button" class="close" data-dismiss="modal"
+						aria-hidden="true">&times;</button>
+					<h4 class="modal-title" id="myModalLabel">交易合规维护</h4>
+				</div>
+				<div class="modal-body">
+					娣诲姞琛ㄥ崟鍐呭
+					<form class="form-horizontal" role="form" name="tradeComplianceForm" novalidate>
+						<div class="row">
+							<div class="col-xs-6" style="white-space: nowrap;">
+								<div class="form-group" style="margin-left:-5px">
+									<label class="col-sm-4 control-label label-style">最大持仓上限
+									<span style="color: red;">*</span></label>
+									<div class="col-sm-6">
+										<input type="text" class="form-control input-style-w"
+											placeholder="请输入最大持仓上限" id="maxPosiAmt" name="maxPosiAmt"
+											ng-model="tradeComplianceEntity.maxPosiAmt" required maxlength="11"
+											ng-pattern="/^[0-9]{1}\d*?$/"
+											required
+											onkeydown="myKeyup(event,this)" tab="1257" > 
+											<label style="padding-top: 5px;">（手）</label>											
+									</div>
+									
+								</div>
+							</div>
+							
+							<div class="col-xs-6" style="white-space: nowrap;">
+								<div class="form-group" style="margin-left:30px">
+									<label class="col-sm-4 control-label label-style">当日最大撤单次数
+									<span style="color: red;">*</span></label>
+									<div class="col-sm-6" style="margin-left:30px">
+										<input type="text" class="form-control input-style-w"
+											placeholder="请输入当日最大撤单次数" id="maxCancelAmt" name="maxCancelAmt"
+											ng-model="tradeComplianceEntity.maxCancelAmt" required maxlength="11"
+											ng-pattern="/^[0-9]{1}\d*?$/"
+											required
+											onkeydown="myKeyup(event,this)" tab="1258" > 
+											<label style="padding-top: 5px;">（次）</label>											
+									</div>
+									
+								</div>
+							</div>
+						</div>
+							
+							<div class="row">
+								<div class="col-xs-6" style="padding-right: 100px;">
+									<span ng-show="tradeComplianceForm.maxPosiAmt.$dirty && tradeComplianceForm.maxPosiAmt.$invalid" 
+									style="color:red;float:right;text-align: right">请输入最大持仓上限,仅能输入整数</span>
+								</div>
+								<div class="col-xs-6" style="padding-right: 100px;">
+									<span ng-show="tradeComplianceForm.maxCancelAmt.$dirty && tradeComplianceForm.maxCancelAmt.$invalid" 
+									style="color: red;float:right;text-align: right">请输入当日最大撤单次数,仅能输入整数</span>
+								</div>
+							</div>
+						<div class="form-group">
+							<div class="col-sm-5">
+								<input type="hidden" ng-model="tradeComplianceEntity.id" />
+							</div>
+						</div>
+					</form>
+					
+					合规参数table
+					<div class="row">
+						<div class="col-xs-12">
+								<div class="col-xs-2">
+									<div class="form-group" id="insertTradeCompliance">
+										<button data-toggle="modal" class="btn btn-success"
+											data-target="#accountTradeComplianceModal" ng-click="insTradeCompliance()">新增</button>
+									</div>
+								</div>
+								<div class="col-xs-2">
+								 	<div ng-dropdown-multiselect="" options="exchangeDatas" selected-model="multiItems" 
+								 	ng-click="getProductList()" extra-settings="multiOptions1" translation-texts="defaultText1" ></div>
+								</div>
+								<div class="col-xs-2">
+								 	<div ng-dropdown-multiselect="" options="productListDatas" selected-model="multiProductItems" 
+								 	ng-click="canBatchInsert()" extra-settings="multiOptions2" translation-texts="defaultText2" ></div>
+								</div>
+								<div class="col-xs-2">
+									<button class="btn btn-success" ng-disabled="canNotInsert || 
+									tradeComplianceForm.maxPosiAmt.$invalid || tradeComplianceForm.maxCancelAmt.$invalid" 
+									ng-click="insTradeCompliances()">批量新增</button>
+								</div>
+							
+							<div class="clearfix">
+								<div class="pull-right tableTools-container"></div>
+							</div>
+							<div>
+								<table id="dynamic-table"
+									class="table table-striped table-bordered table-hover"
+									datatable="ng">
+									<thead>
+										<tr>
+											<th class="center"></th>
+											<th class="center">交易所代码</th>
+											<th class="center">品种代码</th>
+											<th class="center">名称</th>
+											<th class="center">最大持仓量</th>
+											<th class="center">当日最大撤单次数</th>
+											<th class="center">操作</th>
+										</tr>
+									</thead>
+									<tbody>
+										<tr ng-repeat="conplianceEntity in complianceEntitys">
+											<td class="center">{{($index+1)}}</td>
+											<td class="center" ng-bind="conplianceEntity.exchID"></td>
+											<td class="center" ng-bind="conplianceEntity.productID"></td>
+											<td class="center" ng-bind="conplianceEntity.productName"></td>
+											<td class="center"><input type="text" ng-readonly="isList[$index]" style="text-align:center"
+											 ng-model="conplianceEntity.maxPosiAmt" ng-change="checkUppdateValue(conplianceEntity)"></td>
+											<td class="center"><input type="text" ng-readonly="isList[$index]" style="text-align:center"
+											 ng-model="conplianceEntity.maxCancelAmt" ng-change="checkUppdateValue(conplianceEntity)"></td>
+											<td class="center">
+												<div class="hidden-sm hidden-xs action-buttons">
+													<button class="blue" ng-if="isList[$index] == true" ng-click="editCompliance1($index,conplianceEntity)" 
+														style="cursor:pointer;"	title="修改">修改</button>
+													<button class="blue" ng-if="isList[$index] == false" ng-click="updateCompliance($index,conplianceEntity)" 
+														style="cursor:pointer;" title="确定" ng-disabled="isInvalid">确定</button>
+													<button class="blue" ng-if="isList[$index] == false" ng-click="cancelUpdateCompliance($index,conplianceEntity)" 
+														style="cursor:pointer;" title="取消">取消</button>
+													<button class="blue" ng-if="isList[$index] == true" ng-click="delCompliance($index,conplianceEntity)" 
+														style="cursor:pointer;" title="删除">删除</button>
+														data-toggle="modal" data-target="#accountTradeComplianceModal"
+												</div>
+											</td>
+										</tr>
+									</tbody>
+								</table>
+							</div>
+						</div>
+					</div>
+				</div>
+				<div class="modal-footer">
+					<span class="btn btn-info btn-sm popover-info" data-rel="popover"
+						data-placement="bottom" title=""
+						ng-disabled="tradeComplianceForm.maxPosiAmt.$invalid || tradeCompliance.maxCancelAmt.$invalid"
+						ng-click="saveTradeCompliance(tradeComplianceEntity)">&nbsp;确定&nbsp;</span>
+					<span class="btn btn-info btn-sm popover-info" data-rel="popover"
+						  data-placement="bottom" title="" data-dismiss="modal">&nbsp;取消&nbsp;</span>
+				</div>
+			</div>
+		</div>
+	</div> -->
+	
+	<!-- 账户交易合规信息 新增 修改 -->
+<!-- 	<div class="modal fade" id="accountTradeComplianceModal" tabindex="-1" role="dialog"
+		aria-labelledby="myModalLabel" aria-hidden="true"
+		data-backdrop="static" data-keyboard="false">
+		<div class="modal-dialog modal-width" style="width:550px">
+			<div class="modal-content odal-width">
+				<div class="modal-header">
+					<button type="button" class="close" data-dismiss="modal"
+						aria-hidden="true">&times;</button>
+					<h4 class="modal-title" id="myModalLabel">合规参数维护</h4>
+				</div>
+				<div class="modal-body">
+					娣诲姞琛ㄥ崟鍐呭
+					<form class="form-horizontal" role="form" name="accountTradeComplianceForm" novalidate>
+						<div class="row">
+							<div class="col-xs-12" style="padding-left: 100px">
+								<div class="row form-group">
+									<label class="col-sm-4 control-label label-style">交易所代码</label>
+									<div class="col-sm-6">
+										<select ng-model="accountTradeComplianceEntity.exchID" onkeydown="myKeyup(event,this)" tab="1260" required
+											ng-options="op.exchID as op.exchID+'_'+op.exchName for op in exchangeDatas" name="exchID"
+											class="userriskparameter-select-style"
+											ng-change="selectExchange(accountTradeComplianceEntity.exchID)"
+											ng-disabled="isComplianceUpdate"></select>
+											<span ng-show="accountTradeComplianceForm.exchID.$dirty && accountTradeComplianceForm.exchID.$invalid" 
+							 				style="color: red;"></span>
+									</div>
+								</div>
+							</div>
+						</div>
+						
+						<div class="row">
+							<div class="col-xs-12" style="padding-left: 100px">
+								<div class="row form-group">
+									<label class="col-sm-4 control-label label-style">品种代码</label>
+									<div class="col-sm-6">
+										<select ng-model="accountTradeComplianceEntity.productID" onkeydown="myKeyup(event,this)" tab="1261" required
+											ng-options="op.productID as op.productID+'_'+op.productName for op in products" name="productID"
+											class="userriskparameter-select-style"
+											ng-disabled="isComplianceUpdate"></select>
+											<span ng-show="accountTradeComplianceForm.productID.$dirty && accountTradeComplianceForm.productID.$invalid" 
+							 				style="color: red;"></span>
+									</div>
+								</div>
+							</div>
+						</div>
+						
+						<div class="row">
+							<div class="col-xs-12" style="padding-left: 100px;white-space: nowrap;">
+								<div class="row form-group">
+									<label class="col-sm-4 control-label label-style" style="margin-left: 10px;margin-right: -10px;">最大持仓量
+									<span style="color: red;">*</span></label>
+									<div class="col-sm-6">
+										<input type="text" class="form-control userriskparameter-input-style-w"
+											placeholder="请输入当日最大持仓量" id="maxPosiAmt" name="maxPosiAmt"
+											ng-model="accountTradeComplianceEntity.maxPosiAmt" required maxlength="11"
+											ng-pattern="/^[0-9]{1}\d*?$/"
+											required
+											onkeydown="myKeyup(event,this)" tab="1262" > 
+											<label style="padding-top: 5px;">（手）</label>
+									<span ng-show="accountTradeComplianceForm.maxPosiAmt.$dirty && accountTradeComplianceForm.maxPosiAmt.$invalid" 
+									style="color:red;float:right;text-align: right">请输入最大持仓量,仅能输入整数</span>
+									</div>
+								</div>
+							</div>
+						</div>
+						
+						<div class="row">
+							<div class="col-xs-12" style="padding-left: 100px;white-space: nowrap;">
+								<div class="row form-group">
+									<label class="col-sm-4 control-label label-style" style="margin-left: -20px;padding-right: 123px;">当日最大撤单次数
+									<span style="color: red;">*</span></label>
+									<div class="col-sm-6">
+										<input type="text" class="form-control userriskparameter-input-style-w"
+											placeholder="请输入当日最大撤单次数" id="maxCancelAmt" name="maxCancelAmt"
+											ng-model="accountTradeComplianceEntity.maxCancelAmt" required maxlength="11"
+											ng-pattern="/^[0-9]{1}\d*?$/"
+											required
+											onkeydown="myKeyup(event,this)" tab="1263" > 
+											<label style="padding-top: 5px;">（次）</label>	
+											<span ng-show="accountTradeComplianceForm.maxCancelAmt.$dirty && accountTradeComplianceForm.maxCancelAmt.$invalid" 
+									style="color: red;float:right;text-align: right">请输入当日最大撤单次数,仅能输入整数</span>									
+									</div>
+								</div>
+							</div>
+						</div>
+						
+						<div class="form-group">
+							<div class="col-sm-5">
+								<input type="hidden" ng-model="accountTradeComplianceEntity.id" />
+							</div>
+						</div>
+					</form>
+				</div>
+				<div class="modal-footer">
+					<span class="btn btn-info btn-sm popover-info" data-rel="popover"
+						data-placement="bottom" title=""
+						ng-disabled="accountTradeComplianceForm.exchID.$invalid||accountTradeComplianceForm.productID.$invalid||
+						accountTradeComplianceForm.maxPosiAmt.$invalid || accountTradeComplianceForm.maxCancelAmt.$invalid"
+						ng-click="saveAccountTradeCompliance(accountTradeComplianceEntity)">&nbsp;确定&nbsp;</span>
+					<span class="btn btn-info btn-sm popover-info" data-rel="popover"
+						  data-placement="bottom" title="" data-dismiss="modal">&nbsp;取消&nbsp;</span>
+				</div>
+			</div>
+		</div>
+	</div> -->
+	<!-- /.modal -->
+</div>

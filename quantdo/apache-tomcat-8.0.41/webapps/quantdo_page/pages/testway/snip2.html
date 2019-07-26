@@ -1,0 +1,13 @@
+<form id="snip2form" role="form" way-data="snip2data" way-persistent="true">
+	<span>片段2</span>
+	<br/>
+	<a href="#" way-action-push="comments" way-persistent="true">Add Comments</a>
+	<br/>
+	<div way-repeat="comments">
+		<input type="text" way-data="title" way-persistent="true"/>
+		<br/>
+		<input type="text" way-data="content" way-persistent="true"/>
+		<br/>
+		<a href="#" way-action-remove="comments.$$key" way-persistent="true">Remove</a>
+	</div>
+</form>

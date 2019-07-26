@@ -1,0 +1,102 @@
+.spanTab{
+    /*border-radius: 0 !important;*/
+    border: 1px #dddddd solid;
+    background-color: #ffffff;
+    /*padding: 1px 15px 12px 10px;*/
+    /*color: #666;*/
+    /*margin-right: -1px;*/
+    /*line-height: 35px;*/
+    position: relative;
+    font-family: "Microsoft yahei";
+    /*font-size: 14px;*/
+    padding: 0 10px;
+    /*width:135px;*/
+    /*white-space:nowrap;*/
+    overflow:hidden;
+    height: 25px;
+    line-height: 25px;
+    /*text-overflow:ellipsis;*/
+    display: inline-block;
+    /*padding-top: 3px;*/
+    border-bottom: none;
+}
+#move_li:first-child li:first-child .spanTab .closeButton{
+    display: none;
+}
+li.showLi{
+    display: inline-block;
+    margin: 0 0 -2px 4px;
+    border: 0;
+    padding: 0;
+}
+.spanTab a{
+    color: #777;
+    /*margin-left: 10px;*/
+    font-size: 12px;
+    padding-right: 4px;
+}
+.spanTab a:link{
+    text-decoration: none;
+}
+.spanTab:hover{
+    background: #E6E6E6;
+}
+.spanTab:hover a{
+    color: #444;
+}
+.spanTab:hover .closeButton{
+    background: #E6E6E6;
+    opacity: 1;
+    /*color: #ffffff;*/
+}
+li.active .spanTab{
+    background: #0088cc;
+    border-bottom-color: transparent;
+    /*z-index: 10;*/
+}
+li.active .spanTab a{
+    color: #ffffff;
+}
+li.active .spanTab .closeButton{
+    background: #0088cc;
+    opacity: 1;
+    color: #ffffff;
+}
+
+.closeButton{
+    background: #ffffff;
+    color: #B7B7B7;
+    border-radius: 3px;
+    line-height: 8px;
+    text-align: center;
+    height: 8px;
+    width: 8px;
+    font-size: 5px;
+    top: 9px;
+    right: 6px;
+    position: absolute;
+    cursor: pointer;
+    opacity: 0.6;
+}
+.closeButton::after {
+    content: "\2716";
+}
+.closeAll{
+    /*display: inline-block;*/
+    margin-left: 8px;
+    border-top-left-radius: 2px;
+    border-top-right-radius: 2px;
+    display: none;
+}
+.closeAll a{
+    color: #555;
+    font-size: 9px;
+    font-weight: bold;
+    text-decoration: none;
+    background: #eee;
+    padding: 3px 5px;
+}
+.closeAll a:hover{
+    color: #fff;
+    background: #0088CC;
+}

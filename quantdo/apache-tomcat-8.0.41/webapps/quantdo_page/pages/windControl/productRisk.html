@@ -1,0 +1,93 @@
+<link href="windControl/productRisk.css" rel="stylesheet">
+<div ng-controller="productRiskController" style="width: 100%;margin-top: 15px;">
+   
+    <div style="height:10px;"></div>
+    <input type="button"  ng-show = "productRiskAddButtonIsShow" value = &nbsp;&nbsp;&nbsp;新&nbsp;&nbsp;增&nbsp;&nbsp;&nbsp; class="backFilter myNewBtn" name="RiskStromDataService.deleteProductRiskDataIndexData" ng-click = "showDetail()">
+    <div style="height:15px;"></div>
+
+        <div id="outerContainer">
+            <div id="mytable">
+                <table id="productRisk_table" class="cell-border stripe" cellspacing="0" width="100%">
+                </table>
+            </div>
+        </div>
+        <div style="height:15px;"></div>
+        
+        <div ng-show = "productRiskShow">
+        <label class="detail-header">产品风控详细信息设置</label>
+        <div class="controlDetail">
+            <div class="single-information">
+                <div class="detailRow">
+                    <input style='cursor:pointer;' type="checkbox" ng-click="changeDateState()" ng-checked="productRiskEntitys.myDate" ng-model="productRiskEntitys.myDate">
+                    <label>生效日期</label>
+                    <input forType="date" type="text" ng-readonly="true" class="product-time" ng-disabled="dateNotEdit" ng-model="productRiskEntitys.startDate">至
+                    <input forType="date" type="text" ng-readonly="true" class="product-time" ng-disabled="dateNotEdit" ng-model="productRiskEntitys.endDate">
+                </div>
+                <div class="detailRow">
+                    <input style='cursor:pointer;' type="checkbox" ng-click="changeTimeState()" ng-checked="productRiskEntitys.myTime" ng-model="productRiskEntitys.myTime">
+                    <label>生效时间</label>
+                    <input type="text" ng-disabled="timeNotEdit" ng-readonly="true" name="startTime" class="product-time" id="myStartTime"
+                           onClick="WdatePicker({skin:'whyGreen',dateFmt:'HH:mm:ss',isShowClear:false,readOnly:true})" ng-model="productRiskEntitys.startTime">至
+                    <input type="text" ng-disabled="timeNotEdit" ng-readonly="true" name="endTime" class="product-time" id="myEndTime"
+                           onClick="WdatePicker({skin:'whyGreen',dateFmt:'HH:mm:ss',isShowClear:false,readOnly:true})" ng-model="productRiskEntitys.endTime">
+                </div>
+
+                <div class="detailRow">
+                    <input type="text" style="width:70px;" ng-model="productRiskEntitys.lconval1" ng-keyup="numberControl(productRiskEntitys.lconval1,0)">
+                    <select ng-model="productRiskEntitys.lcontag1" class="detail-select"
+                            ng-options="cf.key as cf.text for cf in compareFlag">
+                    </select>
+                    单位净值(P)
+                    <!--<select ng-model="productRiskEntitys.condfield1" class="value-select"-->
+                    <!--ng-options="cv.shortName as cv.paramName for cv in compareValue">-->
+                    <!--</select>-->
+                    <select ng-model="productRiskEntitys.rcontag1" class="detail-select"
+                            ng-options="cf.key as cf.text for cf in compareFlag">
+                    </select>
+                    <input type="text" style="width:70px;" ng-model="productRiskEntitys.rconval1" ng-keyup="numberControl(productRiskEntitys.rconval1)">
+                </div>
+                <div class="detailRow">
+                    <!--<label>风险等级</label>-->
+                    <!--<select ng-model="productRiskEntitys.riskLevel" class="detail-select multi-label"-->
+                            <!--ng-options="rl.key as rl.text for rl in riskLevels">-->
+                    <!--</select>-->
+                    <label>风控方式</label>
+                    <select ng-disabled = "productRiskActionCode" ng-model="productRiskEntitys.actionCode" class="value-select"
+                            ng-options="ca.key as ca.text for ca in riskWay">
+                    </select>
+                </div>
+                <div class="detailRow">
+                    <input style='cursor:pointer;' type="checkbox" ng-click="changeRecoveryState()" ng-checked="isRecoverys">
+                    <label>自动恢复</label>
+                </div>
+            </div>
+            
+            <div class="aboutDetail" style="overflow: auto;">
+                <table id="indexDetail_table" class="cell-border stripe" cellspacing="0" width="100%" style="overflow: auto;">
+                </table>
+            </div>
+            
+            <div class="operation-table">
+             <div class="btn-add-left">
+                    <input ng-show = "productRiskEdit" type="button" value={{productRisk_buttonName_save}} class="backFilter myNewBtn" ng-click="saveProductRisk(productRiskEntitys)"
+                           name="RiskStromDataService.addProductRiskDataIndexData">
+                </div>
+                 <div class="btn-add-left">
+                    <input ng-show = "!productRiskEdit" type="button" value={{productRisk_buttonName_update}} class="backFilter myNewBtn" ng-click="saveProductRisk(productRiskEntitys)"
+                           name="RiskStromDataService.addProductRiskDataIndexData">
+                </div>
+                
+                <div class="btn-add-left">
+                    <input ng-show = "productRiskEdit" type="button" value={{productRisk_buttonName_detail_save}} class="backFilter myNewBtn" title="新增净值分档占比设置" ng-click="addProductRisk()"
+                           name="RiskStromDataService.addProductRiskDataIndexData">
+                </div>
+                <div class="btn-add-left">
+                    <input ng-show = "!productRiskEdit" type="button" value={{productRisk_buttonName_detail_update}} class="backFilter myNewBtn" title="新增净值分档占比设置" ng-click="geiveUpUpdate()"
+                           name="RiskStromDataService.addProductRiskDataIndexData">
+                </div>
+            </div>
+        </div>
+        </div>
+<!--     </div> -->
+
+</div>

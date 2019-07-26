@@ -1,0 +1,46 @@
+<link href="windControl/stockTradingVarietiesRestriction.css"
+	rel="stylesheet">
+<title>证券交易品种限制</title>
+<div ng-controller="stockTradingVarietiesRestrictionController"
+	style="width: 100%; overflow: auto;">
+	
+	 <div style="height:10px;"></div>
+    <input type="button"  ng-show = "stockTradingAddButtonIsShow" value = &nbsp;&nbsp;&nbsp;新&nbsp;&nbsp;增&nbsp;&nbsp;&nbsp; class="backFilter myNewBtn" name="StockTradingVarietiesRestrictionService.saveStockTradingVarietiesRestriction" ng-click = "showDetail()">
+    <div style="height:15px;"></div>
+	
+	<div>
+		<table id="stockTradingVarietiesRestriction_up_table"
+			class="cell-border stripe" cellspacing="0" width="100%">
+		</table>
+	</div>
+	
+	<div ng-show = "stockTradingShow">
+	<label class="detail-header">证券交易品种限制</label>
+	<div class="controlDetail">
+			<div style="float:left;width:40%;margin-top: 12px;">
+				<table id="stockTradingVarietiesRestriction_down_left_table"
+					class="cell-border stripe" cellspacing="0" width="100%">
+				</table>
+			</div>
+			<div style="float:right;width:50%;margin-top: 12px;">
+				<table id="stockTradingVarietiesRestriction_down_right_table"
+					class="cell-border stripe" cellspacing="0" width="100%">
+				</table>
+				<label style="color:red;">(系统暂时只支持：允许交易(全部勾选)，只可卖（只勾选卖），禁止交易（全部不勾选）三种设置)</label>
+			</div>
+			<div class="operation-table">
+		   	    	
+			    	<div class="btn-add-left">
+			    	    <input type="button" value={{stockTradingVarietiesRestriction_buttonName_save}}  class="backFilter myNewBtn" name="StockTradingVarietiesRestrictionService.saveStockTradingVarietiesRestriction"   ng-show="buttonEdit"  ng-click="saveStockTradingVarietiesRestriction()">					
+						<input type="button" value={{stockTradingVarietiesRestriction_buttonName_update}}  class="backFilter myNewBtn" name="StockTradingVarietiesRestrictionService.updateStockTradingVarietiesRestriction" ng-show="!buttonEdit" ng-click="saveStockTradingVarietiesRestriction()">					
+			        </div>
+			        <div class="btn-add-left">
+		   				<input type="button" value={{stockTradingVarietiesRestriction_buttonName_detail_save}} class="backFilter myNewBtn" name="StockTradingVarietiesRestrictionService.saveStockTradingVarietiesRestriction"  ng-show="buttonEdit" ng-click="addStockTradingVarietiesRestriction()">
+			   		</div>
+			   		<div class="btn-add-left">
+		   				<input type="button" value={{stockTradingVarietiesRestriction_buttonName_detail_update}} class="backFilter myNewBtn" name="StockTradingVarietiesRestrictionService.saveStockTradingVarietiesRestriction"  ng-show="!buttonEdit" ng-click="giveUpUpdate()">
+			   		</div>
+		   	</div>
+	</div>
+	</div>
+</div>

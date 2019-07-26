@@ -1,0 +1,81 @@
+<link rel="stylesheet" href="query/operOptionSelfClose.css" />
+<div class="row" ng-controller="OperOptionSelfCloseController">
+	<!-- start 定义表单查询-->
+	<form class="form-12">
+		<div class="form-row">
+			<div class="row-col-one"  >
+				<label class="word-style">所属机构</label>
+				<select ng-model="queryEntity.brokerageFirmID" class="value-style" ng-disabled="noInst"
+                        ng-options="op.instClientID as op.instClientAbbrName for op in instClientList" ng-change="changeInstClient()">
+                    <option value="">全部</option>
+                </select>
+			</div>
+
+			<div class="row-col-one" >
+                <label class="word-style">资金账号</label>
+                <select ng-model="queryEntity.investorID" class="value-style"
+                        ng-options="op.innerAccountID as op.instClientID+'_'+op.innerAccountID+'_'+op.accountName for op in queryAccountEntitys">
+                    <option value="">全部</option>
+                </select>
+			</div>
+
+            <div class="row-col-one">
+                <label class="word-style">交易所</label>
+                <select ng-model="queryEntity.exchID" class="value-style"
+                        ng-options="op.exchID as op.exchID+'_'+op.exchName for op in exchangeDatas">
+                    <option value="">全部</option>
+                </select>
+            </div>
+
+			<div class="row-col-one"  >
+                <label class="word-style">合约代码</label>
+                <input type="text" class="value-style" ng-model="queryEntity.instrumentID" />
+			</div>
+
+			<div class="row-col-one" >
+                <label class="word-style">对冲类型</label>
+                <select ng-model="queryEntity.optSelfCloseFlag" class="value-style"
+						ng-options="op.key as op.text for op in optSelfCloseFlags">
+                    <option value="">全部</option>
+                </select>
+			</div>
+
+            <div class="row-col-one" >
+                <label class="word-style">投保标志</label>
+                <select ng-model="queryEntity.hedgeFlag" class="value-style"
+                        ng-options="op.key as op.text for op in traderTypes">
+                    <option value="">全部</option>
+                </select>
+            </div>
+
+            <!--<div class="row-col-one" >
+                <label class="word-style">对冲结果</label>
+                <select ng-model="queryEntity.optSelfCloseFlag" class="value-style"
+                        ng-options="op.key as op.text for op in optSelfCloseFlags">
+                    <option value="">全部</option>
+                </select>
+            </div>-->
+		</div>
+
+		<div class="btn-beyond-one-row">
+            <button type="button" class="btn btn-query btn-word-two"  ng-show="operOptionSelfClose_query"
+                      ng-click="find(queryEntity)" ng-disabled="isQuery">查询</button>
+            <button type="button" class="btn btn-reset btn-beyond-two" ng-show="operOptionSelfClose_export"
+							ng-click="exportExceloperOptionSelfClose(queryEntity)">导出excel</button>
+    	</div>
+	</form>
+	<!--End 表单查询 -->
+
+    <!--PAGE CONTENT START-->
+    <div class="col-xs-12 clear-padding-right">
+        <div class="row">
+            <div class="col-xs-12 clear-padding-right">
+                <div>
+                    <table id="operOptionSelfClose_dynamic_table" class="cell-border stripe" cellspacing="0" width="100%">
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>

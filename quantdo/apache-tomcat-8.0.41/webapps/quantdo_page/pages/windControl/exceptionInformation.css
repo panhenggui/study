@@ -1,0 +1,6 @@
+#exceptionInformation_table tbody tr td:nth-child(9){
+    text-align: left !important;
+}
+#exceptionInformation_table tbody tr td{
+    white-space: nowrap;
+}

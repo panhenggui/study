@@ -1,0 +1,400 @@
+<link rel="stylesheet" href="marginset/marginTemplate.css" />
+<div class="row" ng-controller="MarginTemplateController">
+
+	<!--左侧表格-->
+    <div class="col-xs-4 clear-pLeft">
+        <form class="form-12">
+           <div class="fee-form-row">
+            	<div class="row-col-one">
+                    <label class="word-style word-bottom-clear">模板名称</label>
+                    <input type="text" class="value-style"
+							ng-model="queryFeeTemplateEntity.templateName" name="templateName" />
+                </div>           
+                <div class="row-form row-btn-operation btn-operation-top-add">
+                	 <input type="button" class="btn btn-reset btn-beyond-two" ng-click="initParameter()" data-toggle="modal" ng-show="marginTemplate_temp_add" data-target="#marginTemplateModal" value="添加模板">
+              	     <input type="button" class="btn btn-reset btn-beyond-two" ng-disabled="isOK"
+						ng-click="initCopyMarginTemplate()" ng-show="marginTemplate_temp_copy"  data-toggle="modal" data-target="#marginTemplateCopyModal" value="复制模板">
+              	     <input type="button" class="btn btn-reset btn-beyond-two" ng-disabled="isOK"  ng-show="marginTemplate_temp_outExcel" 
+			            ng-click="exportExcel()"  value="导出excel">
+                        <input type="button" class="btn btn-reset btn-word-two" data-toggle="modal" ng-disabled="isOK"  ng-show="marginTemplate_temp_in" 
+			            	data-target="#marginTemplateUploadModal" value="导入">
+ 
+                </div>
+                <div class="btn-beyond-one-row">
+                    <input type="button" class="btn btn-query btn-word-two" id="bootbox-options1" ng-click="find(queryFeeTemplateEntity.templateName)" ng-show="marginTemplate_temp_query" ng-disabled="isQuery" value="查询">
+                </div>
+            </div>
+        </form>
+        <div class="col-xs-12 clear-padding-right">
+            <div class="row">
+                <div class="col-xs-12 clear-padding-right">
+                    <div>
+                        <table id="marginTemplate-table" class="cell-border stripe" cellspacing="0" width="100%">
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    
+    <!--右侧表格-->
+    <div class="col-xs-8 clear-pLeft"  style="background-color:#EEF2F5;">
+        <form class="form-12">
+            <div class="fee-form-row">
+                <div class="row-col-one">
+                    <label class="word-style word-bottom-clear">交易所代码</label>
+                    <select ng-model="productEntity.exchID"
+							class="value-style content-bottom-clear" >
+							<option value="">全部</option>
+							<option ng-repeat="exchange in queryExchanges"
+								value="{{exchange.exchID}}">
+								{{exchange.exchID}}_{{exchange.exchName}}</option>
+					</select>
+                </div>
+<!--         <div class="row-col-one">
+                    <label class="word-style word-bottom-clear">品种类别</label>
+                    <select ng-model="productEntity.productType" class="value-style content-bottom-clear"  
+							 ng-click="changeProductTypeForQuery(queryFeeTemplateProductEntity.exchID,queryFeeTemplateProductEntity.productType)"
+                           ng-options="op.key as op.text for op in productTypes">
+                       <option value="">全部</option>
+					</select>
+                </div> -->
+                <div class="row-col-one">
+                    <label class="word-style word-bottom-clear">品种代码</label>
+                    <select ng-model="productEntity.productID"
+							class="value-style content-bottom-clear" > 
+							<option value="">全部</option>
+							<option ng-repeat="product in queryProducts" 
+								value="{{product.productID}}">
+								{{product.productID}}_{{product.productName}}</option>
+					</select>
+                </div>
+                <div class="row-form row-btn-operation btn-operation-top-add">
+                    <input type="button" class="btn btn-add btn-beyond-two" ng-disabled="isOK"   ng-show="marginTemplate_fee_add" 
+					ng-click="initProductParameter()" data-toggle="modal" data-target="#marginTemplateProductModal" value="添加费率">
+                    <input type="button" class="btn btn-reset btn-beyond-two" ng-disabled="isOK"   ng-show="marginTemplate_fee_batchdelete" 
+					ng-click="removeProducts()" value="批量删除">
+                </div>
+                <div class="btn-beyond-one-row">
+                    <input type="button" class="btn btn-query btn-word-two" id="bootbox-options1" ng-click="findProduct(productEntity)" ng-disabled="isOK" value="查询">
+                </div>
+            </div>
+        </form>
+        <div class="col-xs-12 clear-padding-right">
+            <div class="row">
+                <div class="col-xs-12 clear-padding-right">
+                    <div>
+                        <table id="marginTemplateProduct-table" class="cell-border stripe" cellspacing="0" width="100%">
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+
+
+	<!-- 新增 修改 模态框（Modal） -->
+	<div class="modal fade" id="marginTemplateModal" tabindex="-1" role="dialog"
+		aria-labelledby="myModalLabel" aria-hidden="true"
+		data-backdrop="static" data-keyboard="false">
+		<div class="modal-dialog">
+			<div class="modal-content">
+				<div class="modal-header">
+					<button type="button" class="close" data-dismiss="modal"
+						aria-hidden="true">&times;</button>
+					<h4 class="modal-title" id="myModalLabel">保证金模板信息维护</h4>
+				</div>
+				<div class="modal-body">
+					<!-- 添加表单内容-->
+					<form class="form-horizontal" role="form" name="myForm" novalidate>
+						<div class="form-group">
+							<label class="col-sm-3 control-label">模板名称<span
+								style="color: red;">*</span></label>
+							<div class="col-sm-8">
+								<input type="text" class="form-control" placeholder="请输入模板名称"
+									ng-model="TemplateEntity.templateName" maxlength="50"
+									id="templateName" name="templateName" required />
+							</div>
+						</div>
+						<div>
+							<input type="hidden" ng-bind="TemplateEntity.recordIndex">
+						</div>
+					</form>
+					<!--End  添加表单内容-->
+				</div>
+				<div class="modal-footer">
+					<span class="btn btn-info btn-sm popover-info" data-rel="popover"
+						data-placement="bottom" title="" ng-click="myForm.templateName.$invalid||save(TemplateEntity)"
+						ng-disabled="myForm.templateName.$invalid">&nbsp;确定&nbsp;</span>
+					<span class="btn btn-close btn-sm popover-info" data-rel="popover"
+						data-placement="bottom" title="" data-dismiss="modal">&nbsp;取消&nbsp;</span>
+				</div>
+			</div>
+		</div>
+	</div>
+	<!-- /.modal -->
+
+	<div class="modal fade" id="marginTemplateProductModal" tabindex="-1" role="dialog"
+		aria-labelledby="myModalLabel" aria-hidden="true"
+		data-backdrop="static" data-keyboard="false">
+		<div class="modal-dialog">
+			<div class="modal-content"  style="width:650px;">
+				<div class="modal-header">
+					<button type="button" class="close" data-dismiss="modal"
+						aria-hidden="true">&times;</button>
+					<h4 class="modal-title" id="myModalLabel">模板保证金率信息维护</h4>
+				</div>
+				<div class="modal-body">
+					<!-- 添加表单内容-->
+					<form class="form-horizontal" name="myForms" novalidate>
+						<div class="panel panel-default">
+							<div class="panel-heading">
+								<h3 class="panel-title">基本设置</h3>
+							</div>
+							<div class="panel-body">
+								<div class="row">
+									<div class="col-xs-6">
+										<div class="row form-group">
+											<label class="col-sm-4 control-label">交易所代码</label>
+											<div class="col-sm-8">
+												<select ng-model="ProductEntity.exchID"  ng-click="setModalProductList()" name="exchID" required
+												    class="form-control two-columns-modal-input" 
+													ng-options="op.exchID as op.exchID+'_'+op.exchName for op in modalExchanges"
+													ng-disabled="isUpdate"  onkeydown="myKeyup(event,this)" tab="1"
+													></select>
+													<span ng-show="myForms.exchID.$dirty && myForms.exchID.$invalid"
+													style="color: red;">交易所代码为必填项</span>
+											</div>
+										</div>
+									</div>
+									<div class="col-xs-6">
+										<div class="row form-group">
+											<label class="col-sm-4 control-label">品种代码</label>
+											<div class="col-sm-8">
+												<select ng-model="ProductEntity.productID"  onkeydown="myKeyup(event,this)" tab="2" name="productID" required
+													ng-options="op.productID as op.productID+'_'+op.productName for op in modalProducts"
+													class="form-control two-columns-modal-input" 
+													ng-disabled="isUpdate"></select>
+													<span ng-show="myForms.productID.$dirty && myForms.productID.$invalid"
+													style="color: red;">交易所代码为必填项</span>
+											</div>
+										</div>
+									</div>
+								</div>
+								<div class="row">	
+								 <div class="col-xs-6">
+										<div class="row form-group">
+											<label class="col-sm-4 control-label ">投保标志</label>
+											<div class="col-sm-7">
+												<select ng-model="ProductEntity.tradeType"  onkeydown="myKeyup(event,this)" tab="4"
+													class="form-control two-columns-modal-input" 
+													ng-options="op.key as op.text for op in tradeTypes"
+													ng-disabled="isUpdate" class="select-style">
+													 
+												</select>
+											</div>
+										</div>
+									</div>
+									<div class="col-xs-6">
+										<div class="row form-group">
+											<label class="col-sm-4 control-label">收取方式</label>
+											<div class="col-sm-8">
+												<select ng-model="ProductEntity.receiveType"
+													ng-options="r.key as r.text for r in receiveTypes"
+													 onkeydown="myKeyup(event,this)" ng-disabled="true"
+													class="two-columns-modal-input form-control"></select>
+											</div>
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+						<div class="panel panel-default">
+							<div class="panel-heading">
+								<h3 class="panel-title">保证金率模板设置</h3>
+							</div>
+							<div class="panel-body">
+								<div class="row">
+									<div class="col-xs-6">
+										<div class="row form-group">
+											<label class="col-sm-4 control-label">多头按金额<span
+												style="color: red;">*</span></label>
+
+											<div class="col-sm-7">
+												<div style="white-space: nowrap;">
+													<input type="text" class="form-control two-columns-modal-input" id="longMarginRate"
+														placeholder="请输入多头按金额" ng-model="ProductEntity.longMarginRate"
+														ng-pattern="/^\d{1,3}(\.\d{0,6})?$/"
+														  onkeydown="myKeyup(event,this)" tab="3"
+														name="longMarginRate" maxlength="10" required>
+												</div>
+												<span ng-show="myForms.longMarginRate.$dirty && myForms.longMarginRate.$invalid"
+													onkeydown="myKeyup(event,this)" style="color: red;">多头按金额为必填项，最多录入3位整数6位小数，例：98.123456</span>
+											</div>
+											<label for="setValue"  class="col-sm-1 control-label behind-input">%</label>
+										</div>
+									</div>
+									<div class="col-xs-6">
+										<div class="row form-group">
+											<label class="col-sm-4 control-label">多头按手数<span
+												style="color: red;">*</span></label>
+
+											<div class="col-sm-7">
+												<input type="text" class="form-control two-columns-modal-input" id="longMarginAmt"
+													onkeydown="myKeyup(event,this)" placeholder="请输入多头按手数"
+													ng-model="ProductEntity.longMarginAmt" onkeydown="myKeyup(event,this)" tab="4"
+													ng-pattern="/^\d{1,8}(\.\d{0,2})?$/" name="longMarginAmt"
+													maxlength="11" required> <span
+													ng-show="myForms.longMarginAmt.$dirty && myForms.longMarginAmt.$invalid"
+													style="color: red;">多头按手数为必填项，最多录入8位整数2位小数，例：98.12</span>
+											</div>
+										</div>
+									</div>
+								</div>
+
+								<div class="row">
+									<div class="col-xs-6">
+										<div class="row form-group">
+											<label class="col-sm-4 control-label">空头按金额<span
+												style="color: red;">*</span></label>
+
+											<div class="col-sm-7">
+												<div style="white-space: nowrap;">
+													<input type="text" class="form-control two-columns-modal-input" id="shortMarginRate"
+														onkeydown="myKeyup(event,this)" placeholder="请输入空头按金额"
+														ng-model="ProductEntity.shortMarginRate" onkeydown="myKeyup(event,this)" tab="5"
+														ng-pattern="/^\d{1,3}(\.\d{0,6})?$/"
+														name="shortMarginRate" maxlength="10" required>
+												</div>
+												<span ng-show="myForms.shortMarginRate.$dirty && myForms.shortMarginRate.$invalid"
+														style="color: red;">空头按金额为必填项，最多录入3位整数6位小数，例：98.123456</span>
+											</div>
+											<label for="setValue"  class="col-sm-1 control-label behind-input">%</label>
+										</div>
+									</div>
+									<div class="col-xs-6">
+										<div class="row form-group">
+											<label class="col-sm-4 control-label">空头按手数<span
+												style="color: red;">*</span></label>
+
+											<div class="col-sm-7">
+												<input type="text" class="form-control two-columns-modal-input" id="shortMarginAmt"
+													onkeydown="myKeyup(event,this)" placeholder="请输入空头按手数"
+													ng-model="ProductEntity.shortMarginAmt" onkeydown="myKeyup(event,this)" tab="6"
+													ng-pattern="/^\d{1,8}(\.\d{0,2})?$/"
+													name="shortMarginAmt" maxlength="11" required> <span
+													ng-show="myForms.shortMarginAmt.$dirty && myForms.shortMarginAmt.$invalid"
+													style="color: red;">空头按手数为必填项，最多录入8位整数2位小数，例：98.12</span>
+											</div>
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+						<div>
+							<input type="hidden" ng-bind="ProductEntity.recordIndex">
+						</div>
+					</form>
+				</div>
+				<div class="modal-footer">
+				<span class="btn btn-info btn-sm popover-info" data-rel="popover"
+					data-placement="bottom" title=""
+					ng-click="myForms.longMarginRate.$invalid || myForms.exchID.$invalid || myForms.productID.$invalid || 
+					myForms.longMarginAmt.$invalid || myForms.shortMarginRate.$invalid || 
+					myForms.shortMarginAmt.$invalid || saveProduct(ProductEntity)" 
+					ng-disabled="myForms.longMarginRate.$invalid || myForms.exchID.$invalid || myForms.productID.$invalid || 
+					myForms.longMarginAmt.$invalid || myForms.shortMarginRate.$invalid || 
+					myForms.shortMarginAmt.$invalid">&nbsp;确定&nbsp;</span> <span
+					class="btn btn-close btn-sm popover-info" data-rel="popover"
+					data-placement="bottom" title="" data-dismiss="modal">&nbsp;取消&nbsp;</span>
+				</div>
+				<div class="col-xs-6">
+					<!--End  添加表单内容-->
+				</div>
+			</div>
+		</div>
+	</div>
+	<!-- /.modal -->
+	
+		<!-- 复制模态框  -->
+	<div class="modal fade" id="marginTemplateCopyModal" tabindex="-1" role="dialog"
+		aria-labelledby="myModalLabel" aria-hidden="true"
+		data-backdrop="static" data-keyboard="false">
+		<div class="modal-dialog">
+			<div class="modal-content" >
+				<div class="modal-header">
+					<button type="button" class="close" data-dismiss="modal"
+						aria-hidden="true">&times;</button>
+					<h4 class="modal-title" id="myModalLabel">模板保证金复制</h4>
+				</div>
+				<div class="modal-body">
+					<!-- 添加表单内容-->
+					<form class="form-horizontal" name="copyForm" novalidate>
+						<div class="row form-group">
+							<label class="col-sm-3 control-label">旧模板名称</label>
+							<div class="col-sm-8">
+								<input type="text" ng-model="selectedTemplateName" ng-disabled="true"
+								maxlength="50" class="form-control">
+							</div>
+						</div>
+						<div class="row form-group">
+							<label style="margin-left:180px;margin-bottom:0px;">复制到</label>
+							<br>
+						</div>				
+						<div class="row form-group">
+							<label class="col-sm-3 control-label">新模板名称<span
+								style="color: red;">*</span></label>
+							<div class="col-sm-8">
+								<input type="text" placeholder="请输入新模板名称" required 
+									ng-model="newCopyTemplateName" maxlength="50"
+									name="newCopyTemplateName" class="form-control">
+								<span ng-show="copyForm.newCopyTemplateName.$dirty && copyForm.newCopyTemplateName.$invalid"
+											style="color: red;">新模板名称为必填项</span>
+							</div>
+						</div>
+							
+					</form>
+				</div>
+				<div class="modal-footer">
+				<span class="btn btn-info btn-sm popover-info" data-rel="popover"
+					data-placement="bottom" title="" ng-disabled="copyForm.newCopyTemplateName.$invalid"
+					ng-click="copyForm.newCopyTemplateName.$invalid||copy(newCopyTemplateName)">&nbsp;确定&nbsp;&nbsp;</span> <span
+					class="btn btn-close btn-sm popover-info" data-rel="popover"
+					data-placement="bottom" title="" data-dismiss="modal">&nbsp;取消&nbsp;</span>
+
+					<!--End  添加表单内容-->
+				</div>
+			</div>
+		</div>
+	</div>
+	
+	<!-- 导入 -->
+    <div class="modal fade" id="marginTemplateUploadModal" tabindex="-1" role="dialog"
+     aria-labelledby="myModalLabel" aria-hidden="true" data-backdrop="static" data-keyboard="false">
+	    <div class="modal-dialog">
+	        <div class="modal-content"  style="height:100px;">
+	            <div class="modal-header">
+	                <button type="button" class="close"
+	                        data-dismiss="modal" aria-hidden="true">
+	                    &times;
+	                </button>
+	                <h4 class="modal-title" id="uploadtxt">
+	                    导入
+	                </h4>
+	            </div>
+	            <div class="modal-body">
+	                <!-- 添加表单内容-->
+	                <form class="form-horizontal" role="form" name="uploadForm" novalidate>
+	                    <div class="form-group upload_wedge">
+	                        <div id="marginTemplateUploader">upload</div>
+	                    </div>
+	                </form>
+	            </div>
+	        </div>
+	    </div>
+	</div>
+	
+</div>

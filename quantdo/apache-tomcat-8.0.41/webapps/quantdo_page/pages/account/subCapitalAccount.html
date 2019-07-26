@@ -1,0 +1,314 @@
+<link rel="stylesheet" href="account/subCapitalAccount.css" />
+<div class="row" ng-controller="SubCapitalAccountController">
+	<!-- start 定义表单查询-->
+	<form class="form-12">
+		<div class="form-row">
+			<div class="alert alert-success" ng-show="resultInfo">资产单元信息保存成功!</div>
+		</div>
+		<div class="form-row">
+			<div class="row-col-one">
+				<label class="word-style">资产单元</label> <select
+					ng-model="queryEntity.traderID" class="value-style"
+					ng-options="op.traderID as op.traderID+'_'+op.traderName for op in queryEntitys">
+					<option value="">全部</option>
+				</select>
+			</div>
+			<div class="row-col-one">
+				<label class="word-style">资产单元名称</label> <input type="text"
+					class="value-style" ng-model="queryEntity.traderName" />
+			</div>
+			<div class="row-col-one">
+				<label class="word-style">所属业务组</label> <select
+					ng-model="queryEntity.subAccountGroupID" class="value-style"
+					ng-options="f.id as f.text for f in subAccountGroupIDs">
+					<option value="">全部</option>
+				</select>
+			</div>
+		</div>
+		<div class="btn-beyond-one-row" ng-show="subCapitalAccount_query">
+			<button type="button" class="btn btn-query btn-word-two"  ng-disabled="isQuery"
+				ng-click="find()" >查询</button>
+		</div>
+		<div class="row-form row-btn-operation" ng-show="subCapitalAccount_add">
+			<div class="row-btn-icon">
+				<span class="btn-add-icon"></span> <input type="button"
+					data-target="#subCapitalAccountModal" ng-click="initParameter()"
+					class="btn btn-add btn-icon-two" value="新增" data-toggle='modal'>
+			</div>
+		</div>
+	</form>
+	<!--End 表单查询 -->
+
+	<!--PAGE CONTENT START-->
+	<div class="col-xs-12 clear-padding-right">
+		<div class="row">
+			<div class="col-xs-12 clear-padding-right">
+				<div>
+					<table id="SubCapitalAccount_dynamic_table"
+						class="cell-border stripe" cellspacing="0" width="100%">
+					</table>
+				</div>
+			</div>
+		</div>
+	</div>
+	<!--PAGE CONTENT END-->
+
+
+	<!-- 新增 修改 模态框（Modal） -->
+	<div class="modal fade  in" id="subCapitalAccountModal" tabindex="-1"
+		role="dialog" aria-labelledby="myModalLabel" aria-hidden="true"
+		data-backdrop="static" data-keyboard="false">
+		<div class="modal-dialog">
+			<div class="modal-content" style="width:1000px;">
+				<div class="modal-header">
+					<button type="button" class="close" data-dismiss="modal"
+						aria-hidden="true">&times;</button>
+					<h4 class="modal-title" id="myModalLabel">资产单元信息维护</h4>
+				</div>
+				<div class="modal-body">
+					<!-- 添加表单内容-->
+					<form class="form-horizontal" role="form" name="myForm" novalidate>
+						<div class="panel panel-default">
+							<div class="panel-heading">
+								<h3 class="panel-title">基本信息</h3>
+							</div>
+							<div class="panel-body">
+								<div class="row">
+									<div class="row-col-one">
+										<label for="traderID" class="word-style">资产单元 <span
+											style="color: red;">*</span></label> <input type="text"
+											class="value-style" id="traderID" placeholder="请输入资产单元"
+											ng-model="trader.traderID"
+											ng-pattern="/^[^\u4e00-\u9fa5\uFF00-\uFFFF\'\u0022,]{1,18}?$/" name="traderID"
+											maxlength="18" required ng-readonly="isUpdate"
+											onkeydown="myKeyup(event,this)" tab="1231"><span
+											ng-show="myForm.traderID.$dirty && myForm.traderID.$invalid"
+											style="color: red;">资产单元为必填项,且不能输入全角字符，汉字以及逗号引号双引号</span>
+									</div>
+									<div class="row-col-one">
+										<label for="traderID" class="word-style">资产单元名称<span
+											style="color: red;">*</span></label> <input type="text"
+											class="value-style" id="traderName" placeholder="请输入资产单元名称"
+											ng-model="trader.traderName" name="traderName" ng-pattern="/^[^\'\u0022]{1,20}?$/"
+											maxlength="20" required onkeydown="myKeyup(event,this)"
+											tab="1232"> <span
+											ng-show="myForm.traderName.$dirty && myForm.traderName.$invalid"
+											style="color: red;">资产单元名称为必填项，且不能输入单引号及双引号</span>
+									</div>
+									
+									<div class="row-col-one">
+										<label for="telephone" class="word-style">联系电话</label> <input
+											type="text" class="value-style" id="telephone"
+											placeholder="请输入联系电话" ng-model="traderInfo.telephone"
+											name="telephone" maxlength="30"
+											onkeydown="myKeyup(event,this)" tab="1233" style="margin-left:10px;">
+									</div>
+								</div>
+								<div class="row">
+									<div class="col-xs-6">
+									  <div class="row form-group" style="margin-bottom:0px;">
+											<label for="remark"	class="col-sm-2" style="margin-left:0px;">备注</label>
+											<div class="col-sm-8" style="margin-left:8px;">
+												<textarea class="form-control" id="address" style="width: 490px; height: 50px; resize: none;"
+													placeholder="请输入备注" ng-model="traderInfo.address"
+													name="remark" maxlength="100" tab="3110"
+													onkeydown="myKeyup(event,this)">
+												</textarea>
+											</div>
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+
+						<div class="panel panel-default">
+							<div class="panel-heading">
+								<h3 class="panel-title">资产单元信息</h3>
+							</div>
+							<div class="panel-body">
+								<div class="row">
+									<div class="row-col-one">
+										<label for="subAccountID" class="word-style" >资产单元<span style="color: red;">*</span></label>
+											<input type="text" class="value-style"
+												id="subAccountID" placeholder="请输入资产单元"
+												ng-model="trader.traderID" name="subAccountID"
+												maxlength="100" required ng-readonly="true"
+												onkeydown="myKeyup(event,this)" tab="2"> <span
+												ng-show="myForm.subAccountID.$dirty && myForm.subAccountID.$invalid"
+												style="color: red;">资产单元为必填项</span>
+									</div>
+								    <!--<div class="row-col-one">
+										<label for="positionType" class="word-style">持仓类型<span style="color: red;">*</span></label>
+										<select ng-model="modalEntity.positionType"
+											class="subCapitalAccount-select-style value-style" id="positionType"
+											required name="positionType"
+											onkeydown="myKeyup(event,this)" tab="3"
+											ng-options="op.key as op.key+'_'+op.text for op in positionTypes">
+										</select>
+										<span ng-show="myForm.positionType.$dirty && myForm.positionType.$invalid" style="color: red;">持仓类型为必填项</span>
+									</div>-->
+									<div class="row-col-one">
+										<label for="currency"  class="word-style" >基础币种<span style="color: red;">*</span></label>
+										<select ng-model="modalEntity.currency" required
+											class="subCapitalAccount-select-style value-style" id="currency"
+											name="currency" onkeydown="myKeyup(event,this)" tab="4"
+											ng-options="op.key as op.key+'_'+op.text for op in currencys">
+										</select> 
+										<span ng-show="myForm.currency.$dirty && myForm.currency.$invalid" style="color: red;">基础币种为必填项</span>
+									</div>
+								</div>
+								<div class="row">
+									<div class="row-col-one">
+										<label for="currency"  class="word-style" >资金账户组<span style="color: red;">*</span></label>
+										<select ng-model="modalEntity.accountGroupID" required
+												class="subCapitalAccount-select-style value-style" id="accountGroupID"
+												name="accountGroupID" onkeydown="myKeyup(event,this)" tab="4"
+												ng-change="getCapitalAccountByAccountGroup(modalEntity.accountGroupID)"
+												ng-options="op.accountGroupID as op.accountGroupID + '_' + op.accountGroupName for op in accountGroupIDs">
+										</select>
+										<span ng-show="myForm.accountGroupID.$dirty && myForm.accountGroupID.$invalid" style="color: red;">资金账户组为必填项</span>
+									</div>
+									<div class="row-col-one" ng-show="!hideFundProduct">
+										<label for="fundProductID" class="word-style" >基金产品</label>
+										<select ng-model="modalEntity.fundProductID"
+											class="subCapitalAccount-select-style value-style" id="fundProductID" name="fundProductID"
+											onkeydown="myKeyup(event,this)" tab="5"
+											ng-options="f.fundProductID as f.fundProductID+'_'+f.shortProductName for f in fundProductTems">
+											<option value="">请选择</option>
+										</select>
+									</div>
+									<div class="row-col-one" >
+										<label for="subAccountGroupID" class="word-style" >所属业务组</label>
+										<!--<select id="subbusinessGroup" style="width:400px;" class="subCapitalAccount-select-style value-style" multiple='multiple'></select>-->
+										<select ng-model="modalEntity.subAccountGroupID"
+											class="subCapitalAccount-select-style value-style" id="subAccountGroupID" name="subAccountGroupID"
+											onkeydown="myKeyup(event,this)" tab="6"
+											ng-options="f.subAccountGroupID as f.text for f in subAccountGroupIDs">
+											<option value=""></option>
+										</select>
+									</div>
+								</div>
+								<div class="row" style="margin-top:10px;margin-left:10px;">
+									<div class="move-outer-container">
+										<!-- 资金账号选择 -->
+										<!--<div class="move-container move-container-shadow">
+											&lt;!&ndash; left &ndash;&gt;
+											<div class="table-head">
+												<table  class="move-table">
+													<colgroup>
+						                                <col style="width: 150px;" />
+						                                <col style="width: 140px;" />
+						                            </colgroup>
+													<thead>
+														<tr class="container-tr-row">
+															<th>资金账号</th>
+															<th>账号名称</th>
+														</tr>
+													</thead>
+												</table>
+											</div>
+											<div class="table-body">
+												<table class="move-table">
+													<colgroup>
+						                                <col style="width: 150px;" />
+						                                <col style="width: 140px;" />
+						                            </colgroup>
+						                            <tbody>
+														<tr class="table-row" ng-repeat="lEntity in lCapEntitys" ng-class="{selectActive:lEntity.isSelectActive == true}">
+															<td
+																ng-bind="lEntity.innerAccountID"
+																ng-dblclick="addAccount($index,lEntity)"
+																ng-click="addAccountSelect($index,lEntity)"></td>
+															<td
+																ng-bind="lEntity.accountName"
+																ng-dblclick="addAccount($index,lEntity)"
+																ng-click="addAccountSelect($index,lEntity)"></td>
+														</tr>
+													</tbody>
+												</table>
+											</div>
+										</div>
+										<div class="move-container operation-container">
+						                    <span class="move-icon" ng-click="addSelectAccounts()">&gt;</span>
+						                    <span class="move-icon icon-move-right" ng-click="addAllAccounts()"></span>
+						                    <span class="move-icon icon-move-left"  ng-click="deleteAllAccounts()"></span>
+						                    <span class="move-icon" ng-click="deleteSelectAccounts()">&lt;</span>
+						                </div>-->
+										<!-- right  -->
+										<div class="move-container move-container-shadow">
+											<div class="table-head">
+												<table class="move-table">
+													<colgroup>
+						                                <col style="width: 150px;" />
+						                                <col style="width: 140px;" />
+														<col style="width: 100px;" />
+						                                <col style="width: 180px;" />
+						                            </colgroup>
+													<thead>
+														<tr class="container-tr-row">
+															<th>资金账号</th>
+															<th>经纪公司</th>
+															<th>市场</th>
+															<th>费率是否关联资金账号</th>
+														</tr>
+													</thead>
+												</table>
+											</div>
+											<div class="table-body">
+												<table class="move-table">
+													<colgroup>
+						                                <col style="width: 150px;" />
+						                                <col style="width: 140px;" />
+														<col style="width: 100px;" />
+						                                <col style="width: 180px;" />
+						                            </colgroup>
+													<tbody>
+														<tr class="table-row" ng-repeat="rEntity in rCapEntitys" ng-class="{selectActive:rEntity.isSelectActive == true}">
+															<td
+																ng-bind="rEntity.innerAccountID"
+																ng-dblclick="devedAccount($index,rEntity)"
+																ng-click="devedAccountSelect($index,rEntity)"></td>
+															<td
+																ng-bind="transBrokerageFirm(rEntity.brokerageFirmID)"
+																ng-dblclick="devedAccount($index,rEntity)"
+																ng-click="devedAccountSelect($index,rEntity)"></td>
+															<td
+																	ng-bind="transMarketTypes(rEntity.market)"
+																	ng-dblclick="devedAccount($index,rEntity)"
+																	ng-click="devedAccountSelect($index,rEntity)"></td>
+															<td
+																ng-dblclick="devedAccount($index,rEntity)"
+																ng-click="devedAccountSelect($index,rEntity)">
+																<input type="checkbox" name="checkbox_followAccount" class="capitalAccount-radio-style1 checkbox_followAccount"
+																	ng-click="changeStates(rCapEntitys,rEntity)" ng-model="rEntity.followAccount" id="checkbox_followAccount">
+																</td>
+														</tr>
+													</tbody>
+												</table>
+											</div>
+										</div>
+									</div>
+								</div>	
+
+							</div>
+						</div>
+					
+					</form>
+					<!--End  添加表单内容-->
+					<div class="modal-footer">
+					<span class="btn btn-info btn-sm popover-info" data-rel="popover"
+						data-placement="bottom" title=""
+						ng-click="myForm.traderID.$invalid || myForm.traderName.$invalid || myForm.accountGroupID.$invalid ||
+						myForm.positionType.$invalid || myForm.currency.$invalid || save(trader,traderInfo,modalEntity)"
+						ng-disabled="myForm.traderID.$invalid || myForm.traderName.$invalid || myForm.accountGroupID.$invalid ||
+						myForm.positionType.$invalid || myForm.currency.$invalid">&nbsp;确定&nbsp;</span>
+					<span class="btn btn-close btn-sm popover-info" data-rel="popover"
+						data-placement="bottom" title="" data-dismiss="modal">&nbsp;取消&nbsp;</span>
+				</div>
+				</div>
+				
+			</div>
+		</div>
+	</div>
+	<!-- /.modal -->
+</div>

@@ -1,0 +1,161 @@
+<div class="row" ng-controller="WeightUnitController">
+<!-- start 定义表单查询-->
+<form class="form-12">
+     <div class="form-row">
+            
+        <div class="row-col-one">
+             <label class="word-style">市场</label>
+             <select ng-model="queryEntity.exchID" class="value-style"  
+                 ng-options="op.exchID as op.exchID+'_'+op.exchName for op in exchangeDatas">
+                 <option value="">全部</option>
+             </select>
+        </div>
+    
+        <div class="row-col-one">
+            <label class="word-style">品种代码</label>
+                <input type="text" class="value-style" ng-model="queryEntity.productID" name="productID"/>
+
+        </div>
+
+  
+    </div>
+    
+     <div class="btn-beyond-one-row" ng-show="weightUnit_query">
+      	   <button type="button" class="btn btn-query btn-word-two"  ng-click="find(queryEntity)" ng-disabled="isQuery"> 查询</button>
+    </div>
+    <div class="row-form row-btn-operation" ng-show="weightUnit_add">
+    	<div class="row-btn-icon">
+             <span class="btn-add-icon"></span>
+				<button class="btn btn-add btn-icon-two" id="bootbox-options2" ng-click="initParameter()" data-toggle="modal"
+			                data-target="#weightunitModal">新增
+			    </button>
+		</div>
+    </div>
+</form>
+
+ <div class="col-xs-12 clear-padding-right">
+        <div class="row">
+            <div class="col-xs-12 clear-padding-right">
+                <div>
+                    <table id="weightUnit_dynamic_table" class="cell-border stripe" cellspacing="0" width="100%">
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+<!-- /.col -->
+
+<!-- 新增 修改 模态框（Modal） -->
+<div class="modal fade" id="weightunitModal" tabindex="-1" role="dialog"
+     aria-labelledby="myModalLabel" aria-hidden="true" data-backdrop="static" data-keyboard="false">
+    <div class="modal-dialog" >
+        <div class="modal-content"  style="width:650px">
+            <div class="modal-header">
+                <button type="button" class="close"
+                        data-dismiss="modal" aria-hidden="true">
+                    &times;
+                </button>
+                <h4 class="modal-title" id="myModalLabel">
+                 敞口单位信息维护
+                </h4>
+            </div>
+            <div class="modal-body">
+                <!-- 添加表单内容-->
+                <form class="form-horizontal" role="form"  name="myForm" novalidate>
+                		<div class="panel panel-default panel-no-border">
+                			<div class="panel-body">               
+		                    <div class="row">
+		                      
+		                      <div class="col-xs-6">
+		                            <div class="row form-group">
+		                                <label class="col-sm-4 control-label">品种代码<span style="color: red;">*</span></label>
+		
+		                                <div class="col-sm-8">
+		                                    <input type="text" class="form-control  two-columns-modal-input"  id="productID" placeholder="请输入品种代码"
+		                                           ng-model="ModalEntity.productID" name="productID" maxlength="30" ng-readonly="isUpdate"
+		                                           required>
+		                                    <span ng-show="myForm.productID.$dirty && myForm.productID.$invalid"
+		                                          style="color: red;">品种代码为必填项</span>
+		                                </div>
+		                            </div>
+		                        </div>
+		                         <div class="col-xs-6">
+		                            <div class="row form-group">
+		                                <label class="col-sm-4 control-label">标准敞口单位<span style="color: red;">*</span></label>
+		
+		                                <div class="col-sm-8">
+		                                    <input type="text" class="form-control  two-columns-modal-input"  id="standardUnit" placeholder="请输入标准敞口单位"
+		                                           ng-model="ModalEntity.standardUnit" name="standardUnit" maxlength="10"
+		                                           required>
+		                                    <span ng-show="myForm.standardUnit.$dirty && myForm.standardUnit.$invalid"
+		                                          style="color: red;">标准敞口单位为必填项</span>
+		                                </div>
+		                            </div>
+		                        </div>
+		                    </div>
+		                    <div class="row">
+		                      <div class="col-xs-6">
+		                            <div class="row form-group">
+		                                <label class="col-sm-4 control-label">市场<span
+		                                        style="color: red;">*</span></label>
+		                                <div class="col-sm-8">
+		                                 <select ng-model="ModalEntity.exchID" 
+	                            		required name="exchID"  ng-disabled="isUpdate"
+	                                    ng-options="op.exchID as op.exchID+'_'+op.exchName for op in exchangeDatas" class=""></select>
+		                                            
+		                                </div>
+		                            </div>
+		                        </div>
+
+		                           <div class="col-xs-6">
+		                            <div class="row form-group">
+		                                <label class="col-sm-4 control-label">市场敞口单位<span style="color: red;">*</span></label>
+		
+		                                <div class="col-sm-8">
+		                                    <input type="text" class="form-control  two-columns-modal-input"  id="unit" placeholder="请输入市场敞口单位"
+		                                           ng-model="ModalEntity.unit" name="unit" maxlength="10"
+		                                           required>
+		                                    <span ng-show="myForm.unit.$dirty && myForm.unit.$invalid"
+		                                          style="color: red;">市场敞口单位为必填项</span>
+		                                </div>
+		                            </div>
+		                        </div>
+		                    </div>
+		                    <div class="row">
+		                          <div class="col-xs-6">
+		                            <div class="row form-group">
+		                                <label class="col-sm-4 control-label">倍率<span style="color: red;">*</span></label>
+		
+		                                <div class="col-sm-8">
+		                                    <input type="text" class="form-control  two-columns-modal-input"  id="converCoef" placeholder="请输入倍率"
+		                                           ng-model="ModalEntity.converCoef" name="converCoef" maxlength="23"
+		                                        	ng-pattern="/^\d{1,14}(\.\d{0,8})?$/"
+		                                           required>
+		                                    <span ng-show="myForm.converCoef.$dirty && myForm.converCoef.$invalid"
+		                                          style="color: red;">倍率为必填项，且浮点型数字，最多14位整数8位小数</span>
+		                                </div>
+		                            </div>
+		                        </div>
+		                       
+		                    </div>
+
+		                 
+                        </div>
+                    </div>
+
+                    <div><input type="hidden" ng-bind="ModalEntity.recordIndex"></div>
+                </form>
+                <!--End  添加表单内容-->
+            </div>
+            <div class="modal-footer">
+                    <span class="btn btn-info btn-sm popover-info" data-rel="popover" data-placement="bottom" title=""
+                          ng-click="myForm.productID.$invalid || myForm.standardUnit.$invalid ||myForm.unit.$invalid||myForm.converCoef.$invalid || save(ModalEntity)"
+                          ng-disabled="myForm.productID.$invalid || myForm.standardUnit.$invalid ||myForm.unit.$invalid||myForm.converCoef.$invalid ">&nbsp;确定&nbsp;</span>
+                    <span class="btn btn-close btn-sm popover-info" data-rel="popover" data-placement="bottom" title=""
+                          data-dismiss="modal">&nbsp;取消&nbsp;</span>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- /.modal -->
+</div>

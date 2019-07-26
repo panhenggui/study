@@ -1,0 +1,55 @@
+<link href="windControl/productRisk.css" rel="stylesheet">
+<title>单位净值止损设置</title>
+<div ng-controller="unitNetvalueStopController" style="width: 100%;overflow: auto;">
+    <div style="height:10px;"></div>
+    <input type="button"  ng-show = "unitNetAddButtonIsShow" value = &nbsp;&nbsp;&nbsp;新&nbsp;&nbsp;增&nbsp;&nbsp;&nbsp; class="backFilter myNewBtn" name="UnitNetvalueStopService.saveUnitNetvalueStop" ng-click = "showDetail()">
+    <div style="height:15px;"></div>
+    <div>
+	    <table id="unitNetvalueStop_table" class="cell-border stripe" cellspacing="0" width="100%">
+	    </table>
+    </div>
+    <div ng-show = unitNetValueStopShow>
+    <label class="detail-header">单位净值止损参数设置</label>
+    <div class="controlDetail">
+    	<div class="detailRow">
+	        <label>单位净值:</label>
+	        <input ng-model="unitNetvalueStopEntity.unitNetvalue" id="unitNetvalueStop_unitNetvalue" class="detail-select multi-label"></input>
+	        
+	        <label style="margin-left:20px;">净值类型:</label>
+		    <select ng-change = "valueTypeChange()" ng-disabled = "unitNetValueStopActionCode" ng-model="unitNetvalueStopEntity.valueType" ng-init="unitNetvalueStopEntity.valueType='1'" id="unitNetvalueStop_valueType" class="select-style">
+		    	<option value="1"></option>
+				<option value="2">预警线</option>
+				<option value="3">止损线</option>
+		    </select>
+	    	<label style="margin-left:20px;">风控方式:</label>
+		    <select ng-disabled = "unitNetValueStopActionCode" ng-model="unitNetvalueStopEntity.actionCode"  ng-init="unitNetvalueStopEntity.actionCode='1'" id="unitNetvalueStop_actionCode" class="select-style">
+				<option value="1">控制权限</option>
+				<!-- <option value="2">清仓</option> -->
+				<option value="3">预警</option>
+		    </select>
+		    <label ng-show="false" style="margin-left:20px;">触发方式:</label>
+		    <select ng-show="false" ng-disabled = "unitNetValueStopActionCode" ng-model="unitNetvalueStopEntity.tagType"  ng-init="unitNetvalueStopEntity.tagType='<='" id="unitNetvalueStop_tagType" class="select-style">
+				<option value="<=">等于阈值时触发风控</option>
+				<option value="<">超过阈值时触发风控</option>
+		    </select>
+	    </div>
+	    <div style="height:20px;"></div>
+	    <div class="operation-table">
+   	    	
+	    	<div class="btn-add-left">
+	  			<input type="button" value={{unitNetvalueStop_buttonName_save}} name="UnitNetvalueStopService.saveUnitNetvalueStop" ng-show="buttonEdit" class="backFilter myNewBtn" ng-click="saveUnitNetvalueStop(unitNetvalueStopEntity)">
+	        	<input type="button" value={{unitNetvalueStop_buttonName_update}} name="UnitNetvalueStopService.updateUnitNetvalueStop" ng-show="!buttonEdit" class="backFilter myNewBtn" ng-click="saveUnitNetvalueStop(unitNetvalueStopEntity)">
+	        </div>
+	        
+	        <div class="btn-add-left">
+    				<input type="button" value={{unitNetvalueStop_buttonName_detail_save}} class="backFilter myNewBtn" name="UnitNetvalueStopService.saveUnitNetvalueStop" ng-show="buttonEdit" ng-click="addUnitNetvalueStop()">
+    				<input type="button" value={{unitNetvalueStop_buttonName_detail_update}} class="backFilter myNewBtn" name="UnitNetvalueStopService.saveUnitNetvalueStop" ng-show="!buttonEdit" ng-click="giveUpUpdate()">
+	   		</div>
+	   		
+	   	</div>
+    </div>
+    </div>
+    <!-- 这个input是因为找不到解决这个页面angulajs赋值无效加的方法，实在没办法加的。在解决$scope.warnFlga，$scope.stopLossFlag 赋值无效之前勿删除 -->
+    <input id="unitNetvalueStop_warnFlag" ng-show = "false"></input>
+    <input id="unitNetvalueStop_stopLossFlag" ng-show = "false"></input>
+</div>

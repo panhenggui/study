@@ -1,0 +1,332 @@
+<link href="windControl/assetGroupForManagement.css" rel="stylesheet">
+<div ng-controller="assetGroupControllerForManagement" class="row" style="width: 100%;">
+<form class="form-12">
+    <div class="form-row">
+    
+       <div class="row-col-one">
+		    <label class="word-style">所属机构</label>
+	        <select class="value-style" ng-model="assetGroupEntity.brokerID"
+	                ng-options="ca.brokerID as ca.brokerName for ca in brokerIDList">
+	        </select>
+       </div>
+       
+       <div class="row-col-one">
+          
+		     <label class="word-style">数据来源</label>
+	         <select class="value-style" ng-model="assetGroupEntity.dataSourceID"
+               		ng-options="ds.dataSourceID as ds.dataSourceName for ds in dataSourceList">
+               </select>
+       </div> 
+      
+      <div class="row-col-one">
+          
+		        <label class="word-style">市场</label>
+		         	
+				        <select class="value-style" ng-model="assetGroupEntity.capitalTypeID"
+				                ng-options="ct.capitalTypeID as ct.capitalTypeName for ct in capitalTypeList">
+				        </select>
+         
+       </div>
+       
+        <div class="row-col-one">
+		        <label class="word-style">分类方式</label>
+		        <select class="value-style" ng-model="assetGroupEntity.sortTypeID"
+		                ng-options="st.sortTypeID as st.sortTypeName for st in sortTypeList">
+		        </select>
+                    
+       </div>
+        
+        <div class="row-col-one">
+          
+		        <label class="word-style">分类名称</label>
+		         
+				       <input type="text" class="value-style" ng-model="assetGroupEntity.sortName">
+                    
+           
+       </div>
+        
+    </div>
+    
+     
+     <div class="btn-beyond-one-row" ng-show="assetGroup_query">
+      	   <button type="button" class="btn btn-query btn-word-two"  ng-click="assetQuery(assetGroupEntity)" ng-disabled="isQuery"> 查询</button>
+    </div>
+    <div class="row-form row-btn-operation">
+    	<div class="row-btn-icon" ng-show="assetGroup_addDetail">
+    			<span class="btn-add-icon"></span>
+				<button class="btn btn-add btn-icon-two" id="bootbox-options2" ng-click="initAddDetailSortModal()" data-toggle="modal"
+			                >增加明细分类
+			    </button>
+		</div>
+		<div class="row-btn-icon" ng-show="assetGroup_addGroup">
+				<span class="btn-add-icon"></span>
+				<button class="btn btn-add btn-icon-two" id="bootbox-options2" ng-click="initAddCombineSortType()" data-toggle="modal"
+			                >增加组合分类
+			    </button>
+		</div>
+		<div class="row-btn-icon" ng-show="assetGroup_import">
+				<span class="btn-add-icon"></span>
+				<button class="btn btn-add btn-icon-two" id="bootbox-options2" ng-click="initUploadModal()" data-toggle="modal"
+			               >从文件导入分类
+			    </button>
+		</div>
+    </div>
+    
+   <!--  <div class="row header-information">
+	     
+          <input type="button" class="btn btn-success" value="增加明细分类" data-toggle="modal" data-target="#addOrUpdateDetailSortDataModal"
+             	ng-click="initAddDetailSortModal()">
+
+         <input type="button" class="btn btn-success" value="增加组合分类" data-toggle="modal" data-target="#addOrUpdateCombineSortDataModal"
+        			ng-click="initAddCombineSortType()">
+
+          <input type="button" class="btn btn-success" value="从文件导入分类" data-toggle="modal" data-target="#uploadDetailSortDataModal" ng-click="initUploadModal()">
+
+         <input type="button" class="btn btn-query btn-word-two" ng-disabled = "query_Disabled" value="查询" ng-click="assetQuery(assetGroupEntity)">
+	    
+	</div>    -->        
+	               
+</form>
+<div >
+
+
+<div id = "outerContainer_asseGroup">
+<div id = "mytable_asseGroup">
+<table id="assetGroup_table" class="cell-border stripe" cellspacing="0" width="100%"> 
+        <thead>
+		<tr>
+			<th>序号</th>
+			<th>分类名称</th>
+			<th>市场ID</th>
+			<th>市场</th>
+			<th>分类方式ID</th>
+			<th>分类方式</th>
+			<th>数据来源ID</th>
+			<th>数据来源</th>
+			<th>所属机构ID</th>
+			<th>所属机构</th>
+			<th>操作</th>
+		</tr>
+	</thead>
+</table>
+</div>
+</div>
+
+</div>
+<!-- 点击明细按钮时弹出的modal框 -->
+<div class="modal fade" id="showDetailSortDataModel" tabindex="-1" role="dialog"
+     aria-labelledby="myshowDetailSortDataModel" aria-hidden="true" data-backdrop="static" data-keyboard="false">
+<div class="modal-dialog">
+<div class="modal-content" style="width: 1000px">
+<div class="modal-header">
+    <button type="button" class="close"
+            data-dismiss="modal" aria-hidden="true">
+        &times;
+    </button>
+    <h4 class="modal-title" id="myshowDetailSortDataModel" ng-model="myModalTitle.showDetailModal">{{myModalTitle.showDetailModal}}
+    </h4>
+</div>
+		<div class="modal-body" style="padding:5px 17px 5px 5px;height: 450px;">
+			<table id="showDetailSortData_table" class="cell-border stripe"  width="100%">
+				<thead>
+					<tr>
+						<th>序号</th>
+						<th>证券/合约代码</th>
+						<th>名称</th>
+						<th>交易所代码</th>
+					</tr>
+				</thead>
+			</table>
+		</div>
+		<div class="modal-footer">
+            <input type="button" value="退出" class="btn btn-close" ng-click="exitModal('showDetailSortDataModel')">
+        </div>
+</div>
+</div>
+</div>
+
+
+<!--点击增加明细分类按钮，或者 修改明细分类按钮时相应的modal-->
+<div class="modal fade" id="addOrUpdateDetailSortDataModal" tabindex="-1" role="dialog"
+     aria-labelledby="myAddOrUpdateDetailSortDataModal" aria-hidden="true" data-backdrop="static" data-keyboard="false">
+<div class="modal-dialog" style="width: 1200px;height:600px;margin:0 auto;">
+<div class="modal-content" style="height:900px;">
+<div class="modal-header">
+    <button type="button" class="close"
+            data-dismiss="modal" aria-hidden="true">
+        &times;
+    </button>
+    <h4 class="modal-title" id="myAddOrUpdateDetailSortDataModal" ng-model="myModalTitle.showAddOrUpdateDetailSortModal">{{myModalTitle.showAddOrUpdateDetailSortModal}}
+    </h4>
+</div>
+            <div class="modal-body" id="myDetail" style="padding:5px 17px 5px 5px;height: 580px;">
+            
+            		<label class="word-style" style="margin-left: 17px;">分类名称</label>
+                    <input type="text" class= "value-style" ng-model="saveOrUpdateDetailSortEntity.sortName" ng-disabled="detailSort_isDisabled">
+            	
+                    
+                    <label style="margin-left: 17px;">资产类型</label>
+                    <select ng-change = changeSelect() class="col-len" ng-model="saveOrUpdateDetailSortEntity.capitalTypeID" ng-disabled="detailSort_isDisabled" ng-options="ct.key as ct.text for ct in assetContractType"></select>
+                    <div style="line-height: 40px;margin-bottom: -10px;">
+                        <label id="search_label" class="word-style" style="margin-left: 17px;">证券/合约代码</label>
+                        <input type="text" class="value-style" ng-keyup="findByID(saveOrUpdateDetailSortEntity)" ng-model="queryDetailByID" id="search_text">
+                        <label class="myred hidden" id="zqinformation">至少输入<mark>4</mark>位</label>
+                        <label class="myred hidden" id="qhinformation">至少输入<mark>1</mark>位</label>
+                    </div>
+                    <div class="detail-type-table">
+                        <div class="left-table" id="left_table">
+                            <!-- <table id="unchoiceType_table" class="cell-border stripe" cellspacing="0" width="100%"> -->
+                            <table id="unchoiceType_table" class="cell-border stripe">
+                            <thead>
+							    <tr>
+									<th>序号</th>
+									<th>待选证券/合约代码</th>
+									<th>名称</th>
+									<th>交易所代码</th>
+								</tr>
+							</thead>
+                            </table>
+                        </div>
+                        <div class="center-content" id="center_content">
+                        	<div class="move-container operation-container">
+			                    <span class="move-icon" ng-click="addTochoiced()">&gt;</span>
+			                    <span class="move-icon icon-move-right" ng-click="addAlltoChoiced()"></span>
+			                    <span class="move-icon icon-move-left" ng-click="removeAlltoChoiced()"></span>
+			                    <span class="move-icon" ng-click="removeFromChoiced()">&lt;</span>
+			                </div>
+                        	<!-- <button  class="btn btn-add btn-icon-two" style="margin-top: 50px;" ng-click="addAlltoChoiced()">>></button>
+                            <button  class="btn btn-add btn-icon-two" style="margin-top: 50px;" ng-click="addTochoiced()">&nbsp;>&nbsp; </button>
+                            <button  class="btn btn-add btn-icon-two" style="margin-top: 50px;" ng-click="removeFromChoiced()"> &nbsp;&lt;&nbsp; </button>
+                            <button  class="btn btn-add btn-icon-two" style="margin-top: 50px;" ng-click="removeAlltoChoiced()"> &lt;&lt;</button> -->
+                        </div>
+                        <div class="right-table" id="right_table">
+                            <!-- <table id="choicedType_table" class="cell-border stripe" cellspacing="0" width="100%"> -->
+                            <table id="choicedType_table" class="cell-border stripe" >
+                            <thead>
+							    <tr>
+									<th>序号</th>
+									<th>已选证券/合约代码</th>
+									<th>名称</th>
+									<th>交易所代码</th>
+								</tr>
+							</thead>
+                            </table>
+                        </div>
+                    </div>
+        </div>
+		<div class="modal-footer" style="padding-bottom:50px;">
+			<div style="display:inline-block;text-align:center; padding-right:40px; position:relative; bottom:50px; padding-bottom:50px;">
+		    	<input type="button" class="btn btn-add btn-icon-two" style="text-align:left;padding-left:20px;" ng-click="saveOrUpdateDetailSortData(saveOrUpdateDetailSortEntity)" ng-model="myModalButton.saveOrUpdate" value = {{myModalButton.saveOrUpdate}}>
+            	<input type="button" value="退出" class="btn btn-close btn-icon-two" style="text-align:left;padding-left:20px;" ng-click="exitModal('addOrUpdateDetailSortDataModal')">
+            </div>
+        </div>
+</div>
+</div>
+</div>
+
+<!--点击增加组合分类按钮，或者 修改组合分类按钮时相应的modal-->
+<div class="modal fade" id="addOrUpdateCombineSortDataModal" tabindex="-1" role="dialog"
+     aria-labelledby="myAddOrUpdateCombineSortDataModal" aria-hidden="true" data-backdrop="static" data-keyboard="false">
+<div class="modal-dialog">
+<div class="modal-content" style="width: 1000px">
+<div class="modal-header">
+    <button type="button" class="close"
+            data-dismiss="modal" aria-hidden="true">
+        &times;
+    </button>
+    <h4 class="modal-title" id="myAddOrUpdateCombineSortDataModal" ng-model="myModalTitle.showAddOrUpdateCombineSortModal">{{myModalTitle.showAddOrUpdateCombineSortModal}}
+    </h4>
+</div>
+            <div class="modal-body" id="myDetail" style="padding:5px 17px 5px 5px;height: 580px;">
+                    <label class= "word-style" style="margin-left: 17px;">分类名称</label>
+                    <input type="text" class= "value-style" ng-model="saveOrUpdateCombineSortEntity.sortName" ng-disabled="combineSort_isDisabled" style="margin-left: 30px;">
+                    <label class= "word-style" style="margin-left: 17px;">资产类型</label>
+                    <select class="col-len" ng-model="saveOrUpdateCombineSortEntity.capitalTypeID" ng-change = "changeCombineCapital()" ng-disabled="combineSort_isDisabled" ng-options="ct.key as ct.text for ct in assetContractType"></select>
+                    <div class="detail-type-table">
+                        <div class="left-table">
+                            <table id="hasGroupType_table" class="cell-border stripe">
+                            <thead>
+							    <tr>
+									<th>序号</th>
+									<th>选项</th>
+									<th>分类名称</th>
+									<th>操作</th>
+								</tr>
+							</thead>
+                            </table>
+                        </div>
+                        <div class="center-content">
+                           <input type="button" value="增加" class="btn btn-add btn-icon-one" style="align:center;width: 60px;" ng-click="addCombineToRight()">
+                        </div>
+                        <div class="right-table">
+                            <table id="needAddGroup_table" class="cell-border stripe">
+                            <thead>
+							    <tr>
+									<th>序号</th>
+									<th>组合分类内容</th>
+									<th>操作</th>
+								</tr>
+							</thead>
+                            </table>
+                        </div>
+                    </div>
+        </div>
+		<div class="modal-footer">
+		    <input type="button" class="btn btn-add btn-icon-one" style="align:center;width: 60px;" ng-click="saveOrUpdateCombineSortData(saveOrUpdateCombineSortEntity)" ng-model="myModalButton.saveOrUpdate" value = {{myModalButton.saveOrUpdate}}>
+            <input type="button" value="退出" class="btn btn-close btn-icon-one" style="align:center;width: 60px;" ng-click="exitModal('addOrUpdateCombineSortDataModal')">
+        </div>
+</div>
+</div>
+</div>
+
+<!-- 点击文件导入按钮，对应的modal -->
+ <div class="modal fade" id="uploadDetailSortDataModal" tabindex="-1" role="dialog"
+     aria-labelledby="myuploadDetailSortDataModal" aria-hidden="true" data-backdrop="static" data-keyboard="false">
+<div class="modal-dialog" style="width:60%;margin:0 auto;">
+<div class="modal-content">
+<div class="modal-header">
+    <button type="button" class="close"
+            data-dismiss="modal" aria-hidden="true">
+        &times;
+    </button>
+    <h4 class="modal-title" style="margin-top:30px;" id="myuploadDetailSortDataModal" ng-model="myModalTitle.showuploadDetailSortModal">{{myModalTitle.showuploadDetailSortModal}}
+    </h4>
+</div>
+            <div class="modal-body" id="myDetail" style="padding:5px 17px 5px 5px;height: 70%;">
+            			<div>
+		            		<label style="margin-left: 17px;">资产类型</label>
+		                    <select  ng-model="uploadDetailSortEntity.capitalTypeID" ng-options="ct.key as ct.text for ct in assetContractType"></select>
+		                    <label style="margin-left: 17px;">数据来源</label>
+		                    <select  ng-model="uploadDetailSortEntity.dataSourceID" ng-options="ct.key as ct.text for ct in uploadDataSource"></select>
+		      			</div>  
+		      			<span id="uploadFundloaderAssGroup" style="position:absolute; left:0px; top:30px;margin-left: 480px;">选择分类文件</span>            
+	                    <div class="detail-type-table">
+	                        <table id="fileUpload_table" class="cell-border stripe">
+		                        <thead>
+								    <tr>
+										<th>序号</th>
+										<th>分类名称</th>
+										<th>交易所代码</th>
+										<th>待选证券/合约代码</th>
+										<th>名称</th>
+									</tr>
+								</thead>
+                            </table>
+	                    </div>
+        </div>
+		<div class="modal-footer">
+		    <input type="button" class="btn btn-add btn-icon-two" ng-click="uploadDetailSortData(uploadDetailSortEntity)" ng-model="myModalButton.saveOrUpdate" value = {{myModalButton.saveOrUpdate}}>
+            <input type="button" value="退出" class="btn btn-close btn-icon-two" ng-click="exitModal('uploadDetailSortDataModal')">
+        </div>
+</div>
+</div>
+</div>
+
+ </div>
+    
+
+                
+                
+
+               
+               

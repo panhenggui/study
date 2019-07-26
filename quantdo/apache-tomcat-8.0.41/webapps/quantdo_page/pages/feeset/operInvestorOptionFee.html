@@ -1,0 +1,343 @@
+<div class="row" ng-controller="operInvestorOptionFeeController">
+	<!-- start 定义表单查询-->
+	<form class="form-12">
+	 <div class="form-row">
+	 		<div class="row-col-one" ng-show="isMainBroker">
+					<label class="word-style">机构代码</label>
+					<select ng-model="queryEntity.brokerID" class="value-style" ng-change="getQueryAccounts(queryEntity.brokerID)"
+						ng-options="op.instClientID as op.instClientID+'_'+op.instClientAbbrName for op in instDatas">
+						<option value="">全部</option>
+					</select>
+			</div>
+			<div class="row-col-one">
+					<label class="word-style">{{accountType}}</label>
+					<select ng-model="queryEntity.investorID" class="value-style"
+						ng-options="op.investorID as op.investorID+'_'+op.accountName for op in accountDatas">
+						<option value="">全部</option>
+					</select>
+			</div>
+            <div class="row-col-one">
+                    <label class="word-style">交易所</label>
+                    <select ng-model="queryEntity.exchID" class="value-style"
+                        ng-options="op.exchID as op.exchID+'_'+op.exchName for op in exchangeDatas">
+                        <option value="">全部</option>
+                    </select>
+	        </div>
+			<div class="row-col-one">
+					<label class="word-style">品种/合约代码</label>
+					<input type="text" ng-model="queryEntity.instrumentID" class="value-style"/>
+			</div>
+	  </div>
+	  <div class="btn-beyond-one-row">
+      	      		<button type="button" class="btn btn-query btn-word-two"  ng-click="find()"  ng-disabled="isQuery"> 查询</button>
+      </div>
+	  <div class="row-form row-btn-operation">
+		          	<div class="row-btn-icon">
+		               <span class="btn-add-icon"></span>
+		               <input type="button"  ng-click="initParameter()"  class="btn btn-add btn-icon-two" value="新增" data-toggle='modal' >
+		            </div>
+		</div>           
+	</form>
+	<!--End 表单查询 -->
+
+	<!--PAGE CONTENT START-->
+	<div class="col-xs-12 clear-padding-right">
+        <div class="row">
+            <div class="col-xs-12 clear-padding-right">
+                <div>
+                    <table id="operInvestorOpFxFee_dynamic_table" ng-show = "isFx"   class="cell-border stripe" cellspacing="0" width="100%">
+                    </table>
+                    <table id="operInvestorOpZjFee_dynamic_table" ng-show = "!isFx"   class="cell-border stripe" cellspacing="0" width="100%">
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!--PAGE CONTENT END-->	
+
+	<!-- 新增 修改 模态框（Modal） -->
+	<div class="modal fade" id="operInvestorOptionFeeModal" tabindex="-1" role="dialog"
+		aria-labelledby="myModalLabel" aria-hidden="true"
+		data-backdrop="static" data-keyboard="false">
+		<div class="modal-dialog">
+			<div class="modal-content" style="width:650px;">
+				<div class="modal-header">
+					<button type="button" class="close" data-dismiss="modal"
+						aria-hidden="true">&times;</button>
+					<h4 class="modal-title" id="myModalLabel">交易手续费维护</h4>
+				</div>
+				<div class="modal-body">
+					<!-- 添加表单内容-->
+					<form class="form-horizontal" name="myForm" novalidate>
+						<div class="panel panel-default">
+							<div class="panel-heading">
+								<h3 class="panel-title">基本设置</h3>
+							</div>
+							<div class="panel-body">
+								<div class="row">
+								
+									<div class="col-xs-6">
+										<div class="row form-group">
+											<label for="investorID"
+												class="col-sm-4 control-label">{{accountType}}代码</label>
+											<div class="col-sm-7">
+												<select ng-model="ModalEntity.investorID" name="investorID" required
+													ng-disabled = "isUpdate"
+													class="form-control two-columns-modal-input" 
+													ng-options="op.investorID as op.investorID+'_'+op.accountName for op in accounts"
+													id="investorID" onkeydown="myKeyup(event,this)" tab="1"></select>
+											</div>
+										</div>
+									</div>
+									
+									<div class="col-xs-6">
+										<div class="row form-group">
+											<label for="exchID"
+												class="col-sm-4 control-label">交易所代码</label>
+
+											<div class="col-sm-7">
+												<select ng-model="ModalEntity.exchID" ng-disabled = "isUpdate"
+													class="form-control two-columns-modal-input" 
+													ng-options="op.exchID as op.exchID+'_'+op.exchName for op in exchangeDatas"
+													id="exchID" onkeydown="myKeyup(event,this)" tab="2" name="exchID" required></select>
+											</div>
+										</div>
+									</div>
+									
+								</div>
+								
+								<div class="row">
+									<div class="col-xs-6">
+										<div class="row form-group">
+											<label for="productID"
+												class="col-sm-4 control-label">品种/合约代码</label>
+
+											<div class="col-sm-7">
+												<input type="text" ng-model="ModalEntity.instrumentID" name="instrumentID" required
+													class="form-control two-columns-modal-input" ng-disabled = "isUpdate" maxlength=30
+													id="instrumentID" onkeydown="myKeyup(event,this)" tab="3">
+												<span ng-show="myForm.instrumentID.$dirty && myForm.instrumentID.$invalid"
+													style="color: red;">品种/合约代码为必填项</span>
+											</div>
+										</div>
+									</div>
+								</div>
+								
+							</div>
+						</div>
+						<div class="panel panel-default">
+							<div class="panel-heading">
+								<h3 class="panel-title">手续费率设置</h3>
+							</div>
+							<div class="panel-body">
+							
+								<div class="row">
+									<div class="col-xs-6">
+										<div class="row form-group">
+											<label for="openFeeRate"
+												class="col-sm-4 control-label">开仓按金额<span
+												style="color: red;">*</span></label>
+
+											<div class="col-sm-7">
+												<div style="white-space: nowrap;">
+													<input type="text" class="form-control two-columns-modal-input"  id="openFeeRate"
+														placeholder="请输入开仓按金额" onkeydown="myKeyup(event,this)"
+														tab="4" ng-model="ModalEntity.openFeeRate"
+														ng-pattern="/^\d{1,5}(\.\d{0,4})?$/" name="openFeeRate"
+														maxlength="10" required>
+												</div>
+												<span ng-show="myForm.openFeeRate.$dirty && myForm.openFeeRate.$invalid"
+														style="color: red;">开仓按金额为必填项，且最多录入5位整数4位小数，例：98.1234</span>
+													
+											</div>
+											<label for="setValue"  class="col-sm-1 control-label behind-input">%%</label>	
+										</div>
+									</div>
+
+									<div class="col-xs-6">
+										<div class="row form-group">
+											<label for="openFeeAmt"
+												class="col-sm-4 control-label">开仓按手数<span
+												style="color: red;">*</span></label>
+
+											<div class="col-sm-7">
+												<input type="text" class="form-control two-columns-modal-input"  id="openFeeAmt"
+													placeholder="请输入开仓按手数" ng-model="ModalEntity.openFeeAmt"
+													ng-pattern="/^\d{1,8}(\.\d{0,3})?$/" name="openFeeAmt"
+													maxlength="12" required onkeydown="myKeyup(event,this)" tab="5"> <span
+													ng-show="myForm.openFeeAmt.$dirty && myForm.openFeeAmt.$invalid"
+													style="color: red;">开仓按手数为必填项，且最多录入8位整数3位小数，例：98.123</span>
+											</div>
+										</div>
+									</div>
+								</div>
+
+								<div class="row">
+									<div class="col-xs-6">
+										<div class="row form-group">
+											<label for="offsetFeeRate"
+												class="col-sm-4 control-label">平仓按金额<span
+												style="color: red;">*</span></label>
+
+											<div class="col-sm-7">
+												<div style="white-space: nowrap;">
+													<input type="text" class="form-control two-columns-modal-input"  id="offsetFeeRate"
+														placeholder="请输入平仓按金额" ng-model="ModalEntity.offsetFeeRate"
+														ng-pattern="/^\d{1,5}(\.\d{0,4})?$/" name="offsetFeeRate"
+														maxlength="10" required onkeydown="myKeyup(event,this)" tab="6">
+												</div>
+												<span ng-show="myForm.offsetFeeRate.$dirty && myForm.offsetFeeRate.$invalid"
+														style="color: red;">平仓按金额为必填项，且最多录入5位整数4位小数，例：98.1234</span>
+												
+											</div>
+											<label for="setValue"  class="col-sm-1 control-label behind-input">%%</label>
+										</div>
+									</div>
+
+									<div class="col-xs-6">
+										<div class="row form-group">
+											<label for="offsetFeeAmt"
+												class="col-sm-4 control-label">平仓按手数<span
+												style="color: red;">*</span></label>
+
+											<div class="col-sm-7">
+												<input type="text" class="form-control two-columns-modal-input"  id="offsetFeeAmt"
+													placeholder="请输入平仓按手数" ng-model="ModalEntity.offsetFeeAmt"
+													ng-pattern="/^\d{1,8}(\.\d{0,3})?$/" name="offsetFeeAmt"
+													maxlength="12" required onkeydown="myKeyup(event,this)" tab="7"> <span
+													ng-show="myForm.offsetFeeAmt.$dirty && myForm.offsetFeeAmt.$invalid"
+													style="color: red;">平仓按手数为必填项，且最多录入8位整数3位小数，例：98.123</span>
+											</div>
+										</div>
+									</div>
+								</div>
+
+								<div class="row">
+									<div class="col-xs-6">
+										<div class="row form-group">
+											<label for="otFeeRate"
+												class="col-sm-4 control-label">平今按金额<span
+												style="color: red;">*</span></label>
+
+											<div class="col-sm-7">
+												<div style="white-space: nowrap;">
+													<input type="text" class="form-control two-columns-modal-input"  id="otFeeRate"
+														placeholder="请输入平今按金额" onkeydown="myKeyup(event,this)"
+														tab="8" ng-model="ModalEntity.otFeeRate"
+														ng-pattern="/^\d{1,5}(\.\d{0,4})?$/" name="otFeeRate"
+														maxlength="10" required>
+												</div>
+												<span ng-show="myForm.otFeeRate.$dirty && myForm.otFeeRate.$invalid"
+														style="color: red;">平今按金额为必填项，且最多录入5位整数4位小数，例：98.1234</span>
+												
+											</div>
+											<label for="setValue"  class="col-sm-1 control-label behind-input">%%</label>
+										</div>
+									</div>
+
+									<div class="col-xs-6">
+										<div class="row form-group">
+											<label for="otFeeAmt"
+												class="col-sm-4 control-label">平今按手数<span
+												style="color: red;">*</span></label>
+
+											<div class="col-sm-7">
+												<input type="text" class="form-control two-columns-modal-input"  id="otFeeAmt"
+													placeholder="请输入平今按手数" ng-model="ModalEntity.otFeeAmt"
+													ng-pattern="/^\d{1,8}(\.\d{0,3})?$/" name="otFeeAmt"
+													maxlength="12" required onkeydown="myKeyup(event,this)" tab="9"> <span
+													ng-show="myForm.otFeeAmt.$dirty && myForm.otFeeAmt.$invalid"
+													style="color: red;">平今按手数为必填项，且最多录入8位整数3位小数，例：98.123</span>
+											</div>
+										</div>
+									</div>
+								</div>
+								
+								<div class="row">
+									<div class="col-xs-6">
+										<div class="row form-group">
+											<label for="strikeFeeRate"
+												class="col-sm-4 control-label">行权按金额<span
+												style="color: red;">*</span></label>
+
+											<div class="col-sm-7">
+												<div style="white-space: nowrap;">
+													<input type="text" class="form-control two-columns-modal-input"  id="strikeFeeRate"
+														placeholder="请输入行权按金额" onkeydown="myKeyup(event,this)"
+														tab="8" ng-model="ModalEntity.strikeFeeRate"
+														ng-pattern="/^\d{1,5}(\.\d{0,4})?$/" name="strikeFeeRate"
+														maxlength="10" required>
+												</div>
+												<span ng-show="myForm.strikeFeeRate.$dirty && myForm.strikeFeeRate.$invalid"
+														style="color: red;">行权按金额为必填项，且最多录入5位整数4位小数，例：98.1234</span>
+												
+											</div>
+											<label for="setValue"  class="col-sm-1 control-label behind-input">%%</label>
+										</div>
+									</div>
+
+									<div class="col-xs-6">
+										<div class="row form-group">
+											<label for="strikeFeeAmt"
+												class="col-sm-4 control-label">行权按手数<span
+												style="color: red;">*</span></label>
+
+											<div class="col-sm-7">
+												<input type="text" class="form-control two-columns-modal-input"  id="strikeFeeAmt"
+													placeholder="请输入行权按手数" ng-model="ModalEntity.strikeFeeAmt"
+													ng-pattern="/^\d{1,8}(\.\d{0,3})?$/" name="strikeFeeAmt"
+													maxlength="12" required onkeydown="myKeyup(event,this)" tab="9"> <span
+													ng-show="myForm.strikeFeeAmt.$dirty && myForm.strikeFeeAmt.$invalid"
+													style="color: red;">行权按手数为必填项，且最多录入8位整数3位小数，例：98.123</span>
+											</div>
+										</div>
+									</div>
+								</div>
+								
+								<div>
+									<input type="hidden" ng-bind="ModalEntity.recordIndex">
+								</div>
+							</div>
+						</div>
+					</form>
+					<!--End  添加表单内容-->
+				</div>
+				<div class="modal-footer">
+					<span class="btn btn-info btn-sm popover-info" data-rel="popover"
+						data-placement="bottom" title="" ng-click="notClick || myForm.$invalid||save(ModalEntity)"
+						ng-disabled=" notClick || myForm.$invalid">&nbsp;确定&nbsp;</span>
+					<span class="btn btn-close btn-sm popover-info" data-rel="popover"
+						data-placement="bottom" title="" data-dismiss="modal">&nbsp;取消&nbsp;</span>
+				</div>
+			</div>
+		</div>
+	</div>
+	<!-- /.modal -->
+	
+	<!-- 导入 -->
+    <div class="modal fade" id="defaultFeeSetUploadModal" tabindex="-1" role="dialog"
+     aria-labelledby="myModalLabel" aria-hidden="true" data-backdrop="static" data-keyboard="false">
+	    <div class="modal-dialog">
+	        <div class="modal-content">
+	            <div class="modal-header">
+	                <button type="button" class="close"
+	                        data-dismiss="modal" aria-hidden="true">
+	                    &times;
+	                </button>
+	                <h4 class="modal-title" id="uploadtxt">
+	                    导入
+	                </h4>
+	            </div>
+	            <div class="modal-body">
+	                <!-- 添加表单内容-->
+	                <form class="form-horizontal" role="form" name="uploadForm" novalidate>
+	                    <div class="form-group upload_wedge">
+	                        <div id="defaultFeeSetUploader">upload</div>
+	                    </div>
+	                </form>
+	            </div>
+	        </div>
+	    </div>
+	</div>
+	
+</div>

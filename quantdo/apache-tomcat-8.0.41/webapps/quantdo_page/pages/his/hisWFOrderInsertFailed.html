@@ -1,0 +1,116 @@
+<link rel="stylesheet" href="his/hisWFOrderInsertFailed.css" />
+<title>历史错单查询</title>
+<div>
+	<ol class="breadcrumb">
+		<li><a>交易数据查询</a></li>
+		<li class="active">历史错单查询</li>
+	</ol>
+</div>
+<br>
+<div class="row" ng-controller="HisWFOrderInsertFailedController">
+	<!-- start 定义表单查询-->
+	<form class="form-12">
+		<div class="row">
+			<div class=col-xs-12>
+				<div class="alert alert-success" ng-show="resultFlag">
+					<span ng-bind="resultInfo"></span>
+				</div>
+			</div>
+		</div>
+			<div class="form-row">
+					<div class="row-col-one" ng-show="isMom" >
+							<label class="word-style">查询方式</label>
+								<select ng-model="queryEntity.searchType" class="value-style"
+									ng-options="op.key as op.text for op in searchTypes"
+									ng-change="changeInstClient()">
+								</select>
+						
+					</div>
+					<div class="row-col-one">
+						<label class="word-style">开始日期</label> <input type="text"
+							onchange="" class="Wdate value-style word-style" onfocus="WdatePicker({lang:'zh-cn',dateFmt:'yyyyMMdd'})"
+							ng-model="queryEntity.beginDate"
+							ng-readonly="true" id="settleDate" />
+					</div>
+					<div class="row-col-one">
+						<label class="word-style">结束日期</label> <input type="text"
+							onchange="" class="Wdate value-style word-style" onfocus="WdatePicker({lang:'zh-cn',dateFmt:'yyyyMMdd'})"
+							 ng-model="queryEntity.endDate"  ng-readonly="true" id="settleDate" />
+					</div>
+			</div>
+			<div class="form-row">
+					<div class="row-col-one">
+							<label class="word-style">所属机构</label>
+								<select ng-model="queryEntity.brokerageFirmID" class="value-style" ng-disabled="noInst"
+								ng-options="op.instClientID as op.instClientAbbrName for op in instClientList" ng-change="changeInstClient()">
+								<option value="">全部</option>
+								</select>
+					</div>
+					<div class="row-col-one" ng-show="!isMom">
+							<label class="word-style">{{showID}}</label>
+		
+								<select ng-model="queryEntity.accountID"   class="value-style"
+								ng-options="op as op.instClientID+'_'+op.accountID+'_'+op.accountName for op in queryAccountEntitys">
+								<option value="">全部</option>
+								</select>
+					</div>
+					<div class="row-col-one" ng-show="isMom">
+							<label class="word-style">{{showID}}</label>
+		
+								<select ng-model="queryEntity.accountID"  class="value-style"
+								ng-options="op as op.instClientID+'_'+op.accountID+'_'+op.accountName for op in queryAccountEntitys">
+								<option value="">全部</option>
+								</select>
+					</div>
+					<div class="row-col-one" >
+						<label class="word-style">合约类别</label>
+							<select ng-model="queryEntity.productType" class="value-style"
+							ng-options="op.key as op.key+'_'+op.text for op in productTypes">
+							<option value="">全部</option>
+							</select>
+					</div>
+					<div class="row-col-one">
+							<label class="word-style">合约代码</label>
+		
+								<input type="text" class="value-style"
+									ng-model="queryEntity.instrumentID" />
+					</div>
+					<!-- <div class="col-xs-2">
+						<div class="form-group">
+							<button class="btn btn-success" id="bootbox-options1"
+								ng-click="find(queryEntity)" ng-disabled="isQuery">查询</button>
+									<button class="btn btn-success" id="bootbox-options1" 
+							ng-click="exportExcelOWFOIF(queryEntity)">导出excel</button>
+						</div>
+					</div> -->
+			</div>
+			<div class="btn-beyond-one-row">
+			<button type="button" class="btn btn-query btn-word-two" ng-click="find(queryEntity)" ng-show="hisWFOrderInsertFailed_query" ng-disabled="isQuery">查询</button>
+			<button type="button" class="btn btn-reset btn-beyond-two" ng-click="exportExcelHWFOIF(queryEntity)" ng-show="hisWFOrderInsertFailed_export">导出excel</button>
+    	</div>
+	</form>
+	<!--End 表单查询 -->
+
+	<!--PAGE CONTENT -->
+	
+	<!-- /.col -->
+	
+<div class="col-xs-12 clear-padding-right">
+        <div class="row">
+            <div class="col-xs-12 clear-padding-right">
+                <div>
+                <div ng-show="queryEntity.searchType==1">
+                 <table id="hisWFFailed_dynamic_tableOne" class="cell-border stripe" cellspacing="0" width="100%">
+                  </table>
+                </div>
+                 <div ng-show="queryEntity.searchType !=1">
+                   <table id="hisWFFailed_dynamic_tableTwo" class="cell-border stripe" cellspacing="0" width="100%">         
+                    </table>
+                </div>
+                </div>
+            </div>
+        </div>
+    </div>
+	 
+
+</div>

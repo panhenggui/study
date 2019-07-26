@@ -1,0 +1,107 @@
+<link rel="stylesheet" href="query/subPosition.css"/>
+<title>资产单元持仓查询</title>
+<div class="row" ng-controller="SubPositionController">
+    <!-- start 定义表单查询-->
+    <form class="form-12">
+         <div class="form-row">
+
+			 <div class="row-col-one">
+				 <label class="word-style">开始日期</label>
+				 <input type="text" onchange="" class="Wdate value-style word-style" onfocus="WdatePicker({lang:'zh-cn',dateFmt:'yyyyMMdd'})" ng-model="queryEntity.settleDate"
+						ng-readonly="true" id="settleDate"  />
+			 </div>
+
+
+	            <div class="row-col-one">
+	                    <label class="word-style">结束日期</label>
+	                        <input type="text" onchange="" class="Wdate value-style word-style" onfocus="WdatePicker({lang:'zh-cn',dateFmt:'yyyyMMdd'})" ng-model="queryEntity.endDate"
+	                        ng-readonly="true" id="endDate"  />
+	            </div>
+
+
+	             <div class="row-col-one">
+	                    <label class="word-style">交易所</label>
+	
+	                        <select ng-model="queryEntity.exchID" class="value-style"
+	                                ng-options="op.exchID as op.exchID+'_'+op.exchName for op in ExchangeDatas">
+	                            <option value="">全部</option>
+	                        </select>
+	            </div>
+	            <div class="row-col-one">
+					<label class="word-style">查询级别</label> <select
+						ng-model="queryEntity.searchType" class="value-style" ng-change="changeInstClient()" ng-disabled="isTrader"
+						ng-options="op.key as op.text for op in searchTypes">
+					</select>
+				</div>
+
+	            <div class="row-col-one">
+						<label class="word-style">所属机构</label>
+							<select ng-model="queryEntity.instClientID" class="value-style" ng-disabled="noInst"
+							ng-options="op.instClientID as op.instClientAbbrName for op in instClientList" ng-change="changeInstClient()">
+							<option value="">全部</option>
+							</select>
+				</div>	
+				<div class="row-col-one" ng-show="isBusinessGroup">
+					<label class="word-style">业务组</label> <select
+						ng-model="queryEntity.subAccountID" class="value-style"
+						ng-options="op.subAccountGroupID as op.instClientID+'_'+op.subAccountGroupName for op in businessGroups">
+						<option value="">全部</option>
+					</select>
+				</div>
+				<div class="row-col-one" ng-show="isTraderUser">
+					<label class="word-style">交易员</label> <select
+						ng-model="queryEntity.subAccountID" class="value-style"  ng-disabled="isUser"
+						ng-options="op.userID as op.instClientID+'_'+op.userID for op in tradeUsers">
+						<option value="">全部</option>
+					</select>
+				</div>
+				<div class="row-col-one" ng-show="isSubAccountID">
+					<label class="word-style">资产单元</label> <select
+						ng-model="queryEntity.subAccountID" class="value-style"
+						ng-options="op.subAccountID as op.instClientID+'_'+op.subAccountID+'_'+op.subAccountName for op in querySubCapitalAccounts">
+						<option value="">全部</option>
+					</select>
+				</div>
+				<!-- <div class="row-col-one">
+	                    <label class="word-style">资产单元</label>
+	                        <select ng-model="queryEntity.subAccountID" class="value-style" class="subPositionQuery-select-style"
+	                        	ng-options="op as op.instClientID+'_'+op.subAccountID+'_'+op.subAccountName for op in querySubCapitalAccounts">
+	                            <option value="">全部</option>
+	                        </select>
+	            </div> -->
+				
+	            <div class="row-col-one">
+	                    <label class="word-style">币种</label>
+	                        <select ng-model="queryEntity.currency" class="value-style" ng-options="op.key as op.text for op in currencys">
+	                            <option value="">全部</option>
+	                        </select>
+	            </div>
+	           <!--  <div class="col-xs-2">
+	                <div class="form-group">
+	                    <button class="btn btn-success" id="bootbox-options1" ng-click="find(queryEntity)" ng-disabled="isQuery"> 查询</button>
+	                    <button class="btn btn-success" id="bootbox-options1" ng-click="exportExcel(queryEntity)" > 导出excel</button>
+	                </div>
+	            </div> -->
+	    
+        </div>
+        
+        <div class="btn-beyond-one-row">
+			<button type="button" class="btn btn-query btn-word-two"  ng-click="find(queryEntity)" ng-show="subPositionQuery_query">查询</button>
+			<button type="button" class="btn btn-reset btn-beyond-two"  ng-click="exportExcel(queryEntity)" ng-show="subPositionQuery_export">导出excel</button>
+    	</div>
+    </form>
+    <!--End 表单查询 -->
+
+    <!--PAGE CONTENT -->
+    <div class="col-xs-12 clear-padding-right">
+        <div class="row">
+            <div class="col-xs-12 clear-padding-right">
+                <div>
+                    <table id="subPosition_dynamic_table" class="cell-border stripe" cellspacing="0" width="100%">
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- /.col -->
+</div>

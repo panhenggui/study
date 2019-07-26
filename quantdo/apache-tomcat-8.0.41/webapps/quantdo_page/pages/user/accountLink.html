@@ -1,0 +1,285 @@
+<link rel="stylesheet" href="user/accountLink.css" />
+<div class="row" ng-controller="AccountLinkController">
+	<!--编辑-->
+        <div class="special-container winEditTable">
+            <div class="description-first">
+                <span class="description-content">用户选择</span>
+                <div class="input-container">
+                    <div class="row-col-one">
+                        <label class="word-style word-bottom-clear">机构代码<font color=red>*</font></label>
+                        <select class="value-style content-bottom-clear" ng-model="tradeUserEntity.instClientID" name="instClientID" ng-disabled="isInstClient "  ng-change="changInstClient(tradeUserEntity.instClientID)"
+                                ng-options="op.instClientID as op.instClientID + '-' + op.instClientAbbrName for op in instClientListEntitys">
+                                <option value="">全部</option>
+                        </select>
+                    </div>
+                    <div class="row-col-one">
+                        <label class="word-style word-bottom-clear">用户代码<font color=red>*</font></label>
+                        <select class="value-style content-bottom-clear" ng-model="tradeUserEntity.userID" name="userID" ng-disabled="false" ng-click="getAllTraderUsers()"  ng-change="changUserCode(tradeUserEntity.userID)"
+                                ng-options="o.userID as o.userID+'_'+o.userName  for o in tradeUsers" >
+                                <option value="">全部</option>
+                        </select>
+                    </div>
+                    <div class="row-col-one">
+                        <label class="word-style word-bottom-clear">角色</label>
+                        <select class="value-style content-bottom-clear" ng-model="tradeUserEntity.id" name="id" ng-disabled="true"
+                                ng-options="op.id as op.id + '-' + op.roleName for op in roleListEntitys">
+                                <option value="">全部</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+        </div>
+                
+                
+        <!-- 1 对应资金账号组 -->
+        <div class="description-first left-12" ng-show="showRole && false">
+            <span class="description-content">对应资金账号组</span>
+            <div class="input-container" ng-show="amTyp">
+                <div class="row-col-one">
+                    <input type="checkbox" ng-model="flagGroup" ng-click="andAddGroup(flagGroup)" />
+                    <label class="word-style content-bottom-clear">同时添加对应的资产单元</label>
+                </div>
+            </div>
+            <div class="move-outer-container">
+                <div class="move-container move-container-shadow">
+                    <div class="table-head">
+                        <table class="move-table">
+                            <colgroup>
+                                <col style="width: 120px;">
+                                <col style="width: 120px;">
+                            </colgroup>
+                            <thead>
+                                <tr class="container-tr-row">
+                                    <th>账号分组代码</th>
+                                    <th>账号分组名称</th>
+                                </tr>
+                            </thead>
+                        </table>
+                    </div>
+                    <div class="table-body">
+                        <table class="move-table">
+                            <colgroup>
+                                <col style="width: 120px;">
+                                <col style="width: 120px;">
+                            </colgroup>
+                            <tbody>
+                            <tr class="table-row" ng-repeat="alistEntity in accountGroupEntitys" ng-class="{windColoerTr:$index%2 == 0}">
+                                <td ng-class="{selectActive:alistEntity.isSelectActive == true}" ng-bind="alistEntity.accountGroupID"  ng-dblclick="addGroup($index,alistEntity)" ng-click="addGroupSelect($index,alistEntity)"></td>
+                                <td ng-class="{selectActive:alistEntity.isSelectActive == true}" ng-bind="alistEntity.accountGroupName" ng-dblclick="addGroup($index,alistEntity)" ng-click="addGroupSelect($index,alistEntity)"></td>
+                            </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+                <div class="move-container operation-container">
+                    <span class="move-icon" ng-click="addSelectGroupEntity()">&gt;</span>
+                    <span class="move-icon icon-move-right" ng-click="addAllGroupEntity(accountGroupEntitys)"></span>
+                    <span class="move-icon icon-move-left" ng-click="deleteAllGroupEntity(groupArrayMaps)"></span>
+                    <span class="move-icon" ng-click="deleteSelectGroupEntity()">&lt;</span>
+                </div>
+                <div class="move-container move-container-shadow">
+                    <div class="table-head">
+                        <table class="move-table">
+                            <colgroup>
+                                <col style="width: 120px;">
+                                <col style="width: 120px;">
+                            </colgroup>
+                            <thead>
+                                <tr class="container-tr-row">
+                                    <th>账号分组代码</th>
+                                    <th>账号分组名称</th>
+                                </tr>
+                            </thead>
+                        </table>
+                    </div>
+                    <div class="table-body">
+                        <table class="move-table">
+                            <colgroup>
+                                <col style="width: 120px;">
+                                <col style="width: 120px;">
+                            </colgroup>
+                            <tbody>
+                                <tr class="table-row" ng-repeat="listEntity in groupArrayMaps" ng-class="{windColoerTr:$index%2 == 0}">
+                                    <td ng-class="{selectActive:listEntity.isSelectActive == true}"  ng-bind="listEntity.accountGroupID" ng-dblclick="devedGroup($index,listEntity)" ng-click="devedGroupSelect($index,listEntity)"></td>
+                                    <td  ng-class="{selectActive:listEntity.isSelectActive == true}" ng-bind="listEntity.accountGroupName" ng-dblclick="devedGroup($index,listEntity)" ng-click="devedGroupSelect($index,listEntity)" ></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 1 对应资金账号 -->
+        <div class="description-first left-12" ng-show="fofWF">
+            <span class="description-content">对应资金账号</span>
+            <div class="input-container" ng-show="amTyp">
+                <div>
+                    <div class="row-col-one">
+                        <input type="checkbox" ng-model="flagAccountId" ng-click="andAddAccount(flagAccountId)" />
+                        <label class="word-style content-bottom-clear">同时添加对应的资产单元</label>
+                    </div>
+                </div>
+                <div>
+                    <div class="row-col-one" ng-show="!hideFundProduct">
+                        <label class="word-style word-bottom-clear">产品代码<font color="red">*</font></label>
+                        <select class="value-style content-bottom-clear" ng-model="fundProductID" onkeydown="myKeyup(event,this)"
+                                ng-change="changProduct(fundProductID)" ng-options="f.fundProductID as f.fundProductID+'_'+f.shortProductName for f in fundProductTems">
+                            <option value="">全部</option>
+                        </select>
+                    </div>
+                </div>
+
+            </div>
+            <div class="move-outer-container">
+                <div class="move-container move-container-shadow">
+                    <div class="table-head">
+                        <table class="move-table">
+                            <colgroup>
+                                <col style="width: 120px;">
+                                <col style="width: 120px;">
+                            </colgroup>
+                            <thead>
+                            <tr class="container-tr-row">
+                                <th>资金账号</th>
+                                <th>资金账号名称</th>
+                            </tr>
+                            </thead>
+                        </table>
+                    </div>
+                    <div class="table-body">
+                        <table class="move-table">
+                            <colgroup>
+                                <col style="width: 120px;">
+                                <col style="width: 120px;">
+                            </colgroup>
+                            <tbody>
+                            <tr class="table-row" ng-repeat="clistEntity in capitalAccountEntitys" ng-class="{windColoerTr:$index%2 == 0}">
+                                <td ng-class="{selectActive:clistEntity.isSelectActive == true}" ng-bind="clistEntity.innerAccountID"  ng-dblclick="addAccountId($index,clistEntity)" ng-click="addAccountSelect($index,clistEntity)"></td>
+                                <td ng-class="{selectActive:clistEntity.isSelectActive == true}" ng-bind="clistEntity.accountName" ng-dblclick="addAccountId($index,clistEntity)" ng-click="addAccountSelect($index,clistEntity)"></td>
+                            </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+                <div class="move-container operation-container">
+                    <span class="move-icon" ng-click="addSelectAccountEntity()">&gt;</span>
+                    <span class="move-icon icon-move-right" ng-click="addAllAccountEntity(capitalAccountEntitys)"></span>
+                    <span class="move-icon icon-move-left" ng-click="deleteAllAccountEntity(accountIdArrayMaps)"></span>
+                    <span class="move-icon" ng-click="deleteSelectAccountEntity()">&lt;</span>
+                </div>
+                <div class="move-container move-container-shadow">
+                    <div class="table-head">
+                        <table class="move-table">
+                            <colgroup>
+                                <col style="width: 120px;">
+                                <col style="width: 120px;">
+                            </colgroup>
+                            <thead>
+                            <tr class="container-tr-row">
+                                <th>资金账号</th>
+                                <th>资金账号名称</th>
+                            </tr>
+                            </thead>
+                        </table>
+                    </div>
+                    <div class="table-body">
+                        <table class="move-table">
+                            <colgroup>
+                                <col style="width: 120px;">
+                                <col style="width: 120px;">
+                            </colgroup>
+                            <tbody>
+                                <tr class="table-row"  ng-repeat="clistEntity in accountIdArrayMaps" ng-class="{windColoerTr:$index%2 == 0}">
+                                    <td ng-class="{selectActive:clistEntity.isSelectActive == true}" ng-bind="clistEntity.innerAccountID"  ng-dblclick="devedAccountId($index,clistEntity)" ng-click="devedAccountSelect($index,clistEntity)"></td>
+                                    <td ng-class="{selectActive:clistEntity.isSelectActive == true}" ng-bind="clistEntity.accountName" ng-dblclick="devedAccountId($index,clistEntity)" ng-click="devedAccountSelect($index,clistEntity)"></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 2 对应资产单元 -->
+        <div class="description-first left-12" ng-show="amTyp">
+            <span class="description-content">对应资产单元</span>
+            <div class="move-outer-container">
+                <div class="move-container move-container-shadow">
+                    <div class="table-head">
+                        <table class="move-table">
+                            <colgroup>
+                                <col style="width: 120px;">
+                                <col style="width: 120px;">
+                            </colgroup>
+                            <thead>
+                            <tr class="container-tr-row">
+                                <th>资产单元</th>
+                                <th>资产单元名称</th>
+                            </tr>
+                            </thead>
+                        </table>
+                    </div>
+                    <div class="table-body">
+                        <table class="move-table">
+                            <colgroup>
+                                <col style="width: 120px;">
+                                <col style="width: 120px;">
+                            </colgroup>
+                            <tbody>
+                                <tr class="table-row" ng-repeat="slistEntity in SubCapitalAccountEntitys" ng-class="{windColoerTr:$index%2 == 0}">
+                                    <td ng-class="{selectActive:slistEntity.isSelectActive == true}" ng-bind="slistEntity.subAccountID"  ng-dblclick="addClient($index,slistEntity)" ng-click="addClientSelect($index,slistEntity)"></td>
+                                    <td ng-class="{selectActive:slistEntity.isSelectActive == true}" ng-bind="slistEntity.subAccountName" ng-dblclick="addClient($index,slistEntity)" ng-click="addClientSelect($index,slistEntity)"></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+                <div class="move-container operation-container">
+                    <span class="move-icon" ng-click="addSelectSubAccountEntity()">&gt;</span>
+                    <span class="move-icon icon-move-right" ng-click="addAllSubAccountEntity(SubCapitalAccountEntitys)"></span>
+                    <span class="move-icon icon-move-left" ng-click="deleteAllSubAccountEntity(clientArrayMaps)"></span>
+                    <span class="move-icon" ng-click="deleteSelectSubAccountEntity()">&lt;</span>
+                </div>
+                <div class="move-container move-container-shadow">
+                    <div class="table-head">
+                        <table class="move-table">
+                            <colgroup>
+                                <col style="width: 120px;">
+                                <col style="width: 120px;">
+                            </colgroup>
+                            <thead>
+                            <tr class="container-tr-row">
+                                <th>资产单元</th>
+                                <th>资产单元名称</th>
+                            </tr>
+                            </thead>
+                        </table>
+                    </div>
+                    <div class="table-body">
+                        <table class="move-table">
+                            <colgroup>
+                                <col style="width: 120px;">
+                                <col style="width: 120px;">
+                            </colgroup>
+                            <tbody>
+                                <tr class="table-row"  ng-repeat="listEntity in clientArrayMaps" ng-class="{windColoerTr:$index%2 == 0}">
+                                    <td ng-class="{selectActive:listEntity.isSelectActive == true}" ng-bind="listEntity.subAccountID"  ng-dblclick="devedClient($index,listEntity)" ng-click="devedClientSelect($index,listEntity)"></td>
+                                    <td ng-class="{selectActive:listEntity.isSelectActive == true}" ng-bind="listEntity.subAccountName" ng-dblclick="devedClient($index,listEntity)" ng-click="devedClientSelect($index,listEntity)"></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+        <div class="modal-footer btn-background"  style="margin-top:50px;">
+            <span class="btn btn-info btn-sm popover-info" data-rel="popover"
+                data-placement="bottom" title=""  ng-disabled="OkShow"
+                ng-show="accountLink_add"
+                style="margin-left:-40px;"
+                ng-click="OkShow || saveSetting(tradeUserEntity)">&nbsp;确定&nbsp;</span>
+        </div>
+</div>

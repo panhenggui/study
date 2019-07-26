@@ -1,0 +1,20 @@
+th{
+    text-align:center;
+}
+#settleDate{
+    width: 138px;
+}
+
+.exchIDStyle{
+    width: 73px;
+}
+.productStyle{
+    width:84px;
+    padding-left: 20px;
+    padding-right: 5px;
+
+}
+
+.select-style{
+    width:170px;
+}

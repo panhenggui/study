@@ -1,0 +1,193 @@
+/*.capitalAccount-label-style{*/
+    /*width: 100px;*/
+    /*white-space: nowrap;*/
+/*}*/
+/*.capitalAccount-select-style{*/
+    /*width:170px;*/
+/*}*/
+/*.capitalAccount-select-style1{*/
+    /*width:170px;*/
+    /*margin-left: 30px;*/
+/*}*/
+/*.capitalAccount-input-style{*/
+	/*width:170px;*/
+/*}*/
+/*th{*/
+    /*text-align:center;*/
+    /*white-space:nowrap;*/
+/*}*/
+/*td{*/
+    /*text-align:center;*/
+    /*white-space:nowrap;*/
+/*}*/
+/*.capitalAccount-modal-width{*/
+    /*width: 650px;*/
+    /*text-align:center;*/
+/*}*/
+
+/*.capitalAccount-date-style{*/
+    /*padding-top: 0px;*/
+    /*padding-bottom: 0px;*/
+    /*width: 170px;*/
+/*}*/
+/*.capitalAccount-radio-style1{*/
+	/*float:left;*/
+	/*margin : 10px 0 0 0 !important;*/
+	/*margin-left : 10px !important;*/
+/*}*/
+/*.capitalAccount-control-label{*/
+	/*white-space: nowrap;*/
+/*}*/
+
+
+/*#passStrengthca{*/
+	/*height:6px;*/
+	/*width:120px;*/
+	/*border:1px solid #ccc;*/
+/*}*/
+/*.strengthLv1{*/
+	/*background:red;*/
+	/*height:6px;*/
+	/*width:40px;*/
+/*}*/
+/*.strengthLv2{*/
+	/*background:orange;*/
+	/*height:6px;*/
+	/*width:80px;*/
+/*}*/
+/*.strengthLv3{*/
+	/*background:green;*/
+	 /*height:6px;*/
+	 /*width:120px;*/
+/*}*/
+/*#passText{*/
+	/*text-align:center;*/
+/*}*/
+/*#passStrengthcaag{*/
+	/*height:6px;*/
+	/*width:120px;*/
+	/*border:1px solid #ccc;*/
+/*}*/
+/*#passStrengthcatwo{*/
+	/*height:6px;*/
+	/*width:120px;*/
+	/*border:1px solid #ccc;*/
+/*}*/
+/*#passStrengthcatwoag{*/
+	/*height:6px;*/
+	/*width:120px;*/
+	/*border:1px solid #ccc;*/
+/*}*/
+
+.capitalAccount-connect-row2 {
+	display: inline-block;
+	width: 40px;
+	height: 25px;
+	line-height: 25px;
+	color: #8e8e8e;
+	border: 1px solid #8e8e8e;
+	-webkit-border-radius: 3px;
+	-moz-border-radius: 3px;
+	border-radius: 3px;
+	margin-right:5px;
+	cursor: pointer;
+}
+
+
+#capitalAccount_passStrength{
+	height:6px;
+	width:120px;
+	border:1px solid #ccc;
+}
+.strengthLv1{
+	background:red;
+	height:6px;
+	width:40px;
+}
+.strengthLv2{
+	background:orange;
+	height:6px;
+	width:80px;
+}
+.strengthLv3{
+	background:green;
+	 height:6px;
+	 width:120px;
+}
+#passText{
+	text-align:center;
+}
+#capitalAccount_passStrengthag{
+	height:6px;
+	width:120px;
+	border:1px solid #ccc;
+}
+#capitalAccount_passStrengthtwo{
+	height:6px;
+	width:120px;
+	border:1px solid #ccc;
+}
+#capitalAccount_passStrengthtwoag{
+	height:6px;
+	width:120px;
+	border:1px solid #ccc;
+}
+.row-operation-distance{
+	margin-right: 5px;
+	cursor: default;
+}
+
+.right-row{
+	color: #0a9aec;
+}
+.starts-row{
+	color: #519e67;
+}
+.starts-row:hover{
+	color: #1d9640;
+}
+.fobid-operation{
+	color: #fb3232;
+}
+.reset-operation{
+	color: #519e67;
+}
+.row-operation-distance:hover{
+	font-weight: bold;
+}
+.right-row:hover{
+	color: #38a0da;
+}
+.reset-operation:hover{
+	color: #1d9640;
+}
+.fobid-operation:hover{
+	color: #ce0f0f;
+}
+.capitalAccount-update-row2 {
+    display: inline-block;
+    width: 70px;
+    height: 25px;
+    line-height: 25px;
+    color: #8e8e8e;
+    border: 1px solid #8e8e8e;
+    -webkit-border-radius: 3px;
+    -moz-border-radius: 3px;
+    border-radius: 3px;
+}
+.ui-multiselect-all,.ui-multiselect-none{
+	display: inline-block;
+	padding: 2px 6px;
+	color: #8e8e8e;
+	border: 1px solid #8e8e8e;
+	border-radius:3px;
+	text-decoration: none;
+}
+.ui-multiselect-all:hover,.ui-multiselect-none:hover{
+	color: #fff;
+	background-color: #8e8e8e;
+	text-decoration: none !important;
+}
+.capShow{
+	visibility:hidden;
+}

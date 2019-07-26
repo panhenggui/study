@@ -1,0 +1,586 @@
+<!DOCTYPE html>
+<html lang="en" ng-app="myApp">
+<head>
+    <title>风控管理</title>
+    <meta charset="utf-8">
+    <!--<link href="https://cdn.datatables.net/1.10.12/css/jquery.dataTables.min.css" rel="stylesheet">-->
+    <link rel="stylesheet" href="../framework/ui-ace/assets/css/bootstrap-control.css" />
+    <!--<link rel="stylesheet" href="../framework/ui-ace/assets/css/ace.css">-->
+    <!--<link href="../framework/libraries/angular/1.4.3/docs/components/bootstrap-3.1.1/css/bootstrap.min.css" rel="stylesheet">-->
+    <!--<link href="../framework/libraries/gridster/css/jquery.gridster.css" rel="stylesheet">-->
+    <link href="../framework/libraries/datatables/css/jquery.dataTables.min.css" rel="stylesheet">
+    <link href="../framework/libraries/datatables/css/buttons.dataTables.min.css" rel="stylesheet">
+    <link href="../framework/libraries/datatables/css/fixedColumns.dataTables.min.css" rel="stylesheet">
+    <!--<link href="../framework/libraries/datatables/css/jquery.datatblesTest.min.css" rel="stylesheet">-->
+    <link href="../framework/libraries/angular/directives/angularjsTab/angular-control-tab.css" rel="stylesheet">
+    <link href="windControl.css" rel="stylesheet">
+    <link href="../framework/ui-ace/assets/css/autoScreen/autoScreen.css" rel="stylesheet">
+    <link href="../framework/ui-ace/assets/css/right-icon.css" rel="stylesheet">
+    <link href="../framework/ui-ace/assets/css/update-icon.css" rel="stylesheet">
+    <link href="../framework/ui-ace/assets/css/delete-table.css" rel="stylesheet">
+    <link href="../framework/ui-ace/assets/css/bootstrap-datepicker.css" rel="stylesheet" >
+    <link href="../framework/ui-ace/assets/css/dropdown-icon.css" rel="stylesheet">
+    <link href="../framework/ui-ace/assets/css/right-icon-risk.css" rel="stylesheet">
+    <link href="../framework/ui-ace/assets/css/icon-exit.css" rel="stylesheet">
+    <link href="../pages/windControl/productRisk.css" rel="stylesheet">
+    <script src="../framework/ui-ace/assets/js/fullScreen/fullScreen.js"></script>
+    <script src="login/login.js"></script>
+    <script src="../service/LogonService.js"></script>
+</head>
+<body>
+    <div ng-controller="indexController">
+        <!--//菜单栏部分-->
+        <div class="menu-header" ondblclick="launchFullscreen(document.documentElement)">
+            <div ng-controller="mymenuController" class="header-left">
+                <ul class="mymenu" id="control-menu">
+                    <li>
+                        <span id="myfunc-show" class="menu-style" ng-click="controlStyle('#myfunc-show','#riskControl','#riskManagement','#tradeRightManage','#riskQueryMange','#riskParameters')"><i class="icon-right"></i>风险监控</span>
+                        <ul id="menu-show">
+                            <li id="#getRiskFundNetResult_table_wc" ng-click="addPane('','产品净值','getRiskFundNetResultController','windControl/riskFundNetResult.html',1)"><i class="icon-right"></i>产品净值</li>
+                            <li id="#capitalAccount_table_wc" ng-click="addPane('','资金账户','capitalAccountController','windControl/capitalAccount.html',2)"><i class="icon-right"></i>资金账户</li>
+                            <li id="#capitalAccountSum_table_wc" ng-click="addPane('','资金账户总持仓','capitalAccountSumController','windControl/capitalAccountSum.html',2)"><i class="icon-right myopacity"></i>资金账户总持仓</li>
+                            <li id="#capitalAccountGroup_table_wc" ng-click="addPane('','资金账户分组','capitalAccountGroupController','windControl/capitalAccountGroup.html',2)"><i class="icon-right myopacity"></i>资金账户分组</li>
+                            <li id="#traderDetail_table_wc" ng-click="addPane('','成交明细','traderDetailController','windControl/traderDetail.html',3)"><i class="icon-right myopacity"></i>成交明细</li>
+                            <li id="#allOrders_table_wc" ng-click="addPane('','所有报单','allOrdersController','windControl/allOrders.html',3)"><i class="icon-right myopacity"></i>所有报单</li>
+                            <li id="#currentPosition_table_wc" ng-click="addPane('','当前持仓','currentPositionController','windControl/currentPosition.html',3)"><i class="icon-right"></i>当前持仓</li>
+                            <li id="#positionQuery_table_wc" ng-click="addPane('','持仓查询','positionQueryController','windControl/positionQuery.html',3)"><i class="icon-right myopacity"></i>持仓查询</li>
+                            <li id="#exceptionInformation_table_wc" ng-click="addPane('','异常提示','exceptionInformationController','windControl/exceptionInformation.html',4)"><i class="icon-right"></i>异常提示</li>
+                            <li id="#riskAccount_table_wc" ng-click="addPane('','资产单元','riskAccountController','windControl/riskAccount.html',5)"><i class="icon-right myopacity"></i>资产单元</li>
+                            <li id="#riskAccountSum_table_wc" ng-click="addPane('','资产单元总持仓','riskAccountSumController','windControl/riskAccountSum.html',5)"><i class="icon-right"></i>资产单元总持仓</li>
+                        </ul>
+                    </li>
+                    <li>
+                        <span id="myfunc-system" ng-click="controlStyle('#myfunc-system','#riskManagement','#riskControl','#tradeRightManage','#riskQueryMange','#riskParameters')"><i class="icon-right myopacity"></i>风控设置</span>
+                        <ul id="system-show">
+                            <li id="#productRisk_table_wc" ng-click="openRiskControl()"><i class="icon-right"></i>产品风控设置</li>
+                             <li id="#riskAccountproductRisk_table_wc" ng-show = myriskAccountRiskControl ng-click="openriskAccountRiskControl()"><i class="icon-right myopacity"></i>资产单元风控设置</li>
+                        </ul>
+                    </li>
+                    
+                    <li>
+                        <span id="myfunc-tradeRight" ng-click="controlStyle('#myfunc-tradeRight','#tradeRightManage','#riskManagement','#riskControl','#riskQueryMange','#riskParameters')"><i class="icon-right myopacity"></i>风控管理</span>
+                        <ul id="system-tradeRight">
+                            <li id="#tradeRight_table_wc" ng-click="openTradeRightControl()"><i class="icon-right"></i>交易权限管理</li>
+                        </ul>
+                    </li>
+                    
+                    <li>
+                       <span id="myfunc-riskQuery" ng-click="controlStyle('#myfunc-riskQuery','#riskQueryMange','#tradeRightManage','#riskManagement','#riskControl','#riskParameters')"><i class="icon-right myopacity"></i>查询统计</span>
+                       <ul id="system-riskQuery">
+                           <li id="#riskQuery_table_wc" ng-click="openRiskQueryControl()"><i class="icon-right"></i>查询统计</li>
+                       </ul>
+                   </li>
+                    
+                </ul>
+            </div>
+            <div class="header-right" id="header-right">
+            
+            <div  class="navbar-header pull-left" style="margin-top: 4px;margin-left:12px;">
+                    <label style="margin-right:12px;"> {{version}}</label>
+                    所属机构：<label class="myinformation">{{instShortName}}</label>欢迎<label class="myinformation">{{userName}}</label>&nbsp;&nbsp;
+                </div>
+                
+                <div class="pull-left" id="timer-right">
+                    <div class="set-time">
+                        <label>实时轮询</label>
+                        <input type="text" style="width: 50px;text-align: center;" ng-model="queryEntity.sleepTime" id="sleepTime" ng-readonly="isStart">
+                        <label>秒</label>
+                    </div>
+                    <div class="my-operation">
+                        <input type="button" value="执行轮询" ng-click="queryExe(queryEntity)" class="mybtn button-query" ng-disabled="isStart" id="queryExe">
+                        <input type="button" value="停止轮询" ng-click="stopQuery()" ng-disabled="isStop" class="mybtn" id="stopQuery">
+                    </div>
+                </div>
+                 <span class="mybtn myexit" onclick="logback()">
+                             <!--<i class="icon-exit" ></i>-->退出
+                        </span>
+                
+            </div>
+        </div>
+        
+	    <!--查询开始 -->
+	    <!-- 1.查询主菜单 -->
+	    <div class="hidden" id="riskQueryMange" style="height:800px;overflow-x:hidden;">
+	      <!-- 2.第一个下拉菜单：查询 -->
+	      <div class="" id="riskQuery">
+	         <div class="product-risk-center-my">
+	             <ul class="product-menus" ng-repeat="riskQueryfirstMenu in riskQueryfirstMenus">
+	                 <li id="{{riskQueryfirstMenus.idxDictId}}">
+		                 <span class="menu-title" ng-click="closeDropDown(riskQueryfirstMenu.idxDictId)">
+		                       <i class="icon-dropdown"></i><i class="icon-right-risk myopacity"></i>{{riskQueryfirstMenu.idxDictName}}
+		                 </span>
+	                     <ul class="submenu" ng-repeat="riskQuerysecondMenu in riskQueryfirstMenu.riskQuerysecondMenus" id="{{riskQuerysecondMenu.idxDictId}}">
+			                 <span class="menu-title submenu-title" ng-click="closeDropDown(riskQuerysecondMenu.idxDictId)" ng-if="riskQuerysecondMenu.idxDictType == 0">
+			                     <i class="icon-dropdown"></i><i class="icon-right-risk myopacity"></i>{{riskQuerysecondMenu.idxDictName}}
+			                 </span>
+			                 <span class="menu-title submenu-title" ng-click="addPane(riskQuerysecondMenu.idxDictId,riskQuerysecondMenu.idxDictName,ctrl,partial,10)" ng-if="riskQuerysecondMenu.idxDictType == 1">
+			                     <i class="icon-dropdown"></i><a href="" class="menu-href"><i class="icon-right-risk myopacity"></i>{{riskQuerysecondMenu.idxDictName}}</a>
+			                 </span>
+	                         <li ng-repeat="riskQuerythreeMenu in riskQuerysecondMenu.riskQuerythreeMenus" class="menu-li last-menu"
+	                             ng-click="addPane(riskQuerythreeMenu.idxDictId,riskQuerythreeMenu.idxDictName,ctrl,partial,10)">
+	                             <a href="" class="menu-href"> <i class="icon-right-risk myopacity"></i>{{riskQuerythreeMenu.idxDictName}} </a>
+	                         </li>
+	                     </ul>
+	                 </li>
+	             </ul>
+	         </div>
+	         <div class="product-risk-right-my">
+	             <div class="main-content">
+	                 <div class="page-content">
+	                     <tabs>
+	                         <pane ng-repeat="pane in myriskQueryCaiDan | filter:{includedInTabView:true}" tab-title="{{pane.name}}" controller="{{pane.controller}}"
+	                               template="{{pane.partial}}">
+	                         </pane>
+	                     </tabs>
+	                     <div class="page-content-area" data-ajax-content="false"></div>
+	                     <input type="hidden" ng-model="modelFlag" />
+	                 </div>
+	             </div>
+	         </div>
+	     </div>
+	  </div>
+	  <!--查询结束-->
+	  
+      <div class="hidden" id="tradeRightManage" >
+      <!--交易权限管理  -->
+       <div class="" id="tradeAuthorityManage">
+          <div class="product-risk-center-my">
+              <ul class="product-menus" ng-repeat="TradeRightfirstMenu in TradeRightfirstMenus">
+                  <li id="{{TradeRightfirstMenus.idxDictId}}">
+              <span class="menu-title" ng-click="closeDropDown(TradeRightfirstMenu.idxDictId)">
+                  <i class="icon-dropdown"></i><i class="icon-right-risk myopacity"></i>{{TradeRightfirstMenu.idxDictName}}
+              </span>
+                      <ul class="submenu" ng-repeat="TradeRightsecondMenu in TradeRightfirstMenu.TradeRightsecondMenus" id="{{TradeRightsecondMenu.idxDictId}}">
+                  <span class="menu-title submenu-title" ng-click="closeDropDown(TradeRightsecondMenu.idxDictId)" ng-if="TradeRightsecondMenu.idxDictType == 0">
+                      <i class="icon-dropdown"></i><i class="icon-right-risk myopacity"></i>{{TradeRightsecondMenu.idxDictName}}
+                  </span>
+                  <span class="menu-title submenu-title" ng-click="addPane(TradeRightsecondMenu.idxDictId,TradeRightsecondMenu.idxDictName,ctrl,partial,9)" ng-if="TradeRightsecondMenu.idxDictType == 1">
+                      <i class="icon-dropdown"></i><a href="" class="menu-href"><i class="icon-right-risk myopacity"></i>{{TradeRightsecondMenu.idxDictName}}</a>
+                  </span>
+                          <li ng-repeat="TradeRightthreeMenu in TradeRightsecondMenu.TradeRightthreeMenus" class="menu-li last-menu"
+                              ng-click="addPane(TradeRightthreeMenu.idxDictId,TradeRightthreeMenu.idxDictName,ctrl,partial,9)">
+                              <a href="" class="menu-href"> <i class="icon-right-risk myopacity"></i>{{TradeRightthreeMenu.idxDictName}} </a>
+                          </li>
+                      </ul>
+                  </li>
+              </ul>
+          </div>
+          <div class="product-risk-right-my">
+              <div class="main-content">
+                  <div class="page-content">
+                      <tabs>
+                          <pane ng-repeat="pane in myTradeRightManges | filter:{includedInTabView:true}" tab-title="{{pane.name}}" controller="{{pane.controller}}"
+                                template="{{pane.partial}}">
+                          </pane>
+                      </tabs>
+                      <div class="page-content-area" data-ajax-content="false"></div>
+                      <input type="hidden" ng-model="modelFlag" />
+                  </div>
+              </div>
+          </div>
+      </div>
+   </div>
+  <!--交易权限管理  -->
+  
+  
+  <div class="hidden" id="riskManagement">
+      <div class="" id="productRisk">
+          <div class="product-risk-left">
+              <ul id="productInfosFlag">
+                  <span>产品</span>
+                  <li class="fund-name" style="cursor:pointer"
+                   ng-repeat="productInfo in productInfos" ng-click="getFundID(productInfo.fundID,productInfo.BrokerID)">
+                      <a id="{{productInfo.BrokerID+productInfo.fundID}}">{{productInfo.BrokerName}}_{{productInfo.shortProductName}}</a>
+                  </li>
+              </ul>
+          </div>
+          <div class="product-risk-center">
+              <!--<input type="checkbox">-->
+              <!--<label>隐藏未启用设置</label>-->
+              <ul class="product-menus" ng-repeat="firstMenu in firstMenus">
+                  <li id="{{firstMenu.idxDictId}}">
+              <span class="menu-title" ng-click="closeDropDown(firstMenu.idxDictId)">
+                  <i class="icon-dropdown"></i><i class="icon-right-risk myopacity"></i>{{firstMenu.idxDictName}}
+              </span>
+                      <ul class="submenu" ng-repeat="secondMenu in firstMenu.secondMenus" id="{{secondMenu.idxDictId}}">
+                  <span class="menu-title submenu-title" ng-click="closeDropDown(secondMenu.idxDictId)" ng-if="secondMenu.idxDictType == 0">
+                      <i class="icon-dropdown"></i><i class="icon-right-risk myopacity"></i>{{secondMenu.idxDictName}}
+                  </span>
+                  <span class="menu-title submenu-title" ng-click="addPane(secondMenu.idxDictId,secondMenu.idxDictName,ctrl,partial,6)" ng-if="secondMenu.idxDictType == 1">
+                      <i class="icon-dropdown"></i><a href="" class="menu-href"><i class="icon-right-risk myopacity"></i>{{secondMenu.idxDictName}}</a>
+                  </span>
+                          <li ng-repeat="threeMenu in secondMenu.threeMenus" class="menu-li last-menu"
+                              ng-click="addPane(threeMenu.idxDictId,threeMenu.idxDictName,ctrl,partial,6)">
+                              <!--ng-click="addPane('资产分类管理','assetGroupController','windControl/assetGroup.html',6)">-->
+                              <a href="" class="menu-href"> <i class="icon-right-risk myopacity"></i>{{threeMenu.idxDictName}} </a>
+                          </li>
+                      </ul>
+                  </li>
+              </ul>
+          </div>
+          <div class="product-risk-right">
+              <!--风控设置-->
+              <div class="main-content">
+                  <div class="page-content">
+                      <tabs>
+                          <pane ng-repeat="pane in riskManagements | filter:{includedInTabView:true}" tab-title="{{pane.name}}" controller="{{pane.controller}}"
+                                template="{{pane.partial}}">
+                          </pane>
+                      </tabs>
+                      <div class="page-content-area" data-ajax-content="false"></div>
+                      <input type="hidden" ng-model="modelFlag" />
+                  </div>
+              </div>
+          </div>
+      </div>
+      <div class="hidden" id="capitalGroup">
+          <div class="main-content">
+              <div class="page-content">
+                  <tabs>
+                      <pane ng-repeat="pane in capitalPanes | filter:{includedInTabView:true}" tab-title="{{pane.name}}" controller="{{pane.controller}}"
+                            template="{{pane.partial}}">
+                      </pane>
+                  </tabs>
+                  <div class="page-content-area" data-ajax-content="false"></div>
+                  <input type="hidden" ng-model="modelFlag" />
+              </div>
+          </div>
+      </div>
+      
+      <!--资产单元风控设置开始  -->
+       <div class="hidden" id="riskAccountproductRisk">
+         <!--  <div class="product-risk-left-my">
+              <ul id="productInfosFlag">
+                  <span>产品</span>
+                  <li class="fund-name" ng-repeat="productInfo in productInfos" ng-click="getFundID(productInfo.fundID,productInfo.BrokerID)">
+                      <a id="{{productInfo.fundID}}">{{productInfo.BrokerID}}_{{productInfo.shortProductName}}</a>
+                  </li>
+              </ul>
+          </div> -->
+          <div class="product-risk-center-my">
+              <!--<input type="checkbox">-->
+              <!--<label>隐藏未启用设置</label>-->
+              <ul class="product-menus" ng-repeat="RiskAccountfirstMenu in RiskAccountfirstMenus">
+                  <li id="{{RiskAccountfirstMenu.idxDictId}}">
+              <span class="menu-title" ng-click="closeDropDown(RiskAccountfirstMenu.idxDictId)">
+                  <i class="icon-dropdown"></i><i class="icon-right-risk myopacity"></i>{{RiskAccountfirstMenu.idxDictName}}
+              </span>
+                      <ul class="submenu" ng-repeat="RiskAccountsecondMenu in RiskAccountfirstMenu.RiskAccountsecondMenus" id="{{RiskAccountsecondMenu.idxDictId}}">
+                  <span class="menu-title submenu-title" ng-click="closeDropDown(RiskAccountsecondMenu.idxDictId)" ng-if="RiskAccountsecondMenu.idxDictType == 0">
+                      <i class="icon-dropdown"></i><i class="icon-right-risk myopacity"></i>{{RiskAccountsecondMenu.idxDictName}}
+                  </span>
+                  <span class="menu-title submenu-title" ng-click="addPane(RiskAccountsecondMenu.idxDictId,RiskAccountsecondMenu.idxDictName,ctrl,partial,8)" ng-if="RiskAccountsecondMenu.idxDictType == 1">
+                      <i class="icon-dropdown"></i><a href="" class="menu-href"><i class="icon-right-risk myopacity"></i>{{RiskAccountsecondMenu.idxDictName}}</a>
+                  </span>
+                          <li ng-repeat="RiskAccountthreeMenu in RiskAccountsecondMenu.RiskAccountthreeMenus" class="menu-li last-menu"
+                              ng-click="addPane(RiskAccountthreeMenu.idxDictId,RiskAccountthreeMenu.idxDictName,ctrl,partial,8)">
+                              <!--ng-click="addPane('资产分类管理','assetGroupController','windControl/assetGroup.html',6)">-->
+                              <a href="" class="menu-href"> <i class="icon-right-risk myopacity"></i>{{RiskAccountthreeMenu.idxDictName}} </a>
+                          </li>
+                      </ul>
+                  </li>
+              </ul>
+          </div>
+          <div class="product-risk-right-my">
+              <div class="main-content">
+                  <div class="page-content">
+                      <tabs>
+                          <pane ng-repeat="pane in riskAccountproductRisks | filter:{includedInTabView:true}" tab-title="{{pane.name}}" controller="{{pane.controller}}"
+                                template="{{pane.partial}}">
+                          </pane>
+                      </tabs>
+                      <div class="page-content-area" data-ajax-content="false"></div>
+                      <input type="hidden" ng-model="modelFlag" />
+                  </div>
+              </div>
+          </div>
+      </div>
+  <!--资产单元风控设置结束  -->
+  
+  </div>
+  <div class="hidden" id="riskParameters">
+      <div class="main-content">
+          <div class="page-content">
+              <tabs>
+                  <pane ng-repeat="pane in riskAccoutSetPanes | filter:{includedInTabView:true}" tab-title="{{pane.name}}" controller="{{pane.controller}}"
+                        template="{{pane.partial}}">
+                  </pane>
+              </tabs>
+              <div class="page-content-area" data-ajax-content="false"></div>
+              <input type="hidden" ng-model="modelFlag" />
+          </div>
+      </div>
+  </div>
+  <div class="" id="riskControl">
+      <div class="main-content">
+          <div class="page-content">
+              <tabs>
+                  <pane ng-repeat="pane in valuePane | filter:{includedInTabView:true}" tab-title="{{pane.name}}" controller="{{pane.controller}}"
+                        template="{{pane.partial}}">
+                  </pane>
+              </tabs>
+              <div class="page-content-area" data-ajax-content="false"></div>
+              <input type="hidden" ng-model="modelFlag" />
+          </div>
+      </div>
+      <div class="main-content riskAndcapital">
+          <!--投顾-->
+          <div class="page-content riskLeft" id="riskLeft">
+              <tabs>
+                  <pane ng-repeat="pane in riskPanes | filter:{includedInTabView:true}"  tab-title="{{pane.name}}" controller="{{pane.controller}}"
+                        template="{{pane.partial}}">
+                  </pane>
+              </tabs>
+              <div class="page-content-area" data-ajax-content="false"></div>
+              <input type="hidden" ng-model="modelFlag" />
+          </div>
+          <!--资金账号-->
+          <div class="page-content riskRight" id="riskRight">
+              <tabs>
+                  <pane ng-repeat="pane in panes | filter:{includedInTabView:true}" ng-if="'资金账户分组' != pane.name" tab-title="{{pane.name}}{{valueFlag}}" controller="{{pane.controller}}"
+                        template="{{pane.partial}}">
+                  </pane>
+                  <pane ng-repeat="pane in panes | filter:{includedInTabView:true}" ng-if="'资金账户分组' == pane.name" tab-title="{{pane.name}}" controller="{{pane.controller}}"
+                        template="{{pane.partial}}">
+                  </pane>
+              </tabs>
+              <div class="page-content-area" data-ajax-content="false"></div>
+              <input type="hidden" ng-model="modelFlag" />
+          </div>
+      </div>
+      <!--主体页面部分-->
+      <div class="main-content">
+          <div class="page-content">
+              <tabs>
+                  <pane ng-repeat="pane in centerPanes | filter:{includedInTabView:true}" ng-if="'持仓查询' != pane.name" tab-title="{{pane.name}}{{trData}}" controller="{{pane.controller}}"
+                        template="{{pane.partial}}">
+                  </pane>
+                  <pane ng-repeat="pane in centerPanes | filter:{includedInTabView:true}" ng-if="'持仓查询' == pane.name" tab-title="{{pane.name}}" controller="{{pane.controller}}"
+                        template="{{pane.partial}}">
+                  </pane>
+              </tabs>
+              <div class="page-content-area" data-ajax-content="false"></div>
+              <input type="hidden" ng-model="modelFlag" />
+          </div>
+
+          <!--<div class="page-content myright">-->
+          <!--<tabs>-->
+          <!--<pane ng-repeat="pane in rightPanes | filter:{includedInTabView:true}" tab-title="{{pane.name}}" controller="{{pane.controller}}"-->
+          <!--template="{{pane.partial}}"> </pane> </tabs>-->
+          <!--<div class="page-content-area" data-ajax-content="false"></div>-->
+          <!--<input type="hidden" ng-model="modelFlag" />-->
+          <!--</div>-->
+        </div>
+        <div class="main-content bottom-page">
+            <div class="page-content">
+                <tabs>
+                    <pane ng-repeat="pane in bottomPanes | filter:{includedInTabView:true}" tab-title="{{pane.name}}" controller="{{pane.controller}}"
+                          template="{{pane.partial}}"> </pane> </tabs>
+                <div class="page-content-area" data-ajax-content="false"></div>
+                <input type="hidden" ng-model="modelFlag" />
+            </div>
+        </div>
+    </div>
+</div>
+
+    <!--[if !IE]> -->
+    <script type="text/javascript">
+        window.jQuery || document.write("<script src='../framework/ui-ace/assets/js/jquery.js'>" + "<" + "/script>");
+    </script>
+
+    <!-- <![endif]-->
+
+    <!--[if IE]>
+    <script type="text/javascript">
+        window.jQuery || document.write("<script src='../framework/ui-ace/assets/js/jquery1x.js'>" + "<" + "/script>");
+    </script>
+    <![endif]-->
+
+    <script src="../framework/ui-ace/assets/js/bootstrap.js"></script>
+
+    <!-- jquery datatables -->
+    <script src="../framework/ui-ace/assets/js/dataTables/1.10.12/jquery.dataTables.js"></script>
+    <script src="../framework/ui-ace/assets/js/dataTables/extensions/dataTables.buttons.min.js"></script>
+    <script src="../framework/ui-ace/assets/js/dataTables/extensions/buttons.flash.min.js"></script>
+        <script src="../framework/ui-ace/assets/js/dataTables/extensions/jszip.min.js"></script>
+    <script src="../framework/ui-ace/assets/js/dataTables/extensions/buttons.html5.min.js"></script>
+    <script src="../framework/ui-ace/assets/js/dataTables/extensions/buttons.print.min.js"></script>
+    <script src="../framework/ui-ace/assets/js/dataTables/1.10.12/dataTables.fixedColumns.min.js"></script>
+    <!--<script src="../framework/ui-ace/assets/js/dataTables/jquery.dataTables.js"></script>-->
+    <script src="../framework/ui-ace/assets/js/dataTables/jquery.dataTables.bootstrap.js"></script>
+
+    <!-- angularjs -->
+    <script src="../framework/libraries/angular/1.4.3/angular.min.js"></script>
+    <script src="../framework/libraries/angular/1.4.3/angular-route.min.js"></script>
+    <script src="../framework/libraries/angular/directives/datatables/angular-datatables.min.js"></script>
+
+    <!-- jquery upload file -->
+    <script src="../framework/libraries/jquery/jquery.form/jquery.form.js"></script>
+    <script src="../framework/libraries/jquery/upload-file/jquery.uploadfile.min.js"></script>
+    <!--<link rel="stylesheet" href="../framework/libraries/jquery/upload-file/uploadfile.custom.css" />-->
+    <!--<link rel="stylesheet" href="../framework/libraries/jquery/upload-file/uploadfile.css" />-->
+
+    <!-- angular upload file -->
+    <script
+            src="../framework/libraries/angular/ng-file-upload-master/ng-file-upload-shim.min.js"></script>
+    <script
+            src="../framework/libraries/angular/ng-file-upload-master/ng-file-upload.min.js"></script>
+
+    <!--tab-->
+    <script src="../framework/libraries/angular/directives/angularjsTab/angular-ajax-control-tabs.js"></script>
+    <script src="controlApp.js"></script>
+    <script src="../framework/libraries/gridster/js/jquery.gridster.js"></script>
+    <script src="windControl.js"></script>
+
+    <script src="myhome.js"></script>
+
+    <!-- 弹框组件 -->
+    <script src="../framework/ui-ace/assets/js/layer/layer.js"></script>
+    <script src="../framework/libraries/framework.js"></script>
+    <script src="../framework/libraries/util/Namespace.js"></script>
+    <script src="../config.js"></script>
+
+    <script src="../framework/ui-ace/assets/js/date-time/bootstrap-datepicker.js"></script>
+    <script src="../framework/ui-ace/assets/js/date-time/locales/bootstrap-datepicker.zh-CN.js"></script>
+
+    <script src="../constants.js"></script>
+
+    <script src="../service/CommonQueryService.js"></script>
+
+    <!--基金净值-->
+    <script src="../pages/windControl/riskFundNetResult.js"></script>
+
+    <!--资金账户-->
+    <script src="../service/OperInvestorAccountService.js"></script>
+    <script src="../service/CapitalAccountService.js"></script>
+    <!--<script src="../service/OperClientPositionService.js"></script>-->
+    <script src="../pages/windControl/capitalAccount.js"></script>
+    <!--资金账户总持仓-->
+    <script src="../pages/windControl/capitalAccountSum.js"></script>
+
+    <!--资金账户分组-->
+    <script src="../pages/windControl/capitalAccountGroup.js"></script>
+
+    <!--成交明细-->
+    <script src="../service/OperTradeService.js"></script>
+    <script src="../pages/windControl/traderDetail.js"></script>
+
+    <!--所有保单-->
+    <script src="../service/OperOrderService.js"></script>
+    <script src="../pages/windControl/allOrders.js"></script>
+
+    <!--当前持仓-->
+    <script src="../service/OperClientPositionService.js"></script>
+    <script src="../pages/windControl/currentPosition.js"></script>
+
+    <!--本地报单-->
+    <script src="../pages/windControl/localOrders.js"></script>
+
+    <!--异常提示-->
+    <script src="../pages/windControl/exceptionInformation.js"></script>
+ 	<script src="../service/RiskWarnResultService.js"></script>
+    <!--持仓查询-->
+    <script src="../pages/windControl/positionQuery.js"></script>
+
+    <!--交易所接口-->
+    <script src="../service/ExchangeService.js"></script>
+
+    <!--风控指标管理-->
+    <script src="../pages/windControl/controlIndex.js"></script>
+    <script src="../service/RiskStromDataService.js"></script>
+    <!--单位净值止损设置-->
+    <script src="../pages/windControl/unitNetvalueStop.js"></script>
+    <script src="../service/UnitNetvalueStopService.js"></script>
+    <!--日内最大回撤止损设置-->
+    <script src="../pages/windControl/riskDayStopLoss.js"></script>
+    <script src="../service/RiskDayStopLoss.js"></script>
+    
+    
+	<!--期货交易品种限制-->
+    <script src="../pages/windControl/futureVarietiesRestriction.js"></script>
+    <script src="../service/FutureVarietiesRestrictionService.js"></script>
+    <!--证券交易品种限制-->
+    <script src="../pages/windControl/stockTradingVarietiesRestriction.js"></script>
+    <script src="../service/StockTradingVarietiesRestrictionService.js"></script>
+    
+    <!--资产单元风控参数设置  -->
+	<script src="./userriskparameter/userriskparameterfof.js"></script>
+	<script src="../service/SubCapitalAccountService.js"></script>
+	<script src="../service/SubAccountRiskParamService.js"></script>
+	<!--资产单元期货交易品种设置-->
+    <script src="../pages/windControl/riskAccountFutureVarietySet.js"></script>
+    <script src="../service/RiskAccountFutureVarietySetService.js"></script>
+    <!--资产单元证券交易品种设置-->
+    <script src="../pages/windControl/riskAccountStockVarietySet.js"></script>
+    <script src="../service/RiskAccountStockVarietySetService.js"></script>
+    <!--交易权限设置  -->
+	<script src="../pages/windControl/tradeAuthorityManage.js"></script>
+    <script src="../service/TradeAuthorityManageService.js"></script>
+    
+    <script src="../service/CapitalAccountService.js"></script>
+    <script src="../pages/riskparam/capitalRiskParam.js"></script>
+
+    <script src="../framework/libraries/my97DatePicker/WdatePicker.js"></script>
+
+	<script src="../pages/windControl/marketProportionSet.js"></script>
+	<script src="../pages/windControl/positionProportionSet.js"></script>
+    
+    <!--市场持仓占比后台业务  -->
+    <script src="../service/PositionMarketProportionSetService.js"></script>
+    
+    <!--交割期-->
+    <script src="../service/FundProductRiskParamService.js"></script>
+
+    <script src="../service/SubCapitalAccountTradingLimitService.js"></script>
+
+    <!--资产单元-->
+    <script src="../pages/windControl/riskAccount.js"></script>
+
+    <!--资产单元总持仓-->
+    <script src="../pages/windControl/riskAccountSum.js"></script>
+
+    <!--净值风控-->
+    <script src="../pages/windControl/productRisk.js"></script>
+
+    <!--资产分类管理-->
+    <script src="../pages/windControl/assetGroup.js"></script>
+    <!-- 字典表服务  -->
+	<script src="../service/RiskGroupDictionaryService.js"></script>
+
+    <!-- 资产组合风控设置 -->
+    <script src="../pages/windControl/portfolioRiskControlSet.js"></script>
+    <script src="../service/PortfolioRiskControlSetService.js"></script>
+    
+    <!-- 交易所报单频率控制 -->
+    <script src="../pages/windControl/exchangeOrderControl.js"></script>
+    <script src="../service/RiskExchangeOrderControl.js"></script>
+    <!-- 期货数量控制 -->
+    <script src="../pages/windControl/futureVolumeControl.js"></script>
+    <script src="../service/RiskFutureVolumeControl.js"></script>
+    
+    <!-- 同向反向控制 -->
+    <script src="../pages/windControl/directionControl.js"></script>
+    <script src="../service/RiskDirectionControl.js"></script>
+    
+    <!-- 资产单元交易所报单频率控制 -->
+    <script src="../pages/windControl/riskAccountExchangeOrderControl.js"></script>
+    <script src="../service/RiskAccountExchangeOrderControlService.js"></script>
+    
+    <!-- 资产单元期货数量控制 -->
+    <script src="../pages/windControl/riskAccountFutureVolumeControl.js"></script>
+    <script src="../service/RiskAccountFutureVolumeControlService.js"></script>
+    
+     <!-- 风控参数变更流水查询 -->
+    <script src="../pages/windControl/riskOperLog.js"></script>
+    <script src="../service/RiskOperLogService.js"></script>
+    
+     <!-- 风控预警情况统计  -->
+    <script src="../pages/windControl/riskWarnResultCount.js"></script>
+    <script src="../service/RiskWarnResultCountService.js"></script>
+    
+    <!-- 资产单元持仓核对  -->
+    <script src="../pages/windControl/riskAccountPositionCheck.js"></script>
+    <script src="../service/RiskAccountPositionCheckService.js"></script>
+    <!--<script src="./file/file.js"></script>-->
+</body>
+</html>

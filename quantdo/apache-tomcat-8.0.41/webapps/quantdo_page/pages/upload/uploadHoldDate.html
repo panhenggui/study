@@ -1,0 +1,82 @@
+<!-- page specific plugin scripts -->
+
+<link rel="stylesheet" href="upload/uploadHoldDate.css" />
+<!-- ajax layout which only needs content area -->
+<div class="row" ng-controller="uploadHoldDateController">
+
+<form class="form-12">
+	<div class="form-row">
+	<div class="row-col-one">
+
+        <!--<div><label>导入日期:</label><input type="text" id="settleDate" forType="date" readonly="true" ng-model="startDate"></div>-->
+             <div class="row-form row-btn-operation" ng-show="uploadHoldDate_import">
+    				<div class="row-btn-icon">
+						<button class="btn btn-reset btn-word-two" id="bootbox-upload"
+						 data-toggle="modal" style="margin-top:15px;"
+						data-target="#exchangeRateUploadModal">持仓导入</button>
+						</div>
+             </div>
+
+		 <!-- <div id="uploadHoldDateloader">Upload</div> -->
+	</div>
+	
+	</div>
+</form>
+	
+	<div class="col-xs-12 clear-padding-right">
+        <div class="row">
+            <div class="col-xs-12 clear-padding-right">
+                <div>
+                    <table id="uploadHoldDate_dynamic_table" class="cell-border stripe" cellspacing="0" width="100%">
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+       <div class="modal fade" id="exchangeRateUploadModal" tabindex="-1" role="dialog"
+     aria-labelledby="myModalLabel" aria-hidden="true" data-backdrop="static" data-keyboard="false">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close"
+                        data-dismiss="modal" aria-hidden="true">
+                    &times;
+                </button>
+                <h4 class="modal-title" id="uploadtxt">
+                    持仓导入
+                </h4>
+            </div>
+            <div class="modal-body">
+                <!-- 添加表单内容-->
+                <form class="form-horizontal" role="form" name="uploadForm" novalidate>
+                   <div class="row">
+					 <div class="col-xs-6">
+						<div class="row form-group">
+							<label for="tradeRight"
+								class="col-sm-5 control-label label-style">期货持仓文件 </label>
+							<div class="col-sm-5">
+								<div id="uploadHoldDateloader">Upload</div>
+							</div>
+						</div>
+					</div> 
+					<div class="col-xs-6" >
+						<div class="row form-group">
+							<label for="market"
+								class="col-sm-5 control-label label-style">期权持仓文件</label>
+							<div class="col-sm-5">
+							      <div id="uploadOptionHoldDateloader">Upload</div>  
+							</div>
+						</div>
+					</div>
+				</div> 
+                </form>
+            </div>
+        </div>
+    </div>
+</div> 
+
+	
+</div><!-- /.row -->
+
+
+

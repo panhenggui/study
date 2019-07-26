@@ -1,0 +1,117 @@
+<div class="row" ng-controller="BillQuery">
+	<!-- start  定义表单查询-->
+	<form class="form-12" name="queryForm">
+		<div class="form-row">
+			<div class="row-col-one">
+				<label class="word-style">结算类型</label>
+				<select ng-model="subAccount.type"
+					 ng-options="j.key as j.text for j in jsTypes"
+					class="value-style"></select>
+			</div>
+			<div class="row-col-one">
+				<label class="word-style">所属机构</label> <select
+					ng-model="subAccount.instClientID" id="instClientID" name="instClientID"
+					class="value-style"  ng-disabled="noInst"
+					ng-options="op.instClientID as op.instClientAbbrName for op in instClientList"
+					ng-change="changeInstClient()">
+				</select>
+			</div>
+			<div class="row-col-one">
+				<label class="word-style"
+					for="operateModule">资产单元</label>
+					<select ng-model="subAccount.subAccountID"
+					id="subAccountID" required class="value-style"
+					name="subAccountID"
+					ng-change="reSubAccounts()"
+					ng-options="op.subAccountID as op.instClientID+'_'+op.subAccountID+'_'+op.subAccountName for op in SubAccounts">
+					</select>
+			</div>
+			<div class="row-col-one">
+				<label class="word-style">结算日期</label>
+				<input  name="strDte" type="text"  onchange=""   class="Wdate value-style word-style"
+					ng-readonly="true"  ng-model="settleDate" onfocus="WdatePicker({lang:'zh-cn',dateFmt:'yyyyMMdd'})" required  />
+			</div>
+
+		</div>
+		<div class="btn-beyond-one-row">
+			<button type="button" class="btn btn-query btn-word-two" ng-show="billquery_query"
+				ng-click="queryForm.subAccount.$invalid || queryForm.strDte.$invalid ||isQuery||search(settleDate,subAccount,endDate)"
+				ng-disabled="queryForm.subAccount.$invalid || queryForm.strDte.$invalid ||isQuery"
+				>查询</button>
+			<button class="btn btn-reset btn-beyond-two" id="bootbox-options1"
+				ng-disabled="queryForm.subAccount.$invalid || queryForm.strDte.$invalid ||isQuery"
+				ng-click="queryForm.subAccount.$invalid || queryForm.strDte.$invalid ||isQuery||exportExcel(settleDate,subAccount,endDate)"
+				ng-show="billquery_export">导出excel</button>
+		</div>
+	</form>
+
+	<div class="col-xs-12 clear-padding-right">
+		<h4>资金情况</h4>
+		<table id="billquery_capital_table" class="cell-border stripe" cellspacing="0" width="100%">
+		</table>
+	</div>
+
+	<div class="col-xs-12">
+		<h4>出入金</h4>
+		<table id="billquery_inout_table"  class="cell-border stripe"  cellspacing="0" width="100%">
+		</table>
+	</div>
+	<div class="col-xs-12">
+		<h4>成交汇总</h4>
+		<table id="billquery_deal_table"  class="cell-border stripe"  cellspacing="0" width="100%">
+					<tfoot>
+						<tr>
+							<td style="text-align:center">合计</td>
+							<td style="text-align:center"></td>
+							<td style="text-align:center"></td>
+							<td style="text-align:center"></td>
+							<td style="text-align:center"></td>
+							<td style="text-align:center"></td>
+							<td style="text-align:center"></td>
+							<td style="text-align:center"></td>
+							<td style="text-align:center"></td>
+						</tr>
+					</tfoot>
+				</table>
+	</div>
+		
+	<div class="col-xs-12">
+		<h4>平仓汇总</h4>
+		<table id="billquery_selling_table"  class="cell-border stripe"  cellspacing="0" width="100%">
+						<tfoot>
+						<tr>
+							<td style="text-align:center">合计</td>
+							<td style="text-align:center"></td>
+							<td style="text-align:center"></td>
+							<td style="text-align:center"></td>
+							<td style="text-align:center"></td>
+							<td style="text-align:center"></td>
+							<td style="text-align:center"></td>
+							<td style="text-align:center"></td>
+							<td style="text-align:center"></td>
+							<td style="text-align:center"></td>
+						</tr>
+					</tfoot>
+				</table>
+	</div>
+	<div class="col-xs-12">
+		<h4>持仓汇总</h4>
+		<table id="billquery_position_table"  class="cell-border stripe"  cellspacing="0" width="100%">
+					 <tfoot>
+						<tr>
+							<th style="text-align:center">合计</th>
+							<th style="text-align:center"></th>
+							<th style="text-align:center"></th>
+							<th style="text-align:center"></th>
+							<th style="text-align:center"></th>
+							<th style="text-align:center"></th>
+							<th style="text-align:center"></th>
+							<th style="text-align:center"></th>
+							<th style="text-align:center"></th>
+							<th style="text-align:center"></th>
+							<th style="text-align:center"></th>
+						</tr>
+					 </tfoot>
+				</table>
+	</div>
+</div>

@@ -1,0 +1,284 @@
+<link rel="stylesheet" href="upload/uploadHoldFund.css" />
+<div class="row" ng-controller="uploadHoldFundController">
+<form class="form-12">
+	<div class="form-row">
+	<div class="col-xs-12" ng-show="flase">
+
+        <!--<div><label>导入日期:</label><input type="text" id="settleDate" forType="date" readonly="true" ng-model="startDate"></div>-->
+		<br/>
+		<!-- txt格式导入 -->
+		 <div id="fileuploader" ng-show="uploadHoldFund_import">Upload</div>
+
+		<!-- PAGE CONTENT ENDS -->
+	</div><!-- /.col -->
+	<div class="row-col-one">
+        <!-- Exsl格式导入 -->
+		 <span id="excelImport">上传</span>
+
+	</div>
+	</div>
+	</form>
+	
+	<div class="col-xs-12 clear-padding-right">
+        <div class="row">
+            <div class="col-xs-12 clear-padding-right">
+                <div>
+                    <table id="uploadHoldFund_dynamic_table" class="cell-border stripe" cellspacing="0" width="100%">
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+	<!-- <div class="row">
+			<div class="col-xs-12">
+
+				<div class="clearfix">
+					<div class="pull-right tableTools-container"></div>
+				</div>
+				div.table-responsive
+
+				div.dataTables_borderWrap
+				<div>
+					<table id="uploadFund-dynamic-table" class="cell-border stripe" cellspacing="0" width="100%" datatable="ng">
+						<thead>
+							<tr>
+								<th class="center">
+									<label class="pos-rel">
+										<span class="ace" />
+										<span class="lbl"></span>
+									</label>
+								</th>
+								<th>经纪公司代码</th>
+								<th>交易员代码</th>
+								<th class="hidden-180">资金账号</th>
+								<th>结算准备金</th>
+								<th class="hidden-480">可用资金</th>
+								<th class="hidden-480">操作</th>
+							
+							
+								<th class="hidden-480">入金</th>
+								<th class="hidden-480">出金</th>
+								<th class="hidden-480">保证金</th>
+								<th class="hidden-480">权利金收支</th>
+								<th class="hidden-480">手续费</th>
+								<th class="hidden-480">冻结保证金</th>
+								<th class="hidden-480">冻结权利金收支</th>
+								<th class="hidden-480">冻结手续费</th>
+								<th class="hidden-480">平仓盈亏</th>
+								<th class="hidden-480">持仓盈亏</th>
+								<th class="hidden-480">可用资金</th>
+								<th class="hidden-480">结算准备金</th>
+								<th class="hidden-480">多头保证金</th>
+                                <th class="hidden-480">空头保证金</th>
+								<th class="hidden-480">多头冻结保证金</th>
+                                <th class="hidden-480">空头冻结保证金</th>
+                                <th class="hidden-480">动态权益</th>
+                                <th class="hidden-480">风险度</th>
+                                <th class="hidden-480">其他费用</th>
+                                <th class="hidden-480">质押金额</th>
+                                <th class="hidden-480">币种</th>
+                                <th class="hidden-480">总冻结持仓</th>
+                                <th class="hidden-480">进入出入金</th>
+                                <th class="hidden-480">当日释放保证金</th>
+							</tr>
+						</thead>
+
+						<tbody>
+							<tr ng-repeat="tradeEntity in tradeEntitys">
+								<td class="center">
+									{{($index+1)}}
+								</td>
+
+								<td ng-bind="tradeEntity.brokerageFirmID"></td>
+								<td class="hidden-480">{{tradeEntity.traderID}}</td>
+								<td class="hidden-480">{{tradeEntity.accountID}}</td>
+								<td class="hidden-480">{{tradeEntity.preBalance}}</td>
+								<td class="hidden-480">{{tradeEntity.preAvailable}}</td>
+								<td>
+	                                <div class="hidden-sm hidden-xs action-buttons">
+	                                    <a class="green" ng-click="updateInit($index,tradeEntity)" data-toggle="modal"
+	                                       data-target="#fundUpdate_myModal"><i class="ace-icon fa fa-pencil bigger-130"></i>
+	                                    </a>
+	                                </div>
+	                            </td>
+								<td class="hidden-480">{{tradeEntity.deposit}}</td>
+								<td class="hidden-480">{{tradeEntity.withdraw}}</td>
+								<td class="hidden-480">{{tradeEntity.margin}}</td>
+								<td class="hidden-480">{{tradeEntity.premium}}</td>
+								<td class="hidden-480">{{tradeEntity.fee}}</td>
+								<td class="hidden-480">{{tradeEntity.frozenMargin}}</td>
+								<td class="hidden-480">{{tradeEntity.frozenPremium}}</td>
+								<td class="hidden-480">{{tradeEntity.frozenFee}}</td>
+								<td class="hidden-480">{{tradeEntity.closeProfit}}</td>
+                                <td class="hidden-480">{{tradeEntity.positionProfit}}</td>
+                                <td class="hidden-480">{{tradeEntity.available}}</td>
+                                <td class="hidden-480">{{tradeEntity.balance}}</td>
+                                <td class="hidden-480">{{tradeEntity.longMargin}}</td>
+                                <td class="hidden-480">{{tradeEntity.shortMargin}}</td>
+                                <td class="hidden-480">{{tradeEntity.longFrozenMargin}}</td>
+                                <td class="hidden-480">{{tradeEntity.shortFrozenMargin}}</td>
+                                <td class="hidden-480">{{tradeEntity.dynamicRights}}</td>
+                                <td class="hidden-480">{{tradeEntity.risk}}</td>
+                                <td class="hidden-480">{{tradeEntity.otherFee}}</td>
+                                <td class="hidden-480">{{tradeEntity.mortgage}}</td>
+                                <td class="hidden-480">{{tradeEntity.currency}}</td>
+                                <td class="hidden-480">{{tradeEntity.totalFrozenPos}}</td>
+                                <td class="hidden-480">{{tradeEntity.todayInOut}}</td>
+                                <td class="hidden-480">{{tradeEntity.releaseMargin}}</td>
+							</tr>
+
+						</tbody>
+					</table>
+
+				</div>
+
+			</div>
+			
+		</div> -->
+		<!-- <button class="btn btn-success" id="bootbox-options" ng-click="initParameter()" data-toggle="modal"
+            data-target="#myFundModal" ng-show="brokerID=='jy'">新增
+    	</button>
+    	 -->
+    	
+    	<!-- 新增 模态框（Modal） -->
+
+
+	<div class="modal fade" id="myFundModal" tabindex="-1" role="dialog" 
+		 aria-labelledby="myModalLabel" aria-hidden="true"
+		 data-backdrop="static" data-keyboard="false">
+		<div class="modal-dialog"  style="width:800px;">
+			<div class="modal-content">
+				<div class="modal-header">
+					<button type="button" class="close" data-dismiss="modal"
+							aria-hidden="true">&times;</button>
+					<h4 class="modal-title" >账户资金录入</h4>
+				</div>
+				<div class="modal-body">
+					<!-- 添加表单内容-->
+					<div>
+					<table id="uploadFundAdd-dynamic-table" class="table table-striped table-bordered table-hover" datatable="ng">
+                        <thead>
+                        <tr>
+                            <th class="center">
+                                <label class="pos-rel">
+                                    <span class="ace"></span>
+                                    <span class="lbl"></span>
+                                </label>
+                            </th>
+                            <!-- <th class="hidden-180">资金账号</th> -->
+                            <th class="hidden-480">经纪公司代码</th>
+                            <th class="hidden-180">资金账号</th>
+                            <th class="hidden-180">上日结算准备金</th>
+                            <th class="hidden-180">上日可用资金</th>
+                            <th class="hidden-480">总保证金</th>
+                            <!-- <th class="hidden-180">账户名称</th>
+                            <th class="hidden-480">币种</th>
+                            <th class="hidden-480">是否活跃</th> -->
+                        </tr>
+                        </thead>
+
+                        <tbody>
+                        <tr ng-repeat="capitalAccountEntity in capitalAccountEntitys">
+                            <td class="center">
+                                {{($index+1)}}
+                            </td>
+                            <!-- <td ng-bind="capitalAccountEntity.innerAccountID"></td> -->
+                            <td ng-bind="capitalAccountEntity.brokerageFirmID"></td>
+                            <td ng-bind="capitalAccountEntity.accountID"></td>
+                            <td><input type=text onkeyup="value=value.replace(/[^\d.]/g,'').replace(/^\./g,'').replace(/\.{2,}/g,'').replace('.','$#$').replace(/\./g,'').replace('$#$','.')" ng-model="capitalAccountEntity.preBalance"/></td>
+                            <td><input type=text onkeyup="value=value.replace(/[^\d.]/g,'').replace(/^\./g,'').replace(/\.{2,}/g,'').replace('.','$#$').replace(/\./g,'').replace('$#$','.')" ng-model="capitalAccountEntity.preAvailable"/></td>
+                            <td><input type=text onkeyup="value=value.replace(/[^\d.]/g,'').replace(/^\./g,'').replace(/\.{2,}/g,'').replace('.','$#$').replace(/\./g,'').replace('$#$','.')" ng-model="capitalAccountEntity.margin"/></td>
+                            
+                           <!--  <td ng-bind="capitalAccountEntity.accountName"></td>
+                            <td>
+								<span ng-if="capitalAccountEntity.currency == 'CNY'">人民币</span>
+                                <span ng-if="capitalAccountEntity.currency == 'USD'">美元</span>
+                                <span ng-if="capitalAccountEntity.currency == 'JPY'">日元</span>
+                            </td>
+                            <td class="hidden-480">
+                                <span ng-if="capitalAccountEntity.isActive==0">否</span>
+                                <span ng-if="capitalAccountEntity.isActive==1">是</span>
+                            </td> -->
+                        </tr>
+                        </tbody>
+                    </table>
+				</div>
+				
+				<div class="modal-footer">
+                    <span class="btn btn-info btn-sm popover-info" data-rel="popover" data-placement="bottom" title=""
+                          ng-click="saveAll(capitalAccountEntitys)"
+                          >&nbsp;提交&nbsp;</span>
+                    <span class="btn btn-info btn-sm popover-info" data-rel="popover" data-placement="bottom" title=""
+                          data-dismiss="modal">&nbsp;关闭&nbsp;</span>
+                </div>
+			</div>
+					<!--End  添加表单内容-->
+			</div>
+		</div>
+	</div>
+
+
+<!-- /.modal -->
+
+
+<!-- 新增 修改 模态框（Modal） -->
+    <div class="modal fade" id="fundUpdate_myModal" tabindex="-1" role="dialog"
+         aria-labelledby="myModalLabel" aria-hidden="true" data-backdrop="static" data-keyboard="false">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close"
+                            data-dismiss="modal" aria-hidden="true">
+                        &times;
+                    </button>
+                    <h4 class="modal-title" id="myModalLabel">
+                        账户资金信息维护
+                    </h4>
+                </div>
+                <div class="modal-body">
+                    <!-- 添加表单内容-->
+                    <form class="form-horizontal" role="form" name="myForm" novalidate>
+                        <div class="form-group">
+                            <label for="preBalance" class="col-sm-3 control-label">上日结算准备金<span style="color: red;">*</span></label>
+                            <div class="col-sm-8">
+                                <input type="text" class="form-control" id="preBalance"  placeholder="上日结算准备金" onkeyup="value=value.replace(/[^\d.]/g,'').replace(/^\./g,'').replace(/\.{2,}/g,'').replace('.','$#$').replace(/\./g,'').replace('$#$','.')"
+                                       ng-model="modalEntity.preBalance"  name="preBalance" maxlength="20" required>
+                                <span ng-show="myForm.preBalance.$dirty && myForm.preBalance.$invalid" style="color: red;">上日结算准备金为必填项</span>
+                            </div>
+                            <label for="preAvailable" class="col-sm-3 control-label">上日可用资金<span style="color: red;">*</span></label>
+                            <div class="col-sm-8">
+                                <input type="text" class="form-control" id="preAvailable"  placeholder="上日可用资金" onkeyup="value=value.replace(/[^\d.]/g,'').replace(/^\./g,'').replace(/\.{2,}/g,'').replace('.','$#$').replace(/\./g,'').replace('$#$','.')"
+                                       ng-model="modalEntity.preAvailable"  name="preAvailable" maxlength="20" required>
+                                <span ng-show="myForm.preAvailable.$dirty && myForm.preAvailable.$invalid" style="color: red;">上日可用资金为必填项</span>
+                            </div>
+                            <label for="margin" class="col-sm-3 control-label">总保证金<span style="color: red;">*</span></label>
+                            <div class="col-sm-8">
+                                <input type="text" class="form-control" id="margin"  placeholder="总保证金" onkeyup="value=value.replace(/[^\d.]/g,'').replace(/^\./g,'').replace(/\.{2,}/g,'').replace('.','$#$').replace(/\./g,'').replace('$#$','.')"
+                                       ng-model="modalEntity.margin"  name="margin" maxlength="20" required>
+                                <span ng-show="myForm.margin.$dirty && myForm.margin.$invalid" style="color: red;">总保证金为必填项</span>
+                            </div>
+                        </div>
+                    </form>
+                    <!--End  添加表单内容-->
+                </div>
+                <div class="modal-footer">
+                    <span class="btn btn-info btn-sm popover-info" data-rel="popover" data-placement="bottom" title=""
+                          ng-click="myForm.preBalance.$invalid || myForm.preAvailable.$invalid 
+                          || myForm.margin.$invalid||saveUpdate(modalEntity)"
+                          ng-disabled="myForm.preBalance.$invalid || myForm.preAvailable.$invalid 
+                          || myForm.margin.$invalid">&nbsp;提交&nbsp;</span>
+                    <span class="btn btn-info btn-sm popover-info" data-rel="popover" data-placement="bottom" title=""
+                          data-dismiss="modal">&nbsp;关闭&nbsp;</span>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- /.modal -->
+	
+</div><!-- /.row -->
+
+
+
+
+

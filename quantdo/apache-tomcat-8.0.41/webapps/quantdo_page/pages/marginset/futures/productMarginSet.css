@@ -1,0 +1,35 @@
+th{
+    text-align:center;
+    white-space:nowrap;
+}
+td{
+    text-align:center;
+    white-space:nowrap;
+}
+.modal-width{
+    width: 700px;
+}
+
+.date-style{
+    padding-top: 0px;
+    padding-bottom: 0px;
+    width: 170px;
+}
+
+.label-style{
+    width: 125px;
+    
+}
+
+.input-style{
+    width:170px;
+    padding-left: 2px;
+    padding-right: 2px;
+}
+.select-style{
+    width:170px;
+}
+
+.checkbox{
+    padding-left: 10px;
+}

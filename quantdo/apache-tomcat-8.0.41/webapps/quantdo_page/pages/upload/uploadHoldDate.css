@@ -1,0 +1,14 @@
+.ajax-file-upload-container{
+	display: none; !important;
+}
+.ajax-file-upload{
+    background-color: #dbe1e4 !important;
+	border: 1px solid #bac0c4 !important;
+	color: #444 !important;
+	border-radius: 5px;
+}
+
+.ajax-file-upload:hover,.ajax-file-upload:active{
+    background-color: #717476 !important; 
+    color: #ffffff !important;
+}

@@ -1,0 +1,235 @@
+<div class="row" ng-controller="fundProductInfoQueryController">
+	<!-- start 定义表单查询-->
+	<form class="form-12">
+		 <div class="form-row">
+			<div class="row-col-one">
+				<label class="word-style">机构代码 </label> <select
+					ng-model="queryEntity.instClientID" class="value-style" ng-disabled="noInst" 
+					ng-change="getProductsInfo(queryEntity.instClientID)" 
+					ng-options="op.instClientID as op.instClientID+'_'+op.instClientAbbrName for op in queryInsts">
+				</select>
+			</div>
+			<div class="row-col-one">
+				<label class="word-style">产品代码 </label> <select
+					ng-model="queryEntity.fundProductID" class="value-style" 
+					ng-options="op.fundProductID as op.fundProductID+'_'+op.shortProductName for op in queryProducts">
+				</select>
+			</div>
+		</div>
+		
+		<div class="btn-beyond-one-row">
+      	      <button type="button" class="backFilter btn btn-query btn-word-two" ng-disabled="isQuery"
+      	      	name="FundProductService.findFundProduct" ng-click="find(queryEntity)"> 查询</button>
+    	</div>
+	</form>
+	<!--End 表单查询 -->
+	
+	
+	<!--PAGE CONTENT START-->
+	<form class="form-horizontal" role="form" name="myForm" novalidate>
+		<div class="row">
+			<div class="col-xs-6">
+				<div class="row form-group">
+					<label for="fundProductName" class="col-sm-3 control-label">产品简称</label>
+	
+					<div class="col-xs-6">
+						<input type="text" class="word-style" readonly="readonly"
+							ng-model="ModalEntity.shortProductName"/>
+					</div>
+				</div>
+			</div>
+	
+			<div class="col-xs-6">
+				<div class="row form-group">
+					<label for="fundProductName" class="col-sm-3 control-label">产品全称</label>
+	
+					<div class="col-xs-6" style="margin-left:20px" >
+						<input type="text" class="word-style" readonly="readonly"
+							ng-model="ModalEntity.fundProductName"/> 
+					</div>
+				</div>
+			</div>
+		</div>
+		
+		<div class="row">
+			<div class="col-xs-6">
+				<div class="row form-group">
+					<label for="fundProductType" class="col-sm-3 control-label">产品类型</label>
+					<div class="col-xs-6">
+						<input type="text" ng-model="ModalEntity.fundProductType" 
+							class="word-style" readonly="readonly"/>
+					</div>
+				</div>
+			</div>
+			<div class="col-xs-6">
+				<div class="row form-group">
+					<label for="productManage" class="col-sm-3 control-label">产品经理</label>
+					<div class="col-xs-6" style="margin-left:20px">
+						<input type="text" class="word-style" readonly="readonly"
+							ng-model="ModalEntity.productManage"/>
+					</div>
+				</div>
+			</div>
+		</div>
+		
+		<div class="row">
+			<div class="col-xs-6">
+				<div class="row form-group">
+					<label for="productAdmin" class="col-sm-3 control-label">产品管理人</label>
+					<div class="col-xs-6">
+						<input type="text" class="word-style" 
+							ng-model="ModalEntity.productAdmin" readonly="readonly"/>
+					</div>
+				</div>
+			</div>
+			<div class="col-xs-6">
+				<div class="row form-group">
+					<label for="productAdminTelephone" class="col-sm-3 control-label">产品管理人联系方式</label>
+					<div class="col-xs-6" style="margin-left:20px">
+						<input type="text" class="word-style" 
+							ng-model="ModalEntity.productAdminTelephone" readonly="readonly"/>
+					</div>
+				</div>
+			</div>
+		</div>
+		
+		<div class="row">
+			<div class="col-xs-6">
+				<div class="row form-group">
+					<label for="productConsultant" class="col-sm-3 control-label">投资顾问</label>
+					<div class="col-xs-6">
+						<input type="text" class="word-style" 
+							ng-model="ModalEntity.productConsultant"
+							readonly="readonly"/>
+					</div>
+				</div>
+			</div>
+			<div class="col-xs-6">
+				<div class="row form-group">
+					<label for="productConsultantTelephone" class="col-sm-3 control-label">投资顾问联系方式</label>
+					<div class="col-xs-6" style="margin-left:20px" >
+						<input type="text" class="word-style" 
+							ng-model="ModalEntity.productConsultantTelephone"
+							readonly="readonly"/>
+					</div>
+				</div>
+			</div>
+	    </div>
+	    
+	   	<div class="row">
+			<div class="col-xs-6">
+				<div class="row form-group">
+					<label for="productReceiver" class="col-sm-3 control-label">产品对接人</label>
+					<div class="col-xs-6">
+						<input type="text" class="word-style" 
+							ng-model="ModalEntity.productReceiver"
+							readonly="readonly"/>
+					</div>
+				</div>
+			</div>
+			<div class="col-xs-6">
+				<div class="row form-group">
+					<label for="productReceiverTelephone" class="col-sm-3 control-label">产品对接人联系方式</label>
+					<div class="col-xs-6" style="margin-left:20px">
+						<input type="text" class="word-style" 
+							ng-model="ModalEntity.productReceiverTelephone"
+							readonly="readonly"/>
+					</div>
+				</div>
+			</div>
+	    </div>
+	    
+		<div class="row">
+	        <div class="col-xs-6">
+				<div class="row form-group">
+					<label for="productDeposit" class="col-sm-3 control-label">产品托管人</label>
+					<div class="col-xs-6">
+						<input type="text" class="word-style" 
+							ng-model="ModalEntity.productDeposit" 
+							readonly="readonly"/>
+					</div>
+				</div>
+			</div>
+			<div class="col-xs-6">
+				<div class="row form-group">
+					<label for="productAdminFee" class="col-sm-3 control-label">产品管理费</label>
+					<div class="col-xs-6" style="margin-left:20px" >
+						<input class="word-style" type="text"
+							ng-model="ModalEntity.productAdminFee" 
+							readonly="readonly"/>%
+					</div>
+				</div>
+			</div>
+		</div>
+		
+		<div class="row">
+			<div class="col-xs-6">
+				<div class="row form-group">
+					<label for="productDepositFee" class="col-sm-3 control-label">产品托管费</label>
+					<div class="col-xs-6">
+						<input type="text" class="word-style"
+							ng-model="ModalEntity.productDepositFee"
+							readonly="readonly"/>%
+					</div>
+				</div>
+			</div>
+			<div class="col-xs-6" >
+				<div class="row form-group">
+					<label for="startDate" class="col-sm-3 control-label">开始日期</label>
+					<div class="col-xs-6" style="margin-left:20px" >
+						<input class="word-style" type="text" 
+							readonly="readonly"
+							ng-model="ModalEntity.startDate"/>
+					</div>
+				</div>
+			</div>
+		</div>
+		
+		<div class="row">
+			<div class="col-xs-6">
+				<div class="row form-group">
+					<label for="endDate" class="col-sm-3 control-label">到期日期</label>
+					<div class="col-xs-6">
+						<input class="word-style" type="text" 
+							readonly="readonly"
+							ng-model="ModalEntity.endDate" name="endDate"/>
+					</div>
+				</div>
+			</div>
+			<div class="col-xs-6">
+				<div class="row form-group">
+					<label for="notOpenDate" class="col-sm-3 control-label">暂停开仓日期</label>
+					<div class="col-xs-6" style="margin-left:20px">
+						<input class="word-style" type="text" 
+							readonly="readonly"
+							ng-model="ModalEntity.notOpenDate"/>
+					</div>
+				</div>
+			</div>
+	    </div>
+	    
+		<div class="row">
+		    <div class="col-xs-6">
+				<div class="row form-group">
+					<label for="fundProductQuota" class="col-sm-3 control-label">产品份额</label>
+					<div class="col-xs-6">
+						<input type="text" class="word-style"
+							ng-model="ModalEntity.fundProductQuota"
+							readonly="readonly"/>
+					</div>
+				</div>
+			</div>
+			<div class="col-xs-6">
+				<div class="row form-group">
+					<label for="remark" class="col-sm-3 control-label">备注</label>
+					<div class="col-xs-6" style="margin-left:20px" >
+						<input type="text" class="word-style" id="remark"
+							ng-model="ModalEntity.remark" readonly="readonly"/>
+					</div>
+				</div>
+			</div>
+		</div>
+	</form>
+    <!--PAGE CONTENT END-->
+
+</div>

@@ -1,0 +1,51 @@
+
+<title>资产单元期货交易品种设置</title>
+<div ng-controller="riskAccountFutureVarietySetController"
+	style="width: 100%; overflow: auto;"> 
+	
+	<div style="height:10px;"></div>
+    <input type="button" ng-show ="riskAccountFutureAddButtonIsShow" value = &nbsp;&nbsp;&nbsp;新&nbsp;&nbsp;增&nbsp;&nbsp;&nbsp; class="backFilter myNewBtn" name="RiskAccountFutureVarietySetService.saveRiskAccountFutureVarietySet" ng-click = "showDetail()">
+    <div style="height:15px;"></div>
+	
+	<div>
+		<table id="riskAccountFutureVarietySet_up_table" class="cell-border stripe" cellspacing="0" width="100%">
+		</table>
+	</div>
+	
+	
+	<div ng-show = "riskAccountFutureShow">
+	<label class="detail-header">资产单元期货交易品种设置</label>
+	<div class="controlDetail">
+	<div class="operation-table" >
+	
+	
+	<label>资产单元:</label>
+				<select ng-disabled = "risKAccountSelect" ng-model="riskAccountEntity.riskAccount" class="select-style" id="riskAccountFutureVarietySet_riskAccount"
+						ng-options="cf.subAccountID as cf.subAccountName for cf in subAccountList">
+                </select>
+	</div>
+			 <div style="float:left;width:40%;margin-top: 12px;">
+				<table id="riskAccountFutureVarietySet_down_left_table" class="cell-border stripe" cellspacing="0" width="100%">
+				</table>
+			</div> 
+			<div style="float:right;width:50%;margin-top: 12px;">
+				<table id="riskAccountFutureVarietySet_down_right_table" class="cell-border stripe" cellspacing="0" width="100%">
+				</table>
+				<label style="color:red;">(系统暂时只支持：允许交易(全部允许)，只可平仓（只允许买平卖平），禁止交易（全部不允许）三种设置)</label>
+			</div>	
+			<div class="operation-table">
+	   	    	
+		    	<div class="btn-add-left">
+		    	    <input type="button" value={{riskAccountFutureVarietySet_buttonName_save}}  class="backFilter myNewBtn" name="RiskAccountFutureVarietySetService.saveRiskAccountFutureVarietySet"   ng-show="buttonEdit"  ng-click="saveOrUpdate(riskAccountEntity)">					
+					<input type="button" value={{riskAccountFutureVarietySet_buttonName_update}}  class="backFilter myNewBtn" name="RiskAccountFutureVarietySetService.updateRiskAccountFutureVarietySet" ng-show="!buttonEdit" ng-click="saveOrUpdate(riskAccountEntity)">					
+		        </div>
+		        <div class="btn-add-left">
+	   				<input type="button" value={{riskAccountFutureVarietySet_buttonName_detail_save}} class="backFilter myNewBtn" name="RiskAccountFutureVarietySetService.saveRiskAccountFutureVarietySet" ng-show="buttonEdit" ng-click="addRiskAccountFutureVarietySet()">
+		   		</div>
+		   		<div class="btn-add-left">
+	   				<input type="button" value={{riskAccountFutureVarietySet_buttonName_detail_update}} class="backFilter myNewBtn" name="RiskAccountFutureVarietySetService.saveRiskAccountFutureVarietySet" ng-show="!buttonEdit" ng-click="giveUpUpdate()">
+		   		</div>
+	   	   </div>
+	</div>
+	</div>
+</div>

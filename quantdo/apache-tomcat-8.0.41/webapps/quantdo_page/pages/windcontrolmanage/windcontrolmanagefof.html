@@ -1,0 +1,641 @@
+<link rel="stylesheet" href="windcontrolmanage/windcontrolmanagefof.css" />
+<title>风控员管理</title>
+<div>
+	<ol class="breadcrumb">
+		<li><a>账户管理</a></li>
+		<li class="active">风控员管理</li>
+	</ol>
+</div>
+<br>
+<div class="row" ng-controller="WindManageFOF">
+	<!-- start -->
+	<div class="col-xs-12">
+	<form class="form-horizontal">
+	<div class="row header-information">
+			<div class="col-xs-3">
+				<div class="form-group">
+					<label class="col-sm-5 control-label">风控员代码</label>
+					<div class="col-sm-5">
+						<select ng-model="tradeUser" id="tradeUser" name="tradeUser"
+							ng-options="tradeUser.userID as tradeUser.userID+'_'+tradeUser.userName for tradeUser in tradeUsers">
+							<option value="">全部</option>
+						</select>
+					</div>
+				</div>
+			</div>
+
+			<div class="col-xs-3">
+				<div class="form-group button-left-style">
+					<button class="btn btn-success" id="bootbox-options1"
+						ng-click="find(tradeUser)">查询</button>
+				</div>
+			</div>
+
+		</div>
+	</form>
+	</div>
+
+	<div class="col-xs-12">
+		<div class="row">
+			<div class="col-xs-12">
+				<div class="" style="float: left; margin-right: 40px;">
+					<div class="form-group">
+						<button class="btn btn-success" data-toggle="modal"
+							data-target="#windMyModalInsertfof" ng-click="insert()">新增</button>
+					</div>
+				</div>
+				<div class="clearfix">
+					<div class="pull-right tableTools-container"></div>
+				</div>
+				<div>
+					<table id="dynamic-table"
+						class="table table-striped table-bordered table-hover"
+						datatable="ng">
+						<thead>
+							<tr>
+								<th class="center" hidden="hidden"></th>
+								<th class="center">风控员代码</th>
+								<th class="center">风控员名称</th>
+								<th class="center">管理账户</th>
+								<th class="center">操作</th>
+							</tr>
+						</thead>
+						<tbody>
+							<tr ng-repeat="listEntity in listEntitys">
+                              	<td class="center" hidden="hidden">{{($index+1)}}</td>
+								<td class="center" ng-bind="listEntity.userID"></td>
+								<td class="center" ng-bind="listEntity.userName"></td>
+								<!-- <td ng-if="listEntity.isActive == 0">活跃</td>
+								<td ng-if="listEntity.isActive == 1">不活跃</td> -->
+								<td class="center">
+									<div class="hidden-sm hidden-xs action-buttons" ng-show="listEntity.isActive=='0'">
+										<a class="blue" ng-click="message()" style="cursor:pointer"
+										 data-target="#windMyModalEditfof" >[编辑]</a> 
+										<a class="blue" ng-click="message()" style="cursor:pointer"
+											data-target="#windMyModalTextareafof">[查询]</a>
+									</div>
+									<div class="hidden-sm hidden-xs action-buttons" ng-show="listEntity.isActive=='1'">
+										<a class="blue" ng-click="editTab(listEntity)" style="cursor:pointer"
+											data-toggle="modal" data-target="#windMyModalEditfof">[编辑]</a> 
+										<a class="blue" ng-click="query(listEntity)" style="cursor:pointer"
+											data-toggle="modal" data-target="#windMyModalTextareafof">[查询]</a>
+									</div>
+								</td>
+								<td class="center">
+									<div class="hidden-sm hidden-xs action-buttons">
+										<a class="blue" ng-click="edit(listEntity)" data-toggle="modal" ng-if="listEntity.isActive=='1'"
+											data-target="#windMyModalUpdatefof" style="cursor:pointer" >[修改]</a>
+										<a class="blue" ng-click="message()" style="cursor:pointer" 
+											data-toggle="modal" ng-if="listEntity.isActive=='0'">[修改]</a>
+										<a  ng-if="listEntity.isActive==1" class="blue" style="cursor:pointer" 
+											ng-click="cancel(listEntity)">[注销]</a>
+										<a  ng-if="listEntity.isActive==0" class="blue" style="cursor:pointer" 
+											ng-click="cancelRestore(listEntity)">[启用]</a>
+										
+										<!-- <a ng-if="listEntity.isActive==1" class="red"
+											ng-click="cancel(listEntity)" title="注销"><i
+											class="ace-icon fa fa-pencil bigger-130"></i>
+										</a> 
+										<a
+											ng-if="listEntity.isActive==0" class="blue"
+											ng-click="cancelRestore(listEntity)" title="注销恢复"><i
+											class="ace-icon fa fa-unlock-alt bigger-130"></i>
+										</a>  -->
+									</div>
+								</td>
+							</tr>
+						</tbody>
+					</table>
+				</div>
+				
+			</div>
+		</div>
+
+		<!-- PAGE CONTENT ENDS -->
+	</div>
+
+
+	<!--textarea-->
+	<div class="modal fade" id="windMyModalTextareafof" tabindex="-1" role="dialog" ng-show = "myModalTextareaShow"
+		aria-labelledby="myModalLabel" aria-hidden="true"
+		data-backdrop="static" data-keyboard="false">
+		<div class="modal-dialog">
+			<div class="modal-content">
+				<div class="modal-header">
+					<button type="button" class="close" data-dismiss="modal"
+						aria-hidden="true">&times;</button>
+					<h4 class="modal-title">风控员管理</h4>
+				</div>
+				<div class="modal-body">
+					<!-- 添加表单内容-->
+					<div class="panel panel-default">
+							<div class="panel-heading">
+								<h3 class="panel-title">基本信息</h3>
+							</div>
+						<!-- start 查询 -->
+						<div class="row">
+							<!-- <div class="col-sm-10"> -->
+								<div class="form-group">
+									<div class="col-sm-7" >
+										<div>
+											<label>{{message2}}</label>
+										</div>
+										<div>
+											<label>{{message3}}</label>
+										</div>
+										<!-- <div>
+											<label>{{message1}}</label>
+										</div> -->
+									</div>
+									<!-- <textarea rows="10px" cols="80px" disabled="disabled"
+										ng-model="message"></textarea> -->
+								</div>
+							<!-- </div> -->
+						</div>
+					</div>
+					<!-- end 查询 -->
+						<div class="modal-footer">
+							<span class="btn btn-info btn-sm popover-info" data-rel="popover"
+								data-placement="bottom" title="" data-dismiss="modal">&nbsp;关闭&nbsp;</span>
+						</div>
+				</div>
+
+			</div>
+		</div>
+	</div>
+
+	<!--修改-->
+	<div class="modal fade" id="windMyModalUpdatefof" tabindex="-1" role="dialog" ng-show = "myModalUpdateShow"
+		aria-labelledby="myModalLabel" aria-hidden="true"
+		data-backdrop="static" data-keyboard="false">
+		<div class="modal-dialog">
+			<div class="modal-content">
+				<div class="modal-header">
+					<button type="button" class="close" data-dismiss="modal"
+						aria-hidden="true">&times;</button>
+					<h4 class="modal-title">风控员管理</h4>
+				</div>
+				<div class="modal-body">
+					<!-- 添加表单内容-->
+					<form class="form-horizontal" role="form" name="myForm" novalidate>
+						<div class="panel panel-default">
+							<div class="panel-heading">
+								<h3 class="panel-title">基本信息</h3>
+							</div>
+							<div class="panel-body">
+								<div class="form-group">
+									<label class="col-sm-3 control-label">风控员代码<span
+										style="color: red;">*</span></label>
+									<div class="col-sm-5">
+										<input type="text" class="form-control" placeholder="请输入交易员代码"
+											name="forceRisk" ng-model="ModalEntity.userID" required
+											maxlength="15" ng-disabled="forceRisk.disabled"
+											readonly="readonly" onkeydown="myKeyup(event,this)" tab="1" /> <span
+											ng-show="myForm.userID.$dirty && myForm.userID.$invalid"
+											style="color: red;"></span>
+									</div>
+								</div>
+								<div class="form-group">
+									<label class="col-sm-3 control-label">风控员名称<span
+										style="color: red;">*</span></label>
+									<div class="col-sm-5">
+										<input type="text" class="form-control" placeholder="请输入交易员名称"
+											name="forceRisk" ng-model="ModalEntity.userName" required
+											maxlength="20" ng-disabled="forceRisk.disabled" onkeydown="myKeyup(event,this)" tab="2" />
+											 <span ng-show="myForm.userName.$dirty && myForm.userName.$invalid"
+											style="color: red;"></span>
+									</div>
+								</div>
+								<div class="form-group">
+									<label class="col-sm-3 control-label">操作员类型<span
+										style="color: red;">*</span></label>
+									<div class="col-sm-5">
+										<select name="userType" ng-model="ModalEntity.userType"
+											disabled="disabled"
+											ng-options="t.key as t.text for t in tradeUserTypes">
+										</select>
+									</div>
+								</div>
+								<div class="form-group">
+									<label class="col-sm-3 control-label">备注</label>
+									<div class="col-sm-5">
+										<textarea rows="2px" cols="24px" ng-model="ModalEntity.remark" onkeydown="myKeyup(event,this)" tab="3" ></textarea>
+									</div>
+								</div>
+								<!--<h3>密码信息</h3>
+								<div class="form-group">
+									<label  class="col-sm-3 control-label">密码</label>
+									<div class="col-sm-5">
+										<input type="password" class="form-control"  placeholder="请输入密码"
+											   name="forceRisk" ng-model="ModalEntity.password" required maxlength="200" ng-disabled="forceRisk.disabled"/>
+										<span ng-show="myForm.password.$dirty && myForm.password.$invalid" style="color: red;"></span>
+									</div>
+								</div>
+								<div class="form-group">
+									<label  class="col-sm-3 control-label">确认密码</label>
+									<div class="col-sm-5">
+										<input type="password" class="form-control"  placeholder="请输入确认密码"
+											   name="forceRisk" ng-model="ModalEntity.pwd" required maxlength="200" ng-disabled="forceRisk.disabled"/>
+										<span ng-show="myForm.pwd.$dirty && myForm.pwd.$invalid" style="color: red;"></span>
+									</div>
+								</div>-->
+								<div class="form-group">
+									<div class="col-sm-5">
+										<input type="hidden" ng-model="ModalEntity.id" />
+									</div>
+								</div>
+							</div>
+						</div>
+						<div class="modal-footer">
+							<span class="btn btn-info btn-sm popover-info" data-rel="popover"
+								data-placement="bottom" title="" ng-click="update(ModalEntity)">&nbsp;确定&nbsp;</span>
+							<span class="btn btn-info btn-sm popover-info" data-rel="popover"
+								data-placement="bottom" title="" data-dismiss="modal">&nbsp;关闭&nbsp;</span>
+						</div>
+					</form>
+					<!--End  添加表单内容-->
+				</div>
+
+			</div>
+		</div>
+	</div>
+	
+	<!-- 新增 -->
+	<div class="modal fade" id="windMyModalInsertfof" tabindex="-1" role="dialog"
+		aria-labelledby="myModalLabel" aria-hidden="true"
+		data-backdrop="static" data-keyboard="false">
+		<div class="modal-dialog">
+			<div class="modal-content">
+				<div class="modal-header">
+					<button type="button" class="close" data-dismiss="modal"
+						aria-hidden="true">&times;</button>
+					<h4 class="modal-title">风控员管理</h4>
+				</div>
+				<div class="modal-body">
+					<!-- 添加表单内容-->
+					<form class="form-horizontal" role="form" name="myForm" novalidate>
+						<div class="panel panel-default">
+							<div class="panel-heading">
+								<h3 class="panel-title">基本信息</h3>
+							</div>
+						<div class="panel-body">
+							<div class="form-group">
+								<label class="col-sm-3 control-label">风控员代码<span
+									style="color: red;">*</span></label>
+								<div class="col-sm-5">
+									<input type="text" class="form-control" placeholder="请输入交易员代码"
+										name="forceRisk" ng-model="ModalEntity.userID" required
+										maxlength="10" ng-disabled="forceRisk.disabled"
+										onkeydown="myKeyup(event,this)" tab="1" /> <span
+										ng-show="myForm.userID.$dirty && myForm.userID.$invalid"
+										style="color: red;"></span>
+								</div>
+							</div>
+							<div class="form-group">
+								<label class="col-sm-3 control-label">风控员名称<span
+									style="color: red;">*</span></label>
+								<div class="col-sm-5">
+									<input type="text" class="form-control" placeholder="请输入交易员名称"
+										name="forceRisk" ng-model="ModalEntity.userName" required
+										maxlength="20" ng-disabled="forceRisk.disabled" onkeydown="myKeyup(event,this)" tab="2" />
+										 <span ng-show="myForm.userName.$dirty && myForm.userName.$invalid"
+										style="color: red;"></span>
+								</div>
+							</div>
+							<div class="form-group">
+								<label class="col-sm-3 control-label">操作员类型<span
+									style="color: red;">*</span></label>
+								<div class="col-sm-5">
+									<select name="userType" ng-model="ModalEntity.userType"
+										disabled="disabled"
+										ng-options="t.key as t.text for t in tradeUserTypes">
+									</select>
+								</div>
+							</div>
+							<div class="form-group">
+								<label class="col-sm-3 control-label">备注</label>
+								<div class="col-sm-5">
+									<textarea rows="2px" cols="24px" ng-model="ModalEntity.remark" onkeydown="myKeyup(event,this)" tab="3" ></textarea>
+								</div>
+							</div>
+						</div>
+						</div>
+						<div class="panel panel-default">
+							<div class="panel-heading">
+								<h3 class="panel-title">密码信息</h3>
+							</div>
+						<div class="panel-body">
+								<div class="form-group">
+									<label  class="col-sm-3 control-label">密码<span style="color: red;">*</span></label>
+									<div class="col-sm-5">
+										<input type="password" class="form-control"  placeholder="请输入密码"
+												required
+												onkeyup="kEvent(event,this)" ng-change="isBlank(ModalEntity.password)"
+											   name="forceRisk" ng-model="ModalEntity.password" required maxlength="200" ng-disabled="forceRisk.disabled"/>
+										<span ng-show="myForm.password.$dirty && myForm.password.$invalid" style="color: red;"></span>
+									</div>
+								</div>
+								<div class="form-group">
+									<label  class="col-sm-3 control-label">确认密码<span style="color: red;">*</span></label>
+									<div class="col-sm-5">
+										<input type="password" class="form-control"  placeholder="请确认密码"
+												onkeyup="kEvent(event,this)" ng-change="isBlank(ModalEntity.pwd)"
+												required
+											   name="forceRisk" ng-model="ModalEntity.pwd" required maxlength="200" ng-disabled="forceRisk.disabled"/>
+										<span ng-show="myForm.pwd.$dirty && myForm.pwd.$invalid" style="color: red;"></span>
+									</div>
+								</div>
+								<div class="form-group">
+									<div class="col-sm-5">
+										<input type="hidden" ng-model="ModalEntity.id" />
+									</div>
+								</div>
+								<div class="modal-footer">
+									<span class="btn btn-info btn-sm popover-info" data-rel="popover"
+										ng-disabled="myForm.userID.$dirty || myForm.userName.$dirty && myForm.userName.$invalid || myForm.password.$dirty && myForm.password.$invalid || myForm.pwd.$dirty && myForm.pwd.$invalid || pwdIsBlank"
+										data-placement="bottom" title="" ng-click="save(ModalEntity)">&nbsp;确定&nbsp;</span>
+									<span class="btn btn-info btn-sm popover-info" data-rel="popover"
+										data-placement="bottom" title="" data-dismiss="modal">&nbsp;关闭&nbsp;</span>
+								</div>
+						</div>
+						</div>
+					</form>
+					<!--End  添加表单内容-->
+				</div>
+
+			</div>
+		</div>
+	</div>
+
+	<!--end 修改-->
+	<!--编辑-->
+	<div id="dEditTable">
+	<div class="modal fade" id="windMyModalEditfof" tabindex="-1" role="dialog"
+        aria-labelledby="myModalLabel" aria-hidden="true"
+        data-backdrop="static" data-keyboard="false">
+        
+        <div class="modal-dialog " style ="width: 780px;">
+            <div class="modal-content" id="winEditTable">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal"
+                        aria-hidden="true">&times;</button>
+                    <h4 class="modal-title">风控员对应账户设置</h4>
+                </div>
+                <div class="modal-body" style="display: block;overflow-y:scroll;height:800px; ">
+                <form class="form-horizontal">
+                                
+                <div class="row">
+                    <div class="form-group">
+                        <label class="col-sm-3 control-label" style="width:auto;">风控员代码</label>
+                        <div class="col-sm-4">
+                            <select ng-model="tradeUserEntity.userID" name="userID"
+                                ng-options="o.userID as o.userID+'_'+o.userName  for o in tradeUserEntitys" 
+                                ng-disabled="true">
+                            </select>
+                        </div>
+                    </div>
+                </div>
+                <!-- 1 对应资金账号组 -->
+                <div class="panel panel-default">
+                  <div class="panel-heading">
+                      <h3 class="panel-title">对应资金账号组</h3>
+                  </div>
+                  <div class="panel-body">
+                     <!-- <div class="form-group">
+                            <div class="col-sm-5">
+                                <input type="checkbox" ng-model="flagGroup" ng-click="andAddGroup(flagGroup)" />
+                                <label class="control-label">同时添加对应的资产单元</label>
+                            </div>
+                        </div> -->
+               <div class="wcmmodalbodydiv">
+                <!-- left -->
+                <div class="wcmoverflatLeftTitleDiv">
+                        <table >
+                            <thead>
+                            <tr>
+                                <th>账号分组代码</th>
+                                <th>账号分组名称</th>
+                            </tr>
+                            </thead>
+                        </table>
+                    </div>
+                    <div class="wcmoverflatLeftDiv">
+                        <table >
+                            
+                            <tbody>
+                            <tr class="hoverTr" ng-repeat="alistEntity in accountGroupEntitys" ng-class="{windColoerTr:$index%2 == 0}">
+                                <!-- <td>
+                                    <input type="checkbox" ng-model="flag" ng-checked="listEntity.isChecked == 0" ng-click="add(flag,listEntity)" />
+                                </td> -->
+                                <td ng-class="{selectActive:alistEntity.isSelectActive == true}" ng-bind="alistEntity.accountGroupID"  ng-dblclick="addGroup($index,alistEntity)" ng-click="addGroupSelect($index,alistEntity)"></td>
+                                <td ng-class="{selectActive:alistEntity.isSelectActive == true}" ng-bind="alistEntity.accountGroupName" ng-dblclick="addGroup($index,alistEntity)" ng-click="addGroupSelect($index,alistEntity)"></td>
+                            </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <!-- Midd -->
+                    <div  class="wcmoverflatMidDiv">
+                        <button type="button" ng-click="addSelectGroupEntity()" >&nbsp;>&nbsp; </button>
+					    <br>
+					    &nbsp;
+					    <br>
+                        <button type="button" ng-click="addAllGroupEntity(accountGroupEntitys)" style="margin-bottom: 10px;"> >> </button>
+                        <br>
+					    &nbsp;
+					    <br>
+                        <button type="button" ng-click="deleteAllGroupEntity(groupArrayMaps)" >  &lt;&lt;  </button>
+                         <br>
+					    &nbsp;
+					    <br>
+					    <button type="button" ng-click="deleteSelectGroupEntity()" >&nbsp;&lt;&nbsp; </button>
+                    </div>
+                    <!-- right  -->
+                     <div class="wcmoverflatRightTitleDiv">
+                        <table >
+                            <thead>
+                            <tr>
+                                <th>账号分组代码</th>
+                                <th>账号分组名称</th>
+                            </tr>
+                            </thead>
+                        </table>
+                    </div>
+                       <div  class="wcmoverflatRightDiv">
+                        <table>
+                            <tbody>
+                            <tr  class="hoverTr"  ng-repeat="listEntity in groupArrayMaps" ng-class="{windColoerTr:$index%2 == 0}">
+                                <td ng-class="{selectActive:listEntity.isSelectActive == true}"  ng-bind="listEntity.accountGroupID" ng-dblclick="devedGroup($index,listEntity)" ng-click="devedGroupSelect($index,listEntity)"></td>
+                                <td  ng-class="{selectActive:listEntity.isSelectActive == true}" ng-bind="listEntity.accountGroupName" ng-dblclick="devedGroup($index,listEntity)" ng-click="devedGroupSelect($index,listEntity)" ></td> 
+                            </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    </div>
+                   </div>
+                </div>
+                <!-- 2 对应资金账号 -->
+                <div class="panel panel-default">
+                  <div class="panel-heading">
+                      <h3 class="panel-title">对应资金账号</h3>
+                  </div>
+                  <div class="panel-body">
+                    <!-- <div class="form-group">
+                            <div class="col-sm-5">
+                                <input type="checkbox" ng-model="flagAccountId" ng-click="andAddAccount(flagAccountId)" />
+                                <label class="control-label">同时添加对应的资产单元</label>
+                            </div>
+                    </div>  -->
+                <div class="wcmmodalbodydiv">
+                <!-- left -->
+                <div class="wcmoverflatLeftTitleDiv">
+                        <table >
+                            <thead>
+                            <tr>
+                                <th>资金账号</th>
+                                <th>资金账号名称</th>
+                            </tr>
+                            </thead>
+                        </table>
+                    </div>
+                    <div class="wcmoverflatLeftDiv">
+                        <table >
+                            
+                            
+                            <tbody>
+                            <tr  class="hoverTr"  ng-repeat="clistEntity in capitalAccountEntitys" ng-class="{windColoerTr:$index%2 == 0}">
+                                <td ng-class="{selectActive:clistEntity.isSelectActive == true}" ng-bind="clistEntity.innerAccountID"  ng-dblclick="addAccountId($index,clistEntity)" ng-click="addAccountSelect($index,clistEntity)"></td>
+                                <td ng-class="{selectActive:clistEntity.isSelectActive == true}" ng-bind="clistEntity.accountName" ng-dblclick="addAccountId($index,clistEntity)" ng-click="addAccountSelect($index,clistEntity)"></td>
+                             </tr>
+                            </tbody>  
+                        </table>
+                    </div>
+                    <!-- Midd -->
+                    <div  class="wcmoverflatMidDiv">
+                        <button type="button" ng-click="addSelectAccountEntity()" >&nbsp;>&nbsp; </button>
+					    <br>
+					    &nbsp;
+					    <br>
+                        <button type="button" ng-click="addAllAccountEntity(capitalAccountEntitys)" style="margin-bottom: 10px;"> >> </button>
+                         <br>
+					    &nbsp;
+					    <br>
+                        <button type="button" ng-click="deleteAllAccountEntity(accountIdArrayMaps)" >  &lt;&lt;  </button>
+                         <br>
+					    &nbsp;
+					     <br>
+					    <button type="button" ng-click="deleteSelectAccountEntity()" >&nbsp;&lt;&nbsp; </button>
+                    </div>
+                    <!-- right  -->
+                     <div class="wcmoverflatRightTitleDiv">
+                        <table >
+                            <thead>
+                            <tr>
+                                <th>资金账号</th>
+                                <th>资金账号名称</th>
+                            </tr>
+                            </thead>
+                        </table>
+                    </div>
+                       <div  class="wcmoverflatRightDiv">
+                        <table>
+                        
+                      
+                            <tbody>
+                            <tr  class="hoverTr"  ng-repeat="clistEntity in accountIdArrayMaps" ng-class="{windColoerTr:$index%2 == 0}">
+                                <td ng-class="{selectActive:clistEntity.isSelectActive == true}" ng-bind="clistEntity.innerAccountID"  ng-dblclick="devedAccountId($index,clistEntity)" ng-click="devedAccountSelect($index,clistEntity)"></td>
+                                <td ng-class="{selectActive:clistEntity.isSelectActive == true}" ng-bind="clistEntity.accountName" ng-dblclick="devedAccountId($index,clistEntity)" ng-click="devedAccountSelect($index,clistEntity)"></td>
+                               
+                              </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    </div>
+                     
+                      
+                
+                   </div>
+                </div>
+                <!-- 3 对应资产单元-->
+                <!-- <div class="panel panel-default">
+                  <div class="panel-heading">
+                      <h3 class="panel-title">对应资产单元</h3>
+                  </div>
+                  <div class="panel-body">
+                         <div class="form-group">
+                            <div class="col-sm-8">
+                                <input type="checkbox" ng-model="flagSubId" ng-click= "andAddsub(flagSubId)" />
+                                <label class="control-label">同时添加对应的资金账号或资金账号组</label>
+                            </div>
+                           
+                        </div>
+               <div class="wcmmodalbodydiv">
+                left
+                <div class="wcmoverflatLeftTitleDiv">
+                        <table >
+                            <thead>
+                            <tr>
+                                <th>资产单元</th>
+                                <th>资产单元名称</th>
+                            </tr>
+                            </thead>
+                        </table>
+                    </div>
+                    <div class="wcmoverflatLeftDiv">
+                        <table >
+                            
+                            <tbody>
+                            <tr class="hoverTr" ng-repeat="slistEntity in SubCapitalAccountEntitys" ng-class="{windColoerTr:$index%2 == 0}">
+                                <td>
+                                    <input type="checkbox" ng-model="flag" ng-checked="listEntity.isChecked == 0" ng-click="add(flag,listEntity)" />
+                                </td>
+                                <td ng-bind="slistEntity.subAccountID"  ng-click="addClient($index,slistEntity)"></td>
+                                <td ng-bind="slistEntity.subAccountName " ng-click="addClient($index,slistEntity)"></td>
+                            </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    Midd
+                    <div  class="wcmoverflatMidDiv">
+                        <button type="button" ng-click="addAllSubAccountEntity(SubCapitalAccountEntitys)" > >> </button>
+                        <br>
+                        <button type="button" ng-click="deleteAllSubAccountEntity(clientArrayMaps)" >  &lt;&lt;  </button>
+                    </div>
+                    right 
+                     <div class="wcmoverflatRightTitleDiv">
+                        <table >
+                            <thead>
+                            <tr>
+                                <th>资产单元</th>
+                                <th>资产单元名称</th>
+                            </tr>
+                            </thead>
+                        </table>
+                    </div>
+                       <div  class="wcmoverflatRightDiv">
+                        <table>
+                            <tbody>
+                            <tr  class="hoverTr"  ng-repeat="listEntity in clientArrayMaps" ng-class="{windColoerTr:$index%2 == 0}">
+                             
+                                <td ng-bind="listEntity.subAccountID" ng-click="devedClient($index,listEntity)" ></td>
+                                <td ng-bind="listEntity.subAccountName" ng-click="devedClient($index,listEntity)" ></td> 
+                            </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    </div>
+                   </div>
+                </div> -->
+                        <div class="modal-footer btn-background">
+                            <span class="btn btn-info btn-sm popover-info" data-rel="popover"
+                                data-placement="bottom" title=""
+                                ng-click="saveSetting(tradeUserEntity)">&nbsp;确定&nbsp;</span> <span
+                                class="btn btn-info btn-sm popover-info " data-rel="popover"
+                                data-placement="bottom" title="" data-dismiss="modal">&nbsp;关闭&nbsp;</span>
+                        </div>
+                    </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+	</div>
+</div>

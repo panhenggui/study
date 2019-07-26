@@ -1,0 +1,87 @@
+.assetRow{
+    margin-bottom: 10px;
+    margin-left: 12px;
+    line-height: 30px;
+
+}
+.asset-label{
+    margin-right: 5px;
+}
+.col-len{
+    margin-right: 25px;
+}
+.smlbtn{
+    padding-left: 10px;
+    padding-right: 10px;
+}
+.detail-type-table{
+    margin-top: 12px;
+}
+.left-table{
+    float: left;
+    width: 45%;
+}
+.center-content{
+    float: left;
+    margin-top: 6%;
+    margin-left: 3%;
+}
+.right-table{
+    float: right;
+    width: 45%;
+}
+.mar-setting{
+    display: block;
+    margin-bottom: 12px;
+}
+.typeFlag{
+    width: 50px !important;
+}
+.typeName{
+    width: 100px !important;
+}
+.addRow,.delRow,.detailConbine,.delCombine{
+    -webkit-transition: all 0.2s ease-in-out;
+    -moz-transition: all 0.2s ease-in-out;
+    -ms-transition: all 0.2s ease-in-out;
+    -o-transition: all 0.2s ease-in-out;
+    transition: all 0.2s ease-in-out;
+    /*color: #000;*/
+}
+.addRow:hover,.delRow:hover,.detailConbine:hover,.delCombine:hover{
+    color: #6477cc;
+    -webkit-transform: scale(1.2);
+    -moz-transform: scale(1.2);
+    -ms-transform: scale(1.2);
+    -o-transform: scale(1.2);
+    transform: scale(1.2);
+}
+.detailConbine{
+    margin-right: 5px;
+}
+#uploadFundloader{
+    float: right;
+    margin-right: -200px;
+    /*margin-top: -26px;*/
+}
+.ajax-file-upload{
+    background-color: #6477cc;
+    width: 105px;
+    color: #ffffff;
+    line-height: 25px;
+    padding-left: 15px;
+    padding-right: 15px;
+    text-align: center;
+    -webkit-border-radius: 3px;
+    -moz-border-radius: 3px;
+    border-radius: 3px;
+}
+.ajax-file-upload span{
+    display: none !important;
+}
+.ajax-file-upload-container{
+    display: none;
+}
+#unchoiceType_table tbody tr td,#choicedType_table tr td{
+    white-space: nowrap;
+}

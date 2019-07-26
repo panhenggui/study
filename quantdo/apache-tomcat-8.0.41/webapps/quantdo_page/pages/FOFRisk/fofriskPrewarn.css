@@ -1,0 +1,81 @@
+.tab-heading{
+	     height:27px;
+         position:relative;
+         background:#FFF;
+         width:100%;
+         margin:0px 0px -1.5px 0px;
+         
+}
+.tab-heading ul{
+	        width:100%;
+	        position:absolute;
+	        padding:0px;
+	        margin:0;
+}
+
+.tab-heading li{
+	        float:left;
+            width: 15% ;
+            height:26px;
+            line-height:26px;
+            text-align:center;
+            overflow:hidden;
+            background:#FFF;
+            border:1px  solid #eee;
+            //border-radius: 8px 8px 0px 0px;
+}
+
+.tab-heading li.selected{
+	     background:#0088cc;
+         border-bottom-color:transparent;
+         border-left:1px solid #eee;
+         border-right:1px solid #eee;
+         padding:0;//去除填充
+         font-size:40px;
+         color:#FFF;
+         //font-weight:bolder;
+         //font-style:italic;
+}
+
+
+.tab-heading li:hover{background:#DDDDDD;}
+
+th{
+    text-align:center;
+    white-space:nowrap;
+}
+
+td{
+    white-space:nowrap;
+}
+.modal-width{
+    width: 800px;
+}
+
+.date-style{
+    padding-top: 0px;
+    padding-bottom: 0px;
+    width: 170px;
+}
+
+.label-style{
+    width: 115px;
+}
+
+.input-style{
+    width:170px;
+    padding-left: 2px;
+    padding-right: 2px;
+}
+.select-style{
+    width:170px;
+}
+label{
+	white-space: nowrap;
+}
+.input-sm{
+	width: 70px !important;
+}
+.trBgColor{
+   background-color: #00b3ee !important;
+}

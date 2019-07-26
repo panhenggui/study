@@ -1,0 +1,7 @@
+.control-label{
+	white-space: nowrap;
+}
+th{
+    text-align:center;
+    white-space:nowrap;
+}

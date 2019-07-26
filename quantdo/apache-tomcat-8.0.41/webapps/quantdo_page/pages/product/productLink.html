@@ -1,0 +1,144 @@
+<link rel="stylesheet" href="user/accountLink.css" />
+<title>用户关联账号</title>
+<div>
+	<ol class="breadcrumb">
+		<li><a>用户关联产品</a></li>
+		<li class="active">用户关联产品</li>
+	</ol>
+</div>
+<br>
+<div ng-controller="UserFundProductController">
+	<!--编辑-->
+	<div class="special-container winEditTable">
+		<div class="description-first">
+			<span class="description-content">用户选择</span>
+			<div class="input-container">
+				<div class="row-col-one">
+					<label class="word-style word-bottom-clear">机构代码<font
+						color=red>*</font></label> <select ng-model="tradeUserEntity.instClientID"
+						class="value-style content-bottom-clear" name="instClientID"
+						ng-disabled="isInstClient "
+						ng-change="changInstClient(tradeUserEntity.instClientID)"
+						ng-options="op.instClientID as op.instClientID + '-' + op.instClientAbbrName for op in instClientListEntitys">
+						<option value="">全部</option>
+					</select>
+				</div>
+				<div class="row-col-one">
+					<label class="word-style word-bottom-clear">用户代码<font
+						color=red>*</font></label> <select ng-model="tradeUserEntity.userID"
+						name="userID" ng-disabled="false"
+						class="value-style content-bottom-clear"
+						ng-change="changUserCode(tradeUserEntity.userID)"
+						ng-options="o.userID as o.userID+'_'+o.userName  for o in tradeUsers">
+						<option value="">全部</option>
+					</select>
+				</div>
+				<div class="row-col-one">
+					<label class="word-style word-bottom-clear">角色</label> <select
+						ng-model="tradeUserEntity.id" name="id" ng-disabled="true"
+						ng-options="op.id as op.id + '-' + op.roleName for op in roleListEntitys">
+						<option value="">全部</option>
+					</select>
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<!-- 2 对应资产单元 -->
+	<div class="description-first left-12" ng-show="true">
+		<span class="description-content">产品信息</span>
+		<div class="move-outer-container">
+			<div class="move-container move-container-shadow">
+				<div class="table-head">
+					<table class="move-table">
+						<colgroup>
+							<col style="width: 120px;">
+							<col style="width: 120px;">
+						</colgroup>
+						<thead>
+							<tr class="container-tr-row">
+								<th>产品编号</th>
+								<th>产品简称</th>
+							</tr>
+						</thead>
+					</table>
+				</div>
+				<div class="table-body">
+					<table class="move-table">
+						<colgroup>
+							<col style="width: 120px;">
+							<col style="width: 120px;">
+						</colgroup>
+						<tbody>
+							<tr class="hoverTr"
+								ng-repeat="alistEntity in accountGroupEntitys"
+								ng-class="{windColoerTr:$index%2 == 0}">
+								<td ng-class="{selectActive:alistEntity.isSelectActive == true}"
+									ng-bind="alistEntity.fundProductID"
+									ng-dblclick="addGroup($index,alistEntity)"
+									ng-click="addGroupSelect($index,alistEntity)"></td>
+								<td ng-class="{selectActive:alistEntity.isSelectActive == true}"
+									ng-bind="alistEntity.shortProductName"
+									ng-dblclick="addGroup($index,alistEntity)"
+									ng-click="addGroupSelect($index,alistEntity)"></td>
+							</tr>
+						</tbody>
+					</table>
+				</div>
+			</div>
+			<div class="move-container operation-container">
+				<span class="move-icon" ng-click="addSelectGroupEntity()">&gt;</span>
+				<span class="move-icon icon-move-right"
+					ng-click="addAllGroupEntity(accountGroupEntitys)"></span> <span
+					class="move-icon icon-move-left"
+					ng-click="deleteAllGroupEntity(groupArrayMaps)"></span> <span
+					class="move-icon" ng-click="deleteSelectGroupEntity()">&lt;</span>
+			</div>
+			<div class="move-container move-container-shadow">
+				<div class="table-head">
+					<table class="move-table">
+						<colgroup>
+							<col style="width: 120px;">
+							<col style="width: 120px;">
+						</colgroup>
+						<thead>
+							<tr class="container-tr-row">
+								<th>产品编号</th>
+								<th>产品简称</th>
+							</tr>
+						</thead>
+					</table>
+				</div>
+				<div class="table-body">
+					<table class="move-table">
+						<colgroup>
+							<col style="width: 120px;">
+							<col style="width: 120px;">
+						</colgroup>
+						<tbody>
+							<tr class="hoverTr" ng-repeat="listEntity in groupArrayMaps"
+								ng-class="{windColoerTr:$index%2 == 0}">
+								<td ng-class="{selectActive:listEntity.isSelectActive == true}"
+									ng-bind="listEntity.fundProductID"
+									ng-dblclick="devedGroup($index,listEntity)"
+									ng-click="devedGroupSelect($index,listEntity)"></td>
+								<td ng-class="{selectActive:listEntity.isSelectActive == true}"
+									ng-bind="listEntity.shortProductName"
+									ng-dblclick="devedGroup($index,listEntity)"
+									ng-click="devedGroupSelect($index,listEntity)"></td>
+							</tr>
+						</tbody>
+					</table>
+				</div>
+			</div>
+		</div>
+	</div>
+	<span style="color: red;margin-left:12px; ">用户关联产品可增删改查产品的资金和净值数据，如果还需查看或者操作账户数据，请设置用户关联账号。&nbsp;&nbsp;</span>
+	<div class="modal-footer btn-background" style="margin-top: -20px;">
+		<br /> <span class="btn btn-info btn-sm popover-info"
+			data-rel="popover" data-placement="bottom" title=""
+			ng-disabled="OkShow" ng-show="productLink_add"
+			style="margin-left: -40px;"
+			ng-click="OkShow || saveSetting(tradeUserEntity)">&nbsp;确定&nbsp;</span>
+	</div>
+</div>

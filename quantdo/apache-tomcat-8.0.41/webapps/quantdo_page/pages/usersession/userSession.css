@@ -1,0 +1,19 @@
+.modal-width{
+    width: 800px;
+}
+.modify-height{
+    margin-bottom: 15px;
+}
+table.table-stripe{
+    width: 100%;
+}
+table.table-stripe thead tr{
+    background-color: #474f60;
+    color: #fff;
+    height: 35px;
+    line-height: 35px;
+}
+table.table-stripe tbody tr{
+    height: 40px;
+    line-height: 40px;
+}

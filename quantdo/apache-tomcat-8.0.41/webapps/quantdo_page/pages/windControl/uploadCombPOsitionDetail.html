@@ -1,0 +1,58 @@
+<title>郑州大连组合-交易所文件导入</title>
+<link href="windControl/uploadCombPOsitionDetail.css" rel="stylesheet">
+<div ng-controller="uploadCombPositionDetailController" style="width: 100%;">
+	<form class="form-12">
+	<div class="form-row" style="margin-top: 17px;">
+	<label class="word-style" style="margin-left: 17px;">交易所</label>
+	<select class="value-style" style="margin-left: 10px;" ng-model="queryEntity.exchID" ng-options="ct.exchID as ct.exchName for ct in exchEntity"></select>
+	<label class="word-style" style="margin-left: 35px;">交易日</label>
+	<input class="value-style" style="margin-left: 10px;" ng-model="queryEntity.tradingDay" forType="date" type="text" ng-readonly="true" >
+    <!-- <select style="margin-left: 10px;" ng-model="queryEntity.tradingDay" ng-options="ct.tradingDay as ct.tradingDay for ct in tradingDayEntity"></select> -->
+    <button class="btn btn-query btn-word-two" ng-click="showData(queryEntity.exchID,queryEntity.tradingDay)" ng-show="uploadCombPOsitionDetail_query">查询</button>
+     <!-- <button  class="btn btn-success"  ng-click = "confirmUploadCombPositionDetail2()">确认导入</button> -->
+ <!--  <div id="uploadCombPositionDetail" style="margin-right: 55%;margin-top: 1%;" >uploadCombPositionDetail</div> -->
+    </div>
+    <div class="row-form row-btn-operation" ng-show="uploadCombPOsitionDetail_upload">
+    				<div class="row-btn-icon" style="margin-left:-10px;">
+					<span id="uploadCombPositionDetail" style="margin-top:6px;">uploadCombPositionDetail</span>
+					</div>
+             </div>
+	<!-- <div style = "padding-left: 15px;"> -->
+
+	</form>	
+	<!-- </div> -->
+	<div class="row">
+		<div class="col-xs-12">
+
+				<!-- <div class="clearfix">
+					<div class="pull-right tableTools-container"></div>
+				</div> -->
+				<div>
+			    	<table id="uploadCombPositionDetail_table"  class="cell-border stripe">
+		    	        <thead>
+							<tr>
+								<th>序号</th>
+								<th>资金账号</th>
+								<th>交易所代码</th>
+								<th>投机套保标志</th>
+								<th>组合合约代码</th>
+								<th>第一腿合约代码</th>
+								<th>第一腿买卖方向</th>
+								<th>第一腿持仓价</th>
+								<!-- <th>第一腿保证金</th> -->
+								<th>第二腿合约代码</th>
+								<th>第二腿买卖方向</th>
+								<th>第二腿持仓价</th>
+								<!-- <th>第二腿保证金</th> -->
+								<th>总持仓量</th>
+								<!-- <th>总保证金</th> -->
+								<th>所属机构</th>
+								<th>交易日</th>
+							</tr>
+						</thead>
+			    	</table>
+	    		</div>
+		</div>
+	</div>
+	
+</div>

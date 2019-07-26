@@ -1,0 +1,94 @@
+.select-style{
+    width:170px;
+}
+
+.modal-width{
+    width: 900px;
+}
+
+.label-style {
+    width: 118px;
+}
+.edit-font-size{
+	font-size: 13px;
+}
+.overflatLeftDiv{
+	position:absolute;
+	height:300px;
+	width:260px;
+	left:15px;
+	top:37px;
+	overflow:auto;
+    border:1px solid silver;
+
+}
+.overflatLeftTitleDiv{
+	position:absolute;
+    height:23px;
+    width:260px;
+    left:15px;
+    border:1px solid silver;
+}
+.overflatMidDiv{
+    height:100px;
+    width:30px;
+    top:110px;
+	left:283px;
+	position:absolute;
+}
+
+
+.overflatRightDiv{
+	position:absolute;
+    height:300px;
+    width:260px;
+    left:325px;
+    top:37px;
+    overflow:auto;
+    border:1px solid silver;
+}
+.overflatRightTitleDiv{
+	position:absolute;
+    height:23px;
+    width:260px;
+    left:325px;
+    overflow:auto;
+    border:1px solid silver;
+}
+
+.modal-footerdiv{
+  position:absolute;
+  left:360px;
+  top:350px;
+}
+.modalbodydiv{
+	 height:380px;
+     width:650px;
+}
+thead tr th {
+    text-align:left;
+    width:130px;
+    line-height: 20px;
+    padding: 4px;
+    background: #f9f9f9;
+}
+tbody tr td {
+    text-align: left;
+    width:130px;
+    /*border-top:1px solid silver;*/
+    border-bottom:1px solid silver;
+    padding: 4px;
+    line-height: 20px;
+}
+.hoverTr:hover{
+    background:silver;
+}
+.windColoerTr{
+	background:#ffffff;
+}
+
+.selectActive{
+	 background:#e9f7ff;
+}
+
+

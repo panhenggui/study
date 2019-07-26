@@ -1,0 +1,874 @@
+<link rel="stylesheet" href="account/capitalAccount.css" />
+<div class="row"  ng-controller="capitalAccountController">
+	<!-- start 定义表单查询-->
+	<form class="form-12">
+		<div class="form-row">
+				<div class="alert alert-success" ng-show="resultInfo">资金账户信息保存成功!</div>
+		</div>
+		<div class="form-row">
+			<div class="row-col-one" >
+                <label class="word-style">经纪公司代码</label>
+				<select ng-model="queryEntity.brokerageFirmID"
+							class="value-style">
+							<option value="">全部</option>
+							<option ng-repeat="brokerage in brokerages"
+								value="{{brokerage.brokerageFirmID}}">
+								{{brokerage.brokerageFirmID}}_{{brokerage.brokerageFirmName}}</option>
+				</select>
+             </div>
+             <div class="row-col-one" >
+                <label class="word-style">机构代码</label>
+                   <select ng-model="queryEntity.instClientID" required 
+						ng-disabled="isInstClient " class="value-style"
+						ng-options="op.instClientID as op.instClientID+'_'+ op.instClientAbbrName for op in queryinstClientlists">
+						<option value="">全部</option>
+					</select>
+             </div>
+              <div class="row-col-one" >
+                <label class="word-style">资金账号</label>
+                <input type="text" class="value-style"
+					 placeholder="请输入资金账号" ng-model="queryEntity.accountID" name="accountID"  >
+             </div>
+
+             
+		</div>
+		<div class="btn-beyond-one-row">
+      	      <button type="button" class="btn btn-query btn-word-two"  ng-show="capitalAccount_query"  ng-click="find()"> 查询</button>
+      	      <button type="button" class="btn btn-add btn-word-two"  ng-show="capitalAccount_check" ng-click="checkSeat()" ng-disabled="isChecked"> 有效性检查</button>
+    	</div>
+    	<div class="row-form row-btn-operation">
+          	<div class="row-btn-icon">
+               <span class="btn-add-icon"></span>
+               <input type="button"  ng-show="(!isInstClient || (isInstClient && isAllowInstClient))&&capitalAccount_add" class="btn btn-add btn-icon-two" value="新增" data-toggle='modal'  data-target='capitalAccountForm'  ng-click="initParameter()">
+           </div>
+        </div>
+	</form>
+	<!--End 表单查询 -->
+	
+	
+	<!--PAGE CONTENT START-->
+	<div class="col-xs-12 clear-padding-right">
+        <div class="row">
+            <div class="col-xs-12 clear-padding-right">
+                <div>
+                    <table id="capitalAccount_dynamic_table" class="cell-border stripe" cellspacing="0" width="100%">
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!--PAGE CONTENT END-->	
+
+	<!-- 新增 修改 模态框（Modal） -->
+	<div class="modal fade" id="capitalAccountModal" tabindex="-1" role="dialog"
+		aria-labelledby="myModalLabel" aria-hidden="true"
+		data-backdrop="static" data-keyboard="false">
+		<div class="modal-dialog">
+			<div class="modal-content" style="width:700px">
+				<div class="modal-header">
+					<button type="button" class="close" data-dismiss="modal"
+						aria-hidden="true">&times;</button>
+					<h4 class="modal-title" id="myModalLabel">资金账户信息维护</h4>
+				</div>
+				<div class="modal-body">
+					<!-- 添加表单内容-->
+					<form class="form-horizontal" role="form" name="capitalAccountForm" novalidate>
+						<div class="panel panel-default panel-no-border">
+							<!--<div class="panel-heading">-->
+								<!--<h3 class="panel-title">基本信息</h3>-->
+							<!--</div>-->
+							<div class="panel-body">
+								<div class="row">
+								    <div class="col-xs-6">
+										<div class="row form-group">
+											<label for="fundProductType" class="col-sm-4 control-label">机构代码<span
+												style="color: red;">*</span></label>
+											<div class="col-sm-8">
+												<select ng-model="capitalEntity.instClientID" required class="form-control two-columns-modal-input"
+													ng-disabled="isUpdate || isInstClient " class="form-control"
+													id="instClientID" name="instClientID" 
+														ng-change="isInstClientSelect(capitalEntity.instClientID)"
+													onkeydown="myKeyup(event,this)" tab="0"
+													ng-options="op.instClientID as op.instClientID+'_'+ op.instClientAbbrName for op in instClientlistEntitys">
+												</select> <span
+													ng-show=" myForm.instClientID.$dirty &&  myForm.instClientID.$invalid"
+													style="color: red;">机构代码为必填项</span>
+											</div>
+										</div>
+									</div>
+									<div class="col-xs-6">
+										<div class="row form-group">
+											<label for="accountID"
+												class="col-sm-4 control-label">资金账号<span
+												style="color: red;">*</span></label>
+											<div class="col-sm-8">
+												<input type="text" class="form-control two-columns-modal-input"
+													placeholder="请输入资金账号" ng-model="capitalEntity.accountID"
+													ng-change="capSelect(capitalEntity.brokerageFirmID)"
+													name="accountID" maxlength="18" required 
+													ng-pattern="/^[^\u4e00-\u9fa5\uFF00-\uFFFF\'\u0022,]{1,18}?$/"
+													onkeydown="myKeyup(event,this)" tab="1"
+													ng-readonly="isUpdate"> <span
+													ng-show="capitalAccountForm.accountID.$dirty && capitalAccountForm.accountID.$invalid"
+													style="color: red;">资金账号为必填项,最大长度为18，且不能输入全角字符，汉字以及逗号引号双引号</span>
+											</div>
+										</div>
+									</div>
+								</div>
+								<div class="row">
+									<div class="col-xs-6">
+										<div class="row form-group">
+											<label for="accountName"
+												class="col-sm-4 control-label">账户名称<span
+												style="color: red;">*</span></label>
+											<div class="col-sm-8">
+												<input type="text" class="form-control two-columns-modal-input" id="accountName"
+													placeholder="请输入账户名称" ng-model="capitalEntity.accountName"
+													ng-pattern="/^[^\'\u0022]{1,40}?$/"
+													name="accountName" maxlength="40" required 
+													onkeydown="myKeyup(event,this)"  tab="2"> <span
+													ng-show="capitalAccountForm.accountName.$dirty && capitalAccountForm.accountName.$invalid"
+													style="color: red;">账户名称为必填项，且不能输入单引号及双引号</span>
+											</div>
+										</div>
+									</div>
+
+									<div class="col-xs-6">
+										<div class="row form-group">
+											<label for="brokerageFirmID"
+												class="col-sm-4 control-label">经纪公司<span
+												style="color: red;">*</span></label>
+											<div class="col-sm-8">
+												<select ng-model="capitalEntity.brokerageFirmID"
+													class="form-control two-columns-modal-input"
+													id="brokerageFirmID" ng-disabled="isUpdate"
+													onkeydown="myKeyup(event,this)" required 
+													ng-change="brokerageSelect(capitalEntity.brokerageFirmID)"
+													tab="3" name="brokerageFirmID">
+													<option ng-repeat="brokerage in brokerages"
+														value="{{brokerage.brokerageFirmID}}">
+														{{brokerage.brokerageFirmID}}_{{brokerage.brokerageFirmName}}
+													</option>
+												</select> <span
+													ng-show="capitalAccountForm.brokerageFirmID.$dirty && capitalAccountForm.brokerageFirmID.$invalid"
+													style="color: red;">经纪公司为必填项</span>
+											</div>
+										</div>
+									</div>
+								</div>
+								<div class="row" >
+								  <div class="col-xs-6">
+										<div class="row form-group">
+											<label for="innerAccountID"
+												class="col-sm-4 control-label">投资者代码<span
+												style="color: red;">*</span></label>
+											<div class="col-sm-8">
+												<input type="text" class="form-control two-columns-modal-input" id="innerAccountID"
+													placeholder="请输入投资者代码" ng-model="capitalEntity.innerAccountID"
+													name="innerAccountID" maxlength="18" required 
+													ng-pattern="/^[^\u4e00-\u9fa5\uFF00-\uFFFF\'\u0022,]{1,18}?$/"
+													onkeydown="myKeyup(event,this)"  
+													ng-readonly="isUpdate"> 
+													<!-- <span ng-show="capitalAccountForm.innerAccountID.$dirty && capitalAccountForm.innerAccountID.$invalid"
+													style="color: red;">投资者代码不可修改，且为必填项,最大长度为18，不能输入全角字符，汉字以及逗号引号双引号</span>
+												 -->
+													<span ng-show="!isUpdate"
+													style="color: red;">投资者代码不可修改，且为必填项,最大长度为18，不能输入全角字符，汉字以及逗号引号双引号</span>
+											</div>
+										</div>
+									</div>
+									
+									<div class="col-xs-6" ng-show="canSetSeat" >
+										<div class="row form-group">
+										    <label for="seatID" class="col-sm-4 control-label">经纪商交易通道</label>
+											<div class="col-sm-8">
+												<select ng-model="capitalEntity.seatID" name="seatID" id="seatID"
+												ng-options="op.seatID as op.seatID+'_'+op.seatName for op in selectSeatEntitys" ng-click="changeSeat(capitalEntity.seatID)"
+												
+													onkeydown="myKeyup(event,this)" tab="12"  >
+													<option value=""> </option>
+												</select>
+											</div>
+										</div>
+									</div>
+
+									<!-- <div class="col-xs-5" style="margin-left:20px;" ng-show="isNotCTP">
+									<div class="row form-group"  >
+										    <div class="row-btn-icon">
+								                    <span class="btn-add-icon"></span> ng-show="otherIncomeSet_set_add"
+													<button class="btn btn-add btn-icon-two" id="bootbox-options2"  ng-click="initAddSeatUserParameter()" data-toggle="modal">
+														新增席位用户
+											        </button>
+											</div>
+									   </div>
+									</div>   -->
+								
+									
+								   </div>
+								   
+								   <div class="row" ng-show="isNotCTP" >
+									<div class="col-xs-6">
+										<div class="row form-group">
+											<label for="seatUserID" class="col-sm-4 control-label">席位用户代码<span
+												style="color: red;">*</span></label>
+											<div class="col-sm-8">
+								
+												<select ng-model="capitalEntity.seatUserID" required
+														  class="otherIncomeSet-select-style"
+													id="seatUser" name="seatUser"
+													onkeydown="myKeyup(event,this)" tab="1"
+													ng-options="op.seatUserID as transSeats(op.seatID)+'_'+op.seatUserID for op in seatUserLists">
+												</select> <span
+													ng-show="mySeatModalForm.seatUser.$dirty && mySeatModalForm.seatUser.$invalid"
+													style="color: red;">席位用户代码为必填项</span>
+											</div>
+										</div>
+									</div>
+										<div class="col-xs-6" >
+										<div class="row form-group"  >
+											    <div class="row-btn-icon">
+									                    <span class="btn-add-icon"></span>
+														<button class="btn btn-add btn-icon-two" id="bootbox-options2"  ng-click="initSeatUserParameter()" data-toggle="modal"
+												                >新增
+												        </button>
+												</div>
+										   </div>
+										</div>  
+								</div>
+								   
+								   
+								   
+								<div class="row">
+									<div class="col-xs-6" >
+										<div class="row form-group">
+											<label for="market"
+												class="col-sm-4 control-label">允许交易市场<span
+												style="color: red;">*</span></label>
+											<div class="col-sm-8">
+												<select ng-model="capitalEntity.market" required
+													class="form-control two-columns-modal-input" id="market" name="market"
+													onkeydown="myKeyup(event,this)" tab="11" ng-disabled="isUpdate"
+													ng-options="op.key as op.key+'_'+op.text for op in marketTypes">
+												</select>
+											</div>
+										</div>
+									</div>
+									<div class="col-xs-6">
+										<div class="row form-group">
+											<label for="branchID"
+												class="col-sm-4 control-label">营业部</label>
+											<div class="col-sm-8">
+												<select ng-model="capitalEntity.branchID" required
+													class="form-control two-columns-modal-input" id="branchID" name="branchID"
+													onkeydown="myKeyup(event,this)" tab="6"
+													ng-options="op.branchID as op.branchID+'_'+op.branchName for op in branchs">
+												<option value=""></option>
+												</select> 
+											</div>
+										</div>
+									</div>
+						
+								</div>
+								<div class="row">
+									<!--<div class="col-xs-6">
+										<div class="row form-group">
+											<label for="positionType"
+												class="col-sm-4 control-label">持仓类型<span
+												style="color: red;">*</span></label>
+											<div class="col-sm-8">
+												<select class="form-control two-columns-modal-input" name="positionType"
+													ng-model="capitalEntity.positionType" required
+													onkeydown="myKeyup(event,this)" tab="5"
+													ng-options="op.key as op.key+'_'+op.text for op in positionTypes">
+												</select>
+												<span ng-show="capitalAccountForm.positionType.$dirty && capitalAccountForm.positionType.$invalid"
+													style="color: red;">持仓类型为必填项</span>
+											</div>
+										</div>
+									</div>-->
+
+									<div class="col-xs-6">
+										<div class="row form-group">
+											<label for="currency"
+												class="col-sm-4 control-label">基础币种<span
+												style="color: red;">*</span></label>
+											<div class="col-sm-8">
+												<select ng-model="capitalEntity.currency" required
+													class="form-control two-columns-modal-input" id="currency" name="currency"
+													onkeydown="myKeyup(event,this)" tab="6"
+													ng-options="op.key as op.key+'_'+op.text for op in currencys">
+												</select> <span
+													ng-show="capitalAccountForm.currency.$dirty && capitalAccountForm.currency.$invalid"
+													style="color: red;">基础币种为必填项</span>
+											</div>
+										</div>
+									</div>
+
+									<div class="col-xs-6">
+										<div class="row form-group">
+											<label for="accountGroupID"
+												   class="col-sm-4 control-label">资金账号组</label>
+											<div class="col-sm-8">
+												<select class="form-control two-columns-modal-input" id="accountGroupID"
+														ng-model="capitalEntity.accountGroupID"
+														onkeydown="myKeyup(event,this)"
+														ng-options="f.accountGroupID as f.accountGroupID+'_'+f.accountGroupName for f in accountGroupEntityTems"
+														tab="8">
+													<option value="">不参与分组</option>
+												</select>
+											</div>
+										</div>
+									</div>
+								</div>
+
+								<div class="row">
+
+									<div class="col-xs-6" ng-show="!hideFundProduct">
+										<div class="row form-group">
+											<label for="fundProductID"
+												class="col-sm-4 control-label">基金产品</label>
+											<div class="col-sm-8">
+												<select class="form-control two-columns-modal-input"
+													ng-model="capitalEntity.fundProductID" id="fundProductID"
+													onkeydown="myKeyup(event,this)" tab="7"
+													ng-options="f.fundProductID as f.fundProductID+'_'+f.shortProductName for f in fundProductTems">
+													<option value=""></option>
+												</select>
+											</div>
+										</div>
+									</div>
+								</div>
+								<div class="row" ng-show="!(isUpdate || isNotCTP)">
+									<div class="col-xs-6">
+										<div class="row form-group">
+											<label for="password"
+												class="col-sm-4 control-label">密码<span style="color: red;">*</span></label>
+											<div class="col-sm-8">
+									        	<input type="password" class="form-control two-columns-modal-input" id="password"
+													placeholder="请输入账户密码" ng-model="capitalEntity.password"
+													name="password" maxlength="30" required ng-readonly="isUpdate"
+													ng-pattern="/^[^\u4e00-\u9fa5\uFF00-\uFFFF\'\u0022,]{1,30}?$/"
+													ng-change="showLow(capitalEntity.password)"
+													onkeydown="myKeyup(event,this)" onkeyup="kEvent(event,this)" tab="9"> 
+												<span ng-show="capitalAccountForm.password.$dirty && capitalAccountForm.password.$invalid"
+													style="color: red;">密码不可为汉字，全角字符，单引号，双引号，逗号</span>
+											</div>
+											 
+										</div>
+									</div>
+									<div class="col-xs-6">
+										<div class="row form-group"  style="margin-left:-48px;">
+											<label class="col-sm-4 control-label" id="passText">密码强度：</label>
+											<div class="col-sm-8"  style="margin-top:15px;margin-left:-10px;">
+												<div id="capitalAccount_passStrength"></div>
+											</div>
+										</div>
+									</div>
+								</div>
+								<div class="row" ng-show="!(isUpdate || isNotCTP) ">
+									<div class="col-xs-6">
+										<div class="row form-group">
+											<label for="rePassword"
+												class="col-sm-4 control-label">确认密码<span style="color: red;">*</span></label>
+											<div class="col-sm-8">
+												<input type="password" class="form-control two-columns-modal-input" id="rePassword"
+													placeholder="请再次输入账户密码" ng-model="capitalEntity.rePassword"
+													ng-change="showLowag(capitalEntity.rePassword)"
+													ng-pattern="/^[^\u4e00-\u9fa5\uFF00-\uFFFF\'\u0022,]{1,30}?$/"
+													name="rePassword" maxlength="30" required  ng-readonly="isUpdate"
+													onkeydown="myKeyup(event,this)" onkeyup="kEvent(event,this)" tab="10">
+												<span ng-show="capitalAccountForm.rePassword.$dirty && capitalAccountForm.rePassword.$invalid"
+													style="color: red;">确认密码不可为汉字，全角字符，单引号，双引号，逗号</span>		
+											</div>
+										</div>
+									</div>
+									<div class="col-xs-6">
+										<div class="row form-group"  style="margin-left:-63px;">
+											<label class="col-sm-4 control-label"  style="margin-left:-7px;">密码强度：</label>
+											<div class="col-sm-8"  style="margin-top:15px;margin-left:7px;">
+												<div id="capitalAccount_passStrengthag"></div>
+											</div>
+										</div>
+									</div>
+								    <div class="row" ng-show="!(isUpdate || isNotCTP)">
+										<div class="col-xs-6" >
+											<div class="row form-group">
+												<label class="col-sm-4 control-label" style="margin-left:10px">验证码</label>
+												<div class="col-sm-8" style="margin-left:-10px;">
+													<span class="input-icon input-icon-right" style="margin-left:10px;margin-right:20px;">
+														<input type="text" class="form-control two-columns-modal-input" style="padding-right:0px;" placeholder="请输入验证码" 
+														name="validcode" ng-model="capitalEntity.validcode" maxlength="4" id="capitalAccountValidcode" onkeydown="myKeyup(event,this)" tab="3"/>
+													</span>
+												</div>
+											</div>
+										</div>
+										<div class="col-xs-6" >
+											<div class="row form-group">
+												<div class="pass-wrap">
+													<img id="capitalAccountValidImg" src="" style="width:100px;height:34px;"/>
+												</div>
+											</div>
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+
+						<!-- <div class="panel panel-default" ng-show="canSetSeat" >
+							<div class="panel-heading">
+								<h3 class="panel-title">登录信息</h3>
+							</div>
+							<div class="panel-body">
+								<div class="row">
+									<div class="col-xs-6">
+										<div class="row form-group">
+											<label for="seatID"
+												class="col-xs-6 capitalAccount-control-label capitalAccount-label-style">
+												<input type="checkbox" name="checkbox_seat" class="capitalAccount-radio-style1"
+													ng-click="changeState()" ng-model="checkbox.selected" id="checkbox_seat">经纪商交易通道</label>
+											<div class="col-xs-6">
+												<select class="capitalAccount-select-style1" ng-model="capitalEntity.seatID" name="seatID"
+												ng-options="op.seatID as op.seatID+'_'+op.seatName for op in selectSeatEntitys"
+													onkeydown="myKeyup(event,this)" tab="12" ng-disabled="canSet">
+												</select>
+											</div>
+										</div>
+									</div>
+								</div>
+							</div>
+						</div> -->
+						<div>
+							<input type="hidden" ng-bind="capitalEntity.recordIndex">
+							<input type="hidden" ng-model="capitalEntity.selfTradeAvoidType">
+							<input type="hidden" ng-model="capitalEntity.tradeRight">
+							<input type="hidden" ng-model="capitalEntity.productOption">
+						</div>
+					</form>
+					<!--End  添加表单内容-->
+				</div>
+				<div class="modal-footer">
+					<span class="btn btn-query btn-sm popover-info" data-rel="popover"
+						data-placement="bottom" title="" 
+						ng-click="capitalAccountForm.accountID.$invalid || capitalAccountForm.accountName.$invalid ||
+						 capitalAccountForm.brokerageFirmID.$invalid || capitalAccountForm.tradeRight.$invalid || capitalAccountForm.innerAccountID.$invalid || capitalAccountForm.currency.$invalid || save(capitalEntity)"
+						ng-disabled=" capitalAccountForm.accountID.$invalid || capitalAccountForm.accountName.$invalid ||
+						 capitalAccountForm.brokerageFirmID.$invalid || capitalAccountForm.tradeRight.$invalid || capitalAccountForm.innerAccountID.$invalid || capitalAccountForm.currency.$invalid ">&nbsp;确定&nbsp;</span>
+					<span class="btn btn-close btn-sm popover-info" data-rel="popover"
+						data-placement="bottom" title="" data-dismiss="modal">&nbsp;取消&nbsp;</span>
+				</div>
+			</div>
+		</div>
+	</div>
+	<!-- /.modal -->
+	<!-- 密码重置 -->
+    <div class="modal fade" id="capAccPwdReset" tabindex="-1" role="dialog" 
+         aria-labelledby="myModalLabel" aria-hidden="true"
+         data-backdrop="static" data-keyboard="false">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal"
+                            aria-hidden="true">&times;</button>
+                    <h4 class="modal-title" >资金账号密码信息维护</h4>
+                </div>
+                <div class="modal-body">
+                    <!-- 添加表单内容-->
+                    <form class="form-horizontal" role="form" name="capitalAccountFormPwdReset" novalidate>
+                        <div class="panel panel-default">
+                            <!-- <div class="panel-heading">
+                                <h3 class="panel-title">密码重置</h3>
+                            </div> -->
+                            <div class="panel-body">
+                            <div class="form-group">
+                                <label  class="col-sm-3 control-label">密码<span style="color: red;">*</span></label>
+                                <div class="col-sm-5">
+                                    <input type="password" class="form-control"  placeholder="请输入密码"
+                                    	ng-change="showLowtwo(ModalPwdEntity.password)"
+                                    	ng-pattern="/^[^\u4e00-\u9fa5\uFF00-\uFFFF\'\u0022,]{1,30}?$/"
+                                        name="password" ng-model="ModalPwdEntity.password" required maxlength="30"  onkeydown="myKeyup(event,this)" onkeyup="kEvent(event,this)" tab="11" />
+                                    <span ng-show="capitalAccountFormPwdReset.password.$dirty && capitalAccountFormPwdReset.password.$invalid" style="color: red;">
+                                    	密码不可为汉字，全角字符，单引号，双引号，逗号
+                                    </span>
+                                       <div class="pass-wrap">
+										        <em id="passText" >密码强度：</em>
+										        <div id="capitalAccount_passStrengthtwo"></div>
+										 </div>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label  class="col-sm-3 control-label">确认密码<span style="color: red;">*</span></label>
+                                <div class="col-sm-5">
+                                    <input type="password" class="form-control"  placeholder="请输入确认密码"
+                                    	ng-pattern="/^[^\u4e00-\u9fa5\uFF00-\uFFFF\'\u0022,]{1,30}?$/"
+                                    	ng-change="showLowtwoag(ModalPwdEntity.reSeatPassword)"
+                                        name="reSeatPassword" ng-model="ModalPwdEntity.reSeatPassword" required maxlength="30"  onkeydown="myKeyup(event,this)" onkeyup="kEvent(event,this)"  tab="12" />
+                                    <span ng-show="capitalAccountFormPwdReset.reSeatPassword.$dirty && capitalAccountFormPwdReset.reSeatPassword.$invalid" style="color: red;">
+                                    	确认密码不可为汉字，全角字符，单引号，双引号，逗号
+                                    </span>
+                                      <div class="pass-wrap">
+										        <em id="passText" >密码强度：</em>
+										        <div id="capitalAccount_passStrengthtwoag"></div>
+										 </div>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label  class="col-sm-3 control-label">是否实时上场<span style="color: red;">*</span></label>
+                                <div class="col-sm-5">
+                                    <select ng-model="ModalPwdEntity.isTrade" required
+										class="capitalAccount-select-style" id="isTrade" name="isTrade"
+										onkeydown="myKeyup(event,this)" tab="12"
+										ng-options="op.key as op.key+'_'+op.text for op in isNotDatas">
+									</select>
+                                </div>
+                            </div>
+                            <div class="row form-group">
+								<label class="col-sm-3 control-label" >验证码</label>
+								<div class="col-sm-4">
+									<span class="input-icon input-icon-right" style="margin-right:20px;">
+										<input type="text" class="form-control" style="padding-right:0px; width:120px;" placeholder="请输入验证码" 
+										name="validcode" ng-model="ModalPwdEntity.validcode" maxlength="4" id="capitalAccountPwdResetValidcode" onkeydown="myKeyup(event,this)" ng-disabled="forceRisk.disabled"  tab="3"/>
+									</span>
+								</div>
+								<div class="col-sm-4">
+									<span>
+										<img id="capitalAccountPwdResetValidImg" src="" style="width:100px;height:34px;float: right;"/>
+									</span>
+								</div>
+							</div>
+                            </div>
+                        </div>
+      
+                    </form>
+                    <!--End  添加表单内容-->
+                </div>
+                <div class="modal-footer">
+                   <span class="btn btn-info btn-sm popover-info" data-rel="popover"
+                         data-placement="bottom" title=""
+                         ng-click="capitalAccountFormPwdReset.reSeatPassword.$invalid || capitalAccountFormPwdReset.password.$invalid || pwdSeat || capitalAccountFormPwdReset.isTrade.$invalid || updateResetPwd(ModalPwdEntity)"
+                       ng-disabled="capitalAccountFormPwdReset.reSeatPassword.$invalid || capitalAccountFormPwdReset.password.$invalid || pwdSeat || capitalAccountFormPwdReset.isTrade.$invalid">&nbsp;确定&nbsp;</span>
+                   <span class="btn btn-close btn-sm popover-info" data-rel="popover"
+                         data-placement="bottom" title="" data-dismiss="modal">&nbsp;关闭&nbsp;</span>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- end 密码重置 -->
+    
+    <!-- 权限模态框 -->
+    <div class="modal fade" id="capitalRigthModal" tabindex="-1" role="dialog"
+		aria-labelledby="myModalLabel" aria-hidden="true"
+		data-backdrop="static" data-keyboard="false">
+		<div class="modal-dialog">
+			<div class="modal-content" style="width:650px">
+				<div class="modal-header">
+					<button type="button" class="close" data-dismiss="modal"
+						aria-hidden="true">&times;</button>
+					<h4 class="modal-title" id="myModalLabel">资金账户权限信息维护</h4>
+				</div>
+				<div class="modal-body">
+					<!-- 添加表单内容-->
+					<form class="form-horizontal" role="form" name="capitalAccountQXForm" novalidate>
+						<div class="panel panel-default">
+							<!-- <div class="panel-heading">
+								<h3 class="panel-title">基本信息</h3>
+							</div> -->
+							<div class="panel-body">
+								<div class="row">
+									<div class="col-xs-6">
+										<div class="row form-group">
+											<label for="accountID"
+												class="col-sm-5 control-label">资金账号<span
+												style="color: red;">*</span></label>
+											<div class="col-sm-7">
+												<input type="text" class="form-control two-columns-modal-input"
+													placeholder="请输入资金账号" ng-model="capitalRigthEntity.accountID"
+													name="accountID" maxlength="20" required ng-pattern="/^[A-Za-z0-9]{1,20}?$/"
+													onkeydown="myKeyup(event,this)" tab="1"
+													ng-readonly="true"> <span
+													ng-show="capitalAccountForm.accountID.$dirty && capitalAccountForm.accountID.$invalid"
+													style="color: red;">资金账号为必填项,且仅能输入数字和字母</span>
+											</div>
+										</div>
+									</div>
+								    <!--<div class="col-xs-6">
+										<div class="row form-group">
+											<label for="selftradeavoidtype"
+												class="col-sm-6 control-label">是否检查自成交<span
+												style="color: red;">*</span></label>
+											<div class="col-sm-3">
+												<select ng-model="capitalRigthEntity.selfTradeAvoidType" required
+													class="" id="selfTradeAvoidType" name="selfTradeAvoidType"
+													onkeydown="myKeyup(event,this)" tab="12"
+													ng-options="op.key as op.key+'_'+op.text for op in isNotDatas">
+												</select>
+											</div>
+										</div>
+									</div>-->
+									<div class="col-xs-6">
+										<div class="row form-group">
+											<label for="tradeRight"
+												   class="col-sm-5 control-label">交易权限<span
+													style="color: red;">*</span></label>
+											<div class="col-sm-7">
+												<select ng-model="capitalRigthEntity.tradeRight" required
+														class="capitalAccount-select-style" id="tradeRight" name="tradeRight"
+														onkeydown="myKeyup(event,this)" tab="4"
+														ng-options="op.key as op.text for op in rightSelects">
+												</select> <span
+													ng-show="capitalAccountForm.tradeRight.$dirty && capitalAccountForm.tradeRight.$invalid"
+													style="color: red;">交易权限为必填项</span>
+											</div>
+										</div>
+									</div>
+								</div>
+
+								<div class="row">
+									<div class="col-xs-6">
+										<div class="row form-group">
+											<label for="exchRight" class="col-sm-5 control-label">交易所权限</label>
+											<div class="col-sm-7">
+										        <select id="exchRight" class="" ng-model="capitalRigthEntity.exchRight" multiple="multiple" required>
+	                                            </select>
+											</div>
+										</div>
+									</div>
+
+									<div class="col-xs-6" ng-show="isOption">
+										<div class="row form-group">
+											<label for="productOption"
+												   class="col-sm-5 control-label">允许交易商品期权</label>
+											<div class="col-sm-7">
+												<select id="productOption" class="" ng-model="capitalRigthEntity.productOption" multiple="multiple" required>
+												</select>
+											</div>
+										</div>
+									</div>
+								</div>
+
+								<div class="row">
+									<div class="col-xs-6" ng-show="isOption">
+										<div class="row form-group">
+											<label for="notAllowProduct"
+												   class="col-sm-5 control-label">不允许交易品种</label>
+											<div class="col-sm-7">
+												<select id="notAllowProduct" class="" ng-model="capitalRigthEntity.notAllowProduct" multiple="multiple" required>
+												</select>
+											</div>
+										</div>
+									</div>
+								</div>
+
+							</div>
+						</div>
+
+						<div>
+							<input type="hidden" ng-bind="capitalRigthEntity.recordIndex">
+							<input type="hidden" ng-bind="capitalRigthEntity.market">
+							<input type="hidden" ng-bind="capitalRigthEntity.seatID">
+							<input type="hidden" ng-bind="capitalRigthEntity.rePassword">
+						    <input type="hidden" ng-bind="capitalRigthEntity.password">
+						    <input type="hidden" ng-bind="capitalRigthEntity.accountGroupID">
+						    <input type="hidden" ng-bind="capitalRigthEntity.fundProductID">
+						    <input type="hidden" ng-bind="capitalRigthEntity.currency">
+						    <input type="hidden" ng-bind="capitalRigthEntity.positionType">
+						    <input type="hidden" ng-bind="capitalRigthEntity.accountName">
+						    <input type="hidden" ng-bind="capitalRigthEntity.brokerageFirmID">
+						    <input type="hidden" ng-bind="capitalRigthEntity.instClientID">
+						    <input type="hidden" ng-bind="capitalRigthEntity.innerAccountID">
+						</div>
+					</form>
+					<!--End  添加表单内容-->
+				</div>
+				<div class="modal-footer">
+					<span class="btn btn-info btn-sm popover-info" data-rel="popover"
+						data-placement="bottom" title="" 
+						ng-click="capitalAccountForm.tradeRight.$invalid || saveRigth(capitalRigthEntity)"
+						ng-disabled="  capitalAccountForm.tradeRight.$invalid ">&nbsp;确定&nbsp;</span>
+					<span class="btn btn-close btn-sm popover-info" data-rel="popover"
+						data-placement="bottom" title="" data-dismiss="modal">&nbsp;取消&nbsp;</span>
+				</div>
+			</div>
+		</div>
+	</div>
+    <!--  end 权限模态框 -->
+    
+    
+        <!-- 非ctp账号绑定席位用户 -->
+<!--     
+    <div class="modal fade" id="modalInsertSeatUserModal" tabindex="-1"
+		role="dialog" aria-labelledby="myModalLabel" aria-hidden="true"
+		data-backdrop="static" data-keyboard="false">
+		<div class="modal-dialog">
+			<div class="modal-content" style="width: 750px">
+				<div class="modal-header">
+					<button type="button" class="close" data-dismiss="modal"
+						aria-hidden="true">&times;</button>
+					<h4 class="modal-title" id="myModalLabel">席位用户信息设置</h4>
+				</div>
+				<div class="modal-body">
+					添加表单内容
+					<form class="form-horizontal" role="form" name="mySeatModalForm" novalidate>
+						<div class="panel panel-default">
+							<div class="panel-body">
+								<div class="row">
+									<div class="col-xs-6">
+										<div class="row form-group">
+											<label for="seatUserID" class="col-sm-3 control-label">席位用户代码<span
+												style="color: red;">*</span></label>
+											<div class="col-xs-6">
+								
+												<select ng-model="capitalEntity.seatUserID" required
+														  class="otherIncomeSet-select-style"
+													id="seatUser" name="seatUser"
+													onkeydown="myKeyup(event,this)" tab="1"
+													ng-options="op.seatUserID as op.seatUserID  for op in seatUserLists">
+												</select> <span
+													ng-show="mySeatModalForm.seatUser.$dirty && mySeatModalForm.seatUser.$invalid"
+													style="color: red;">席位用户代码为必填项</span>
+											</div>
+										</div>
+									</div>
+										<div class="col-xs-6" >
+										<div class="row form-group"  >
+											    <div class="row-btn-icon">
+									                    <span class="btn-add-icon"></span> ng-show="otherIncomeSet_set_add"
+														<button class="btn btn-add btn-icon-two" id="bootbox-options2"  ng-click="initSeatUserParameter()" data-toggle="modal"
+												                >新增
+												        </button>
+												</div>
+										   </div>
+										</div>  
+								</div>
+								
+								
+								 <div class="col-xs-12 clear-padding-right">
+							        <div class="row">
+							            <div class="col-xs-12 clear-padding-right">
+							                <div>
+							                    <table id="cap_seat_user_dynamic_table" class="cell-border stripe" cellspacing="0" width="100%">
+							                    </table>
+							                </div>
+							            </div>
+							        </div>
+							    </div>
+							</div>
+						</div>
+					</form>
+					End  添加表单内容
+				</div>
+                <div class="modal-footer">
+                    <span class="btn btn-info btn-sm popover-info" data-rel="popover" data-placement="bottom" title=""
+                          ng-click="mySeatModalForm.seatUser.$invalid   || saveSeatModal()"  
+                          ng-disabled="  mySeatModalForm.seatUser.$invalid ">&nbsp;确定&nbsp;</span>
+                    <span class="btn btn-close btn-sm popover-info" data-rel="popover" data-placement="bottom" title=""
+                          data-dismiss="modal">&nbsp;取消&nbsp;</span>
+                </div>
+                
+            </div>
+        </div>
+    </div>
+     -->
+    
+    <!-- 新增席位用户   -->
+    <div class="modal fade" id="modalAddSeatUserModal" tabindex="-1" role="dialog" 
+         aria-labelledby="myModalLabel" aria-hidden="true"
+         data-backdrop="static" data-keyboard="false">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal"
+                            aria-hidden="true">&times;</button>
+                    <h4 class="modal-title" >席位用户信息维护</h4>
+                </div>
+                <div class="modal-body">
+                    <!-- 添加表单内容-->
+                    <form class="form-horizontal" role="form" name="modalAddSeatUserModal" novalidate>
+                        <div class="panel panel-default">
+                            <!-- <div class="panel-heading">
+                                <h3 class="panel-title">密码重置</h3>
+                            </div> -->
+                            <div class="panel-body">
+                            
+                      
+							<div class="row form-group">
+								<label for="seatUserID"
+									class="col-sm-3 control-label">席位用户代码<span
+									style="color: red;">*</span></label>
+								<div class="col-sm-5">
+									<input type="text" class="form-control two-columns-modal-input" id="seatUserID"
+										placeholder="请输入席位用户代码" ng-model="modalAddSeatUserModalEntity.seatUserID"
+										name="seatUserID" maxlength="128" required
+										onkeydown="myKeyup(event,this)" tab="1" > <span
+										ng-show="modalAddSeatUserModal.seatUserID.$dirty && modalAddSeatUserModal.seatUserID.$invalid"
+										style="color: red;">席位用户代码为必填项</span>
+								</div>
+							</div>
+                            
+                            <div class="form-group">
+                                <label  class="col-sm-3 control-label">密码<span style="color: red;">*</span></label>
+                                <div class="col-sm-5">
+                                    <input type="password" class="form-control"  placeholder="请输入密码"
+                                    	ng-change="showLowthr(modalAddSeatUserModalEntity.password)"
+                                    	ng-pattern="/^[^\u4e00-\u9fa5\uFF00-\uFFFF\'\u0022,]{1,30}?$/"
+                                        name="password" ng-model="modalAddSeatUserModalEntity.password" required maxlength="30"  onkeydown="myKeyup(event,this)" onkeyup="kEvent(event,this)" tab="11" />
+                                    <span ng-show="modalAddSeatUserModal.password.$dirty && modalAddSeatUserModal.password.$invalid" style="color: red;">
+                                    	密码不可为汉字，全角字符，单引号，双引号，逗号
+                                    </span>
+                                       <div class="pass-wrap">
+										        <em id="passText" >密码强度：</em>
+										        <div id="capitalAccount_passStrengththr"></div>
+										 </div>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label  class="col-sm-3 control-label">确认密码<span style="color: red;">*</span></label>
+                                <div class="col-sm-5">
+                                    <input type="password" class="form-control"  placeholder="请输入确认密码"
+                                    	ng-pattern="/^[^\u4e00-\u9fa5\uFF00-\uFFFF\'\u0022,]{1,30}?$/"
+                                    	ng-change="showLowthrag(modalAddSeatUserModalEntity.reSeatPassword)"
+                                        name="reSeatPassword" ng-model="modalAddSeatUserModalEntity.reSeatPassword" required maxlength="30"  onkeydown="myKeyup(event,this)" onkeyup="kEvent(event,this)"  tab="12" />
+                                    <span ng-show="modalAddSeatUserModal.reSeatPassword.$dirty && modalAddSeatUserModal.reSeatPassword.$invalid" style="color: red;">
+                                    	确认密码不可为汉字，全角字符，单引号，双引号，逗号
+                                    </span>
+                                      <div class="pass-wrap">
+										        <em id="passText" >密码强度：</em>
+										        <div id="capitalAccount_passStrengththrag"></div>
+										 </div>
+                                </div>
+                            </div>
+                         
+                            <div class="row form-group">
+								<label class="col-sm-3 control-label" >验证码</label>
+								<div class="col-sm-4">
+									<span class="input-icon input-icon-right" style="margin-right:20px;">
+										<input type="text" class="form-control" style="padding-right:0px; width:120px;" placeholder="请输入验证码" 
+										name="validcode" ng-model="modalAddSeatUserModalEntity.validcode" maxlength="4" id="capSeatUserValidcode" onkeydown="myKeyup(event,this)" ng-disabled="forceRisk.disabled"  tab="3"/>
+									</span>
+								</div>
+								<div class="col-sm-4">
+									<span>
+										<img id="capSeatUserValidImg" src="" style="width:100px;height:34px;float: right;"/>
+									</span>
+								</div>
+							</div>
+                            </div>
+                        </div>
+      
+                    </form>
+                    <!--End  添加表单内容-->
+                </div>
+                <div class="modal-footer">
+                   <span class="btn btn-info btn-sm popover-info" data-rel="popover"
+                         data-placement="bottom" title=""
+                         ng-click="modalAddSeatUserModal.reSeatPassword.$invalid || modalAddSeatUserModal.password.$invalid || pwdSeat || modalAddSeatUserModal.seatUserID.$invalid || insertSeatUser(modalAddSeatUserModalEntity)"
+                       ng-disabled="modalAddSeatUserModal.reSeatPassword.$invalid || modalAddSeatUserModal.password.$invalid || pwdSeat || modalAddSeatUserModal.seatUserID.$invalid">&nbsp;确定&nbsp;</span>
+                   <span class="btn btn-close btn-sm popover-info" data-rel="popover"
+                         data-placement="bottom" title="" data-dismiss="modal">&nbsp;关闭&nbsp;</span>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- end 新增席位用户    -->
+    
+    
+</div>

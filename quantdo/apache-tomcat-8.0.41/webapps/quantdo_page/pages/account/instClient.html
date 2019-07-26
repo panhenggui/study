@@ -1,0 +1,459 @@
+<link rel="stylesheet" href="account/instClient.css" />
+<div class="row" ng-controller="instClientController">
+	<!-- start 定义表单查询-->
+	<form class="form-12">
+		 <div class="form-row">
+			<div class="row-col-one" >
+				  <label class="word-style">机构简称</label>
+                  <input type="text" class="value-style" ng-model="queryEntity.instClientAbbrName" />
+			</div>
+		</div>
+		<div class="btn-beyond-one-row"  ng-show="instClient_query">
+      	      <button type="button" class="btn btn-query btn-word-two"  ng-click="find()"> 查询</button>
+    	</div>
+		<div class="row-form row-btn-operation"  ng-show="instClient_add">
+          	<div class="row-btn-icon" >
+               <span class="btn-add-icon"></span>
+               <input type="button" class="btn btn-add btn-icon-two" value="新增" data-toggle='modal'
+                      data-target='#instClientModal' ng-click="initParameter()">
+           </div>
+        </div>
+	</form>
+	<!--End 表单查询 -->
+	
+	
+	<!--PAGE CONTENT START-->
+	<div class="col-xs-12 clear-padding-right">
+        <div class="row">
+            <div class="col-xs-12 clear-padding-right">
+                <div>
+                    <table id="instClient_dynamic_table" class="cell-border stripe" cellspacing="0" width="100%">
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!--PAGE CONTENT END-->
+
+	<!--机构管理 新增 修改 模态框（Modal） -->
+	<div class="modal fade" id="instClientModal" tabindex="-1" role="dialog"
+		aria-labelledby="myModalLabel" aria-hidden="true"
+		data-backdrop="static" data-keyboard="false">
+		<div class="modal-dialog">
+			<div class="modal-content" style="width:650px">
+				<div class="modal-header">
+					<button type="button" class="close" data-dismiss="modal"
+						aria-hidden="true">&times;</button>
+					<h4 class="modal-title" id="myModalLabel">机构管理信息维护</h4>
+				</div>
+				<div class="modal-body">
+					<!-- 添加表单内容-->
+					<form class="form-horizontal" role="form" name="instClientForm" novalidate>
+						<div class="row">
+							<div class="col-xs-6">
+								<div class="row form-group">
+									<label for="instClientID"
+										class="col-sm-3 capitalAccount-control-label capitalAccount-label-style">投资机构代码<span
+										style="color: red;">*</span></label>
+									<div class="col-xs-8">
+										<input type="text" class="form-control two-columns-modal-input" id="instClientID"
+											placeholder="请输入投资机构代码" ng-model="modalEntity.instClientID"
+											name="instClientID" maxlength="4" required
+											ng-pattern="/^([0-9]{1,4})?$/"
+											onkeydown="myKeyup(event,this)" tab="3101"
+											ng-disabled="isUpdate"> <span
+											ng-show="instClientForm.instClientID.$dirty && instClientForm.instClientID.$invalid"
+											style="color: red;">投资机构代码为必填项，且仅能输入数字</span>
+									</div>
+								</div>
+							</div>
+							<div class="col-xs-6">
+								<div class="row form-group">
+									<label for="instClientAbbrName"
+										class="col-sm-3 capitalAccount-control-label capitalAccount-label-style">机构简称<span
+										style="color: red;">*</span></label>
+									<div class="col-sm-8">
+										<input type="text" class="form-control two-columns-modal-input" id="instClientAbbrName"
+											placeholder="请输入机构简称" ng-model="modalEntity.instClientAbbrName"
+											name="instClientAbbrName" maxlength="6" required
+											onkeydown="myKeyup(event,this)" tab="3102"> <span
+											ng-show="instClientForm.instClientAbbrName.$dirty && instClientForm.instClientAbbrName.$invalid"
+											style="color: red;">机构简称为必填项</span>
+									</div>
+								</div>
+							</div>
+						</div>
+						<div class="row">
+							<div class="col-xs-6">
+								<div class="row form-group">
+									<label for="instClientName"
+										class="col-sm-3 capitalAccount-control-label capitalAccount-label-style">机构全称<span
+										style="color: red;">*</span></label>
+									<div class="col-sm-8">
+										<input type="text" class="form-control two-columns-modal-input" id="instClientName"
+											placeholder="请输入机构全称" ng-model="modalEntity.instClientName"
+											name="instClientName" maxlength="100" required
+											onkeydown="myKeyup(event,this)" tab="3103"> <span
+											ng-show="instClientForm.instClientName.$dirty && instClientForm.instClientName.$invalid"
+											style="color: red;">机构全称为必填项</span>
+									</div>
+								</div>
+							</div>
+							<div class="col-xs-6">
+								<div class="row form-group">
+									<label for="amType"
+										class="col-sm-3 capitalAccount-control-label capitalAccount-label-style">机构账号类型<span
+										style="color: red;">*</span></label>
+									<div class="col-sm-8">
+										<select ng-model="modalEntity.amType" required ng-disabled="isUpdate" ng-change="changeAmType()"
+											class="form-control two-columns-modal-input"  id="amType" name="amType"
+											onkeydown="myKeyup(event,this)" tab="3104"
+											ng-options="op.key as op.text for op in amTypes">
+										</select> <span
+											ng-show="instClientForm.amType.$dirty && instClientForm.amType.$invalid"
+											style="color: red;">机构账号类型为必填项</span>
+									</div>
+								</div>
+							</div>
+						</div>
+						<div class="row">
+							<div class="col-xs-6">
+								<div class="row form-group">
+									<label for="address"
+										class="col-sm-3 capitalAccount-control-label capitalAccount-label-style">地址</label>
+									<div class="col-sm-8">
+										<input type="text" class="form-control two-columns-modal-input" id="address"
+											placeholder="请输入地址" ng-model="modalEntity.address"
+											name="address" maxlength="255"
+											onkeydown="myKeyup(event,this)" tab="3105">
+									</div>
+								</div>
+							</div>
+							<div class="col-xs-6">
+								<div class="row form-group">
+									<label for="contactPerson"
+										class="col-sm-3 capitalAccount-control-label capitalAccount-label-style">联系人</label>
+									<div class="col-sm-8">
+										<input type="text" class="form-control two-columns-modal-input" id="contactPerson"
+											placeholder="请输入联系人" ng-model="modalEntity.contactPerson"
+											name="contactPerson" maxlength="8"
+											onkeydown="myKeyup(event,this)" tab="3106">
+									</div>
+								</div>
+							</div>
+						</div>
+						<div class="row">
+							<div class="col-xs-6">
+								<div class="row form-group">
+									<label for="telephone"
+										class="col-sm-3 capitalAccount-control-label capitalAccount-label-style">电话</label>
+									<div class="col-sm-8">
+										<input type="text" class="form-control two-columns-modal-input" id="telephone"
+											placeholder="请输入电话" ng-model="modalEntity.telephone"
+											name="telephone" maxlength="20" ng-pattern="/^[0-9]*$/"
+											onkeydown="myKeyup(event,this)" tab="3107">
+											 <span
+											ng-show="instClientForm.telephone.$dirty && instClientForm.telephone.$invalid"
+											style="color: red;">电话为整数类例如：1234</span>
+									</div>
+								</div>
+							</div>
+							<div class="col-xs-6">
+								<div class="row form-group">
+									<label for="mobilePhone"
+										class="col-sm-3 capitalAccount-control-label capitalAccount-label-style">手机号码</label>
+									<div class="col-sm-8">
+										<input type="text" class="form-control two-columns-modal-input" id="mobilePhone"
+											placeholder="请输入手机号码" ng-model="modalEntity.mobilePhone"
+											name="mobilePhone" maxlength="20" ng-pattern="/^[0-9]*$/"
+											onkeydown="myKeyup(event,this)" tab="3108">
+											 <span
+											ng-show="instClientForm.mobilePhone.$dirty && instClientForm.mobilePhone.$invalid"
+											style="color: red;">手机号码为整数类例如：1234</span>
+									</div>
+								</div>
+							</div>
+						</div>
+						<div class="row">
+							<div class="col-xs-6">
+								<div class="row form-group">
+									<label for="email"
+										class="col-sm-3 capitalAccount-control-label capitalAccount-label-style">电子邮箱</label>
+									<div class="col-sm-8">
+										<input type="text" class="form-control two-columns-modal-input" id="email"
+											placeholder="请输入电子邮箱" ng-model="modalEntity.email"
+											name="email" maxlength="40"
+											onkeydown="myKeyup(event,this)" tab="3109">
+									</div>
+								</div>
+							</div>
+							<div class="col-xs-6" ng-show="isMOM">
+								<div class="row form-group">
+									<label for="arithmetic" class="col-sm-3 capitalAccount-control-label capitalAccount-label-style">分仓算法<span
+											style="color: red;">*</span></label>
+									<div class="col-sm-8">
+										<select ng-model="modalEntity.arithmetic" required ng-disabled="isUpdate"
+											class="form-control two-columns-modal-input"  id="arithmetic" name="arithmetic"
+											onkeydown="myKeyup(event,this)" tab="3104"
+											ng-options="op.key as op.text for op in arithmetics">
+										</select> 
+										<a class="instClientTip" ng-show="!isUpdate && modalEntity.arithmetic == '1'" 
+										title="该算法在判断风控管理参数符合后，&#10;采用手续费、保证金占用及账号风险度三者最优的算法选择资金账号交易"></a>
+										<a class="instClientTip" ng-show="!isUpdate && modalEntity.arithmetic == '2'" 
+										title="该算法在判断风控管理参数符合后，&#10;采用账号风险度最优的算法选择资金账号交易"></a>
+										<span ng-show="!isUpdate" style="color: red;display:block;">该字段保存后无法修改！</span>
+										<!-- <span ng-show="!isUpdate && modalEntity.arithmetic == '1'" >
+										该算法在判断风控管理参数符合后，采用手续费、保证金占用及账号风险度三者最优的算法选择资金账号交易</span>
+										<span ng-show="!isUpdate && modalEntity.arithmetic == '2'" >
+										该算法在判断风控管理参数符合后，采用账号风险度最优的算法选择资金账号交易</span> -->
+										<span ng-show="instClientForm.arithmetic.$dirty && instClientForm.arithmetic.$invalid"
+											style="color: red;">分仓算法为必填项</span>
+									</div>
+									
+								</div>
+							</div>
+						</div>
+						<div class="row">
+							<div class="col-xs-6">
+								<div class="row form-group">
+									<label for="remark"
+										class="col-sm-3   capitalAccount-control-label capitalAccount-label-style">备注</label>
+									<div class="col-sm-8">
+										<textarea class="form-control" id="remark" style="width: 435px; height: 50px; resize: none;"
+											placeholder="请输入备注" ng-model="modalEntity.remark"
+											name="remark" maxlength="255" tab="3110"
+											onkeydown="myKeyup(event,this)">
+										</textarea>
+									</div>
+								</div>
+							</div>
+						</div>
+						<input type="hidden" ng-bind="modalEntity.recordIndex">
+					</form>
+					<!--End  添加表单内容-->
+				</div>
+				<div class="modal-footer">
+					<input class="btn btn-info btn-sm popover-info" data-rel="popover" type="button" value="确定"
+						ng-disabled = "instClientForm.instClientName.$invalid || instClientForm.instClientAbbrName.$invalid || instClientForm.instClientID.$invalid"
+						data-placement="bottom" title="" ng-click="instClientForm.instClientName.$invalid || instClientForm.instClientID.$invalid || instClientForm.instClientAbbrName.$invalid || save(modalEntity)" tab="3111" onkeydown="myKeyup(event,this)">
+					<input class="btn btn-close btn-sm popover-info" data-rel="popover" type="button" value="取消" tab="3112" onkeydown="myKeyup(event,this)"
+						data-placement="bottom" title="" data-dismiss="modal">
+				</div>
+			</div>
+		</div>
+	</div>
+	<!-- /.modal -->
+	
+	<!-- 机构管理员 新增  模态框（Modal） -->
+	<div class="modal fade" id="instAdminModal" tabindex="-1" role="dialog"
+		aria-labelledby="myModalLabel" aria-hidden="true"
+		data-backdrop="static" data-keyboard="false">
+		<div class="modal-dialog">
+			<div class="modal-content" style="width:650px">
+				<div class="modal-header">
+					<button type="button" class="close" data-dismiss="modal"
+						aria-hidden="true">&times;</button>
+					<h4 class="modal-title" id="myModalLabel">机构管理员信息维护</h4>
+				</div>
+				<div class="modal-body">
+					<!-- 添加表单内容-->
+					<form class="form-horizontal" role="form" name="instAdminForm" novalidate>
+								<div class="row">
+									<div class="col-xs-6">
+										<div class="row form-group">
+											<label for="instClientID"
+												class="col-sm-5 control-label">投资机构<span
+												style="color: red;">*</span></label>
+											<div class="col-sm-6">
+												<select ng-model="modalAdminEntity.instClientID" 
+												   required ng-disabled="true"
+													class="form-control two-columns-modal-input"
+													id="instClientID" name="instClientID"
+													onkeydown="myKeyup(event,this)" tab="3121"
+													ng-options="op.instClientID as op.instClientID+'_'+op.instClientAbbrName for op in listEntitys">
+												</select>
+											</div>
+										</div>
+									</div>
+									<div class="col-xs-6">
+										<div class="row form-group">
+											<label for="adminID"
+												class="col-sm-5 control-label">机构管理员代码<span
+												style="color: red;">*</span></label>
+											<div class="col-sm-6">
+												<input type="text" class="form-control two-columns-modal-input" id="adminID"
+													placeholder="请输入机构管理员代码" ng-model="modalAdminEntity.adminID"
+													name="adminID" maxlength="18" required ng-disabled="isAdminUpdate"
+													onkeydown="myKeyup(event,this)" tab="3122"> <span
+													ng-show="instAdminForm.adminID.$dirty && instAdminForm.adminID.$invalid"
+													style="color: red;">机构管理员代码为必填项</span>
+											</div>
+										</div>
+									</div>
+								</div>
+								<div class="row">
+									<div class="col-xs-6">
+										<div class="row form-group">
+											<label for="adminName"
+												class="col-sm-5 control-label">机构管理员名称<span
+												style="color: red;">*</span></label>
+											<div class="col-sm-6">
+												<input type="text" class="form-control two-columns-modal-input" id="adminName"
+													placeholder="请输入机构管理员名称" ng-model="modalAdminEntity.adminName"
+													name="adminName" maxlength="100" required 
+													onkeydown="myKeyup(event,this)" tab="3123"> <span
+													ng-show="instAdminForm.adminName.$dirty && instAdminForm.adminName.$invalid"
+													style="color: red;">机构管理员名称为必填项</span>
+											</div>
+										</div>
+									</div>
+									<div class="col-xs-6">
+										<div class="row form-group">
+											<label for="role"
+												class="col-sm-5 control-label">角色类型<span
+												style="color: red;">*</span></label>
+											<div class="col-sm-6">
+												<select ng-model="modalAdminEntity.role" required ng-disabled="true"
+													class="form-control two-columns-modal-input" id="role" name="role"
+													ng-options="op.key as op.text for op in tradeUserTypes">
+												</select> <span
+													ng-show="instAdminForm.role.$dirty && instAdminForm.role.$invalid"
+													style="color: red;">角色类型为必填项</span>
+											</div>
+										</div>
+									</div>
+								</div>
+								<div class="row">
+									<div class="col-xs-6">
+										<div class="row form-group">
+											<label for="password" ng-if="modalAdminEntity.hasAdmin == false"
+												class="col-sm-5 control-label">密码<span
+												style="color: red;">*</span></label>
+											<label for="password" ng-if="modalAdminEntity.hasAdmin == true"
+												class="col-sm-5 control-label">重置密码<span
+												style="color: red;">*</span></label>
+											<div class="col-sm-6">
+												<input type="password" class="form-control two-columns-modal-input" id="password"
+													placeholder="请输入密码" ng-model="modalAdminEntity.password"
+													ng-change="isBlank(modalAdminEntity.password,modalAdminEntity.pwdag);showLow()"
+													name="password" maxlength="20" required onkeyup="kEvent(event,this)"
+													onkeydown="myKeyup(event,this)" tab="3124"> <span
+													ng-show="instAdminForm.password.$dirty && instAdminForm.password.$invalid"
+													style="color: red;">密码为必填项</span>
+											</div>
+										</div>
+									</div>
+									<div class="col-xs-6">
+										<div class="row form-group">
+											<div class="pass-wrap">
+												        <em id="passText" >密码强度：</em>
+												        <div id="instClient_passStrength"></div>
+											 </div>
+										</div>
+									</div>
+								</div>
+								<div class="row">
+									<div class="col-xs-6">
+										<div class="row form-group">
+											<label for="pwdag" ng-if="modalAdminEntity.hasAdmin == false"
+												class="col-sm-5 control-label">确认密码<span
+												style="color: red;">*</span></label>
+											<label for="pwdag" ng-if="modalAdminEntity.hasAdmin == true"
+												class="col-sm-5 control-label">确认重置密码<span
+												style="color: red;">*</span></label>
+											<div class="col-sm-6">
+												<input type="password" class="form-control two-columns-modal-input" id="pwdag"
+													placeholder="请输入确认密码" ng-model="modalAdminEntity.pwdag"
+													ng-change="isBlank(modalAdminEntity.password,modalAdminEntity.pwdag);showLowag()"
+													name="pwdag" maxlength="20" required onkeyup="kEvent(event,this)"
+													onkeydown="myKeyup(event,this)" tab="3125"> <span
+													ng-show="instAdminForm.pwdag.$dirty && instAdminForm.pwdag.$invalid"
+													style="color: red;">确认密码为必填项</span>
+											</div>
+										</div>
+									</div>
+									<div class="col-xs-6">
+										<div class="row form-group">
+											<div class="pass-wrap">
+												        <em id="passText" >密码强度：</em>
+												        <div id="instClient_passStrengthag"></div>
+											 </div>
+										</div>
+									</div>
+						    	</div>
+						    	<div class="form-group" ng-show="checkPwd !='false'">
+									<div class="row form-group">
+										<label class="col-sm-8 control-label" ><span style="color: red;">密码必须大于等于8位字符且包含数字、字母、特殊字符！</span></label>
+										
+									</div>
+								</div>
+						    	<div class="row">
+										<div class="col-xs-6" >
+											<div class="row form-group">
+												<label class="col-sm-5 control-label">验证码</label>
+												<div class="col-xs-6">
+													<span class="input-icon input-icon-right" style="margin-right:-40px;">
+														<input type="text" class="form-control two-columns-modal-input" style="padding-right:0px;" placeholder="请输入验证码" 
+														name="validcode" ng-model="instAdminForm.validcode" maxlength="4" id="instClientValidcode" onkeydown="myKeyup(event,this)" />
+													</span>
+												</div>
+											</div>
+										</div>
+										<div class="col-xs-6" >
+											<div class="row form-group">
+												<div class="pass-wrap">
+													<img id="instClientValidImg" src="" style="width:100px;height:34px;"/>
+												</div>
+											</div>
+										</div>
+									</div>
+					</form>
+					<!--End  添加表单内容-->
+				</div>
+				<div class="modal-footer">
+					<span class="btn btn-info btn-sm popover-info" data-rel="popover"
+						data-placement="bottom" title="" ng-click="saveAdmin(modalAdminEntity)"
+						ng-disabled="instAdminForm.adminName.$invalid || instAdminForm.instClientID.$invalid || instAdminForm.adminName.$invalid ||
+						instAdminForm.role.$invalid || instAdminForm.password.$invalid || instAdminForm.pwdag.$invalid || pwdBlank  ">&nbsp;确定&nbsp;</span>
+					<span class="btn btn-close btn-sm popover-info" data-rel="popover"
+						data-placement="bottom" title="" data-dismiss="modal">&nbsp;取消&nbsp;</span>
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<!-- 权限设置（Modal） -->
+	<div class="modal fade" id="instSetting_setModal" tabindex="-1" role="dialog"
+	         aria-labelledby="myModalLabel" aria-hidden="true" data-backdrop="static" data-keyboard="false">
+	        <div class="modal-dialog">
+	            <div class="modal-content">
+	                <div class="modal-header">
+	                    <button type="button" class="close"
+	                            data-dismiss="modal" aria-hidden="true">
+	                        &times;
+	                    </button>
+	                    <h4 class="modal-title" id="setModalLabel">
+	                        用户权限设置
+	                    </h4>
+	                </div>
+	                <div class="modal-body treeStyle" style="height:550px;">
+	                    <!-- 添加表单内容-->
+	                    <form class="form-horizontal" role="form" name="myForm" novalidate>
+	                        <div class="zTreeDemoBackground left" style="height:500px;width:450px;overflow-y:scroll;">
+	                            <ul id="instAdminRightTree" class="ztree"></ul>
+	                        </div>
+	                    </form>
+	                    <!--End  添加表单内容-->
+	                </div>
+	                <div class="modal-footer">
+	                    <span class="btn btn-info btn-sm popover-info" data-rel="popover" data-placement="bottom" title=""
+	                          ng-click="saveUserMenuList()"
+	                          ng-disabled="">&nbsp;确定&nbsp;</span>
+	                    <span class="btn btn-close btn-sm popover-info" data-rel="popover" data-placement="bottom" title=""
+	                          data-dismiss="modal">&nbsp;取消&nbsp;</span>
+	                </div>
+	            </div>
+	        </div>
+	</div>
+	<!-- modal end -->
+</div>

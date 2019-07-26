@@ -1,0 +1,49 @@
+.capitalAccount-label-style{
+    width: 100px;
+    white-space: nowrap;
+}
+.capitalAccount-select-style{
+    width:170px;
+}
+.capitalAccount-select-style1{
+    width:170px;
+    margin-left: 30px;
+}
+.capitalAccount-input-style{
+	/*width:160px;*/
+}
+th{
+    text-align:center;
+    white-space:nowrap;
+}
+td{
+    text-align:center;
+    white-space:nowrap;
+}
+.capitalAccount-modal-width{
+    width: 650px;
+    text-align:center;
+}
+
+.capitalAccount-date-style{
+    padding-top: 0px;
+    padding-bottom: 0px;
+    width: 170px;
+}
+.capitalAccount-radio-style1{
+	float:left;
+	margin : 10px 0 0 0 !important;
+	margin-left : 10px !important;
+}
+.capitalAccount-control-label{
+	white-space: nowrap;
+}
+.fundrisk-date-style{
+	width:120px!important;
+}
+.riskControlpink{
+	background-color:#FFCCCC !important
+}
+.riskControlyellow{
+	background-color:#FFFFCC !important
+}

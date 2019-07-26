@@ -1,0 +1,213 @@
+<link rel="stylesheet" href="syspecial/leverageCalculator.css" />
+<div class="row" ng-controller="LeverageCalculatorController">
+	<!-- start 定义表单查询-->
+	<form class="form-12">
+		<div class="row">
+			<label class="control-label" style="margin:20px 0px 0px 50px">
+				<input id="add" name="operType" type="radio" value="add" checked ng-disabled="isChangeUserID"/> <label for="add">加仓</label>
+			</label>
+			<label class="control-label" style="margin:20px 0px 0px 50px">
+				<input id="sub" name="operType" type="radio" value="sub" ng-disabled="isChangeUserID"/> <label for="sub">减仓</label>
+			</label>
+			<div class="row-col-one" style="margin-left:100px;">
+				<button type="button" class="btn btn-query btn-word-two" ng-show="isAdd && leverageCalculator_getPrincipal" ng-click="resetPrincipal()">重新获取</button>
+			</div>
+		</div>
+
+		<div class="row" style="padding-left:20px;" ng-show="leverageCalculator_chooseCap || leverageCalculator_calculate">
+			<div class="row-col-one">
+				<label class="word-style">所属机构</label>
+				<select ng-model="queryEntity.instClientID" class="value-style" ng-disabled="noInst"
+						ng-options="op.instClientID as op.instClientName for op in instClientList" ng-change="changeInstClient()">
+					<option value="">全部</option>
+				</select>
+			</div>
+
+			<!--<div class="row-col-one">
+                <label class="word-style">产品</label>
+                <select ng-model="queryEntity.fundProductID" class="value-style" ng-change="changeFundProductID()"
+                    ng-options="op.fundProductID  as op.instClientID+'_'+op.fundProductID+'_'+op.fundProductName for op in fundProductEntitys">
+                    <option value="">全部</option>
+                </select>
+            </div>-->
+
+			<!-- <div class="row-col-one">
+				<label class="word-style">市场</label>
+				<select ng-model="queryEntity.market" class="value-style" ng-change="changeFundProductID()"
+					ng-options="op.key as op.text for op in marketTypes">
+					<option value="">全部</option>
+				</select>
+			</div> -->
+
+			<div class="row-col-one" style="position:relative;left:15px;">
+				<div id="multiple-select">
+					<label class="word-style">资产单元</label>
+
+					<select id="leverageCalculatorInnerAccountID" class="" ng-model="queryEntity.innerAccountID" multiple="multiple">
+					</select>
+				</div>
+			</div>
+		</div>
+		<div class="row" style="padding-left:20px;" ng-show="leverageCalculator_chooseCap || leverageCalculator_calculate">
+			<div class="row-col-one">
+				<label class="word-style">买卖方向</label>
+				<select ng-model="queryEntity.direction" class="value-style" ng-change="changeProductID()"
+						ng-options="op.key as op.text for op in directions">
+				</select>
+			</div>
+
+			<div class="row-col-one">
+				<label class="word-style">交易所</label>
+				<select ng-model="queryEntity.exchID" class="value-style"
+						ng-change="changeExchID()"
+						ng-options="op.exchID as op.exchID+'_'+op.exchName for op in exchangeDatas">
+					<option value="">全部</option>
+				</select>
+			</div>
+
+			<div class="row-col-one">
+				<label class="word-style">品种代码</label>
+				<select ng-model="queryEntity.productID" class="value-style"
+						ng-options="op.productID as op.productID+'_'+op.productName+'_'+op.tradeCurrency for op in queryProducts">
+				</select>
+			</div>
+
+			<div class="row-col-one" ng-show="!isAdd">
+				<label class="word-style">减仓方式</label>
+				<select ng-model="queryEntity.type" class="value-style" ng-change="changeType(queryEntity.type)"
+						ng-options="op.key as op.text for op in lcSubTypes">
+				</select>
+			</div>
+
+			<div class="row-col-one" style="margin-left:30px;">
+				<button type="button" class="btn btn-query btn-word-two" ng-click="generateRule()" ng-show="leverageCalculator_chooseCap">确定</button>
+			</div>
+		</div>
+	</form>
+
+
+	<!--PAGE CONTENT START-->
+	<div class="col-xs-12 clear-padding-right" ng-show="isAdd && (leverageCalculator_chooseCap || leverageCalculator_calculate)">
+		<div class="row">
+			<div class="col-xs-12 clear-padding-right">
+				<div id="outer_lcAddOrder_dynamic_table">
+					<div id="inner_lcAddOrder_dynamic_table">
+						<table id="lcAddOrder_dynamic_table" class="cell-border stripe" cellspacing="0" width="100%">
+						</table>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<div class="col-xs-12 clear-padding-right" ng-show="!isAdd && (leverageCalculator_chooseCap || leverageCalculator_calculate)">
+		<div class="row">
+			<div class="col-xs-12 clear-padding-right">
+				<div id="outer_lcSubOrder_dynamic_table">
+					<div id="inner_lcSubOrder_dynamic_table">
+						<table id="lcSubOrder_dynamic_table" class="cell-border stripe" cellspacing="0" width="100%">
+						</table>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<div class="row" style="padding-left:30px; padding-top:10px;" ng-show="leverageCalculator_chooseCap || leverageCalculator_calculate">
+		<div class="row-col-one">
+			<label class="word-style ">指令倍数</label>
+			<input type="text" class="value-style leverageCalculatorMultiple" ng-model="queryEntity.multiple" ng-disabled="isMultiple">
+		</div>
+		<div class="row-col-one">
+			<label class="word-style">指令批次</label>
+			<input type="text" class="value-style" ng-model="queryEntity.batch" ng-disabled="true">
+		</div>
+	</div>
+
+	<div class="row-col-one" style="margin-left:30px;" ng-show="leverageCalculator_chooseCap || leverageCalculator_calculate">
+		<label>计算结果：</label>
+	</div>
+	<div class="row-col-one" style="margin-left:300px;" ng-show="leverageCalculator_calculate">
+		<button type="button" class="btn btn-query btn-word-two" ng-click="calculator()">计算</button>
+	</div>
+
+	<div class="row" style="padding-left:43px;">
+		<label>计算结果查询：  </label>
+		<div class="row-col-one">
+			<label class="word-style">批次</label>
+			<input type="text" class="value-style" ng-model="queryResultEntity.batch">
+		</div>
+		<div class="row-col-one">
+			<label class="word-style">日期</label>
+			<input type="text" onchange="" class="Wdate value-style word-style" onfocus="WdatePicker({lang:'zh-cn',dateFmt:'yyyyMMdd'})"
+				   ng-model="queryResultEntity.tradeDate" ng-readonly="true" id="tradeDate" />
+		</div>
+		<div class="row-col-one" style="position:relative;left:15px;top:0px;">
+			<div id="multiple-select">
+				<label class="word-style">资产单元</label>
+
+				<select id="leverageCalculatorInnerAccountID_findResult" class="" ng-model="queryResultEntity.innerAccountID" multiple="multiple">
+				</select>
+			</div>
+		</div>
+
+		<div class="row-col-one" style="padding-left:15px;">
+			<label class="word-style">交易员</label>
+			<select ng-model="queryResultEntity.userID" class="value-style" ng-options="op.userID as op.userID+'_'+op.userName for op in tradeUserLists" ng-disabled="onlySend" ng-change="find(queryResultEntity)">
+				<option value="">全部</option>
+			</select>
+		</div>
+
+		<div class="row-col-one">
+			<label class="word-style">指令状态</label>
+			<select ng-model="queryResultEntity.status" class="value-style" ng-options="op.key as op.text for op in status" ng-change="find(queryResultEntity)">
+				<option value="">全部</option>
+			</select>
+		</div>
+
+		<div class="row-col-one" style="position:relative;left:25px;top:-2px;" ng-show="leverageCalculator_query">
+			<button type="button" class="btn btn-query btn-word-two" ng-click="find(queryResultEntity)" ng-disabled="isQuery || isChangeUserID" >查询</button>
+		</div>
+
+		<div class="row-col-one" style="position:relative;left:25px;top:-2px;" ng-show="leverageCalculator_set&&!isChangeUserID ">
+			<button type="button" class="btn btn-query btn-word-two" ng-click="changeUserID()">分发</button>
+		</div>
+
+		<div class="row-col-one" style="position:relative;left:25px;top:-2px;" ng-show="leverageCalculator_set&&isChangeUserID">
+			<button type="button" class="btn btn-query btn-word-two" ng-click="saveUserID()">保存</button>
+		</div>
+
+		<div class="row-col-one" style="position:relative;left:25px;top:-2px;" ng-show="leverageCalculator_set&&isChangeUserID">
+			<button type="button" class="btn btn-query btn-word-two" ng-click="cancelSaveUserID()">取消</button>
+		</div>
+
+		<div class="row-col-one" style="position:relative;left:25px;top:-2px;" ng-show="leverageCalculator_send">
+			<button type="button" class="btn btn-query btn-word-two" ng-click="sendOrderToTrade()" ng-disabled="isSend || isChangeUserID">推送至交易端</button>
+			<a id="sendResultToTrade" href="" style="visibility:hidden;"></a>
+		</div>
+	</div>
+
+	<div class="col-xs-12 clear-padding-right" ng-show="isAdd">
+		<div class="row">
+			<div class="col-xs-12 clear-padding-right">
+				<div>
+					<table id="lcAddResult_dynamic_table" class="cell-border stripe" cellspacing="0" width="100%">
+					</table>
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<div class="col-xs-12 clear-padding-right" ng-show="!isAdd">
+		<div class="row">
+			<div class="col-xs-12 clear-padding-right">
+				<div>
+					<table id="lcSubResult_dynamic_table" class="cell-border stripe" cellspacing="0" width="100%">
+					</table>
+				</div>
+			</div>
+		</div>
+	</div>
+	<!--PAGE CONTENT END-->
+
+</div>

@@ -1,0 +1,146 @@
+<link rel="stylesheet" href="account/subCapitalAccountReg.css" />
+<title>客户开户</title>
+<div>
+	<ol class="breadcrumb">
+		<li><a>账户管理</a></li>
+		<li class="active">资产单元生成</li>
+	</ol>
+</div>
+<div class="row" ng-controller="subCapitalAccountRegController">
+	<br />
+	<form class="form-horizontal" role="form" name="myForm" novalidate>
+		<div class="panel panel-default">
+			<div class="panel-heading">
+				<h3 class="panel-title">资产单元生成</h3>
+			</div>
+			<div class="panel-body">
+				<div class="row">
+					<div class="col-xs-4">
+						<div class="form-group">
+							<label for="traderID" class="col-sm-3 control-label">资产单元<span
+								style="color: red;">*</span></label>
+							<div class="col-sm-6">
+								<input type="text" class="form-control" id="traderID"
+									placeholder="请输入资产单元" ng-model="subCapitalAccount.traderID"
+									name="traderID" maxlength="100" required ng-readonly="true"
+									onkeydown="myKeyup(event,this)" tab="1"> <span
+									ng-show="myForm.traderID.$dirty && myForm.traderID.$invalid"
+									style="color: red;">资产单元为必填项</span> <input type="hidden"
+									ng-bind="trader.traderName" id="traderName" name="traderName">
+							</div>
+						</div>
+					</div>
+					<div class="col-xs-4">
+						<div class="form-group">
+							<label for="subAccountID" class="col-sm-3 control-label">资产单元<span
+								style="color: red;">*</span></label>
+							<div class="col-sm-6">
+								<input type="text" class="form-control" id="subAccountID"
+									placeholder="请输入资产单元"
+									ng-model="subCapitalAccount.subAccountID" name="subAccountID"
+									maxlength="100" required onkeydown="myKeyup(event,this)" 
+									tab="1" ng-readonly="true"> <span
+									ng-show="myForm.subAccountID.$dirty && myForm.subAccountID.$invalid"
+									style="color: red;">资产单元为必填项</span>
+							</div>
+						</div>
+					</div>
+				</div>
+				<div class="row">
+					<div class="col-xs-4">
+						<div class="form_group">
+							<label for="positionType" class="col-sm-3 control-label" style="padding-right: 20px;">持仓类型<span
+								style="color: red;">*</span></label>
+							<div class="col-sm-6" style="margin-left: -20px;margin-bottom: 17px;"> 
+								<select class="subCapitalAccountReg-select-style"
+								ng-model="subCapitalAccount.positionType"
+								name="positionType" id="positionType" required
+								ng-options="op.key as op.key+'_'+op.text for op in positionTypes">
+								</select>
+								<span ng-show="myForm.positionType.$dirty && myForm.positionType.$invalid"
+								  style="color: red;">持仓类型为必填项</span>
+							</div>
+						</div>
+					</div>
+				</div>
+				<div class="row">
+					<div class="col-xs-4">
+						<div class="form_group">
+							<input type="radio" name="radio_innerAccountID"
+								class="subCapitalAccountReg-radio-style" ng-click="changeState()"
+								ng-model="radio.selected" id="radio_innerAccountID"
+								ng-checked="true" value="1"><label for="innerAccountID"
+								class="col-xs-3 label-style subCapitalAccountReg-label-style1">对应资金账号</label> <select
+								class="subCapitalAccountReg-select-style"
+								ng-model="tmpSubCapitalAccount.innerAccountID"
+								name="innerAccountID" id="innerAccountID"
+								ng-options="op.innerAccountID as op.innerAccountID+'_'+op.accountName for op in capitalAccountEntitys"
+								ng-disabled="isSelected1">
+							</select>
+						</div>
+					</div>
+					<div class="col-xs-4">
+						<div class="form_group">
+							<input type="radio" name="radio_innerAccountID"
+								class="subCapitalAccountReg-radio-style1" ng-click="changeState()"
+								ng-model="radio.selected" id="radio_innerAccountID" value="2"><label
+								for="accountGroupID"
+								class="col-xs-3 label-style subCapitalAccountReg-label-style2">对应资金账号组</label> <select
+								class="subCapitalAccountReg-select-style"
+								ng-model="tmpSubCapitalAccount.accountGroupID"
+								name="accountGroupID" id="accountGroupID"
+								ng-options="op.accountGroupID as op.accountGroupID+'_'+op.accountGroupName for op in accountGroupEntitys"
+								ng-disabled="isSelected2">
+							</select>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+		
+		<div class="panel panel-default">
+			<div class="panel-heading">
+				<h3 class="panel-title">费率设置</h3>
+			</div>
+			<div class="panel-body">
+				<div class="row">
+					<div class="col-xs-4">
+						<div class="form_group">
+							<input type="checkbox" name="marginTemplate"
+								class="subCapitalAccountReg-checkboxstyle" ng-click="isMargin(x)"
+								ng-model="x" id="marginTemplate" ><label for="marginTemplate"
+								class="col-xs-3 label-style subCapitalAccountReg-label-style3">对应保证金率模板</label> 
+								<select	class="subCapitalAccountReg-select-style1"
+								ng-model="subAccountTemplate.marginTemplateID"
+								name="marginTemplate" id="marginTemplate"
+								ng-options="op.templateID as op.templateID+'_'+op.templateName for op in marginTemplateEntitys"
+								ng-disabled="isSelected3">
+							</select>
+						</div>
+					</div>
+					<div class="col-xs-4">
+						<div class="form_group">
+							<input type="checkbox" name="feeTemplate"
+								class="subCapitalAccountReg-checkboxstyle" ng-click="isFee(y)"
+								ng-model="y" id="feeTemplate" ><label for="feeTemplate"
+								class="col-xs-3 label-style subCapitalAccountReg-label-style3">对应手续费率模板</label> 
+								<select class="subCapitalAccountReg-select-style1"
+								ng-model="subAccountTemplate.feeTemplateID"
+								name="feeTemplateID" id="feeTemplateID"
+								ng-options="op.templateID as op.templateID+'_'+op.templateName for op in feeTemplateEntitys"
+								ng-disabled="isSelected4">
+							</select>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+			<div class="subCapitalAccountReg-modal-footer center">
+				<span class="btn btn-success" data-rel="popover"
+					data-placement="bottom" title=""
+					ng-click="finish(subCapitalAccount)"
+					ng-disabled="myForm.traderID.$invalid || myForm.subAccountID.$invalid || myForm.positionType.$invalid">&nbsp;完成&nbsp;</span>
+			</div>
+	</form>
+
+</div>

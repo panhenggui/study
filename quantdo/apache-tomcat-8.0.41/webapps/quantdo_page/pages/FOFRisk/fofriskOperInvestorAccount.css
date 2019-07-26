@@ -1,0 +1,26 @@
+.realTimeAccountQuery-select-style{
+    width:inherit;
+}
+.label-style{
+    width: 100px;
+    white-space: nowrap;
+}
+
+th{
+    text-align:center;
+    white-space:nowrap;
+}
+td{
+    text-align:center;
+    white-space:nowrap;
+}
+.modal-width{
+    width: 650px;
+    text-align:center;
+}
+
+.date-style{
+    padding-top: 0px;
+    padding-bottom: 0px;
+    width: 170px;
+}

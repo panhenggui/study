@@ -1,0 +1,53 @@
+th{
+    text-align:center;
+    white-space:nowrap;
+}
+td{
+    text-align:center;
+    white-space:nowrap;
+}
+windColoerTr{
+    background:#ffffff;
+}
+.selectActive {
+    background: #e9f7ff;
+}
+#subCapitalAccountProcessModal .table-body{
+    max-height: 150px;
+}
+.start-row{
+    display: inline-block;
+    width: 40px;
+    height: 25px;
+    line-height: 25px;
+    border: 1px solid #519e67;
+    border-radius: 3px;
+    text-align: center;
+    color: #519e67;
+    cursor: pointer;
+}
+.start-row:hover{
+    background-color: #519e67;
+    color: #ffffff;
+}
+.skip{
+    font-weight: bold;
+    color:#6fb3e0;
+}
+
+.get-margin,.get-fee{
+    display: inline-block;
+    width: 40px;
+    height: 25px;
+    line-height: 25px;
+    border: 1px solid #F08A86;
+    border-radius: 3px;
+    text-align: center;
+    color: #F08A86;
+    margin-right: 5px;
+    cursor: pointer;
+}
+.get-margin:hover,.get-fee:hover{
+    background-color: #F08A86;
+    color: #ffffff;
+}

@@ -1,0 +1,51 @@
+.subCapitalAccountReg-select-style{
+    width:170px;
+    margin-left:15px;
+}
+.subCapitalAccountReg-control-radio{
+	padding-left:100px;
+}
+
+.subCapitalAccountReg-radio-style{
+	float:left;
+}
+.subCapitalAccountReg-radio-style1{
+	float:left;
+	margin-left:-10px !important;
+	margin-right:10px !important;
+}
+.subCapitalAccountReg-label-style1{
+	white-space: nowrap;
+  	padding-left: 10px;
+    width: 105px;
+}
+.subCapitalAccountReg-label-style2{
+	white-space: nowrap;
+  	padding-left: 0;
+    width: 105px;
+}
+.subCapitalAccountReg-col-xs-4 {
+  width: 33.333%;
+  margin-bottom: 30px;
+}
+.subCapitalAccountReg-modal-footer {
+  padding-top: 12px;
+  padding-bottom: 14px;
+  border-top-color: #e4e9ee;
+  -webkit-box-shadow: none;
+  box-shadow: none;
+  background-color: #eff3f8;
+  margin-top: 20px;
+}
+.subCapitalAccountReg-checkboxstyle{
+	float: left;
+}
+.subCapitalAccountReg-label-style3{
+	white-space: nowrap;
+  	padding-right: 10px;
+    width: 95px;
+}
+.subCapitalAccountReg-select-style1{
+    width:220px;
+    margin-left:50px;
+}

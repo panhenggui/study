@@ -1,0 +1,42 @@
+@font-face {
+    font-family: 'update-icon';
+    src:    url('../fonts/update-icon.eot?kv4x1l');
+    src:    url('../fonts/update-icon.eot?kv4x1l#iefix') format('embedded-opentype'),
+        url('../fonts/update-icon.ttf?kv4x1l') format('truetype'),
+        url('../fonts/update-icon.woff?kv4x1l') format('woff'),
+        url('../fonts/update-icon.svg?kv4x1l#update-icon') format('svg');
+    font-weight: normal;
+    font-style: normal;
+}
+
+.icon-update {
+    /* use !important to prevent issues with browser extensions that change fonts */
+    font-family: 'update-icon' !important;
+    speak: none;
+    font-style: normal;
+    font-weight: bold;
+    font-variant: normal;
+    text-transform: none;
+    line-height: 1;
+    font-size: 14px;
+    /* Better Font Rendering =========== */
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    -webkit-transition: all 0.1s;
+    -moz-transition: all 0.1s;
+    -ms-transition: all 0.1s;
+    -o-transition: all 0.1s;
+    transition: all 0.1s;
+}
+
+.icon-update:before {
+    content: "\e605";
+}
+.icon-update:hover{
+    -webkit-transform: scale(1.2);
+    -moz-transform: scale(1.2);
+    -ms-transform: scale(1.2);
+    -o-transform: scale(1.2);
+    transform: scale(1.2);
+}
+

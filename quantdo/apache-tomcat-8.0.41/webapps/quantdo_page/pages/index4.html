@@ -1,0 +1,1976 @@
+<!DOCTYPE html>
+<html lang="en" ng-app="myApp">
+<head>
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+<meta charset="utf-8" />
+<title>全球交易系统</title>
+
+<meta name="viewport"
+	content="width=device-width, initial-scale=1.0, maximum-scale=1.0" />
+
+<!--[if !IE]> -->
+<link rel="stylesheet" href="../framework/ui-ace/assets/css/pace.css" />
+<script
+	data-pace-options='{ "ajax": true, "document": true, "eventLag": false, "elements": false }'
+	src="../framework/ui-ace/assets/js/pace.js"></script>
+
+<!-- <![endif]-->
+
+<!-- bootstrap & fontawesome -->
+<link rel="stylesheet"
+	href="../framework/ui-ace/assets/css/bootstrap.css" />
+<link rel="stylesheet"
+	href="../framework/ui-ace/assets/css/font-awesome.css" />
+<link rel="stylesheet"
+	href="../framework/ui-ace/assets/css/bootstrap-datepicker.css">
+	
+<link rel="stylesheet" 
+	href="../framework/libraries/my97DatePicker/skin/default/datepicker.css">
+
+<link rel="stylesheet"
+	href="../framework/ui-ace/assets/css/bootstrap-duallistbox.css">
+<link rel="stylesheet"
+	href="../framework/ui-ace/assets/css/bootstrap-multiselect.css">
+
+
+<!-- text fonts -->
+<link rel="stylesheet"
+	href="../framework/ui-ace/assets/css/ace-fonts.css" />
+<link rel="stylesheet" href="../pages/css/myfont.css" />
+
+<!-- ace styles -->
+<link rel="stylesheet" href="../framework/ui-ace/assets/css/ace.css"
+	class="ace-main-stylesheet" id="main-ace-style" />
+<link rel="stylesheet"
+	href="../framework/libraries/angular/directives/angularjsTab/angularTab.css" />
+<link rel="stylesheet"
+	href="../framework/libraries/ztree/css/zTreeStyle/zTreeStyle.css" />
+	
+<!-- 多选框样式 -->
+<link href="../framework/ui-ace/multiselect/css/jquery-ui.css" rel="stylesheet">
+<link href="../framework/ui-ace/multiselect/css/jquery.multiselect.css" rel="stylesheet">
+<link href="../framework/ui-ace/multiselect/css/prettify.css" rel="stylesheet">
+<link href="../framework/ui-ace/multiselect/css/style.css" rel="stylesheet">
+<!-- <link href="../framework/libraries/datatables/css/jquery.dataTables.min.css" rel="stylesheet"> -->
+	
+<!--<link rel="stylesheet" href="../framework/libraries/ztree/css/demo.css" />-->
+<!--[if lte IE 9]>
+    <link rel="stylesheet" href="../framework/ui-ace/assets/css/ace-part2.css" class="ace-main-stylesheet"/>
+    <![endif]-->
+
+<!--[if lte IE 9]>
+    <link rel="stylesheet" href="../framework/ui-ace/assets/css/ace-ie.css"/>
+    <![endif]-->
+
+<!-- ace settings handler -->
+<script src="../framework/ui-ace/assets/js/ace-extra.js"></script>
+
+<!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
+
+<!--[if lte IE 8]>
+    <script src="../framework/ui-ace/assets/js/html5shiv.js"></script>
+    <script src="../framework/ui-ace/assets/js/respond.js"></script>
+    <![endif]-->
+<script src="login/login.js"></script>
+<script src="../service/LogonService.js"></script>
+
+</head>
+
+<body class="no-skin" ng-controller="IndexMenuController">
+	<!-- #section:basics/navbar.layout -->
+	<div id="navbar" class="navbar navbar-default">
+		<script type="text/javascript">
+			try {
+				ace.settings.check('navbar', 'fixed')
+			} catch (e) {
+			}
+		</script>
+
+		<div class="navbar-container" id="navbar-container"
+			ng-controller="indexTitleController">
+
+			<!-- /section:basics/sidebar.mobile.toggle -->
+			<div class="navbar-header pull-left">
+				<!-- #section:basics/navbar.layout.brand -->
+				<a href="#home" class="navbar-brand">
+					<small>
+						<i class="fa fa-leaf">全球交易系统</i>
+					</small>
+				</a>
+				<!-- 资管柜台放开 -->
+		<!--  			<a href="#home" class="navbar-brand">
+					<small>
+						<i class="fa fa-leaf">{{qdamName}}</i>
+					</small>
+				</a> -->
+				
+				<a  ng-show="showRole" href="" class="navbar-brand" ng-click="toWindControl()">
+					<small>
+						<i class="fa fa-leaf">量投风控平台</i>
+					</small>
+				</a>
+				
+				<!--<a href="#" class="navbar-brand">-->
+					<!--<small> &lt;!&ndash; <i class="fa fa-leaf"></i> &ndash;&gt;-->
+						<!--<img src="../pic/logo_index.png"-->
+						<!--style="width: 32px; height: 32px;"> 全球交易系统-->
+				<!--</small>-->
+				<!--</a>-->
+			</div>
+			
+
+			<div class="navbar-header pull-right logout">
+			
+				<span class="ace-icon fa fa-power-off red"></span>
+				<a href="#home" onclick="logout()">退出</a>
+			</div>
+			<div class="navbar-header pull-right logout" style="width: 100px;">
+				<span class="ace-icon fa fa-key red"></span>
+				<a href="" ng-click="changePwd()" data-toggle="modal"
+				   data-target="#indexPwdChangeModal">修改登录密码
+				</a>
+			</div>
+			<div  class="navbar-header pull-right" style="width: 250px;margin-top: 18px;">
+			所属机构： {{instShortName}}&nbsp;&nbsp; 欢迎&nbsp;{{userName}}&nbsp;登录
+			</div>
+
+			<!-- /section:basics/navbar.dropdown -->
+			<!-- 密码修改  模态框（Modal） -->
+			<div class="modal fade" id="indexPwdChangeModal" tabindex="-1"
+				role="dialog" aria-labelledby="myModalLabel" aria-hidden="true"
+				data-backdrop="static" data-keyboard="false">
+				<div class="modal-dialog">
+					<div class="modal-content">
+						<div class="modal-header">
+							<button type="button" class="close" data-dismiss="modal"
+								aria-hidden="true">&times;</button>
+							<h4 class="modal-title" id="myModalLabel">修改密码</h4>
+						</div>
+						<div class="modal-body">
+							<!-- 添加表单内容-->
+							<form class="form-horizontal" role="form"
+								name="indexPwdChangeForm" novalidate>
+								<div class="form-group">
+									<label for="password" class="col-sm-3 control-label">原密码<span
+										style="color: red;">*</span></label>
+									<div class="col-sm-8">
+										<input type="password" class="input-style" id="password"
+											placeholder="请输入原密码" ng-model="modalEntity.password"
+											name="password" maxlength="20" required
+											ng-change="showIndLow(modalEntity.password) ; isBlank(modalEntity)" onkeyup="kEvent(event,this)"
+											onkeydown="myKeyup(event,this)" tab="1"> <span
+											ng-show="indexPwdChangeForm.password.$dirty && indexPwdChangeForm.password.$invalid"
+											style="color: red;">原密码为必填项</span>
+											 <div class="pass-wrap">
+											        <em id="passText" >密码强度：</em>
+											        <div id="passStrength"></div>
+										 </div>
+									</div>
+								</div>
+
+								<div class="form-group">
+									<label for="newPassword" class="col-sm-3 control-label">新密码<span
+										style="color: red;">*</span></label>
+									<div class="col-sm-8">
+										<input type="password" class="input-style" id="newPassword"
+											placeholder="请输入新密码" ng-model="modalEntity.newPassword"
+										ng-change="showIndLowag(modalEntity.newPassword); isBlank(modalEntity)"  name="newPassword"
+											maxlength="20" required onkeyup="kEvent(event,this)"
+											onkeydown="myKeyup(event,this)" tab="2"> <span
+											ng-show="indexPwdChangeForm.newPassword.$dirty && indexPwdChangeForm.newPassword.$invalid"
+											style="color: red;">新密码为必填项</span>
+											 <div class="pass-wrap">
+											        <em id="passText" >密码强度：</em>
+											        <div id="passStrengthag"></div>
+										 </div>
+									</div>
+								</div>
+
+								<div class="form-group">
+									<label for="pwdag" class="col-sm-3 control-label">确认新密码<span
+										style="color: red;">*</span></label>
+									<div class="col-sm-8">
+										<input type="password" class="input-style" id="pwdag"
+											placeholder="请输入确认新密码" ng-model="modalEntity.pwdag"
+										ng-change="showIndLowtwo(modalEntity.pwdag); isBlank(modalEntity)" name="pwdag" maxlength="20"
+											required onkeyup="kEvent(event,this)"
+											onkeydown="myKeyup(event,this)" tab="3"> <span
+											ng-show="indexPwdChangeForm.pwdag.$dirty && indexPwdChangeForm.pwdag.$invalid"
+											style="color: red;">确认新密码为必填项</span>
+											 <div class="pass-wrap">
+											        <em id="passText" >密码强度：</em>
+											        <div id="passStrengthtwo"></div>
+										 </div>
+									</div>
+								</div>
+
+							</form>
+							<!--End  添加表单内容-->
+						</div>
+						<div class="modal-footer">
+							<span class="btn btn-info btn-sm popover-info" data-rel="popover"
+								data-placement="bottom" title="" ng-click="savePwd(modalEntity)"
+								ng-disabled="indexPwdChangeForm.$invalid || pwdBlank">&nbsp;确定&nbsp;</span>
+							<span class="btn btn-info btn-sm popover-info" data-rel="popover"
+								data-placement="bottom" title="" data-dismiss="modal">&nbsp;取消&nbsp;</span>
+						</div>
+					</div>
+				</div>
+			</div>
+
+
+		</div>
+		<!-- /.navbar-container -->
+	</div>
+
+	<!-- /section:basics/navbar.layout -->
+	<div class="main-container" id="main-container">
+		<script type="text/javascript">
+			try {
+				ace.settings.check('main-container', 'fixed')
+			} catch (e) {
+			}
+		</script>
+
+		<!-- #section:basics/sidebar -->
+		<div id="sidebar" class="sidebar responsive">
+			<script type="text/javascript">
+				try {
+					ace.settings.check('sidebar', 'fixed')
+				} catch (e) {
+				}
+			</script>
+
+
+			<div class="menuScroller" style="OVERFLOW:auto;height: 800px;">
+				<div class="sliderLeft">
+					<a href="" ng-click="hideSidebar()"> << </a>
+				</div>
+			<!--菜单栏-->
+			<ul class="nav nav-list">
+
+
+				<!-- 基础管理 -->
+				<li class="" ng-show="menu.home1"  ><a href="#" class="dropdown-toggle"> <i
+						class="icon-1account"></i> <span class="menu-text"> 基础管理 </span> <b
+						class="arrow fa fa-angle-down"></b>
+				</a> <b class="arrow"></b>
+
+					<ul class="submenu">
+                       <!-- 机构管理 -->
+                       <li class=""  ng-show="menu.instClient" ><a href="#" class="dropdown-toggle"> <i
+								class="menu-icon fa fa-caret-right"></i> 机构管理 <b
+								class="arrow fa fa-angle-down"></b>
+						</a> <b class="arrow"></b>
+							<ul class="submenu">
+						<li class=""  ng-show="menu.instClient"
+							ng-click="addPane('机构设置','instClientController','account/instClient.html')">
+							<a data-url="page/buttons" href="#instClient"> <i
+								class="menu-icon fa fa-caret-right"></i> 机构设置
+						</a> <b class="arrow"></b>
+						</li>
+							</ul>
+						</li>
+                      <!--经纪公司管理-->
+                      <li class=""   ng-show="menu.brokerageFirm" ><a href="#" class="dropdown-toggle"> <i
+								class="menu-icon fa fa-caret-right"></i> 经纪公司管理<b
+								class="arrow fa fa-angle-down"></b>
+						</a> <b class="arrow"></b>
+							<ul class="submenu">
+                        <li class=""  ng-show="menu.brokerageFirm"
+							ng-click="addPane('设置经纪公司','BrokerageFirmController','account/brokerageFirm.html')">
+							<a data-url="page/buttons" href="#brokerageFirm"> <i
+								class="menu-icon fa fa-caret-right"></i> 设置经纪公司
+						</a> <b class="arrow"></b>
+						</li>
+							</ul>
+						</li>
+					<!-- 用户管理 -->
+						<li class=""  ng-show="menu.userManage || menu.userOnlineManage " ><a href="#" class="dropdown-toggle"> <i
+								class="menu-icon fa fa-caret-right"></i> 用户管理 <b
+								class="arrow fa fa-angle-down"></b>
+						</a> <b class="arrow"></b>
+							<ul class="submenu">
+								<li class=""  ng-show="menu.roleManage"
+									ng-click="addPane(' 角色管理','RoleManageController','user/roleManage.html')">
+									<!-- ng-show=menu.roleManage --> <a data-url="page/buttons"
+									href="#roleManage"> <i
+										class="menu-icon fa fa-caret-right"></i> 角色管理
+								</a> <b class="arrow"></b>
+								</li>
+								<li class=""  ng-show="menu.userManage"
+									ng-click="addPane('用户设置','UserManageController','user/userManage.html')">
+									 <a data-url="page/buttons"
+									href="#userManage"> <i
+										class="menu-icon fa fa-caret-right"></i> 用户设置
+								</a> <b class="arrow"></b>
+								</li>
+							
+								<li class=""  ng-show="menu.tradeUserProductCheck"
+									ng-click="addPane('交易端认证码维护','TradeUserProductCheckController','user/tradeUserProductCheck.html')">
+									 <a data-url="page/buttons"
+									href="#tradeUserProductCheck"> <i
+										class="menu-icon fa fa-caret-right"></i> 交易端认证码维护
+								</a> <b class="arrow"></b>
+								</li>
+								<li class=""  ng-show="menu.userOnlineManage"
+									ng-click="addPane('在线交易用户管理','UserOnlineManageController','user/userOnlineManage.html')">
+									 <a data-url="page/buttons"
+									href="#userOnlineManage"> <i
+										class="menu-icon fa fa-caret-right"></i> 在线交易用户管理
+								</a> <b class="arrow"></b>
+								</li>
+								
+								<li class=""  ng-show="menu.accountLink"
+									ng-click="addPane('用户关联账号','UserManageController','user/accountLink.html')">
+									<a data-url="page/buttons"
+									href="#accountLink"> <i
+										class="menu-icon fa fa-caret-right"></i> 用户关联账号
+								</a> <b class="arrow"></b>
+								</li>
+			 					<li class=""  ng-show="menu.productLink"
+									ng-click="addPane('用户关联产品','UserFundProductController','product/productLink.html')">
+									<a data-url="page/buttons"
+									href="#productLink"> <i
+										class="menu-icon fa fa-caret-right"></i> 用户关联产品
+								</a> <b class="arrow"></b>
+								</li> 
+							</ul>
+						</li>
+						<!-- 产品管理 -->
+                        <li class="" ng-show="menu.fundProduct" ><a href="#" class="dropdown-toggle"> <i
+								class="menu-icon fa fa-caret-right"></i> 产品管理 <b
+								class="arrow fa fa-angle-down"></b>
+						</a> <b class="arrow"></b>
+							<ul class="submenu">
+								<li class=""  ng-show="menu.fundProduct"
+							ng-click="addPane('设置产品基础信息','FundProductController','product/fundProduct.html')">
+								<a data-url="page/buttons" href="#fundProduct"> <i
+									class="menu-icon fa fa-caret-right"></i> 设置产品基础信息
+							     </a> <b class="arrow"></b>
+						         </li>
+						         
+						         <li class=""  ng-show="menu.fixedIncomeSet" 
+							ng-click="addPane('产品固收资产设置','FixedIncomeSetController','product/fixedIncomeSet.html')">
+								<a data-url="page/buttons" href="#fixedIncomeSet"> <i
+									class="menu-icon fa fa-caret-right"></i>产品固收资产设置
+							     </a> <b class="arrow"></b>
+						         </li>
+						         <li class=""  ng-show="menu.otherIncomeSet" 
+							ng-click="addPane('产品其他权益设置','OtherIncomeSetController','product/otherIncomeSet.html')">
+								<a data-url="page/buttons" href="#otherIncomeSet"> <i
+									class="menu-icon fa fa-caret-right"></i>产品其他权益设置
+							     </a> <b class="arrow"></b>
+						         </li>
+						         <li class=""  ng-show="menu.workFlowSet"
+								ng-click="addPane('工作流设置','workFlowSetController','account/workFlowSet.html')">
+								<a data-url="page/buttons" href="#workFlowSet"> <i
+									class="menu-icon fa fa-caret-right"></i> 工作流设置
+							</a> <b class="arrow"></b>
+							</li>
+							</ul>
+                       </li>
+					</ul>
+				</li>
+				
+				<!--  账户管理 -->
+				<li class=""  ng-show="menu.home2"  ><a href="#" class="dropdown-toggle"> <i
+						class="icon-1account"></i> <span class="menu-text"> 账户管理 </span> <b
+						class="arrow fa fa-angle-down"></b>
+				</a> <b class="arrow"></b>
+					<ul class="submenu">
+						<li class=""  ng-show="menu.capitalAccount" ><a href="#" class="dropdown-toggle"> <i
+								class="menu-icon fa fa-caret-right"></i> 资金账号 <b
+								class="arrow fa fa-angle-down"></b>
+						</a> <b class="arrow"></b>
+							<ul class="submenu">
+								<li class="" 	 ng-show="menu.capitalAccount"
+									ng-click="addPane('设置账号信息','capitalAccountController','account/capitalAccount.html')">
+								  <a data-url="page/buttons"
+									href="#capitalAccount"> <i
+										class="menu-icon fa fa-caret-right"></i> 设置账号信息
+								</a> <b class="arrow"></b>
+								</li>
+
+								<li class=""  ng-show="menu.accountGroup"
+									ng-click="addPane('设置账号分组','AccountGroupController','account/accountGroup.html')">
+									<!-- ng-show=menu.accountGroup --> <a data-url="page/buttons"
+									href="#accountGroup"> <i
+										class="menu-icon fa fa-caret-right"></i> 设置账号分组
+								</a> <b class="arrow"></b>
+								</li>
+								<li class=""  ng-show="menu.leverage"
+								ng-click="addPane('杠杆基数管理','leverageController','account/leverage.html')">
+								<a data-url="page/buttons" href="#leverage"> <i
+									class="menu-icon fa fa-caret-right"></i> 杠杆基数管理
+								</a> <b class="arrow"></b>
+								</li>
+								
+							</ul></li>
+
+						<!-- <li class=""  ng-show="amType =='2'">  -->
+						<li class=""   ng-show="amType =='2'" >
+						<a href="#"
+							class="dropdown-toggle"> <i
+								class="menu-icon fa fa-caret-right"></i> 资产单元 <b
+								class="arrow fa fa-angle-down"></b>
+						</a> <b class="arrow"></b>
+							<ul class="submenu">
+						<!-- 		<li class=""  ng-show="menu.traderReg"
+									ng-click="addPane('资产单元开户','traderRegController','account/traderReg.html')">
+									<a data-url="page/buttons" href="#traderReg"> <i
+										class="menu-icon fa fa-caret-right"></i> 资产单元开户
+								</a> <b class="arrow"></b>
+								</li> -->
+	
+								<li class="" ng-show="menu.subCapitalAccount"
+									ng-click="addPane('资产单元维护','SubCapitalAccountController','account/subCapitalAccount.html')">
+									<a data-url="page/buttons" href="#subCapitalAccount"> <i
+										class="menu-icon fa fa-caret-right"></i>资产单元维护
+								</a> <b class="arrow"></b>
+								</li>
+		           <!--           <li class="" ng-show="menu.subCapitalRiskParam"
+								ng-click="addPane('设置交易品种限制','subCapitalRiskParamController','riskparam/subCapitalRiskParam.html')">
+								<a data-url="page/buttons" href="#subCapitalRiskParam"> <i
+									class="menu-icon fa fa-caret-right"></i>设置交易品种限制
+							</a> <b class="arrow"></b>
+							</li>
+						
+	
+							<li class=""  ng-show="menu.userriskparameter"
+								ng-click="addPane('设置风险参数','Userriskparameter','userriskparameter/userriskparameter.html')">
+								<a data-url="page/buttons" href="#userriskparameter"> <i
+									class="menu-icon fa fa-caret-right"></i>设置风险参数
+							</a> <b class="arrow"></b>
+							</li> -->
+							
+							<li class="" ng-show="menu.subMoneyIO"
+							ng-click="addPane('资产单元资金划拨','SubMoneyIOController','settleparam/subMoneyIO.html')">
+							<a data-url="page/buttons" href="#subMoneyIO"> <i
+								class="menu-icon fa fa-caret-right"></i> 资产单元资金划拨
+						</a> <b class="arrow"></b>
+						</li>
+						</ul>
+					  </li>
+					   <li class=""  ng-show="menu.member"
+							ng-click="addPane('会员管理','MemberController','account/member.html')">
+							<a data-url="page/buttons"
+							href="#member"> <i
+								class="menu-icon fa fa-caret-right"></i>  会员管理
+						</a> <b class="arrow"></b>
+						</li>
+						<li class=""  ng-show="menu.exchClient"
+							ng-click="addPane('交易编码管理','ExchClientController','account/exchClient.html')">
+							<a data-url="page/buttons"
+							href="#exchClient"> <i
+								class="menu-icon fa fa-caret-right"></i>  交易编码管理
+						</a> <b class="arrow"></b>
+						</li>
+					</ul>
+				</li>
+				
+				<!-- <li class="" ng-show="menu.home3"><a href="#"
+					class="dropdown-toggle"> <i class="icon-money"></i> <span
+						class="menu-text"> 风控管理</span> <b class="arrow fa fa-angle-down"></b>
+				</a> <b class="arrow"></b>
+						
+					<ul class="submenu">
+						<li class=""  ng-show="menu.fundProductRiskParam"
+							ng-click="addPane('产品级风控','fundProductRiskParamController','riskparam/fundProductRiskParam.html')">
+							<a data-url="page/buttons" href="#fundProductRiskParam"> <i
+								class="menu-icon fa fa-caret-right"></i> 产品级风控
+						</a> <b class="arrow"></b>
+						</li>
+						<li class=""  ng-show="menu.capitalRiskParam"
+							ng-click="addPane('资金账户级风控','capitalRiskParamController','riskparam/capitalRiskParam.html')">
+							<a data-url="page/buttons" href="#capitalRiskParam"> <i
+								class="menu-icon fa fa-caret-right"></i> 资金账户级风控
+						</a> <b class="arrow"></b>
+						</li>
+						<li class="" ng-show="menu.riskControl"
+							ng-click="addPane('产品级风控界面','RiskControlController','riskparam/riskControl.html')">
+							<a data-url="page/buttons" href="#riskControl"> <i
+								class="menu-icon fa fa-caret-right"></i> 产品级风控界面
+						</a> <b class="arrow"></b>
+						</li>
+					</ul>
+				</li> -->
+				
+				<!-- 交易参数 -->
+				<li class=""   ng-show="menu.home4" ><a href="#" class="dropdown-toggle"> <i
+						class="icon-system"></i> <span class="menu-text"> 系统管理 </span> <b
+						class="arrow fa fa-angle-down"></b>
+				</a> <b class="arrow"></b>
+
+					<ul class="submenu">
+						<li class="" ng-show="menu.product || menu.singleEdgeProductGroup"><a href="#"
+							class="dropdown-toggle"> <i
+								class="menu-icon fa fa-caret-right"></i> 交易参数管理<b
+								class="arrow fa fa-angle-down"></b>
+						</a> <b class="arrow"></b>
+							<ul class="submenu">
+								<li class="" ng-show="menu.exchange"
+									ng-click="addPane('交易所设置','exchangeController','tradeparam/exchange.html')">
+									<a data-url="page/buttons" href="#exchange"> <i
+										class="menu-icon fa fa-caret-right"></i> 交易所设置
+								</a> <b class="arrow"></b>
+								</li>
+
+								<li class=""  ng-show="menu.product"
+									ng-click="addPane('品种设置','ProductController','tradeparam/product.html')">
+									<a data-url="page/buttons" href="#product"> <i
+										class="menu-icon fa fa-caret-right"></i> 品种设置
+								</a> <b class="arrow"></b>
+								</li>
+
+								<li class="" ng-show="menu.instrument"
+									ng-click="addPane('合约设置','InstrumentController','tradeparam/instrument.html')">
+									<a data-url="page/buttons" href="#instrument"> <i
+										class="menu-icon fa fa-caret-right"></i> 合约设置
+								</a> <b class="arrow"></b>
+								</li>
+								
+								<li class="" ng-show="menu.singleEdgeProductGroup"
+									ng-click="addPane('组合保证金品种组管理','SingleEdgeProductGroupController','combmargin/singleEdgeProductGroup.html')">
+									<a data-url="page/buttons" href="#singleEdgeProductGroup">
+										<i class="menu-icon fa fa-caret-right"></i> 组合保证金品种组管理
+								</a> <b class="arrow"></b>
+								</li>
+
+							</ul>
+							</li>	
+
+							<li class="" ng-show="menu.userSession"><a href="#"
+							class="dropdown-toggle"> <i
+								class="menu-icon fa fa-caret-right"></i>系统日志<b
+								class="arrow fa fa-angle-down"></b>
+						</a> <b class="arrow"></b>
+								<ul class="submenu">
+								     <li class="" ng-show="menu.logManage"
+										ng-click="addPane('操作日志查询','LogManageController','user/logManage.html')">
+										<a data-url="page/buttons" href="#logManage"> <i
+											class="menu-icon fa fa-caret-right"></i>操作日志查询
+									</a> <b class="arrow"></b>
+									</li>
+									<li class="" ng-show="menu.userSession"
+									ng-click="addPane('用户登录信息统计','UserSessionController','usersession/userSession.html')">
+									<a data-url="page/buttons" href="#userSession"> <i
+											class="menu-icon fa fa-caret-right"></i>用户登录信息统计
+									</a> <b class="arrow"></b>
+								</li>
+	
+								</ul>
+						
+							</li>	
+							<li class=""  ng-show="menu.tradeUserIPCheck"
+									ng-click="addPane('监管参数管理','TradeUserIPCheckController','user/tradeUserIPCheck.html')">
+									 <a data-url="page/buttons"
+									href="#tradeUserIPCheck"> <i
+										class="menu-icon fa fa-caret-right"></i>监管参数管理
+								</a> <b class="arrow"></b>
+							</li>
+							
+				
+					        <li class="" ng-show="menu.assetGroup"
+								ng-click="addPane('资产分类管理','assetGroupControllerForManagement','windControl/assetGroupForManagement.html')">
+								<a data-url="page/buttons" href="#assetGroupForManagement"> <i
+									class="menu-icon fa fa-caret-right"></i> 资产分类管理
+							</a> <b class="arrow"></b>
+							</li>
+							 <li class="" ng-show="menu.stockAddInformationImport"
+									ng-click="addPane('证券附加信息导入','stockAddInformationImportController','windControl/stockAddInformationImport.html')">
+									<a data-url="page/buttons" href="#stockAddInformationImport"> <i
+										class="menu-icon fa fa-caret-right"></i> 证券附加信息导入
+								</a> <b class="arrow"></b>
+								</li>
+					</ul>
+				</li> 
+
+				
+					
+					<!-- 费率设置 -->
+				<li class="" ng-show="menu.home5 && (amType !='1' || amType ==undefined ) "><a href="#"
+					class="dropdown-toggle"> <i class="icon-huilv"></i> <span
+						class="menu-text">费率管理</span> <b class="arrow fa fa-angle-down"></b>
+				</a> <b class="arrow"></b>
+					<ul class="submenu">	
+						<li class="" ng-show=" menu.defaultMarginSet && (amType =='2' || amType ==undefined )  "><a href="#" class="dropdown-toggle"> <i
+								class="menu-icon fa fa-caret-right"></i> 默认费率管理 <b
+								class="arrow fa fa-angle-down"></b>
+						</a> <b class="arrow"></b>
+							<ul class="submenu">
+								<li class="" ng-show="menu.defaultMarginSet"
+									ng-click="addPane('默认品种保证金率设置','FuturesDefaultMarginSetController','marginset/futures/defaultMarginSet.html')">
+									<a data-url="page/buttons" href="#defaultMarginSet"> <i
+										class="menu-icon fa fa-caret-right"></i> 默认品种保证金率设置
+								</a> <b class="arrow"></b>
+								</li>
+
+								<li class=""  ng-show="menu.defaultInstrumentMarginSet"
+									ng-click="addPane('默认合约保证金率设置','DefaultInstrumentMarginSetController','marginset/defaultInstrumentMarginSet.html')">
+									<a data-url="page/buttons" href="#defaultInstrumentMarginSet">
+										<i class="menu-icon fa fa-caret-right"></i> 默认合约保证金率设置
+								</a> <b class="arrow"></b>
+								</li>
+								<li class="" ng-show="menu.defaultFeeSet"
+									ng-click="addPane('默认品种手续费率设置','DefaultFeeSetController','feeset/defaultFeeSet.html')">
+									<a data-url="page/buttons" href="#defaultFeeSet"> <i
+										class="menu-icon fa fa-caret-right"></i> 默认品种手续费率设置
+								</a> <b class="arrow"></b>
+								</li>
+							</ul></li>
+						<!--BEGIN-->
+
+						<li class=""  ng-show="  menu.subProductMarginSet && (amType =='2' ||  amType ==undefined ) "><a href="#" class="dropdown-toggle"> <i
+								class="menu-icon fa fa-caret-right"></i> 账号费率管理 <b
+								class="arrow fa fa-angle-down"></b>
+						</a> <b class="arrow"></b>
+							<ul class="submenu">
+								<li class="" ng-show="menu.subProductMarginSet"
+									ng-click="addPane('品种保证金率','SubProductMarginSetController','marginset/subProductMarginSet.html')">
+									<a data-url="page/buttons" href="#subProductMarginSet"> <i
+										class="menu-icon fa fa-caret-right"></i> 品种保证金率
+								</a> <b class="arrow"></b>
+								</li>
+								<li class="" ng-show="menu.subInstrumentMarginSet"
+									ng-click="addPane('合约保证金率','SubInstrumentMarginSetController','marginset/subInstrumentMarginSet.html')">
+									<a data-url="page/buttons" href="#subInstrumentMarginSet">
+										<i class="menu-icon fa fa-caret-right"></i> 合约保证金率
+								</a> <b class="arrow"></b>
+								</li>
+								<li class="" ng-show="menu.subProductFeeSet"
+									ng-click="addPane('品种手续费设置','SubProductFeeSetController','feeset/subProductFeeSet.html')">
+									<a data-url="page/buttons" href="#subProductFeeSet"> <i
+										class="menu-icon fa fa-caret-right"></i> 品种手续费设置
+								</a> <b class="arrow"></b>
+								</li>
+								
+								
+							</ul>
+						</li>
+						
+						<li class="" ng-show="menu.operInvestorFee"
+									ng-click="addPane('交易手续费率实时设置','operInvestorFeeController','feeset/operInvestorFee.html')">
+							<a data-url="page/buttons" href="#operInvestorFee"> <i
+								class="menu-icon fa fa-caret-right"></i> 交易手续费率实时设置
+						</a> <b class="arrow"></b>
+						</li>
+						
+						<li class="" ng-show="menu.operInvestorMargin"
+							ng-click="addPane('交易保证金率实时设置','operInvestorMarginController','marginset/operInvestorMargin.html')">
+							<a data-url="page/buttons" href="#operInvestorMargin"> <i
+								class="menu-icon fa fa-caret-right"></i> 交易保证金率实时设置
+						</a> <b class="arrow"></b>
+						</li>
+
+					
+
+						<li class=""  ng-show=" menu.feeTemplate &&  (amType =='2' || amType ==undefined)  "><a href="#" class="dropdown-toggle"> <i
+								class="menu-icon fa fa-caret-right"></i> 费率模板管理 <b
+								class="arrow fa fa-angle-down"></b>
+						</a> <b class="arrow"></b>
+							<ul class="submenu">
+								<li class="" ng-show="menu.feeTemplate"
+									ng-click="addPane('手续费模板','FeeTemplateController','feeset/feeTemplate.html')">
+									<a data-url="page/buttons" href="#feeTemplate"> <i
+										class="menu-icon fa fa-caret-right"></i> 手续费模板
+								</a> <b class="arrow"></b>
+								</li>
+
+								<li class="" ng-show="menu.marginTemplate"
+									ng-click="addPane('保证金模板','MarginTemplateController','marginset/marginTemplate.html')">
+									<a data-url="page/buttons" href="#marginTemplate"> <i
+										class="menu-icon fa fa-caret-right"></i> 保证金模板
+								</a> <b class="arrow"></b>
+								</li>
+								<li class="" ng-show="menu.subAccountTemplate"
+									ng-click="addPane('对应费率模板','SubAccountTemplateController','marginset/subAccountTemplate.html')">
+									<a data-url="page/buttons" href="#subAccountTemplate"> <i
+										class="menu-icon fa fa-caret-right"></i> 对应费率模板
+								</a> <b class="arrow"></b>
+								</li>
+
+							</ul></li>
+						<!--END-->
+       <!--                <li class=""  ng-show="menu.defaultStockProductFeeSet"><a href="#" class="dropdown-toggle"> <i
+						class="menu-icon fa fa-caret-right"></i> 证券费率设置 <b
+						class="arrow fa fa-angle-down"></b>
+			       	</a> <b class="arrow"></b>
+					<ul class="submenu">
+						 <li class="" ng-show="menu.defaultStockProductFeeSet"
+							ng-click="addPane('默认证券品种费率设置','DefaultStockProductFeeSetController','feeset/defaultStockProductFeeSet.html')">
+							<a data-url="page/buttons" href="#defaultStockProductFeeSet"> <i
+								class="menu-icon fa fa-caret-right"></i> 默认证券品种费率设置
+						</a> <b class="arrow"></b>
+						</li>
+						
+						 <li class="" ng-show="menu.stockProductFeeSet"
+							ng-click="addPane('证券品种费率设置','StockProductFeeSetController','feeset/stockProductFeeSet.html')">
+							<a data-url="page/buttons" href="#stockProductFeeSet"> <i
+								class="menu-icon fa fa-caret-right"></i> 证券品种费率设置
+						</a> <b class="arrow"></b>
+						</li>
+					</ul></li> -->
+					<li class=""  ng-show="menu.deferredFeeSet"
+							ng-click="addPane(' 递延费率设置','DeferredFeeSetController','feeset/deferredFeeSet.html')">
+							<a data-url="page/buttons" href="#deferredFeeSet"> <i
+								class="menu-icon fa fa-caret-right"></i>  递延费率设置
+						</a> <b class="arrow"></b>
+					</li>
+
+					</ul>
+				</li>
+				
+				
+				<li class="" ng-show="menu.dataToTrade"  ><a href="#" class="dropdown-toggle"> <i
+						class="icon-huilv2"></i> <span class="menu-text"> 数据管理 </span> <b
+						class="arrow fa fa-angle-down"></b>
+				</a> <b class="arrow"></b>
+					<ul class="submenu">
+						<li class="" ng-show="menu.dataToTrade"
+							ng-click="addPane('上场数据生成','DataToTradeController','dailysettle/dataToTrade.html')">
+							<a data-url="page/buttons" href="#dataToTrade"> <i
+								class="menu-icon fa fa-caret-right"></i> 上场数据生成
+						</a> <b class="arrow"></b>
+						</li>
+					</ul>
+				</li>
+				<li class="" ng-show="menu.runMonitor"  ><a href="#" class="dropdown-toggle"> <i
+						class="icon-huilv2"></i> <span class="menu-text"> 监控管理 </span> <b
+						class="arrow fa fa-angle-down"></b>
+				</a> <b class="arrow"></b>
+					<ul class="submenu">
+						<li class="" ng-show="menu.runMonitor"
+							ng-click="addPane('运行监控','RunMonitorController','monitor/runMonitor.html')">
+							<a data-url="page/buttons" href="#runMonitor"> <i
+									class="menu-icon fa fa-caret-right"></i> 运行监控
+							</a> <b class="arrow"></b>
+						</li>
+						<li class="" ng-show="menu.busAudit"
+							ng-click="addPane('业务稽核','BusAuditController','busaudit/busAudit.html')">
+							<a data-url="page/buttons" href="#busAudit"> <i
+									class="menu-icon fa fa-caret-right"></i> 业务稽核
+							</a> <b class="arrow"></b>
+						</li>
+					</ul>
+					
+				</li>
+
+				<li class="" ng-show="menu.home6  && amType !='1' "  ><a href="#" class="dropdown-toggle"> <i
+						class="icon-huilv2"></i> <span class="menu-text"> 结算管理 </span> <b
+						class="arrow fa fa-angle-down"></b>
+				</a> <b class="arrow"></b>
+
+					<ul class="submenu">
+						<li class="" ng-hide="true"><a data-url="page/typography"
+							href="#tables"> <i class="menu-icon fa fa-caret-right"></i>
+								表格样例
+						</a> <b class="arrow"></b></li>
+
+						<li class="" ng-hide="true"><a data-url="page/elements"
+							href="#file"> <i class="menu-icon fa fa-caret-right"></i>
+								文件操作
+						</a> <b class="arrow"></b></li>
+
+					   <li class=""  ng-show="menu.home61" ><a href="#" class="dropdown-toggle"> <i
+								class="menu-icon fa fa-caret-right"></i> 结算数据准备 <b
+								class="arrow fa fa-angle-down"></b>
+						</a> <b class="arrow"></b>
+							<ul class="submenu">
+							<li class="" ng-show="menu.trade && amType =='2' "
+								ng-click="addPane('资产单元成交单维护','tradeController','dailysettle/trade.html')">
+								<a data-url="page/buttons" href="#trade"> <i
+									class="menu-icon fa fa-caret-right"></i> 资产单元成交单维护
+							</a> <b class="arrow"></b>
+							</li>
+							<li class=""  ng-show="menu.capTrade"
+								ng-click="addPane('资金账号成交单维护','capTradeController','dailysettle/capTrade.html')">
+								<a data-url="page/buttons" href="#capTrade"> <i
+									class="menu-icon fa fa-caret-right"></i> 资金账号成交单维护
+							</a> <b class="arrow"></b>
+							</li>
+	
+							<li class="" ng-show="menu.settlePrice"
+								ng-click="addPane('结算价维护','SettlePriceController','tradeparam/settlePrice.html')">
+								<a data-url="page/buttons" href="#settlePrice"> <i
+									class="menu-icon fa fa-caret-right"></i> 结算价维护
+							</a> <b class="arrow"></b>
+							</li>
+	
+	
+							<li class="" ng-show="menu.exchangeRate"
+								ng-click="addPane('汇率管理','ExchangeRateController','settleparam/exchangeRate.html')">
+								<a data-url="page/buttons" href="#exchangeRate"> <i
+									class="menu-icon fa fa-caret-right"></i> 汇率管理
+							</a> <b class="arrow"></b>
+							</li>
+	                       </ul>
+					   </li>
+			          <li class=""  ng-show="menu.dailySettle" ><a href="#" class="dropdown-toggle"> <i
+								class="menu-icon fa fa-caret-right"></i>日终结算 <b
+								class="arrow fa fa-angle-down"></b>
+						</a> <b class="arrow"></b>
+							<ul class="submenu">
+							<li class=""  ng-show="menu.dailySettle"
+								ng-click="addPane('日终结算','dailySettleController','dailysettle/dailySettle.html')">
+								<a data-url="page/buttons" href="#dailySettle"> <i
+									class="menu-icon fa fa-caret-right"></i> 日终结算
+							</a> <b class="arrow"></b>
+							</li>
+	
+							<li class="" ng-show="menu.settleRollback" 
+								ng-click="addPane('结算回退','settleRollbackController','dailysettle/settleRollback.html')">
+								<a data-url="page/buttons" href="#settleRollback"> <i
+									class="menu-icon fa fa-caret-right"></i> 结算回退
+							</a> <b class="arrow"></b>
+							</li>
+							
+						
+							
+						  </ul>
+						</li>
+						<li class="" ng-show="menu.uploadCombPOsitionDetail" 
+							ng-click="addPane('资金账号组合持仓导入','uploadCombPositionDetailController','windControl/uploadCombPOsitionDetail.html')">
+							<a data-url="page/buttons" href="#uploadCombPOsitionDetail"> <i
+								class="menu-icon fa fa-caret-right"></i> 资金账号组合持仓导入
+						</a> <b class="arrow"></b>
+						</li>
+						<!--  ng-show="menu.uploadHoldFund" -->
+						 <li class="" ng-show="menu.uploadHoldFund"
+							ng-click="addPane('黄金客户账户资金导入','uploadHoldFundController','upload/uploadHoldFund.html')">
+							<a data-url="page/buttons" href="#uploadHoldFund"> <i
+								class="menu-icon fa fa-caret-right"></i>黄金客户账户资金导入
+						</a> <b class="arrow"></b>
+						</li>					
+						 <li class="" ng-show="menu.uploadFund"
+							ng-click="addPane('客户账户资金导入','uploadFundController','upload/uploadFund.html')">
+							<a data-url="page/buttons" href="#uploadFund"> <i
+								class="menu-icon fa fa-caret-right"></i>客户账户资金导入
+						</a> <b class="arrow"></b>
+						</li>
+						
+						 <li class="" ng-show="menu.uploadHoldDate"
+							ng-click="addPane('客户持仓导入','uploadHoldDateController','upload/uploadHoldDate.html')">
+							<a data-url="page/buttons" href="#uploadHoldDate"> <i
+								class="menu-icon fa fa-caret-right"></i>客户持仓导入
+						</a> <b class="arrow"></b>
+						</li>
+						
+						 <li class="" ng-show="false"
+							ng-click="addPane('结算文件导入','uploadSettleFileController','upload/uploadSettleFile.html')">
+							<a data-url="page/buttons" href="#uploadSettleFile"> <i
+								class="menu-icon fa fa-caret-right"></i>结算文件导入
+						</a> <b class="arrow"></b>
+						</li>
+						
+
+					</ul></li>
+					<!-- 柜台资管一体化数据 -->
+					
+					
+					<!-- 资金管理  -->
+					<li class="" ng-show="menu.home8"  ><a href="#" class="dropdown-toggle"> <i
+						class="icon-huilv2"></i> <span class="menu-text"> 资金管理 </span> <b
+						class="arrow fa fa-angle-down"></b>
+				     </a> <b class="arrow"></b>
+					<ul class="submenu">
+					
+                        <li class="" ng-show="menu.tmpMoneyIO"
+							ng-click="addPane('出入金一次录入','tmpMoneyIOController','settleparam/tmpMoneyIO.html')">
+							<a data-url="page/buttons" href="#tmpMoneyIO"> <i
+								class="menu-icon fa fa-caret-right"></i>出入金一次录入
+						</a> <b class="arrow"></b>
+						</li>
+						 <li class="" ng-show="menu.moneyIORecheck"
+							ng-click="addPane('出入金复核','moneyIORecheckController','settleparam/moneyIORecheck.html')">
+							<a data-url="page/buttons" href="#moneyIORecheck"> <i
+								class="menu-icon fa fa-caret-right"></i>出入金复核
+						</a> <b class="arrow"></b>
+						</li>
+					    <li class="" ng-show="menu.moneyIO"
+							ng-click="addPane('出入金流水查询','moneyIOController','settleparam/moneyIO.html')">
+							<a data-url="page/buttons" href="#moneyIO"> <i
+								class="menu-icon fa fa-caret-right"></i>出入金流水查询
+						</a> <b class="arrow"></b>
+						</li>
+					</ul></li>
+					
+				<!-- 抵押品管理  -->
+				<li class="" ng-show="menu.home10"  ><a href="#" class="dropdown-toggle"> <i
+					class="icon-huilv2"></i> <span class="menu-text"> 抵押品管理 </span> <b
+					class="arrow fa fa-angle-down"></b>
+			     </a> <b class="arrow"></b>
+				<ul class="submenu">
+				
+					<li class=""
+						ng-click="addPane('抵押品管理','mortgageController','mortgage/mortgage.html')">
+						<a data-url="page/buttons" href="#mortgage"> <i
+							class="menu-icon fa fa-caret-right"></i>抵押品管理
+					</a> <b class="arrow"></b>
+					</li>
+	
+				</ul></li>
+				
+				<!-- 现货管理  -->
+				<li class="" ng-show="menu.home11"  ><a href="#" class="dropdown-toggle"> <i
+					class="icon-huilv2"></i> <span class="menu-text"> 现货管理 </span> <b
+					class="arrow fa fa-angle-down"></b>
+			     </a> <b class="arrow"></b>
+				<ul class="submenu">
+				
+					<li class=""
+						ng-click="addPane('现货成交管理','spotTradeController','spot/spottrade.html')">
+						<a data-url="page/buttons" href="#spottrade"> <i
+							class="menu-icon fa fa-caret-right"></i>现货成交管理
+					</a> <b class="arrow"></b>
+					</li>
+					
+					<li class=""
+						ng-click="addPane('现货库存管理','spotStorageController','spot/spotstorage.html')">
+						<a data-url="page/buttons" href="#spotstorage"> <i
+							class="menu-icon fa fa-caret-right"></i>现货库存管理
+					</a> <b class="arrow"></b>
+					</li>
+	
+				</ul></li>
+				
+				<li class=""  ng-show="menu.home7" ><a href="#" class="dropdown-toggle"> <i
+						class="icon-transaction"></i> <span class="menu-text">信息查询</span>
+						<b class="arrow fa fa-angle-down"></b>
+				</a> <b class="arrow"></b>
+					<ul class="submenu">
+						
+						<!-- 实时查询 -->
+						<li class="" ><a href="#"
+							class="dropdown-toggle"> <i class="menu-icon fa fa-caret-right"></i> 
+                                                                                                                            实时查询<b class="arrow fa fa-angle-down"></b>
+						</a> <b class="arrow"></b>
+							<ul class="submenu">
+							
+							<li class=""
+								ng-click="addPane('客户流量实时监控','FlowQueryController','query/flowQuery.html')">
+								<a data-url="page/buttons" href="#flowQuery"> <i
+									class="menu-icon fa fa-caret-right"></i>客户流量实时监控
+							</a> <b class="arrow"></b>
+							</li>
+							<li class=""
+							ng-click="addPane('实时持仓查询','OperClientPositionQueryController','query/operClientPositionQuery.html')">
+							<a data-url="page/buttons" href="#operClientPositionQuery"> <i
+								class="menu-icon fa fa-caret-right"></i> 实时持仓查询
+						</a> <b class="arrow"></b>
+						</li>
+					
+						<li class=""
+							ng-click="addPane('实时资金查询','RealTimeAccountQueryController','query/realTimeAccountQuery.html')">
+							<a data-url="page/buttons" href="#realTimeAccountQuery"> <i
+								class="menu-icon fa fa-caret-right"></i> 实时资金查询
+						</a> <b class="arrow"></b>
+						</li>
+					<!-- 	<li class=""
+							ng-click="addPane('实时成交查询','OperTradeController','query/operTrade.html')">
+							<a data-url="page/buttons" href="#operTrade"> <i
+								class="menu-icon fa fa-caret-right"></i> 实时成交查询
+						</a> <b class="arrow"></b>
+						</li> -->
+						<!-- <li class=""
+							ng-click="addPane('实时错单查询','OperOrderInsertFailedController','query/operOrderInsertFailed.html')">
+							<a data-url="page/buttons" href="#operOrderInsertFailed"> <i
+								class="menu-icon fa fa-caret-right"></i> 实时错单查询
+						</a> <b class="arrow"></b>
+						</li> -->
+					<!-- 	<li class=""
+							ng-click="addPane('实时委托查询','OperOrderServiceController','query/operOrder.html')">
+							<a data-url="page/buttons" href="#operOrder"> <i
+								class="menu-icon fa fa-caret-right"></i> 实时委托查询
+						</a> <b class="arrow"></b>
+						</li> -->
+						
+						<li class="" 
+							ng-click="addPane('实时资产汇总','OperAssetSummaryController','query/operAssetSummary.html')">
+							<a data-url="page/buttons" href="#operAssetSummary"> <i
+								class="menu-icon fa fa-caret-right"></i>实时资产汇总
+						</a> <b class="arrow"></b>
+						</li>
+						<!-- <li class="" ng-show="amType =='2' || amType ==undefined"
+							ng-click="addPane('实时资产汇总','OperAssetSummaryController','query/operAssetSummary.html')">
+							<a data-url="page/buttons" href="#operAssetSummary"> <i
+								class="menu-icon fa fa-caret-right"></i>实时资产汇总
+						</a> <b class="arrow"></b>
+						</li> -->
+						
+						<!-- 带工作流属性的实时查询 -->
+						<li class=""
+							ng-click="addPane('实时委托查询','OperWFOrderServiceController','query/operWFOrder.html')">
+							<a data-url="page/buttons" href="#operWFOrder"> <i
+								class="menu-icon fa fa-caret-right"></i> 实时委托查询
+						</a> <b class="arrow"></b>
+						</li>
+						
+						<li class=""
+							ng-click="addPane('实时成交查询','OperWFTradeController','query/operWFTrade.html')">
+							<a data-url="page/buttons" href="#operWFTrade"> <i
+								class="menu-icon fa fa-caret-right"></i> 实时成交查询
+						</a> <b class="arrow"></b>
+						</li>
+						
+						<li class=""
+							ng-click="addPane('实时错单查询','OperWFOrderInsertFailedController','query/operWFOrderInsertFailed.html')">
+							<a data-url="page/buttons" href="#operWFOrderInsertFailed"> <i
+								class="menu-icon fa fa-caret-right"></i> 实时错单查询
+						</a> <b class="arrow"></b>
+						</li>
+							
+					        </ul>
+						</li>
+						
+						
+						
+						<!-- 历史查询 -->
+						<li class="" ><a href="#"
+							class="dropdown-toggle"> <i class="menu-icon fa fa-caret-right"></i> 
+                                                                                                                   历史查询 <b class="arrow fa fa-angle-down"></b>
+						</a> <b class="arrow"></b>
+							<ul class="submenu">
+							
+						<!-- 	<li class=""
+								ng-click="addPane('历史委托查询','HisOrderServiceController','his/hisOrder.html')">
+								<a data-url="page/buttons" href="#hisOrder"> <i
+									class="menu-icon fa fa-caret-right"></i> 历史委托查询
+							</a> <b class="arrow"></b>
+							</li>
+							<li class=""
+								ng-click="addPane('历史成交查询','HisTradeServiceController','his/hisTrade.html')">
+								<a data-url="page/buttons" href="#hisTrade"> <i
+									class="menu-icon fa fa-caret-right"></i> 历史成交查询
+							</a> <b class="arrow"></b>
+							</li> -->
+							<li class=""
+								ng-click="addPane('历史净值查询','HisFundNetValueController','his/hisFundNetValue.html')">
+								<a data-url="page/buttons" href="#HisFundNetValue"> <i
+									class="menu-icon fa fa-caret-right"></i> 历史净值查询
+							</a> <b class="arrow"></b>
+							</li>
+							<li class="" 
+								ng-click="addPane('历史资金查询','HisInvestorAccountController','his/hisInvestorAccount.html')">
+								<a data-url="page/buttons" href="#hisInvestorAccount"> <i
+									class="menu-icon fa fa-caret-right"></i> 历史资金查询
+							</a> <b class="arrow"></b>
+							</li>
+							
+							<li class=""
+								ng-click="addPane('历史委托查询','HisWFOrderServiceController','his/hisWFOrder.html')">
+								<a data-url="page/buttons" href="#hisWFOrder"> <i
+									class="menu-icon fa fa-caret-right"></i> 历史委托查询
+							</a> <b class="arrow"></b>
+							</li>
+							
+							<li class="" 
+								ng-click="addPane('历史成交查询','HisWFTradeServiceController','his/hisWFTrade.html')">
+								<a data-url="page/buttons" href="#hisWFTrade"> <i
+									class="menu-icon fa fa-caret-right"></i> 历史成交查询
+							</a> <b class="arrow"></b>
+							</li>
+							
+							<li class="" 
+								ng-click="addPane('历史持仓查询','HisPositionQueryController','his/hisPosition.html')">
+								<a data-url="page/buttons" href="#hisPositionQuery"> <i
+									class="menu-icon fa fa-caret-right"></i> 历史持仓查询
+							</a> <b class="arrow"></b>
+							</li>
+					        </ul>
+						</li>
+						
+						<!-- 结算数据查询 -->
+						<!-- <li class="" ng-if=" (isAllowIndexSub) && ( amType =='2'  || amType ==undefined )  "><a href="#" -->
+						<li class="" ng-show=" isAllowIndexSub && ( amType =='2'  || amType ==undefined ) ">
+						<a href="#" class="dropdown-toggle"> <i class="menu-icon fa fa-caret-right"></i> 
+						结算数据查询 <b class="arrow fa fa-angle-down"></b>
+						</a> <b class="arrow"></b>
+							<ul class="submenu">
+			
+								<li class=""
+									ng-click="addPane('资产单元成交查询','TradeQueryController','query/tradeQuery.html')">
+									<a data-url="page/buttons" href="#tradeQuery"> <i
+										class="menu-icon fa fa-caret-right"></i> 资产单元成交查询
+								</a> <b class="arrow"></b>
+								</li>
+								<li class=""
+									ng-click="addPane('资产单元资金对账','SubAccountCapitalController','query/subAccountCapital.html')">
+									<a data-url="page/buttons" href="#subAccountCapitalQuery"> <i
+										class="menu-icon fa fa-caret-right"></i> 资产单元资金对账
+								</a> <b class="arrow"></b>
+								</li>
+								<li class=""
+									ng-click="addPane('资产单元持仓查询','SubPositionController','query/subPosition.html')">
+									<a data-url="page/buttons" href="#subPositionQuery"> <i
+										class="menu-icon fa fa-caret-right"></i> 资产单元持仓查询
+								</a> <b class="arrow"></b>
+								</li>
+							
+								<li class=""
+									ng-click="addPane('资产单元日账单','BillQuery','billquery/billquery.html')">
+									<a data-url="page/buttons" href="#billquery"> <i
+										class="menu-icon fa fa-caret-right"></i> 资产单元日账单
+								</a> <b class="arrow"></b>
+								</li>
+							</ul>
+						</li>
+					</ul></li>
+					
+					<!-- FOF风控管理菜单 -->
+					<!-- ng-show="menu.fofriskoperClientPositionQuery" -->
+					<li class="" ng-show="menu.home9"><a href="#"
+						class="dropdown-toggle"> <i class="icon-huilv"></i> <span
+							class="menu-text">FOF风控管理</span> <b
+							class="arrow fa fa-angle-down"></b>
+					</a> <b class="arrow"></b>
+						<ul class="submenu">
+
+							<!-- 信息查询 -->
+							<li class=""><a href="#" class="dropdown-toggle"> <i
+									class="menu-icon fa fa-caret-right"></i>风控子节点实时查询<b
+									class="arrow fa fa-angle-down"></b>
+							</a> <b class="arrow"></b>
+								<ul class="submenu">
+
+									<li class=""
+										ng-click="addPane('持仓查询','FofriskoperClientPositionController','FOFRisk/fofriskoperClientPosition.html')">
+										<a data-url="page/buttons" href="#fofriskoperClientPosition">
+											<i class="menu-icon fa fa-caret-right"></i> 持仓查询
+									</a> <b class="arrow"></b>
+									</li>
+									
+									<li class=""
+										ng-click="addPane('委托查询','FofriskOperOrderController','FOFRisk/fofriskoperOrder.html')">
+										<a data-url="page/buttons" href="#fofriskoperOrder">
+											<i class="menu-icon fa fa-caret-right"></i> 委托查询
+									</a> <b class="arrow"></b>
+									</li>
+									
+									<li class=""
+										ng-click="addPane('成交查询','FofriskOperTradeController','FOFRisk/fofriskoperTrade.html')">
+										<a data-url="page/buttons" href="#fofriskoperTrade">
+											<i class="menu-icon fa fa-caret-right"></i> 成交查询
+									</a> <b class="arrow"></b>
+									</li>
+									
+									<li class=""
+										ng-click="addPane('资金查询','FofriskOperInvestorAccountController','FOFRisk/fofriskOperInvestorAccount.html')">
+										<a data-url="page/buttons" href="#fofriskOperInvestorAccount">
+											<i class="menu-icon fa fa-caret-right"></i> 资金查询
+									</a> <b class="arrow"></b>
+									</li>
+									
+									<li class=""
+										ng-click="addPane('风控参数查询','fofRiskParamsController','FOFRisk/fofriskparams.html')">
+										<a data-url="page/buttons" href="#fofriskparams">
+											<i class="menu-icon fa fa-caret-right"></i> 风控参数查询
+									</a> <b class="arrow"></b>
+									</li>
+									
+								</ul>
+							</li>
+							
+							<!-- 风控子节点 -->
+							<li class=""><a href="#" class="dropdown-toggle"> <i
+									class="menu-icon fa fa-caret-right"></i> 风控子节点配置 <b
+									class="arrow fa fa-angle-down"></b>
+							</a> <b class="arrow"></b>
+								<ul class="submenu">
+
+									<li class=""
+										ng-click="addPane('子产品机构配置','fofInstClientController','foffund/fofinstclient.html')">
+										<a data-url="page/buttons" href="#fofinstclient">
+											<i class="menu-icon fa fa-caret-right"></i> 子产品机构配置
+									</a> <b class="arrow"></b>
+									</li>
+									<li class=""
+										ng-click="addPane('子产品配置','fofFundProductController','foffund/foffundproduct.html')">
+										<a data-url="page/buttons" href="#foffundproduct">
+											<i class="menu-icon fa fa-caret-right"></i> 子产品配置
+									</a> <b class="arrow"></b>
+									</li>
+									<li class=""
+										ng-click="addPane('风控子节点配置','fofRiskSubNodeController','foffund/fofrisksubnode.html')">
+										<a data-url="page/buttons" href="#fofrisksubnode">
+											<i class="menu-icon fa fa-caret-right"></i> 风控子节点配置
+									</a> <b class="arrow"></b>
+									</li>
+
+								</ul>
+							</li>
+
+							<!-- 产品组风控 -->
+							<li class=""><a href="#" class="dropdown-toggle"> <i
+									class="menu-icon fa fa-caret-right"></i> 产品组风控 <b
+									class="arrow fa fa-angle-down"></b>
+							</a> <b class="arrow"></b>
+								<ul class="submenu">
+
+									<li class=""
+										ng-click="addPane('产品组配置','fofFundGroupController','foffund/foffundgroup.html')">
+										<a data-url="page/buttons" href="#foffundgroup">
+											<i class="menu-icon fa fa-caret-right"></i> 产品组配置
+									</a> <b class="arrow"></b>
+									</li>
+
+								</ul>
+							</li>
+                            <!-- 风控预警监控 -->
+							<li class="" ng-click="addPane('风控预警','testController','FOFRisk/fofriskPrewarn.html')">
+							       <a data-url="page/buttons" href="#fofriskPrewarn">
+											<i class="menu-icon fa fa-caret-right"></i> 风控预警查询
+									</a> <b class="arrow"></b>
+                            </li>
+                            
+                            <!-- 持仓分布 -->
+							<li class="" ng-click="addPane('持仓分布','testController','FOFRisk/fofriskPositionDistribution.html')">
+							       <a data-url="page/buttons" href="#fofriskPositionDistribution">
+											<i class="menu-icon fa fa-caret-right"></i> 持仓分布
+									</a> <b class="arrow"></b>
+                            </li>
+
+
+						</ul>
+					</li>
+
+			</ul>
+			<!-- /.nav-list -->
+
+			<!-- /section:basics/sidebar.layout.minimize -->
+			<script type="text/javascript">
+				try {
+					ace.settings.check('sidebar', 'collapsed')
+				} catch (e) {
+				}
+			</script>
+		</div>
+		</div>
+		<div id="hideSideBar" class="hideSideBar">
+			<a href="" ng-click="showSidebar()"> >> </a>
+		</div>
+		<!-- /section:basics/sidebar -->
+		<div class="main-content" id="main-content">
+			<div class="main-content-inner">
+				<!-- #section:basics/content.breadcrumbs -->
+
+
+				<div class="page-content">
+					<tabs> <pane
+						ng-repeat="pane in panes | filter:{includedInTabView:true}"
+						tab-title="{{pane.name}}" controller="{{pane.controller}}"
+						template="{{pane.partial}}"> </pane> </tabs>
+					<div class="page-content-area" data-ajax-content="false"></div>
+					<input type="hidden" ng-model="modelFlag" />
+				</div>
+				<!-- /.page-content -->
+			</div>
+		</div>
+		<!-- /.main-content -->
+
+		<div class="footer">
+			<div class="footer-inner" id="footer-inner">
+				<!-- #section:basics/footer -->
+				<div class="footer-content">
+					<span class="bigger-120"> <small><span
+							class="blue bolder">Octopus-v1.37-170116</span></small> <small>&copy; Copyright
+							2016 <a href="http://www.quantdo.com.cn" target="_blank">quantdo.com.cn</a>
+							Inc. All Rights Reserved.
+					</small>
+					</span>
+				</div>
+
+				<!-- /section:basics/footer -->
+			</div>
+		</div>
+
+		<a href="#" id="btn-scroll-up"
+			class="btn-scroll-up btn btn-sm btn-inverse"> <i
+			class="ace-icon fa fa-angle-double-up icon-only bigger-110"></i>
+		</a>
+	</div>
+	<!-- /.main-container -->
+	<!-- basic scripts -->
+
+	<!--[if !IE]> -->
+	<script type="text/javascript">
+		window.jQuery
+				|| document
+						.write("<script src='../framework/ui-ace/assets/js/jquery.js'>"
+								+ "<" + "/script>");
+	</script>
+	
+	<!-- 工作流框架js -->
+	<script src="../framework/ui-ace/multiselect/js/jquery-ui.min.js"></script>
+
+	<!-- <![endif]-->
+
+	<!--[if IE]>
+<script type="text/javascript">
+    window.jQuery || document.write("<script src='../framework/ui-ace/assets/js/jquery1x.js'>" + "<" + "/script>");
+</script>
+<![endif]-->
+
+	<script type="text/javascript">
+		if ('ontouchstart' in document.documentElement)
+			document
+					.write("<script src='../framework/ui-ace/assets/js/jquery.mobile.custom.js'>"
+							+ "<" + "/script>");
+	</script>
+	<script src="../framework/ui-ace/assets/js/bootstrap.js"></script>
+	<script
+		src="../framework/ui-ace/assets/js/date-time/bootstrap-datepicker.js"></script>
+	<script
+		src="../framework/ui-ace/assets/js/date-time/locales/bootstrap-datepicker.zh-CN.js"></script>
+	<script
+		src="../framework/ui-ace/assets/js/date-time/bootstrap-timepicker.js"></script>
+		
+	<script src="../framework/libraries/my97DatePicker/WdatePicker.js"></script>
+
+	<!-- jquery datatables -->
+	<script src="../framework/ui-ace/assets/js/dataTables/jquery.dataTables.js"></script>
+	<script src="../framework/ui-ace/assets/js/dataTables/sum().js"></script>
+	<script
+		src="../framework/ui-ace/assets/js/dataTables/jquery.dataTables.bootstrap.js"></script>
+	<script
+		src="../framework/ui-ace/assets/js/dataTables/extensions/TableTools/js/dataTables.tableTools.js"></script>
+	<script
+		src="../framework/ui-ace/assets/js/dataTables/extensions/ColVis/js/dataTables.colVis.js"></script>
+	<!-- end jquery datatables -->
+
+	<!-- angularjs -->
+	<script src="../framework/libraries/angular/1.4.3/angular.min.js"></script>
+	<script src="../framework/libraries/angular/1.4.3/angular-route.min.js"></script>
+	<script
+		src="../framework/libraries/angular/directives/datatables/angular-datatables.min.js"></script>
+	<!--fixed column-->
+	<script
+		src="../framework/libraries/angular/directives/datatables/dataTables.fixedColumns.js"></script>
+	<script
+		src="../framework/libraries/angular/directives/datatables/angular-datatables.fixedcolumns.min.js"></script>
+	<script src="../framework/libraries/isjs/is.min.js"></script>
+
+	<!-- jquery upload file -->
+	<script src="../framework/libraries/jquery/jquery.form/jquery.form.js"></script>
+	<script
+		src="../framework/libraries/jquery/upload-file/jquery.uploadfile.min.js"></script>
+	<link rel="stylesheet"
+		href="../framework/libraries/jquery/upload-file/uploadfile.custom.css" />
+	<link rel="stylesheet"
+		href="../framework/libraries/jquery/upload-file/uploadfile.css" />
+
+
+	<!-- angular upload file -->
+	<script
+		src="../framework/libraries/angular/ng-file-upload-master/ng-file-upload-shim.min.js"></script>
+	<script
+		src="../framework/libraries/angular/ng-file-upload-master/ng-file-upload.min.js"></script>
+
+	<!-- 弹框组件 -->
+	<script src="../framework/ui-ace/assets/js/layer/layer.js"></script>
+
+	<script src="../framework/libraries/framework.js"></script>
+	<script src="../framework/libraries/util/Namespace.js"></script>
+	<script src="../config.js"></script>
+
+
+
+	<!--业务常量定义-->
+	<script src="../constants.js"></script>
+	<!-- 登录检查 -->
+	<script src="../service/LogonCheckService.js"></script>
+	<!-- ztree  -->
+	<script src="../framework/libraries/ztree/js/jquery.ztree.core-3.5.js"></script>
+	<script
+		src="../framework/libraries/ztree/js/jquery.ztree.excheck-3.5.js"></script>
+	
+
+	<!--tab-->
+
+	<script
+		src="../framework/libraries/angular/directives/angularjsTab/angular-ajax-tabs.js"></script>
+	<script src="../app.js"></script>
+
+	<!--Home-->
+	<script src="./home.js"></script>
+	<!--Home-->
+	<script src="./index.js"></script>
+
+	<!-- controller js -->
+	<script src="./blank/blank.js"></script>
+	<script src="./table/tables.js"></script>
+	<script src="./file/file.js"></script>
+
+	<!-- service js -->
+	<script src="../service/TestService.js"></script>
+
+	<!--委托流量查询-->
+	<script src="./query/flowQuery.js"></script>
+	<script src="../service/FlowQueryService.js"></script>
+	
+	<!--用户在线管理-->
+	<script src="./user/userOnlineManage.js"></script>
+	<script src="../service/UserOnlineManageService.js"></script>
+    <!--日志管理-->
+	<script src="./user/logManage.js"></script>
+	<script src="../service/LogManageService.js"></script>
+
+	<!--角色管理-->
+	<script src="./user/roleManage.js"></script>
+	<script src="../service/RoleManageService.js"></script>
+
+	<!--用户管理-->
+	<script src="./user/userManage.js"></script>
+	<script src="../service/UserManageService.js"></script>
+	
+	<!--交易员IP校验-->
+	<script src="./user/tradeUserIPCheck.js"></script>
+	<script src="../service/TradeUserIPCheckService.js"></script>
+	
+	<!--交易员产品校验-->
+	<script src="./user/tradeUserProductCheck.js"></script>
+	<script src="../service/TradeUserProductCheckService.js"></script>
+	
+	<!--用户关联账号-->
+	<script src="./user/accountLink.js"></script>
+	<script src="../service/AccountLinkService.js"></script>
+
+    <!--用户关联产品-->
+	<script src="./product/productLink.js"></script>
+	<script src="../service/UserFundProductService.js"></script>
+
+	<!--交易导入-->
+	<script src="./upload/upload.js"></script>
+	<script src="../service/UploadService.js"></script>
+
+	<!--成交维护-->
+	<script src="../service/TradeService.js"></script>
+	<script src="./dailysettle/trade.js"></script>
+	<!--成交维护-->
+	<script src="./dailysettle/capTrade.js"></script>
+
+	<!--资产单元开户-->
+	<script src="./account/traderReg.js"></script>
+	<script src="../service/TraderRegService.js"></script>
+
+	<!--资产单元开户-->
+	<script src="./account/subCapitalAccountReg.js"></script>
+	<script src="../service/SubCapitalAccountRegService.js"></script>
+
+	<!--资产单元资料维护-->
+	<script src="./account/trader.js"></script>
+	<script src="../service/TraderService.js"></script>
+
+	<!--资金账户维护-->
+	<script src="./account/capitalAccount.js"></script>
+	<script src="../service/CapitalAccountService.js"></script>
+
+	<!--账户分组管理-->
+	<script src="./account/accountGroup.js"></script>
+	<script src="../service/AccountGroupService.js"></script>
+
+	<!--银行账户管理-->
+	<script src="./settleparam/bankAccount.js"></script>
+	<script src="../service/BankAccountService.js"></script>
+
+	<!--质押管理-->
+	<script src="./settleparam/mortMoney.js"></script>
+	<script src="../service/MortMoneyService.js"></script>
+
+
+	<!--资产单元管理-->
+	<script src="./account/subCapitalAccount.js"></script>
+	<script src="../service/SubCapitalAccountService.js"></script>
+
+	<!--资产分类管理-->
+    <script src="./windControl/assetGroupForManagement.js"></script>
+	<script src="../service/RiskStromDataService.js"></script>
+
+    <!--证券附加信息导入-->
+    <script src="./windControl/stockAddInformationImport.js"></script>
+	<script src="../service/StockAddInformationImportService.js"></script>
+
+    <!--递延费率设置-->
+    <script src="./feeset/deferredFeeSet.js"></script>
+	<script src="../service/DeferredFeeSetService.js"></script>
+
+    <!--默认证券品种费率设置-->
+    <script src="./feeset/defaultStockProductFeeSet.js"></script>
+	<script src="../service/DefaultStockProductFeeSet.js"></script>
+    <!--证券品种费率-->
+    <script src="./feeset/stockProductFeeSet.js"></script>
+	<script src="../service/StockProductFeeSet.js"></script>
+
+	<!--分组管理-->
+	<script src="./account/subAccountGroup.js"></script>
+	<script src="../service/SubAccountGroupService.js"></script>
+
+	<!--交易用户管理-->
+	<script src="./account/tradeUser.js"></script>
+	<script src="../service/TradeUserService.js"></script>
+
+	<!--会员管理-->
+	<script src="./account/member.js"></script>
+	<script src="../service/MemberService.js"></script>
+
+	<!--用户交易员关系管理-->
+	<script src="./account/userTrader.js"></script>
+	<script src="../service/UserTraderService.js"></script>
+
+	<!--交易客户管理-->
+	<script src="./account/exchClient.js"></script>
+	<script src="../service/ExchClientService.js"></script>
+
+	<!--单边产品组管理-->
+	<script src="./combmargin/singleEdgeProductGroup.js"></script>
+	<script src="../service/SingleEdgeProductGroupService.js"></script>
+
+	<!-- 资产单元模板关系 -->
+	<script src="../service/SubAccountTemplateService.js"></script>
+	<!--不参与单边合约管理-->
+	<script src="./combmargin/notSingleEdgeInstrument.js"></script>
+	<script src="../service/NotSingleEdgeInstrumentService.js"></script>
+
+	<!--配资管理-->
+	<script src="./settleparam/withFunding.js"></script>
+	<script src="../service/WithFundingService.js"></script>
+
+	<!--账户资金管理-->
+	<script src="../service/AccountCapitalService.js"></script>
+	<script src="./capital/accountCapital.js"></script>
+
+	<!--汇率管理-->
+	<script src="./settleparam/exchangeRate.js"></script>
+	<script src="../service/ExchangeRateService.js"></script>
+
+	<!--经纪公司管理-->
+	<script src="./account/brokerageFirm.js"></script>
+	<script src="../service/BrokerageFirmService.js"></script>
+
+	<!--基金产品管理-->
+	<script src="./product/fundProduct.js"></script>
+	<script src="../service/FundProductService.js"></script>
+
+    <!--资产单元产品管理-->
+	<script src="./product/fixedIncomeSet.js"></script>
+	<script src="../service/FixedIncomeSetService.js"></script>
+
+    <!--其他权益管理-->
+	<script src="./product/otherIncomeSet.js"></script>
+	<script src="../service/OtherIncomeSetService.js"></script>
+
+
+	<!--出入金管理-->
+	<script src="./settleparam/tmpMoneyIO.js"></script>
+	<script src="../service/TmpMoneyIOService.js"></script>
+
+	<!--出入金复核-->
+	<script src="./settleparam/moneyIORecheck.js"></script>
+
+	<!--子资金出入金管理-->
+	<script src="./settleparam/subMoneyIO.js"></script>
+	<script src="../service/SubMoneyIOService.js"></script>
+
+	<!--出入金流水查询-->
+	<script src="./settleparam/moneyIO.js"></script>
+	<script src="../service/MoneyIOService.js"></script>
+
+	<!--品种管理-->
+	<script src="./tradeparam/product.js"></script>
+	<script src="../service/ProductService.js"></script>
+
+	<!--结算参数管理-->
+	<script src="./settleparam/settleParamInfo.js"></script>
+	<script src="../service/SettleParamService.js"></script>
+
+	<!--合约管理-->
+	<script src="./tradeparam/instrument.js"></script>
+	<script src="../service/InstrumentService.js"></script>
+
+	<!--期权系列管理-->
+	<script src="./tradeparam/optionSeries.js"></script>
+	<script src="../service/OptionSeriesService.js"></script>
+
+	<!--交易通道管理-->
+	<script src="./account/seat.js"></script>
+	<script src="../service/SeatService.js"></script>
+	
+	<!--资金账户导入-->
+    <script src="./upload/uploadFund.js"></script>
+    	
+	<!--黄金客户账户资金账户导入-->
+    <script src="./upload/uploadHoldFund.js"></script>
+    <!--客户持仓导入-->
+    <script src="./upload/uploadHoldDate.js"></script>
+
+
+     <!--结算文件导入-->
+    <script src="./upload/uploadSettleFile.js"></script>
+
+
+	<!--结算价管理-->
+	<script src="./tradeparam/settlePrice.js"></script>
+	<script src="../service/SettlePriceService.js"></script>
+
+	<!--默认保证金设置(期货)-->
+	<script src="./marginset/futures/defaultMarginSet.js"></script>
+	<script src="../service/DefaultMarginSetService.js"></script>
+
+	<!--产品保证金设置(期货)-->
+	<script src="./marginset/futures/productMarginSet.js"></script>
+	<script src="../service/ProductMarginSetService.js"></script>
+
+	<!--合约保证金设置(期货)-->
+	<script src="./marginset/futures/instrumentMarginSet.js"></script>
+	<script src="../service/InstrumentMarginSetService.js"></script>
+
+
+
+	<!--默认保证金设置(期权)-->
+	<script src="./marginset/option/defaultMarginSet.js"></script>
+	<script src="../service/DefaultMarginSetService.js"></script>
+
+	<!--产品保证金设置(期权)-->
+	<script src="./marginset/option/productMarginSet.js"></script>
+	<script src="../service/ProductMarginSetService.js"></script>
+
+	<!--合约保证金设置(期权)-->
+	<script src="./marginset/option/instrumentMarginSet.js"></script>
+	<script src="../service/InstrumentMarginSetService.js"></script>
+
+
+	<!--默认手续费设置-->
+	<script src="./feeset/defaultFeeSet.js"></script>
+	<script src="../service/DefaultFeeSetService.js"></script>
+
+	<!-- 资金账号组合持仓导入 -->
+	<script src="./windControl/uploadCombPOsitionDetail.js"></script>
+	<script src="../service/UploadCombPositionDetailService.js"></script>
+	
+	<!--产品手续费设置-->
+	<script src="./feeset/productFeeSet.js"></script>
+	<script src="../service/ProductFeeSetService.js"></script>
+
+	<!-- 手续费模板 -->
+	<script src="./feeset/feeTemplate.js"></script>
+	<script src="../service/FeeTemplateService.js"></script>
+	<script src="../service/FeeTemplateProductService.js"></script>
+
+	<!-- 客户资金帐号对应模板 -->
+	<script src="./marginset/subAccountTemplate.js"></script>
+	<script src="../service/SubAccountTemplateService.js"></script>
+
+	<!--合约手续费(期货)-->
+	<script src="./feeset/futures/instrumentFeeSet.js"></script>
+	<script src="../service/InstrumentFeeSetService.js"></script>
+
+	<!--合约手续费(期权)-->
+	<script src="./feeset/option/instrumentFeeSet.js"></script>
+	<script src="../service/InstrumentFeeSetService.js"></script>
+
+
+	<!--资产单元产品手续费-->
+	<script src="./feeset/subProductFeeSet.js"></script>
+	<script src="../service/SubProductFeeSetService.js"></script>
+
+	<!--资产单元合约手续费-->
+	<script src="./feeset/subInstrumentFeeSet.js"></script>
+	<script src="../service/SubInstrumentFeeSetService.js"></script>
+
+	<!--默认合约保证金-->
+	<script src="./marginset/defaultInstrumentMarginSet.js"></script>
+	<script src="../service/DefaultInstrumentMarginSetService.js"></script>
+
+	<!--资产单元产品保证金-->
+	<script src="./marginset/subProductMarginSet.js"></script>
+	<script src="../service/SubProductMarginSetService.js"></script>
+
+	<!--品种保证金模板-->
+	<script src="../service/MarginTemplateProductService.js"></script>
+
+	<!--保证金模板-->
+	<script src="./marginset/marginTemplate.js"></script>
+	<script src="../service/MarginTemplateService.js"></script>
+
+
+	<!--资产单元合约保证金-->
+	<script src="./marginset/subInstrumentMarginSet.js"></script>
+	<script src="../service/SubInstrumentMarginSetService.js"></script>
+
+	<!--标的指数收盘价-->
+	<script src="./settleparam/underlyingPrice.js"></script>
+	<script src="../service/UnderlyingPriceService.js"></script>
+
+	<!--日终结算-->
+	<script src="./dailysettle/dailySettle.js"></script>
+	<script src="../service/DailySettleService.js"></script>
+	<script src="../service/SysCalendarService.js"></script>
+
+	<!--资金结算-->
+	<script src="./dailysettle/moneySettle.js"></script>
+
+	<!--结算回退-->
+	<script src="./dailysettle/settleRollback.js"></script>
+
+	<!--上场数据生成-->
+	<script src="./dailysettle/dataToTrade.js"></script>
+	<script src="../service/DataToTradeService.js"></script>
+
+	<!--交易所信息维护-->
+	<script src="./tradeparam/exchange.js"></script>
+	<script src="../service/ExchangeService.js"></script>
+	<!--运行监控  runMonitor-->
+	<script src="./monitor/runMonitor.js"></script>
+	<script src="../service/RunMonitorService.js"></script>
+	<!--业务稽核  busAudit-->
+	<script src="./busaudit/busAudit.js"></script>
+	<script src="../service/BusAuditService.js"></script>
+	<!--登录信息查询 userSession -->
+	<script src="./usersession/userSession.js"></script>
+	<script src="../service/UserSessionService.js"></script>
+	<!--Begin查询类业务-->
+
+	<script src="../service/CommonQueryService.js"></script>
+	<!--到期合约持仓查询-->
+	<script src="./query/dueSubPositionQuery.js"></script>
+	<!--资产单元资金查询-->
+	<script src="./query/subAccountCapital.js"></script>
+	<!--账户资金查询-->
+	<script src="./query/accountCapital.js"></script>
+	<!--账户持仓查询-->
+	<script src="./query/position.js"></script>
+	<!--资产单元持仓查询-->
+	<script src="./query/subPosition.js"></script>
+	<!--客户实时持仓查询-->
+	<script src="./query/operClientPositionQuery.js"></script>
+	<script src="../service/OperClientPositionService.js"></script>
+	<!--客户实时成交查询-->
+	<script src="./query/operTrade.js"></script>
+	<script src="../service/OperTradeService.js"></script>
+	<script src="./query/operWFTrade.js"></script>
+	<script src="../service/OperWFTradeService.js"></script>
+	<!--客户实时错单查询-->
+	<script src="./query/operOrderInsertFailed.js"></script>
+	<script src="../service/OperOrderInsertFailedService.js"></script>
+	<script src="./query/operWFOrderInsertFailed.js"></script>
+	<script src="../service/OperWFOrderInsertFailedService.js"></script>
+	<!--客户实时委托查询-->
+	<script src="./query/operOrder.js"></script>
+	<script src="../service/OperOrderService.js"></script>
+	<script src="./query/operWFOrder.js"></script>
+	<script src="../service/OperWFOrderService.js"></script>
+	<!--客户历史委托查询-->
+	<script src="./his/hisOrder.js"></script>
+	<script src="../service/HisOrderService.js"></script>
+	<script src="./his/hisWFOrder.js"></script>
+	<script src="../service/HisWFOrderService.js"></script>
+	<!--客户历史成交查询-->
+	<script src="./his/hisTrade.js"></script>
+	<script src="../service/HisTradeService.js"></script>
+	<script src="./his/hisWFTrade.js"></script>
+	<script src="../service/HisWFTradeService.js"></script>
+	<!--历史净值查询-->
+	<script src="./his/hisFundNetValue.js"></script>
+	<script src="../service/HisFundNetValueService.js"></script>
+	<!--历史资金查询-->
+	<script src="./his/hisInvestorAccount.js"></script>
+	<script src="../service/HisInvestorAccountService.js"></script>
+	<!--历史资金查询-->
+	<script src="./his/hisPosition.js"></script>
+	<script src="../service/HisPositionService.js"></script>
+	
+	
+	
+	<!--客户实时账户资金查询-->
+	<script src="./query/operInvestorAccountQuery.js"></script>
+	<script src="../service/OperInvestorAccountService.js"></script>
+	<!--客户实时账户资金查询-->
+	<script src="./query/operInvestorAccountQuery.js"></script>
+	<script src="../service/OperInvestorAccountService.js"></script>
+	<!-- 实时资产汇总 -->
+	<script src="./query/operAssetSummary.js"></script>
+	<script src="../service/OperAssetSummaryService.js"></script>
+	<!--成交查询-->
+	<script src="./query/tradeQuery.js"></script>
+	<!--查询系统操作员信息-->
+	<script src="../service/SystemParamService.js"></script>
+	<!-- 设置资产单元参数 -->
+	<script src="./userriskparameter/userriskparameter.js"></script>
+	<script src="../service/SubAccountRiskParamService.js"></script>
+	<script src="../service/AccountTradeComplianceService.js"></script>
+
+	<!-- 设置资产单元参数 -->
+	<script src="./userriskparameter/userriskparameterfof.js"></script>
+	<!-- 设置资产单元限制交易的交易品种 -->
+	<script src="./userriskvariety/userriskvariety.js"></script>
+	<script src="../service/SubCapitalAccountTradingLimitService.js"></script>
+	<script src="./newUserriskvariety/newUserriskvariety.js"></script>
+	<script src="./newUserriskvariety/newUserriskvarietyfof.js"></script>
+
+	<!-- 日账单查询 -->
+	<script src="./billquery/billquery.js"></script>
+	<script src="../service/SubAccountCapitalService.js"></script>
+	<script src="../service/SubPositionDetailService.js"></script>
+
+	<!-- 交易员管理 -->
+	<script src="./tradermanage/tradermanage.js"></script>
+
+	<!-- 交易员管理 -->
+	<script src="./tradermanage/tradermanagefof.js"></script>
+
+	<!-- 风控员管理 -->
+	<script src="./windcontrolmanage/windcontrolmanage.js"></script>
+	<!-- 风控员管理 -->
+	<script src="./windcontrolmanage/windcontrolmanagefof.js"></script>
+	
+	<!-- 工作流设置 -->
+	<script src="./account/workFlowSet.js"></script>
+	<script src="../service/WorkFlowSetService.js"></script>
+	
+	<script src="../service/FundWorkFlowService.js"></script>
+
+	<!-- 杠杆基数设置 -->
+	<script src="./account/leverage.js"></script>
+	<script src="../service/LeverageService.js"></script>
+
+	<!--  -->
+	<script src="../service/UserAccountGroupService.js"></script>
+	<script src="../service/UserAccountService.js"></script>
+
+	<!-- 操作员管理 -->
+	<script src="./operationalmanage/operationalmanage.js"></script>
+	<!-- 实时资金查询 -->
+	<script src="./query/realTimeAccountQuery.js"></script>
+	<script src="../service/OperInvestorAccountService.js"></script>
+
+	<!-- 机构管理 -->
+	<script src="./account/instClient.js"></script>
+	<script src="../service/InstClientService.js"></script>
+	<script src="../service/InstAdminService.js"></script>
+	
+	<!-- 产品级风控 -->
+	<script src="./riskparam/fundProductRiskParam.js"></script>
+	<script src="../service/FundProductRiskParamService.js"></script>
+	
+	<!-- 产品级风控界面 -->
+	<script src="./riskparam/riskControl.js"></script>
+	<script src="../service/RiskWarnResultService.js"></script>
+	
+	<!-- 资金账户级风控 -->
+	<script src="./riskparam/capitalRiskParam.js"></script>
+	<!-- 资金账户级风控 -->
+	<script src="./riskparam/subCapitalRiskParam.js"></script>
+	
+	<!-- 多选框 -->
+    <script src="../framework/ui-ace/multiselect/js/prettify.js"></script>
+    <script src="../framework/ui-ace/multiselect/js/jquery.multiselect.js"></script>
+    
+        
+    <!-- 交易手续费率 -->
+    <script src="./feeset/operInvestorFee.js"></script>
+	<script src="../service/OperInvestorFeeService.js"></script>
+	
+	<!-- 交易保证金率 -->
+    <script src="./marginset/operInvestorMargin.js"></script>
+	<script src="../service/OperInvestorMarginService.js"></script>
+	
+	<!-- 现货交易 -->
+    <script src="./spot/spottrade.js"></script>
+	<script src="../service/SpotTradeService.js"></script>
+	
+	<!-- 现货库存 -->
+    <script src="./spot/spotstorage.js"></script>
+	<script src="../service/SpotStorageService.js"></script>
+	
+	<!-- 抵押品管理  -->
+	<script src="./mortgage/mortgage.js"></script>
+	<script src="../service/MortgageService.js"></script>
+	
+	<!-- -------------------------------------fof子节点菜单js--------------------------------------------------- -->
+    <!-- FOFRisk风控管理 -->
+    
+    <script src="../service/FundProductRisknodeService.js"></script>
+    <!-- 母基金机构配置 -->
+    <script src="./foffund/fofinstclient.js"></script>
+    <script src="../fofservice/FOFInstClientService.js"></script>
+   
+    <!-- 产品配置 -->
+    <script src="./foffund/foffundproduct.js"></script>
+    <script src="../fofservice/FOFFundProductService.js"></script>
+   
+    <!-- 风控子节点配置 -->
+    <script src="./foffund/fofrisksubnode.js"></script>
+    <script src="../fofservice/FOFRiskSubNodeService.js"></script>
+    
+    <!-- 风控产品组 -->
+    <script src="./foffund/foffundgroup.js"></script>
+    <script src="../fofservice/FOFFundGroupService.js"></script>
+    <script src="../fofservice/FOFRiskFundGroupWithFundProductService.js"></script>
+    <script src="../fofservice/FOFRiskFundGroupNetRiskParamService.js"></script>
+    <script src="../fofservice/FOFRiskProductProvisionParamService.js"></script>
+   
+   <!-- FOFRisk风控管理     信息查询-->
+     <!-- 持仓查询 -->
+    <script src="./FOFRisk/fofriskoperClientPosition.js"></script>
+    <script src="../fofservice/FOFriskoperClientPositionService.js"></script>
+    <!-- 委托查询 -->
+    <script src="./FOFRisk/fofriskoperOrder.js"></script>
+    <script src="../fofservice/FOFriskoperOrderService.js"></script>
+    <!-- 成交查询 -->
+    <script src="./FOFRisk/fofriskoperTrade.js"></script>
+    <script src="../fofservice/FOFriskoperTradeService.js"></script>
+    <!-- 资金查询 -->
+    <script src="./FOFRisk/fofriskOperInvestorAccount.js"></script>
+    <script src="../fofservice/FOFriskOperInvestorAccountService.js"></script>
+    <!-- 风控参数查询 -->
+    <script src="./FOFRisk/fofriskparams.js"></script>
+    <script src="../fofservice/FOFRiskParamsService.js"></script>
+    
+     <!-- 风控预警信息 -->
+    <script src="./FOFRisk/fofriskPrewarn.js"></script>
+    <script src="../fofservice/FOFRiskPrewarnService.js"></script>
+    
+     <!-- 持仓分布 -->
+    <script src="./FOFRisk/fofriskPositionDistribution.js"></script>
+    <script src="../service/FofriskPositionDistributionService.js"></script>
+	
+
+	<!--End查询-->
+	<!-- end controller js -->
+	<!-- directives -->
+	<!--<script src="./directives/datatable.js"></script>-->
+
+	<!-- ace scripts -->
+	<script src="../framework/ui-ace/assets/js/ace/elements.scroller.js"></script>
+	<script src="../framework/ui-ace/assets/js/ace/elements.colorpicker.js"></script>
+	<script src="../framework/ui-ace/assets/js/ace/elements.fileinput.js"></script>
+	<script src="../framework/ui-ace/assets/js/ace/elements.typeahead.js"></script>
+	<script src="../framework/ui-ace/assets/js/ace/elements.wysiwyg.js"></script>
+	<script src="../framework/ui-ace/assets/js/ace/elements.spinner.js"></script>
+	<script src="../framework/ui-ace/assets/js/ace/elements.treeview.js"></script>
+	<script src="../framework/ui-ace/assets/js/ace/elements.wizard.js"></script>
+	<script src="../framework/ui-ace/assets/js/ace/elements.aside.js"></script>
+	<script src="../framework/ui-ace/assets/js/ace.js"></script>
+	<script src="../framework/ui-ace/assets/js/ace/ace.ajax-content.js"></script>
+	<script src="../framework/ui-ace/assets/js/ace/ace.touch-drag.js"></script>
+	<script src="../framework/ui-ace/assets/js/ace/ace.sidebar.js"></script>
+	<script src="../framework/ui-ace/assets/js/ace/ace.sidebar-scroll-1.js"></script>
+	<script src="../framework/ui-ace/assets/js/ace/ace.submenu-hover.js"></script>
+	<script src="../framework/ui-ace/assets/js/ace/ace.widget-box.js"></script>
+	<script src="../framework/ui-ace/assets/js/ace/ace.settings.js"></script>
+	<script src="../framework/ui-ace/assets/js/ace/ace.settings-rtl.js"></script>
+	<script src="../framework/ui-ace/assets/js/ace/ace.settings-skin.js"></script>
+	<script src="../framework/ui-ace/assets/js/ace/ace.widget-on-reload.js"></script>
+	<script
+		src="../framework/ui-ace/assets/js/ace/ace.searchbox-autocomplete.js"></script>
+
+	<!-- <script src="../framework/ui-ace/assets/js/bootstrap-multiselect.js"></script> -->
+	<script src="../framework/libraries/angularjs-dropdown-multiselect.js"></script>
+	<!-- <script src="../framework/libraries/angular/directives/datatables/dataTables.scroller.js"></script>
+<script src="../framework/libraries/angular/directives/datatables/angular-datatables.scroller.min.js"></script> -->
+	<script src="../framework/libraries/lodash.js"></script>
+	<script src="../framework/libraries/highchart/highcharts.js"></script>
+
+
+</body>
+</html>

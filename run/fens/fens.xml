@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="GB2312"?>
+<fens>
+<!--tcp-->
+	<frontgroup name="trade-tcp"  listenaddr="tcp://127.0.0.1:4901">
+	        <!--PD-->
+		<frontlist name="default front" match="0.0.0.0" mask="0.0.0.0">
+			<frontend address="tcp://127.0.0.1:30005" priority="1"/>
+			<frontend address="tcp://127.0.0.1:30005" priority="1"/>
+		</frontlist>					
+	</frontgroup>
+</fens>

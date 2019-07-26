@@ -1,0 +1,134 @@
+<div class="row" ng-controller="DeferredFeeSetController">
+	<!-- start 定义表单查询-->
+	<form class="form-12">
+		<div class="form-row">
+				<div class="alert alert-success" ng-show="resultInfo">递延费率信息保存成功!</div>
+		</div>
+	 <div class="form-row">
+		    <div class="row-col-one" >
+                    <label class="word-style">开始日期</label>
+					<input class="Wdate value-style word-style"  id="startDate"  onchange=""  ng-model="queryEntity.startDate" onfocus="WdatePicker({lang:'zh-cn',dateFmt:'yyyyMMdd'})"/>
+ 			</div>
+            <div class="row-col-one">
+                    <label class="word-style">结束日期</label>
+                    <input class="Wdate value-style word-style"  id="endDate"  onchange=""  ng-model="queryEntity.endDate" onfocus="WdatePicker({lang:'zh-cn',dateFmt:'yyyyMMdd'})"/>
+            </div>
+			<div class="row-col-one">
+					<label class="word-style">合约代码</label>
+						<select ng-model="queryEntity.productID" class="value-style"
+							ng-options="op.productID as op.productID+'_'+op.instrumentName for op in productDatas"><option
+								value="">全部</option></select>
+				</div>
+			</div>
+			<div class="btn-beyond-one-row">
+				<button type="button" class="btn btn-query btn-word-two" ng-show="deferredFeeSet_query" ng-click="find()" ng-disabled="isQuery">查询</button>
+		    </div>
+		    <div class="row-form row-btn-operation">
+			<div class="row-btn-icon">
+				<span class="btn-add-icon"></span> 
+				<input type="button" ng-show="deferredFeeSet_add"
+					data-target="#deferredFeeSetModal" ng-click="initParameter()"
+					class="btn btn-add btn-icon-two" value="新增" data-toggle='modal'>
+			</div>
+		</div>
+	</form>
+	<!--End 表单查询 -->
+	
+	
+	
+	<!--PAGE CONTENT START-->
+	<div class="col-xs-12 clear-padding-right">
+		<div class="row">
+			<div class="col-xs-12 clear-padding-right">
+				<div>
+					<table id="DeferredFeeSet_dynamic_table"  	class="cell-border stripe" cellspacing="0" width="100%">
+					</table>
+				</div>
+			</div>
+		</div>
+	</div>
+	<!--PAGE CONTENT END-->
+
+	<!-- 新增 修改 模态框（Modal） -->
+	<div class="modal fade" id="deferredFeeSetModal" tabindex="-1" role="dialog"
+		aria-labelledby="myModalLabel" aria-hidden="true"
+		data-backdrop="static" data-keyboard="false">
+		<div class="modal-dialog">
+			<div class="modal-content" >
+				<div class="modal-header">
+					<button type="button" class="close" data-dismiss="modal"
+						aria-hidden="true">&times;</button>
+					<h4 class="modal-title" id="myModalLabel">递延手续费率维护</h4>
+				</div>
+				<div class="modal-body">
+					<!-- 添加表单内容-->
+					<form class="form-horizontal" name="myForm" novalidate>
+										<div class="row form-group">
+											<label for="settleDate" class="col-sm-3 control-label">日期<span
+												style="color: red;">*</span></label>										
+											<div class="col-sm-8" >
+												<input  class="Wdate form-control"  onchange="" 
+													 placeholder="请选择日期" required 	ng-readonly="true"  onfocus="WdatePicker({lang:'zh-cn',dateFmt:'yyyyMMdd'})"
+													ng-model="ModalEntity.settleDate" name="settleDate" ng-disabled="isUpdate"
+													id="settleDate" onkeydown="myKeyup(event,this)" tab="1"  type="text"  
+													maxlength="8" /> <span
+													ng-show=" myForm.settleDate.$dirty &&  myForm.settleDate.$invalid"
+													style="color: red;">日期为必填项</span>
+											</div>
+										</div>
+										<div class="row form-group">
+											<label for="productID"
+												class="col-sm-3 control-label">合约代码</label>
+
+											<div class="col-sm-8" >
+												<select ng-model="ModalEntity.productID" name="productID" required
+													class="form-control add-select"  ng-disabled = "isUpdate"
+													ng-options="op.productID as op.productID+'_'+op.instrumentName for op in productDatas"
+													id="productID" onkeydown="myKeyup(event,this)" tab="2"></select>
+											</div>
+										</div>
+										<div class="row form-group">
+											<label for="direction"
+												class="col-sm-3 control-label">支付方向</label>
+
+											<div class="col-sm-8" >
+												<select ng-model="ModalEntity.direction" name="direction" required
+													class="form-control add-select" 
+													ng-options="op.key as op.key+'_'+op.text for op in directions"
+													id="direction" onkeydown="myKeyup(event,this)" tab="3"></select>
+											</div>
+										</div>
+										<div class="row form-group">
+											<label for="deferredFeeRate"
+												class="col-sm-3 control-label">递延费率<span
+												style="color: red;">*</span></label>
+											<div class="col-sm-8" >
+													<input type="text" class="form-control" id="deferredFeeRate"
+														placeholder="请输入递延费率" onkeydown="myKeyup(event,this)"
+														tab="3" ng-model="ModalEntity.deferredFeeRate" tab="4"
+														ng-pattern="/^\d{1,2}(\.\d{0,6})?$/" name="deferredFeeRate"
+														maxlength="9" required>
+												  <span	 ng-show="myForm.deferredFeeRate.$dirty && myForm.deferredFeeRate.$invalid"
+														style="color: red;">递延费率为必填项，且最多录入2位整数6位小数，例：99.123456</span>
+											</div>
+											<label for="setValue"  class="col-sm-1 control-label behind-input"  style="margin-left:-80px;">%</label>
+										</div>
+									<div>
+										<input type="hidden" ng-bind="ModalEntity.recordIndex">
+									</div>
+					</form>
+					<!--End  添加表单内容-->
+				</div>
+				<div class="modal-footer">
+					<span class="btn btn-info btn-sm popover-info" data-rel="popover"
+						data-placement="bottom" title="" ng-click="canClick || myForm.settleDate.$invalid || myForm.productID.$invalid || 
+						myForm.direction.$invalid || myForm.deferredFeeRate.$invalid || save(ModalEntity)"
+						ng-disabled=" canClick || myForm.settleDate.$invalid || myForm.productID.$invalid || 
+						myForm.direction.$invalid || myForm.deferredFeeRate.$invalid ">&nbsp;确定&nbsp;</span>
+					<span class="btn btn-close btn-sm popover-info" data-rel="popover"
+						data-placement="bottom" title="" data-dismiss="modal">&nbsp;取消&nbsp;</span>
+				</div>
+		</div>
+	  </div>
+	</div>
+</div>

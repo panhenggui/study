@@ -1,0 +1,137 @@
+.capitalAccount-label-style{
+    width: 100px;
+    white-space: nowrap;
+}
+.instClient-select-style{
+    width:170px;
+}
+.capitalAccount-select-style1{
+    width:170px;
+    margin-left: 30px;
+}
+.capitalAccount-input-style{
+	width:160px;
+}
+th{
+    text-align:center;
+    white-space:nowrap;
+}
+td{
+    text-align:center;
+    white-space:nowrap;
+}
+.capitalAccount-modal-width{
+    width: 650px;
+    text-align:center;
+}
+
+.capitalAccount-date-style{
+    padding-top: 0px;
+    padding-bottom: 0px;
+    width: 170px;
+}
+.capitalAccount-radio-style1{
+	float:left;
+	margin : 10px 0 0 0 !important;
+	margin-left : 10px !important;
+}
+.capitalAccount-control-label{
+	white-space: nowrap;
+}
+
+#instClient_passStrength{
+	height:6px;
+	width:120px;
+	border:1px solid #ccc;
+}
+.strengthLv1{
+	background:red;
+	height:6px;
+	width:40px;
+}
+.strengthLv2{
+	background:orange;
+	height:6px;
+	width:80px;
+}
+.strengthLv3{
+	background:green;
+	 height:6px;
+	 width:120px;
+}
+#passText{
+	text-align:center;
+}
+#instClient_passStrengthag{
+	height:6px;
+	width:120px;
+	border:1px solid #ccc;
+}
+#instClient_passStrengthtwo{
+	height:6px;
+	width:120px;
+	border:1px solid #ccc;
+}
+#instClient_passStrengthtwoag{
+	height:6px;
+	width:120px;
+	border:1px solid #ccc;
+}
+.my-update{
+    display: inline-block;
+    width: 40px;
+    height: 25px;
+    line-height: 25px;
+    border: 1px solid #519e67;
+    border-radius: 3px;
+    text-align: center;
+    color: #519e67;
+    margin-right: 5px;
+    cursor: pointer;
+}
+.my-update:hover{
+    background-color: #519e67;
+    color: #ffffff;
+}
+.my-set{
+    display: inline-block;
+    width: 40px;
+    height: 25px;
+    line-height: 25px;
+    border: 1px solid #F08A86;
+    border-radius: 3px;
+    text-align: center;
+    color: #F08A86;
+    margin-right: 5px;
+    cursor: pointer;
+}
+.my-set:hover{
+    background-color: #F08A86;
+    color: #ffffff;
+}
+
+.permission-set{
+    display: inline-block;
+    width: 80px;
+    height: 25px;
+    line-height: 25px;
+    border: 1px solid #38a0da;
+    border-radius: 3px;
+    text-align: center;
+    color: #38a0da;
+    margin-right: 5px;
+    cursor: pointer;
+}
+.permission-set:hover{
+    background-color: #38a0da;
+    color: #ffffff;
+}
+.instClientTip{
+	display:inline-block;
+	width:16px;
+	height:16px;
+	background-image:url(../../pic/riskPicture.png);
+	position: absolute;
+    right: 30px;
+    top: 7px;
+}

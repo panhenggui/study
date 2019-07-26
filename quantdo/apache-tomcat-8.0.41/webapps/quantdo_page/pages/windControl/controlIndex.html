@@ -1,0 +1,428 @@
+<div ng-controller="controlIndexController" style="width: 100%;overflow: auto;">
+    <button class="button-add" id="bootbox-options" ng-click="initControlIndex()"
+            data-toggle="modal" data-target="#myModal">新增
+    </button>
+    <div class="" id="table-div">
+        <!--<table id="example" class="display" width="100%"></table>-->
+        <table id="controlIndex_table" class="cell-border stripe" cellspacing="0" width="100%">
+        </table>
+    </div>
+    <!-- PAGE CONTENT ENDS -->
+
+    <!-- 新增 修改 模态框（Modal） -->
+    <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" data-backdrop="static" data-keyboard="false">
+        <div class="modal-dialog modal-width">
+            <div class="modal-content modal-width">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal"
+                            aria-hidden="true">&times;</button>
+                    <h4 class="modal-title" id="myModalLabel">风控指标管理信息维护</h4>
+                </div>
+                <div class="modal-body">
+                    <!-- 添加表单内容-->
+                    <form class="form-horizontal" role="form" name="myForm" novalidate>
+                        <div class="model-form-left">
+                            <div class="left-header">
+                                <select ng-model="indexEntity.fundId"
+                                        ng-options="op.fundId as op.fundName for op in fundProductList" required>
+                                </select>
+                                <div ng-repeat="myindexList in indexList" class="myIndex">
+                                    <a href="#a1" ng-click="addNewLink(myindexList.indexId,myindexList.indexType)" data-toggle="tab" ng-show="indexPageFlag.page1==myindexList.indexType">{{myindexList.indexName}}</a>
+                                    <a href="#a2" ng-click="addNewLink(myindexList.indexId,myindexList.indexType)" data-toggle="tab" ng-show="indexPageFlag.page2==myindexList.indexType">{{myindexList.indexName}}</a>
+                                    <a href="#a3" ng-click="addNewLink(myindexList.indexId,myindexList.indexType)" data-toggle="tab" ng-show="indexPageFlag.page3==myindexList.indexType">{{myindexList.indexName}}</a>
+                                    <input type="checkbox" id="control_index_select_{{myindexList.indexId}}" ng-click="myselect(myindexList.indexId,myindexList.indexType)" ng-checked="myindexList.checkIndex">
+                                    <input type="hidden" ng-model="indexEntity.indexId">
+                                </div>
+                            </div>
+                            <div class="left-footer">
+                                <label class="directive-only">只显示已选中的指令</label>
+                                <input type="checkbox">
+                            </div>
+                        </div>
+                        <div class="model-form-right">
+                            <div class="tab-pane fade in active" id="a1">
+                                <div class="panel panel-default">
+                                    <div class="panel-heading">
+                                        <h3 class="panel-title">日期/时间信息</h3>
+                                    </div>
+                                    <div class="panel-body">
+                                        <div class="row">
+                                            <div class="col-xs-6">
+                                                <div class="form-group">
+                                                    <label for="startDate" class="col-sm-4 control-label">开始日期</label>
+
+                                                    <div class="col-sm-7">
+                                                        <input type="text" forType="date" class="fundrisk-date-style" name="startDate"
+                                                               ng-readonly="true"  ng-model="indexEntity.startDate">
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="col-xs-6">
+                                                <div class="form-group">
+                                                    <label for="endDate" class="col-sm-4 control-label">结束日期</label>
+
+                                                    <div class="col-sm-7">
+                                                        <input type="text" forType="date" class="fundrisk-date-style" name="endDate"
+                                                               ng-readonly="true"  ng-model="indexEntity.endDate">
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-xs-6">
+                                                <div class="form-group">
+                                                    <label for="startTime" class="col-sm-4 control-label">开始时间</label>
+                                                    <div class="col-sm-7">
+                                                        <input type="text" class="fundrisk-time-style" ng-disabled="timeNotEdit" ng-readonly="true" name="startTime" id="startTime"
+                                                               onClick="WdatePicker({skin:'whyGreen',dateFmt:'HH:mm',isShowClear:false,readOnly:true})"  ng-model="indexEntity.startTime">
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="col-xs-6">
+                                                <div class="form-group">
+                                                    <label for="upBrokerID" class="col-sm-4 control-label">结束时间</label>
+                                                    <div class="col-sm-7" >
+                                                        <input type="text" class="fundrisk-time-style" ng-disabled="timeNotEdit" ng-readonly="true" name="endTime" id="endTime"
+                                                               onClick="WdatePicker({skin:'whyGreen',dateFmt:'HH:mm',isShowClear:false,readOnly:true})"  ng-model="indexEntity.endTime">
+                                                    </div>
+
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="panel panel-default">
+                                    <div class="panel-heading">
+                                        <h3 class="panel-title">状态设置</h3>
+                                    </div>
+                                    <div class="panel-body">
+                                        <div class="row">
+                                            <div class="col-xs-6">
+                                                <div class="form-group">
+                                                    <label for="statusObject" class="col-sm-4 control-label">状态</label>
+
+                                                    <div class="col-sm-7">
+                                                        <select ng-model="indexEntity.statusObject">
+                                                            <option value="0" selected>启用</option>
+                                                            <option value="1">暂停</option>
+                                                        </select>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="panel panel-default">
+                                    <div class="panel-heading">
+                                        <h3 class="panel-title">参数设置</h3>
+                                    </div>
+                                    <div class="panel-body">
+                                        <div class="row">
+                                            <div class="col-xs-12">
+                                                <div class="form-group parameter-width">
+                                                    <div class="col-sm-2">
+                                                        <input type="text" ng-model="myParemeters.lconval1" name="lconval1">
+                                                    </div>
+                                                    <div class="col-sm-2">
+                                                        <select ng-model="myParemeters.lcontag1"
+                                                                ng-options="op.value as op.sign for op in compareFlag" required>
+                                                        </select>
+                                                    </div>
+                                                    <div class="col-sm-3">
+                                                        <select ng-model="myParemeters.condfield1" style="width: 90px;"
+                                                                ng-options="op.shortName as op.paramName for op in compareValue" required>
+                                                        </select>
+                                                    </div>
+                                                    <div class="col-sm-2">
+                                                        <select ng-model="myParemeters.rcontag1"
+                                                                ng-options="op.value as op.sign for op in compareFlag" required>
+                                                        </select>
+                                                    </div>
+                                                    <div class="col-sm-2">
+                                                        <input type="text" ng-model="myParemeters.rconval1" name="rconval1">
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-xs-4">
+                                                <div class="form-group">
+                                                    <label for="startDate" class="col-sm-3 control-label">阈值</label>
+
+                                                    <div class="col-sm-2">
+                                                        <input type="text" class="form-control" ng-model="myParemeters.threshold" name="threshold">
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="col-xs-6">
+                                                <div class="form-group">
+                                                    <label for="endDate" class="col-sm-4 control-label">动作</label>
+
+                                                    <div class="col-sm-3">
+                                                        <select ng-model="myParemeters.actionCode"
+                                                                ng-options="op.value as op.sign for op in compareAction" required>
+                                                        </select>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <button class="button-add" ng-click="addManyParemeters()">增加</button>
+                                        </div>
+                                        <div class="row" style="height: 120px;overflow: auto;">
+                                            <table id="myParameter_table" class="cell-border stripe" cellspacing="0" width="100%">
+                                            </table>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="tab-pane fade" id="a2">
+                                <div class="panel panel-default">
+                                    <div class="panel-heading">
+                                        <h3 class="panel-title">黑白名单设置</h3>
+                                    </div>
+                                    <div class="panel-body">
+                                        <div class="row">
+                                            <div class="col-xs-6">
+                                                <div class="form-group">
+                                                    <label for="startDate" class="col-sm-5 control-label">
+                                                        <span style="color: red;">*</span>资金账号
+                                                    </label>
+
+                                                    <div class="col-sm-7">
+                                                        <select class="select-style form-control"
+                                                                ng-model="indexEntity.subAccountID" name="subAccountID" required
+                                                                ng-options="o.innerAccountID as o.innerAccountID+'_'+o.accountName for o in captailAccounts" >
+                                                        </select>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-xs-6">
+                                            <div class="form-group">
+                                                <label for="endDate" class="col-sm-4 control-label">
+                                                    <span style="color: red;">*</span>类型
+                                                </label>
+
+                                                <div class="col-sm-7">
+                                                    <select class="select-style form-control" ng-model="indexEntity.limitType">
+                                                        <option value="0" selected>黑名单</option>
+                                                        <option value="1">白名单</option>
+                                                    </select>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-xs-6">
+                                                <div class="form-group">
+                                                    <label for="startTime" class="col-sm-4 control-label">
+                                                        <span style="color: red;">*</span> 交易所
+                                                    </label>
+                                                    <div class="col-sm-7">
+                                                        <select class="select-style form-control"
+                                                                ng-model="indexEntity.exchID" name="exchID"
+                                                                ng-options="e.exchID as e.exchID+'_'+e.exchName for e in exchs"
+                                                                required>
+                                                        </select>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-xs-6">
+                                                <div class="form-group">
+                                                    <label for="startTime" class="col-sm-4 control-label">
+                                                        <span style="color: red;">*</span> 类别
+                                                    </label>
+                                                    <div class="col-sm-7">
+                                                        <select class="select-style form-control"
+                                                                ng-model="indexEntity.instrumentID" name="instrumentID"
+                                                                ng-options="p.key as p.text for p in bwProductType"
+                                                                required>
+                                                        </select>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-xs-6">
+                                                <div class="form-group">
+                                                    <label for="startTime" class="col-sm-4 control-label">
+                                                        <span style="color: red;">*</span> 代码
+                                                    </label>
+                                                    <div class="col-sm-7">
+                                                        <textarea type="text" class="newuserrisk-input-style form-control" name="instrumentID"
+                                                                  id="instrumentID" name="instrumentID" ng-model="indexEntity.instrumentID"></textarea>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="tab-pane fade" id="a3">
+                                <div class="row">
+                                    <div class="col-xs-6">
+                                        <div class="form-group">
+                                            <label for="startDate" class="col-sm-5 control-label">
+                                                产品
+                                            </label>
+
+                                            <div class="col-sm-7">
+                                                <select ng-model="indexEntity.fundId" ng-options="op.fundId as op.fundName for op in fundProductList" required>
+                                                </select>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="panel panel-default">
+                                    <div class="panel-heading">
+                                        <h3 class="panel-title">参数设置</h3>
+                                    </div>
+                                    <div class="panel-body">
+                                        <div class="row">
+                                            <div class="col-xs-6">
+                                                <div class="form-group">
+                                                    <label for="endDate" class="col-sm-4 control-label">
+                                                        品种
+                                                    </label>
+
+                                                    <div class="col-sm-7">
+                                                       <textarea ng-model="indexEntity.productID" name="productID"></textarea>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-xs-6">
+                                                <div class="form-group">
+                                                    <label for="startTime" class="col-sm-4 control-label">
+                                                        <span style="color: red;">*</span> 交割前几月
+                                                    </label>
+                                                    <div class="col-sm-7">
+                                                        <input type="text" ng-model="indexEntity.beforeDelivMonths" name="beforeDelivMonths">
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-xs-6">
+                                                <div class="form-group">
+                                                    <label for="startTime" class="col-sm-4 control-label">
+                                                        <span style="color: red;">*</span> 交易权限
+                                                    </label>
+                                                    <div class="col-sm-7">
+                                                        <select ng-model="indexEntity.tradeRight">
+                                                            <option value="0">允许平仓</option>
+                                                            <option value="1" selected>只可平仓</option>
+                                                            <option value="2">禁止交易</option>
+                                                        </select>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                    <!--End  添加表单内容-->
+                </div>
+                <div class="modal-footer">
+                    <input type="hidden" ng-model="indexEntity.myParameters">
+                    <input type="hidden" ng-model="indexEntity.id">
+                    <span class="btn btn-info btn-sm popover-info" data-rel="popover" data-placement="bottom" title=""
+                          ng-click="save(indexEntity)"
+                          >&nbsp;确定&nbsp;</span>
+                    <span class="btn btn-info btn-sm popover-info" data-rel="popover" data-placement="bottom" title=""
+                          data-dismiss="modal">&nbsp;取消&nbsp;</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- /.modal -->
+
+    <!--修改参数设置-->
+    <div class="modal fade" id="myParameterModal" tabindex="-2" role="dialog"
+         aria-labelledby="myParameterLabel" aria-hidden="true" data-backdrop="static" data-keyboard="false">
+        <div class="modal-dialog" style="width: 500px;">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close"
+                            data-dismiss="modal" aria-hidden="true">
+                        &times;
+                    </button>
+                    <h4 class="modal-title" id="myParameterLabel">
+                       修改参数设置
+                    </h4>
+                </div>
+                <div class="modal-body" style="height: 400px;">
+                    <!-- 添加表单内容-->
+                    <form class="form-horizontal" role="form" name="myParameterForm" novalidate>
+                        <div class="form-group parameter-height">
+                            <label for="lconval1" class="col-sm-3 control-label">左条件值<span style="color: red;">*</span></label>
+                            <div class="col-sm-8">
+                                <input type="text" class="form-control"
+                                       ng-model="myParameter.lconval1" name="lconval1" required>
+                            </div>
+                        </div>
+                        <div class="form-group parameter-height">
+                            <label for="lcontag1" class="col-sm-3 control-label">左符号<span style="color: red;">*</span></label>
+                            <div class="col-sm-8">
+                                <select ng-model="myParameter.lcontag1"
+                                        ng-options="op.value as op.sign for op in compareFlag" required>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="form-group parameter-height">
+                            <label for="condfield1" class="col-sm-3 control-label">对应条件<span style="color: red;">*</span></label>
+                            <div class="col-sm-8">
+                                <select ng-model="myParameter.condfield1"
+                                        ng-options="op.shortName as op.paramName for op in compareValue" required>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="form-group parameter-height">
+                            <label for="rcontag1" class="col-sm-3 control-label">右符号<span style="color: red;">*</span></label>
+                            <div class="col-sm-8">
+                                <select ng-model="myParameter.rcontag1"
+                                        ng-options="op.value as op.sign for op in compareFlag" required>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="form-group parameter-height">
+                            <label for="rconval1" class="col-sm-3 control-label">右条件值<span style="color: red;">*</span></label>
+                            <div class="col-sm-8">
+                                <input type="text" class="form-control"
+                                       ng-model="myParameter.rconval1" name="rconval1" required>
+                            </div>
+                        </div>
+                        <div class="form-group parameter-height">
+                            <label for="threshold" class="col-sm-3 control-label">阈值<span style="color: red;">*</span></label>
+                            <div class="col-sm-8">
+                                <input type="text" class="form-control"
+                                       ng-model="myParameter.threshold" name="threshold" required>
+                            </div>
+                        </div>
+                        <div class="form-group parameter-height">
+                            <label for="actionCode" class="col-sm-3 control-label">动作<span style="color: red;">*</span></label>
+                            <div class="col-sm-8">
+                                <select ng-model="myParameter.actionCode"
+                                        ng-options="op.value as op.sign for op in compareAction" required>
+                                </select>
+                            </div>
+                        </div>
+                    </form>
+                    <!--End  添加表单内容-->
+                </div>
+                <div class="modal-footer">
+                    <span class="btn btn-info btn-sm popover-info" data-rel="popover" data-placement="bottom" title=""
+                          ng-click="updateMyParameter(myParameter)">&nbsp;确定&nbsp;</span>
+                    <span class="btn btn-info btn-sm popover-info" data-rel="popover" data-placement="bottom" title=""
+                          data-dismiss="modal">&nbsp;取消&nbsp;</span>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

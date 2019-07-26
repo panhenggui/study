@@ -1,0 +1,17 @@
+td{
+	text-align:center;
+    white-space: nowrap;
+}
+th{
+    text-align:center;
+    white-space: nowrap;
+}
+.queryInput {
+	width: 170px;
+}
+.operAssetSummary-select-style{
+    width:inherit;
+}
+#operAssetSummaryTable tr:hover{
+	color:#444 !important;
+}

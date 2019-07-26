@@ -1,0 +1,134 @@
+.subCapitalAccount-label-style{
+    width: 120px;
+}
+
+.subCapitalAccount-select-style{
+    width:170px;
+}
+
+th{
+    text-align:center;
+    white-space:nowrap;
+}
+td{
+    text-align:center;
+    white-space:nowrap;
+}
+.subCapitalAccount-modal-width{
+    width: 650px;
+    text-align:center;
+}
+
+.subCapitalAccount-date-style{
+    padding-top: 0px;
+    padding-bottom: 0px;
+    width: 170px;
+}
+.subCapitalAccount-radio-style{
+	float:left;
+	margin-top:10px !important;
+}
+.subCapitalAccount-radio-style1{
+	float:left;
+	margin-top:10px !important;
+	margin-right: -3px !important;
+	margin-left: 2px !important;
+}
+.subCapitalAccount-label-style1{
+	white-space: nowrap;
+  	padding-left: 10px;
+    width: 105px;
+}
+.subCapitalAccount-label-style2{
+	white-space: nowrap;
+  	padding-left: 0;
+    width: 105px;
+}
+
+/*�ʽ��˺Ŷ�ѡ����ʽ*/
+.subCapflatLeftDiv{
+    position:relative;
+    height:350px;
+    width:260px;
+    left:35px;
+    overflow:auto;
+     top:-1px;
+    border:1px solid silver;
+
+}
+.subCapflatLeftTitleDiv{
+    position:relative;
+    height:30px;
+    width:260px;
+    left:35px;
+    border:1px solid silver;
+}
+.subCapflatMidDiv{
+    height:100px;
+    width:30px;
+    top:-270px;
+    left:303px;
+    position:relative;
+}
+.subCapflatRightDiv{
+    position:relative;
+    height:350px;
+    width:260px;
+    left:345px;
+    top:-480px;
+    overflow:auto;
+    border:1px solid silver;
+}
+.subCapflatRightTitleDiv{
+    position:relative;
+    height:30px;
+    width:260px;
+    left:345px;
+    top:-480px;
+    overflow:auto;
+    border:1px solid silver;
+    border-bottom: none;
+}
+.subCapbodydiv{
+     height:380px;
+     width:650px;
+}
+.specthead tr th {
+    text-align:center;
+    width:130px;
+    line-height: 20px;
+    padding: 4px;
+    background: #f9f9f9;
+}
+.spectbody tr td {
+    text-align: center;
+    width:130px;
+    border-top:1px solid silver;
+    border-bottom:1px solid silver;
+    padding: 4px;
+    line-height: 20px;
+} 
+.hoverTr:hover{
+    background:silver;
+}
+.windColoerTr{
+	background:#ffffff;
+}
+.selectActive{
+	 background:#e9f7ff;
+}
+.start-row{
+    display: inline-block;
+    width: 40px;
+    height: 25px;
+    line-height: 25px;
+    border: 1px solid #519e67;
+    border-radius: 3px;
+    text-align: center;
+    color: #519e67;
+    cursor: pointer;
+}
+.start-row:hover{
+    background-color: #519e67;
+    color: #ffffff;
+}

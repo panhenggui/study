@@ -1,0 +1,132 @@
+<div class="row" ng-controller="AccountGroupController">
+	<!-- start 定义表单查询-->
+	<form class="form-12">
+		<div class="form-row">
+			<div class="alert alert-success" ng-show="resultInfo">资金账户信息保存成功!</div>
+		</div>
+		<div class="form-row">
+			<div class="row-col-one"  >
+				<label class="word-style">所属机构</label>
+				<select ng-model="queryEntity.instClientID" class="value-style" ng-disabled="noInst" ng-change="changeInstClient(queryEntity.instClientID)"
+						ng-options="op.instClientID as op.instClientAbbrName for op in instClientList">
+					<option value="">全部</option>
+				</select>
+			</div>
+			<div class="row-col-one">
+				<label class="word-style">分组代码</label>
+				<select class="value-style" ng-model="queryEntity.accountGroupID">
+					<option value="">全部</option>
+					<option ng-repeat="accountGroup in accountGroups"
+						value="{{accountGroup.accountGroupID}}">
+						{{accountGroup.accountGroupID}}_{{accountGroup.accountGroupName}}</option>
+				</select>
+			</div>
+			<div class="row-col-one">
+				<label class="word-style">分组名称</label>
+				<input type="text" class="value-style" ng-model="queryEntity.accountGroupName" />
+			</div>
+
+		</div>
+		<div class="btn-beyond-one-row" ng-show="accountGroup_query">
+			<button type="button" class="btn btn-query btn-word-two"
+				ng-click="find()" ng-disabled="isQuery">查询</button>
+		</div>
+		<div class="row-form row-btn-operation"  ng-show="accountGroup_add">
+			<div class="row-btn-icon">
+				<span class="btn-add-icon"></span> <input type="button"
+					data-target="#accountGroupModal" class="btn btn-add btn-icon-two"
+					value="新增" data-toggle='modal'
+					ng-click="initParameter()">
+			</div>
+		</div>
+	</form>
+	<!--End 表单查询 -->
+
+	<!--PAGE CONTENT START-->
+	<div class="col-xs-12 clear-padding-right">
+		<div class="row">
+			<div class="col-xs-12 clear-padding-right">
+				<div>
+					<table id="AccountGroup_dynamic_table" class="cell-border stripe"
+						cellspacing="0" width="100%">
+					</table>
+				</div>
+			</div>
+		</div>
+	</div>
+	<!--PAGE CONTENT END-->
+
+	<!-- 新增 修改 模态框（Modal） -->
+	<div class="modal fade" id="accountGroupModal" tabindex="-1"
+		role="dialog" aria-labelledby="myModalLabel" aria-hidden="true"
+		data-backdrop="static" data-keyboard="false">
+		<div class="modal-dialog">
+			<div class="modal-content">
+				<div class="modal-header">
+					<button type="button" class="close" data-dismiss="modal"
+						aria-hidden="true">&times;</button>
+					<h4 class="modal-title" id="myModalLabel">账户分组信息维护</h4>
+				</div>
+				<div class="modal-body">
+					<!-- 添加表单内容-->
+					<form class="form-horizontal" role="form" name="myForm" novalidate>
+						<div class="form-group">
+							<div class="row">
+								<label for="instClientID" class="col-sm-3 control-label">机构代码<span
+									style="color: red;">*</span></label>
+								<div class="col-xs-6">
+									<select ng-model="ModalEntity.instClientID" required
+										ng-disabled="isUpdate || isInstClient " class="form-control"
+										id="instClientID" name="instClientID"
+										onkeydown="myKeyup(event,this)" tab="0"
+										ng-options="op.instClientID as op.instClientID+'_'+ op.instClientAbbrName for op in instClientList">
+									</select> <span
+										ng-show=" myForm.instClientID.$dirty &&  myForm.instClientID.$invalid"
+										style="color: red;">机构代码为必填项</span>
+								</div>
+							</div>
+						</div>
+
+						<div class="form-group">
+							<div class="row">
+								<label class="col-sm-3 control-label">分组代码<span
+									style="color: red;">*</span></label>
+								<div class="col-xs-6">
+									<input type="text" class="form-control"
+										ng-model="ModalEntity.accountGroupID" id="accountGroupID"
+										placeholder="请输入分组代码" name="accountGroupID"
+										ng-disabled="true" maxlength="3" required
+										onkeydown="myKeyup(event,this)" tab="1" />
+								</div>
+							</div>
+						</div>
+						<div class="form-group">
+							<div class="row">
+								<label class="col-sm-3 control-label">分组名称<span
+									style="color: red;">*</span></label>
+								<div class="col-xs-6">
+									<input type="text" class="form-control" placeholder="请输入分组名称"
+										ng-model="ModalEntity.accountGroupName" id="accountGroupName"
+										name="accountGroupName" required maxlength="20"
+										onkeydown="myKeyup(event,this)" tab="2" />
+								</div>
+							</div>
+						</div>
+						<div>
+							<input type="hidden" ng-bind="ModalEntity.recordIndex">
+						</div>
+					</form>
+					<!--End  添加表单内容-->
+				</div>
+				<div class="modal-footer">
+					<span class="btn btn-info btn-sm popover-info" data-rel="popover"
+						data-placement="bottom" title="" ng-click="canClick || myForm.instClientID.$invalid || myForm.accountGroupID.$invalid || myForm.accountGroupName.$invalid||save(ModalEntity)"
+						ng-disabled=" canClick || myForm.instClientID.$invalid || myForm.accountGroupID.$invalid || myForm.accountGroupName.$invalid">&nbsp;确定&nbsp;</span>
+					<span class="btn btn-close btn-sm popover-info" data-rel="popover"
+						data-placement="bottom" title="" data-dismiss="modal">&nbsp;取消&nbsp;</span>
+				</div>
+			</div>
+		</div>
+	</div>
+	<!-- /.modal -->
+</div>

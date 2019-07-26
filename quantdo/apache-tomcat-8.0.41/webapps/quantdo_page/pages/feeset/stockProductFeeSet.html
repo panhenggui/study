@@ -1,0 +1,341 @@
+<link rel="stylesheet" href="feeset/stockProductFeeSet.css" />
+<div class="row" ng-controller="StockProductFeeSetController">
+	<!-- start 定义表单查询-->
+	<form class="form-12">
+		<div class="form-row">
+				<div class="alert alert-success" ng-show="resultInfo">证券品种费率设置保存成功!</div>
+		</div>
+	 <div class="form-row">
+			<div class="row-col-one">
+					<label class="word-style">资金账号</label>
+					<select ng-model="queryEntity.accountID" class="value-style"
+							ng-options="op.accountID as op.accountID+'_'+op.accountName for op in accountDatas">
+							<option value="">全部</option>
+					</select>
+			</div>		
+			<div class="row-col-one">
+					<label class="word-style">交易所</label>
+					<select ng-model="queryEntity.exchID" class="value-style"
+							ng-options="op.exchID as op.exchID+'_'+op.exchName for op in exchangeDatas">
+							<option value="">全部</option>
+					</select>
+			</div>
+			<div class="row-col-one">
+					<label class="word-style">市场</label>
+					<select ng-model="queryEntity.marketID" class="value-style"
+							ng-options="op.marketID as op.marketID+'_'+op.marketName for op in marketDatas"><option
+								value="">全部</option></select>
+			</div>			
+			<div class="row-col-one">
+					<label class="word-style">证券类别</label>
+					<select ng-model="queryEntity.stockTypeID" class="value-style"
+							ng-options="op.stockTypeID as op.stockTypeID+'_'+op.stockTypeName for op in stockTypeDatas"><option
+								value="">全部</option></select>
+			</div>
+			<div class="btn-beyond-one-row">
+					<button class="btn btn-query btn-word-two" id="bootbox-options1"	ng-show="stockProductFeeSet_query" ng-click="find(queryEntity)" ng-disabled="isQuery">查询</button>
+			</div>
+			<div class="row-form row-btn-operation">
+				<div class="row-btn-icon">
+					<span class="btn-add-icon"></span> 
+					<input type="button" ng-show="stockProductFeeSet_add"
+						data-target="#stockProductFeeSetModal" ng-click="initParameter()"
+						class="btn btn-add btn-icon-two" value="新增" data-toggle='modal'>
+				</div>
+			</div>
+		</div>
+	</form>
+	<!--End 表单查询 -->
+	
+	<!--PAGE CONTENT START-->
+	<div class="col-xs-12 clear-padding-right">
+		<div class="row">
+			<div class="col-xs-12 clear-padding-right">
+				<div>
+					<table id="stockProductFeeSet_dynamic_table"  	class="cell-border stripe" cellspacing="0" width="100%">
+					</table>
+				</div>
+			</div>
+		</div>
+	</div>
+	<!--PAGE CONTENT END-->
+
+	<!-- 新增 修改 模态框（Modal） -->
+	<div class="modal fade" id="stockProductFeeSetModal" tabindex="-1" role="dialog"
+		aria-labelledby="myModalLabel" aria-hidden="true"
+		data-backdrop="static" data-keyboard="false">
+		<div class="modal-dialog">
+			<div class="modal-content" style="width:650px;">
+				<div class="modal-header">
+					<button type="button" class="close" data-dismiss="modal"
+						aria-hidden="true">&times;</button>
+					<h4 class="modal-title" id="myModalLabel">证券品种费率设置维护</h4>
+				</div>
+				<div class="modal-body">
+					<!-- 添加表单内容-->
+					<form class="form-horizontal" name="myForm" novalidate>
+						<div class="panel panel-default">
+							<div class="panel-heading">
+								<h3 class="panel-title">基本设置</h3>
+							</div>
+							<div class="panel-body">
+								<div class="row">
+										<div class="col-xs-6">
+										<div class="row form-group">
+											<label for="accountID"
+												class="col-sm-4 control-label">资金账号</label>
+
+											<div class="col-sm-8">
+												<select ng-model="ModalEntity.accountID" name="accountID" required
+													ng-disabled = "isUpdate"
+													class="form-control two-columns-modal-input" 
+													ng-options="op.accountID as op.accountID+'_'+op.accountName for op in modalAccountNameDatas"
+													id="marketID" onkeydown="myKeyup(event,this)" tab="2"></select>
+											</div>
+										</div>
+									</div>
+									<div class="col-xs-6">
+										<div class="row form-group">
+											<label for="exchID"
+												class="col-sm-4 control-label">交易所</label>
+											<div class="col-sm-8">
+												<select ng-model="ModalEntity.exchID" ng-disabled = "isUpdate"
+												    class="form-control two-columns-modal-input" 
+													ng-options="op.exchID as op.exchID+'_'+op.exchName for op in modalExchangeDatas"
+													id="exchID" onkeydown="myKeyup(event,this)" tab="1" name="exchID" required
+													ng-change="selectExchange(ModalEntity.exchID)"></select>
+											</div>
+										</div>
+									</div>
+								</div>
+								<div class="row">
+									<div class="col-xs-6">
+										<div class="row form-group">
+											<label for="marketID"
+												class="col-sm-4 control-label">市场</label>
+
+											<div class="col-sm-8">
+												<select ng-model="ModalEntity.marketID" name="marketID" required
+													ng-disabled = "isUpdate" class="form-control two-columns-modal-input" 
+													ng-options="op.marketID as op.marketID+'_'+op.marketName for op in modalMarketDatas"
+													id="marketID" onkeydown="myKeyup(event,this)" tab="2"></select>
+											</div>
+										</div>
+									</div>
+									
+									<div class="col-xs-6">
+										<div class="row form-group">
+											<label for="stockTypeID"
+												class="col-sm-4 control-label">证券类别</label>
+
+											<div class="col-sm-8">
+												<select ng-model="ModalEntity.stockTypeID" name="stockTypeID" required
+													ng-disabled = "isUpdate"   class="form-control two-columns-modal-input" 
+													ng-options="op.stockTypeID as op.stockTypeID+'_'+op.stockTypeName for op in modalStockTypeDatas"
+													id="stockTypeID" onkeydown="myKeyup(event,this)" tab="3"></select>
+											</div>
+										</div>
+									</div>
+									
+								</div>
+							</div>
+						</div>
+						<div class="panel panel-default">
+							<div class="panel-heading">
+								<h3 class="panel-title">证券品种费率设置</h3>
+							</div>
+							<div class="panel-body">
+								<div class="row">
+									<div class="col-xs-6">
+										<div class="row form-group">
+											<label for="bFee"
+												class="col-sm-4 control-label">买方佣金比例<span
+												style="color: red;">*</span></label>
+
+											<div class="col-sm-8">
+												<input type="text" class="form-control two-columns-modal-input" id="bFee"
+													placeholder="请输入买方佣金比例" onkeydown="myKeyup(event,this)"
+													tab="6" ng-model="ModalEntity.bFee"
+													ng-pattern="/^[0-9]+(\.[0-9]{0,8})?$/" name="bFee"
+													maxlength="16" required> <span
+													ng-show="myForm.bFee.$dirty && myForm.bFee.$invalid"
+													style="color: red;">买方佣金比例为必填项，且为浮点数字型，最多录入8位小数，例：98.12345678</span>
+											</div>
+										</div>
+									</div>
+									<div class="col-xs-6">
+										<div class="row form-group">
+											<label for="sFee"
+												class="col-sm-4 control-label">卖方佣金比例<span
+												style="color: red;">*</span></label>
+
+											<div class="col-sm-8">
+												<input type="text" class="form-control two-columns-modal-input" id="sFee"
+													placeholder="请输入卖方佣金比例" ng-model="ModalEntity.sFee"
+													ng-pattern="/^[0-9]+(\.[0-9]{0,8})?$/" name="sFee"
+													maxlength="16" required onkeydown="myKeyup(event,this)" tab="5"> <span
+													ng-show="myForm.sFee.$dirty && myForm.sFee.$invalid"
+													style="color: red;">卖方佣金比例为必填项，且为浮点数字型，最多录入8位小数，例：98.12345678</span>
+											</div>
+										</div>
+									</div>
+								</div>
+								<div class="row">
+									<div class="col-xs-6">
+										<div class="row form-group">
+											<label for="minFee"
+												class="col-sm-4 control-label">最低佣金<span
+												style="color: red;">*</span></label>
+
+											<div class="col-sm-8">
+												<input type="text" class="form-control two-columns-modal-input" id="minFee"
+													placeholder="请输入最低佣金" ng-model="ModalEntity.minFee"
+													ng-pattern="/^[0-9]+(\.[0-9]{0,2})?$/" name="minFee"
+													maxlength="16" required onkeydown="myKeyup(event,this)" tab="6"> <span
+													ng-show="myForm.minFee.$dirty && myForm.minFee.$invalid"
+													style="color: red;">最低佣金为必填项，且为浮点数字型，最多录入2位小数，例：98.12</span>
+											</div>
+										</div>
+									</div>
+								</div>
+
+								<div class="row">
+									<div class="col-xs-6">
+										<div class="row form-group">
+											<label for="bTax"
+												class="col-sm-4 control-label">买方印花税率<span
+												style="color: red;">*</span></label>
+
+											<div class="col-sm-8">
+												<input type="text" class="form-control two-columns-modal-input" id="bTax"
+													placeholder="请输入买方印花税率" ng-model="ModalEntity.bTax"
+													ng-pattern="/^[0-9]+(\.[0-9]{0,8})?$/" name="bTax"
+													maxlength="16" required onkeydown="myKeyup(event,this)" tab="7"> <span
+													ng-show="myForm.bTax.$dirty && myForm.bTax.$invalid"
+													style="color: red;">买方印花税率为必填项，且为浮点数字型，最多录入8位小数，例：98.12345678</span>
+											</div>
+										</div>
+									</div>
+									<div class="col-xs-6">
+										<div class="row form-group">
+											<label for="sTax"
+												class="col-sm-4 control-label">卖方印花税率<span
+												style="color: red;">*</span></label>
+
+											<div class="col-sm-8">
+												<input type="text" class="form-control two-columns-modal-input" id="sTax"
+													placeholder="请输入卖方印花税率" ng-model="ModalEntity.sTax"
+													ng-pattern="/^[0-9]+(\.[0-9]{0,8})?$/" name="sTax"
+													maxlength="16" required onkeydown="myKeyup(event,this)" tab="8"> <span
+													ng-show="myForm.sTax.$dirty && myForm.sTax.$invalid"
+													style="color: red;">卖方印花税率为必填项，且为浮点数字型，最多录入8位小数，例：98.12345678</span>
+											</div>
+										</div>
+									</div>
+								</div>
+								<div class="row">
+									<div class="col-xs-6">
+										<div class="row form-group">
+											<label for="minTax"
+												class="col-sm-4 control-label">最低印花税<span
+												style="color: red;">*</span></label>
+
+											<div class="col-sm-8">
+												<input type="text" class="form-control two-columns-modal-input" id="minTax"
+													placeholder="请输入最低印花税" ng-model="ModalEntity.minTax"
+													ng-pattern="/^[0-9]+(\.[0-9]{0,2})?$/" name="minTax"
+													maxlength="16" required onkeydown="myKeyup(event,this)" tab="9"> <span
+													ng-show="myForm.minTax.$dirty && myForm.minTax.$invalid"
+													style="color: red;">最低印花税为必填项，且为浮点数字型，最多录入2位小数，例：98.12</span>
+											</div>
+										</div>
+									</div>
+								</div>
+
+								 <div class="row">
+									<div class="col-xs-6">
+										<div class="row form-group">
+											<label for="bTransferFee"
+												class="col-sm-4 control-label">买方过户费率<span
+												style="color: red;">*</span></label>
+
+											<div class="col-sm-8">
+												<input type="text" class="form-control two-columns-modal-input" id="bTransferFee"
+													placeholder="请输入买方过户费率"
+													ng-model="ModalEntity.bTransferFee"
+													ng-pattern="/^[0-9]+(\.[0-9]{0,8})?$/" name="bTransferFee"
+													maxlength="16" required onkeydown="myKeyup(event,this)" tab="10"> <span
+													ng-show="myForm.bTransferFee.$dirty && myForm.bTransferFee.$invalid"
+													style="color: red;">买方过户费率为必填项，且为浮点数字型，最多录入8位小数，例：98.12345678</span>
+											</div>
+										</div>
+									</div>
+									
+									<div class="col-xs-6">
+										<div class="form-group">
+											<label for="sTransferFee"
+												class="col-sm-4 control-label">卖方过户费率<span
+												style="color: red;">*</span></label>
+
+											<div class="col-sm-8">
+												<input type="text" class="form-control two-columns-modal-input" id="sTransferFee"
+													placeholder="请输入卖方过户费率" ng-model="ModalEntity.sTransferFee"
+													ng-pattern="/^[0-9]+(\.[0-9]{0,8})?$/" name="sTransferFee"
+													maxlength="16" required onkeydown="myKeyup(event,this)" tab="11"> <span
+													ng-show="myForm.sTransferFee.$dirty && myForm.sTransferFee.$invalid"
+													style="color: red;">卖方过户费率为必填项，且为浮点数字型，最多录入8位小数，例：98.12345678</span>
+											</div>
+										</div>
+									</div>
+								</div>
+								<div class="row">
+									<div class="col-xs-6">
+										<div class="form-group">
+											<label for="minTransferFee"
+												class="col-sm-4 control-label">最低过户费<span
+												style="color: red;">*</span></label>
+
+											<div class="col-sm-8">
+												<input type="text" class="form-control two-columns-modal-input" id="minTransferFee"
+													placeholder="请输入最低过户费" ng-model="ModalEntity.minTransferFee"
+													ng-pattern="/^[0-9]+(\.[0-9]{0,2})?$/" name="minTransferFee"
+													maxlength="16" required onkeydown="myKeyup(event,this)" tab="12"> <span
+													ng-show="myForm.minTransferFee.$dirty && myForm.minTransferFee.$invalid"
+													style="color: red;">最低过户费为必填项，且为浮点数字型，最多录入2位小数，例：98.12</span>
+											</div>
+										</div>
+									</div>
+								</div>
+
+									<div>
+										<input type="hidden" ng-bind="ModalEntity.recordIndex">
+									</div>
+								</div>
+							</div>
+					</form>
+					<!--End  添加表单内容-->
+					<!--  ||myForm.accountID.$invalid|| myForm.exchID.$invalid || myForm.marketID.$invalid || myForm.stockTypeID.$invalid || 
+					    myForm.bFee.$invalid || myForm.sFee.$invalid || myForm.minFee.$invalid || 
+						myForm.bTax.$invalid || myForm.sTax.$invalid || myForm.minTax.$invalid ||
+						myForm.bTransferFee.$invalid || myForm.sTransferFee.$invalid || myForm.minTransferFee.$invalid -->
+				</div>
+				<div class="modal-footer">
+					<span class="btn btn-info btn-sm popover-info" data-rel="popover"
+						data-placement="bottom" title="" 
+						ng-click="myForm.accountID.$invalid|| myForm.exchID.$invalid || myForm.marketID.$invalid || myForm.stockTypeID.$invalid || 
+					    myForm.bFee.$invalid || myForm.sFee.$invalid || myForm.minFee.$invalid || 
+						myForm.bTax.$invalid || myForm.sTax.$invalid || myForm.minTax.$invalid ||
+						myForm.bTransferFee.$invalid || myForm.sTransferFee.$invalid || myForm.minTransferFee.$invalid||canClick || save(ModalEntity)"
+						ng-disabled="myForm.accountID.$invalid|| myForm.exchID.$invalid || myForm.marketID.$invalid || myForm.stockTypeID.$invalid || 
+					    myForm.bFee.$invalid || myForm.sFee.$invalid || myForm.minFee.$invalid || 
+						myForm.bTax.$invalid || myForm.sTax.$invalid || myForm.minTax.$invalid ||
+						myForm.bTransferFee.$invalid || myForm.sTransferFee.$invalid || myForm.minTransferFee.$invalid||canClick
+						">&nbsp;确定&nbsp;</span>
+					<span class="btn btn-close btn-sm popover-info" data-rel="popover"
+						data-placement="bottom" title="" data-dismiss="modal">&nbsp;取消&nbsp;</span>
+				</div>
+			</div>
+		</div>
+	</div>
+	<!-- /.modal -->
+</div>

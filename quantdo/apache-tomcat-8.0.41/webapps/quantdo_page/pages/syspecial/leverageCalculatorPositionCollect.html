@@ -1,0 +1,48 @@
+<link rel="stylesheet" href="syspecial/leverageCalculatorPositionCollect.css" />
+<div class="row" ng-controller="LeverageCalculatorPositionCollectController">
+    <form class="form-12">
+        <div class="row-col-one" >
+            <label class="word-style">机构代码</label>                         <!--OK-->
+            <select ng-model="queryEntity.instClientID"
+                    ng-disabled="isInstClient " class="value-style" ng-change="changeInstClient()"
+                    ng-options="op.instClientID as op.instClientID+'_'+ op.instClientAbbrName for op in queryinstClientlists">     <!--这里会出现下拉栏-->
+                <option value="">全部</option>
+            </select>
+        </div>
+        <!--<div class="row-col-one">
+            <label class="word-style">批次号</label>                    &lt;!&ndash;这里设计为文本框的形式&ndash;&gt;
+            <input type="text" class="value-style" ng-model="queryEntity.batch">
+        </div>-->
+        <div class="row-col-one" >
+            <label class="word-style">资产单元</label>                          <!--OK-->
+            <select ng-model="queryEntity.innerAccountID"  class="value-style"
+                    ng-options="op.subAccountID as op.instClientID+'_'+op.subAccountID+'_'+op.subAccountName for op in queryAccountEntitys">
+                <option value="">全部</option>
+            </select>
+        </div>
+        <div class="row-col-one" >
+            <label class="word-style">交易所</label>                          <!--OK-->
+            <select ng-model="queryEntity.exchID"  class="value-style"
+                    ng-options="op.exchID as op.exchID+'_'+op.exchName for op in exchangeData">
+                <option value="">全部</option>
+            </select>
+        </div>
+        <div class="row-col-one">
+            <label class="word-style">品种/合约代码</label>
+            <input type="text" class="value-style" ng-model="queryEntity.instrumentID">
+        </div>
+        <div class="btn-beyond-one-row"  ng-show="leverageCalculatorPositionCollect_query">          <!--OK-->
+            <button type="button" class="btn btn-query btn-word-two"  ng-click="find()">查询</button>
+        </div>
+    </form>
+    <div class="col-xs-12 clear-padding-right">
+        <div class="row">
+            <div class="col-xs-12 clear-padding-right">
+                <div>
+                    <table id="leverageCalculatorPositionCollect_dynamic_table" class="cell-border stripe" cellspacing="0" width="100%">
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

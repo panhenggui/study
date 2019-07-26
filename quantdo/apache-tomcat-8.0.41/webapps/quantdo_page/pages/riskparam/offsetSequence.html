@@ -1,0 +1,174 @@
+<link rel="stylesheet" href="riskparam/offsetSequence.css" />
+<div class="row" ng-controller="OffsetSequenceController">
+	<!-- start 定义表单查询-->
+	<form class="form-12">
+	    <div class="row">
+	        <div class=col-xs-12>
+	            <div class="alert alert-success" ng-show="resultInfo">开平仓优先顺序保存成功!</div>
+	        </div>
+	    </div>
+	    <div class="form-row">
+	    	<div class="row-col-one"  >
+				<label class="word-style">所属机构</label>
+	            <select ng-model="queryEntity.instClientID" class="value-style" ng-disabled="noInst"
+					ng-options="op.instClientID as op.instClientAbbrName for op in instClientList">
+					<option value="">全部</option>
+				</select>
+			</div>
+	    	<div class="row-col-one">
+	        	<label class="word-style">交易所代码</label>
+	            	<select ng-model="queryEntity.exchID" class="value-style"
+	                	ng-options="op.exchID as op.exchID+'_'+op.exchName for op in exchangeDatas">
+	                <option value="">全部</option>
+	            </select>
+	        </div>
+	        <div class="row-col-one">
+	        	<label class="word-style">品种/合约代码</label>
+                <input type="text" class="value-style" ng-model="queryEntity.instrumentID">
+		    </div>
+		    <div class="row-col-one">
+                <label class="word-style">开平仓优先顺序</label>
+                <select ng-model="queryEntity.sequenceType"  class="value-style"
+                	ng-options="op.key as op.text for op in sequenceTypes">
+                    <option value="">全部</option>
+                </select>
+	        </div> 
+	        <div class="row-col-one">
+	        	<label class="word-style">合约类别</label>
+                <select ng-model="queryEntity.productType" class="value-style"
+                   	ng-options="op.key as op.text for op in productTypes">
+                   	<option value="">全部</option>
+                </select>
+	        </div>   
+	    </div>
+	    	
+	    <div class="btn-beyond-one-row">
+	    	<button type="button" class="btn btn-query btn-word-two"  ng-show="offsetSequence_query"  ng-click="find(queryEntity)" ng-disabled="isQuery"> 查询</button>
+	    </div>
+		<div class="row-form row-btn-operation" ng-show="offsetSequence_add">
+		    <div class="row-btn-icon">
+		        <span class="btn-add-icon"></span>
+				<button class="btn btn-add btn-icon-two" id="bootbox-options2" ng-click="initParameter()" 
+					data-toggle="modal" data-target="#offsetSequenceModal">新增</button>
+			</div>
+	    </div>
+	</form>
+	<!--End 表单查询 -->
+
+	<!--PAGE CONTENT -->
+
+	<div class="col-xs-12 clear-padding-right">
+        <div class="row">
+            <div class="col-xs-12 clear-padding-right">
+                <div>
+                    <table id="offsetSequence_dynamic_table" class="cell-border stripe" cellspacing="0" width="100%">
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+<!-- /.col -->
+
+<!-- 新增 修改 模态框（Modal） -->
+	<div class="modal fade" id="offsetSequenceModal" tabindex="-1" role="dialog"
+	     aria-labelledby="myModalLabel" aria-hidden="true" data-backdrop="static" data-keyboard="false">
+		<div class="modal-dialog" >
+			<div class="modal-content"   style="width:750px">
+				<div class="modal-header">
+	    			<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+	    			<h4 class="modal-title" id="myModalLabel">开平仓顺序设置</h4>
+				</div>
+				<div class="modal-body">
+				<!-- 添加表单内容-->
+					<form class="form-horizontal" role="form" name="myForm" novalidate>
+						<div class="panel panel-default panel-no-border">
+							<div class="panel-body">
+								<div class="row">
+									<div class="col-xs-6">
+								        <div class="row form-group">
+								            <label class="col-sm-4 control-label">机构代码<span style="color: red;">*</span></label>
+								
+								            <div class="col-sm-8">
+								                <select ng-model="ModalEntity.instClientID" name="instClientID" ng-disabled="isUpdate || noInst"
+								                    ng-options="op.instClientID as op.instClientAbbrName for op in instClientList"
+								                    class="form-control two-columns-modal-input" 
+								                    required onkeydown="myKeyup(event,this)" tab="1"></select>
+								                <span ng-show=" myForm.instClientID.$dirty &&  myForm.instClientID.$invalid"
+													style="color: red;">机构代码为必填项</span>
+								            </div>
+								        </div>
+								    </div>
+									<div class="col-xs-6">
+								        <div class="row form-group">
+								            <label class="col-sm-4 control-label">交易所代码<span style="color: red;">*</span></label>
+								
+								            <div class="col-sm-8">
+								                <select ng-model="ModalEntity.exchID" name="exchID" ng-disabled="isUpdate"
+								                    ng-options="op.exchID as op.exchID+'_'+op.exchName for op in exchangeDatas"
+								                    class="form-control two-columns-modal-input" 
+								                    required ng-change="changeExchID(ModalEntity.exchID)"
+								                    onkeydown="myKeyup(event,this)" tab="1"></select>
+								                <span ng-show=" myForm.exchID.$dirty &&  myForm.exchID.$invalid"
+													style="color: red;">交易所代码为必填项</span>
+								            </div>
+								        </div>
+								    </div>
+								</div>
+							    <div class="row">
+							    	<div class="col-xs-6">
+								        <div class="row form-group">
+								            <label class="col-sm-4 control-label">品种/合约代码</label>
+								
+								            <div class="col-sm-8">
+								                <input type="text" class="form-control two-columns-modal-input" id="instrumentID" ng-disabled="isUpdate "
+								                      ng-model="ModalEntity.instrumentID" name="instrumentID" maxlength="30" >
+								            </div>
+								        </div>
+								    </div>
+								    <div class="col-xs-6">	
+										 <div class="row form-group">
+											<label class="col-sm-4 control-label">合约类别</label>
+											
+											<div class="col-xs-8">
+												<select class="form-control two-columns-modal-input"  ng-model="ModalEntity.productType" ng-disabled="isUpdate || !isFour"
+										            name="productID" ng-options="op.key as op.text for op in productTypes" tab="2">
+									            </select>
+											</div>
+										</div>
+								    </div>
+								</div>
+								<div class="row">
+									<div class="col-xs-6">
+								        <div class="row form-group">
+								            <label class="col-sm-4 control-label">开平仓优先顺序<span style="color: red;">*</span></label>
+								
+								            <div class="col-sm-8">
+								                <select ng-model="ModalEntity.sequenceType" ng-options="op.key as op.text for op in sequenceTypes"
+								                    class="form-control two-columns-modal-input" onkeydown="myKeyup(event,this)" tab="2" required
+								                    name="sequenceType">
+								                </select>
+								                <span ng-show=" myForm.sequenceType.$dirty &&  myForm.sequenceType.$invalid"
+													style="color: red;">开平仓优先顺序为必填项</span>
+								            </div>
+								        </div> 
+								    </div>
+								</div>
+		
+								<div><input type="hidden" ng-bind="ModalEntity.recordIndex"></div>
+							</div>
+						</div>
+					</form>
+				</div>
+				<!--End  添加表单内容-->
+				<div class="modal-footer">
+	           		<span class="btn btn-info btn-sm popover-info" data-rel="popover" data-placement="bottom" title="" id="confirm"
+	                    ng-click="myForm.instClientID.$invalid || myForm.exchID.$invalid || myForm.sequenceType.$invalid || save(ModalEntity)" 
+	                    ng-disabled="myForm.instClientID.$invalid || myForm.exchID.$invalid || myForm.sequenceType.$invalid ">&nbsp;确定&nbsp;</span>
+	                <span class="btn btn-close btn-sm popover-info" data-rel="popover" data-placement="bottom" title="" 
+	                    data-dismiss="modal">&nbsp;取消&nbsp;</span>
+				</div>
+			</div>
+		</div>
+	</div>
+<!-- /.modal -->
+</div>

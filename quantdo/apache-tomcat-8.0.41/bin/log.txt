@@ -1,0 +1,8 @@
+CreateUserapi Call./con_files/trade,
+RegisterSpi Call,ptr139900126963568
+new CQdamUserSpi
+SubscribeTopic Call,ptr139900126963568
+SubscribeTopic Call,ptr139900126963568
+RegisterFront Call,ptr139900126963568
+ReqTrader SetHeartbeatTimeout,timeout = 60000
+Init Call,ptr139900126963568

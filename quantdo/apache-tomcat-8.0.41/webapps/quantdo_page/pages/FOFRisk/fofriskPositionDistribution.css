@@ -1,0 +1,41 @@
+
+.input-sm{
+	width: 70px !important;
+}
+.trBgColor{
+   background-color: #00b3ee !important;
+}
+
+td.details-control {
+    background: url('../../pic/details_open.png') no-repeat center center;
+    cursor: pointer;
+}
+tr.shown td.details-control {
+    background: url('../../pic/details_close.png') no-repeat center center;
+}
+
+.myfofriskColor
+{
+	background-color:#F8F8FF !important;
+}
+.odd{
+	background-color:#fff !important;
+}
+/* .table > thead > tr > th,
+.table > tbody > tr > th,
+.table > tfoot > tr > th,
+.table > thead > tr > td,
+.table > tbody > tr > td,
+.table > tfoot > tr > td {
+  padding: 0px !important;
+  line-height: 25px !important;
+  vertical-align: top !important;
+  font-weight: normal !important;
+  border-top: 1px solid #dddddd !important;
+} */
+.myfofrisktable{
+	cellspacing:0px;
+	cellpadding:0px;
+	frame:hsides;
+	margin:0cm 0cm 0cm 0cm;
+}

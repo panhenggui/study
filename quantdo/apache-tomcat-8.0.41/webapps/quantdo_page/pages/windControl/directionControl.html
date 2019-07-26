@@ -1,0 +1,18 @@
+<!--  交易所报单频率控制 -->
+<link href="windControl/directionControl.css" rel="stylesheet">
+<div ng-controller="directionControlController" style="width: 100%;overflow: auto;">
+    <div style="height:20px;"></div>
+    
+    <table id="directionControl_table" class="cell-border stripe" cellspacing="0" width="100%"></table>
+     <div class="operation-table">
+          <div class="btn-add-left">
+          		<!-- 保存 -->
+              <input ng-show = directionIsCanUse type="button" value={{directionControl_buttonName_save}} 
+              		class="backFilter myNewBtn" ng-click="saveDirectionControl()" name="RiskDirectionControlService.saveDirectionData">
+              <!-- 重置 -->
+              <input ng-show = directionIsCanUse type="button" value={{directionControl_buttonName_reset}} 
+              		class="backFilter myNewBtn" ng-click="resetDirectionControl()" name="RiskDirectionControlService.saveDirectionData">
+          </div>
+      </div>
+    
+</div>

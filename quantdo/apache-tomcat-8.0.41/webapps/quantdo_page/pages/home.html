@@ -1,0 +1,197 @@
+<title>Welcome!</title>
+<style>
+    h1 {
+        height: 700px;
+    }
+    .back{
+        background-image: url(../pic/home.jpg);
+        background-repeat:no-repeat;
+    }
+</style>
+
+<!-- ajax layout which only needs content area -->
+<div class="row" style="" ng-controller="homeCtroller">
+    <div >
+        <div style="width: 100%;height:250px;border-bottom: 1px solid #ccc; ">
+            <div style="width: 33%;height: 250px;float: left">
+                <div style="height: 150px;line-height: 250px;text-align: center;">
+                    <img src="../framework/ui-ace/docs/images/home/future.png" style="width: 70px;height: 70px">
+                </div>
+                <div style="height: 100px;line-height: 100px;text-align: center">
+                    <span style="color: #009999;font-size: 20px;">{{userInfo.futureAcc}}</span><span style="font-size: 20px;">个期货账号</span>
+                </div>
+            </div>
+            <div style="width: 33%;height: 250px;float: left">
+                <div style="height: 150px;line-height: 250px;text-align: center;">
+                    <img src="../framework/ui-ace/docs/images/home/stock.png" style="width: 70px;height: 70px">
+                </div>
+                <div style="height: 100px;line-height: 100px;text-align: center">
+                    <span style="color: #009999;font-size: 20px;">{{userInfo.shareAcc}}</span><span style="font-size: 20px;">个股票账号</span>
+                </div>
+            </div>
+            <div style="width: 33%;height: 250px;float: left">
+                <div style="height: 150px;line-height: 250px;text-align: center;">
+                    <img src="../framework/ui-ace/docs/images/home/credit.png" style="width: 70px;height: 70px">
+                </div>
+                <div style="height: 100px;line-height: 100px;text-align: center">
+                    <span style="color: #009999;font-size: 20px;">{{userInfo.creditAcc}}</span><span style="font-size: 20px;">个信用账号</span>
+                </div>
+            </div>
+        </div>
+        <div style="width: 100%;height: 240px;border-bottom: 1px solid #ccc;">
+
+            <div style="width: 25%;height: 240px;float: left;padding: 5px 0;">
+                <div style="height: 110px;line-height: 150px;color: #009999;font-size: 20px;text-align: center;border-right: 1px solid #ccc;">
+                    {{userInfo.investAdvis}}
+                </div>
+                <div style="height: 110px;line-height: 70px;color: #999;font-size: 20px;text-align: center;border-right: 1px solid #ccc;">
+                    个投资顾问
+                </div>
+            </div>
+            <div style="width: 25%;height: 240px;float: left;padding: 5px 0;">
+                <div style="height: 110px;line-height: 150px;color: #009999;font-size: 20px;text-align: center;border-right: 1px solid #ccc;">
+                    {{userInfo.investAdmin}}
+                </div>
+                <div style="height: 110px;line-height: 70px;color: #999;font-size: 20px;text-align: center;border-right: 1px solid #ccc;">
+                    个投资经理
+                </div>
+            </div>
+            <div style="width: 25%;height: 240px;float: left;padding: 5px 0;">
+                <div style="height: 110px;line-height: 150px;color: #009999;font-size: 20px;text-align: center;border-right: 1px solid #ccc;">
+                    {{userInfo.transPerson}}
+                </div>
+                <div style="height: 110px;line-height: 70px;color: #999;font-size: 20px;text-align: center;border-right: 1px solid #ccc;">
+                    个交易员
+                </div>
+            </div>
+            <div style="width: 25%;height: 240px;float: left;padding: 5px 0;">
+                <div style="height: 110px;line-height: 150px;color: #009999;font-size: 20px;text-align: center;">
+                    {{userInfo.riskPerson}}
+                </div>
+                <div style="height: 110px;line-height: 70px;color: #999;font-size: 20px;text-align: center;">
+                    个风控员
+                </div>
+            </div>
+        </div>
+        <!--<div style="width: 100%;height: 120px;border-bottom: 1px solid #ccc;">-->
+            <!--<div style="width: 25%;height: 120px;float: left;padding: 5px 0;">-->
+                <!--<div style="height: 55px;line-height: 55px;color: #009999;font-size: 20px;text-align: center;border-right: 1px solid #ccc;">-->
+                    <!--{{userInfo.riskPerson}}-->
+                <!--</div>-->
+                <!--<div style="height: 55px;line-height: 55px;color: #999;font-size: 20px;text-align: center;border-right: 1px solid #ccc;">-->
+                    <!--个风控员-->
+                <!--</div>-->
+            <!--</div>-->
+            <!--<div style="width: 25%;height: 120px;float: left;padding: 5px 0;">-->
+                <!--<div style="height: 55px;line-height: 55px;color: #009999;font-size: 20px;text-align: center;border-right: 1px solid #ccc;">-->
+                    <!--{{userInfo.unwindPerson}}-->
+                <!--</div>-->
+                <!--<div style="height: 55px;line-height: 55px;color: #999;font-size: 20px;text-align: center;border-right: 1px solid #ccc;">-->
+                    <!--个平仓员-->
+                <!--</div>-->
+            <!--</div>-->
+            <!--<div style="width: 25%;height: 120px;float: left;padding: 5px 0;">-->
+                <!--<div style="height: 55px;line-height: 55px;color: #009999;font-size: 20px;text-align: center;border-right: 1px solid #ccc;">-->
+                    <!--{{userInfo.ordersPerson}}-->
+                <!--</div>-->
+                <!--<div style="height: 55px;line-height: 55px;color: #999;font-size: 20px;text-align: center;border-right: 1px solid #ccc;">-->
+                    <!--个接单员-->
+                <!--</div>-->
+            <!--</div>-->
+            <!--<div style="width: 25%;height: 120px;float: left;padding: 5px 0;">-->
+                <!--<div style="height: 55px;line-height: 55px;color: #009999;font-size: 20px;text-align: center;">-->
+                    <!--{{userInfo.transPerson}}-->
+                <!--</div>-->
+                <!--<div style="height: 55px;line-height: 55px;color: #999;font-size: 20px;text-align: center;">-->
+                    <!--个交易员-->
+                <!--</div>-->
+            <!--</div>-->
+        <!--</div>-->
+        <div style="width: 100%;height:210px;">
+            <div style="width: 50%;height: 210px;line-height:210px;float: left">
+                <div style="width: 50%;float: left;text-align: right">
+                    <img src="../framework/ui-ace/docs/images/home/prod.png" style="width: 60px;height: 60px;margin-right: 10px;">
+                </div>
+                <div style="width: 50%;float: left;height: 210px;line-height:210px;">
+                    <span style="margin-left: 5px;color: #009999;font-size: 20px;">{{userInfo.productNum}}</span>
+                    <span style="font-size: 20px;color: #999;height: 105px;">
+                        个产品
+                    </span>
+                </div>
+            </div>
+            <div style="width: 50%;height: 210px;line-height:210px;float: left">
+                <div style="width: 50%;float: left;text-align: right">
+                    <img src="../framework/ui-ace/docs/images/home/api.png" style="width: 60px;height: 60px;margin-right: 10px;">
+                </div>
+                <div style="width: 50%;float: left;height: 210px;line-height:210px;">
+                    <span style="margin-left: 5px;color: #009999;font-size: 20px;">{{userInfo.interfaceNum}}</span>
+                    <span style="font-size: 20px;color: #999;height: 105px;">
+                        个交易通道
+                    </span>
+                </div>
+            </div>
+            <!--<div style="width: 33%;height: 210px;line-height:210px;float: left">-->
+                <!--<div style="width: 50%;float: left;text-align: right">-->
+                    <!--<img src="../framework/ui-ace/docs/images/home/interface.png" style="width: 60px;height: 60px;margin-right: 10px;">-->
+                <!--</div>-->
+                <!--<div style="width: 50%;float: left;height: 210px;line-height:210px;">-->
+                    <!--<span style="margin-left: 5px;color: #009999;font-size: 20px;">{{userInfo.apiNum}}</span>-->
+                    <!--<span style="font-size: 20px;color: #999;height: 105px;">-->
+                        <!--个API-->
+                    <!--</span>-->
+                <!--</div>-->
+            <!--</div>-->
+        </div>
+    </div>
+    <!--<div class="col-xs-12">-->
+        <!--<div style="height: 233px;white-space: nowrap;border-bottom: solid 1px #ccc;">-->
+            <!--<span style="display: inline-block;height: 232px;line-height:232px;width: 30%;min-width: 100px;max-width: 200px;margin-left: 20px;">-->
+                <!--<span style="color: #009999">{{userInfo.futureAcc}}</span>个期货账号-->
+            <!--</span>-->
+            <!--<span style="display: inline-block;height: 232px;line-height:232px;width: 30%;min-width: 100px;max-width: 200px;">-->
+                <!--<span style="color: #009999">{{userInfo.shareAcc}}</span>个股票账号-->
+            <!--</span>-->
+            <!--<span style="display: inline-block;height: 232px;line-height:232px;width: 30%;min-width: 100px;max-width: 200px;">-->
+                <!--<span style="color: #009999">{{userInfo.creditAcc}}</span>个信用账号-->
+            <!--</span>-->
+        <!--</div>-->
+        <!--<div style="height: 233px;line-height: 233px;white-space: nowrap;border-bottom: solid 1px #ccc;">-->
+            <!--<span style="display: inline-block;width: 30%;min-width: 100px;max-width: 200px;margin-left: 20px;">-->
+                <!--<span style="color: #009999">{{userInfo.indepInvest}}</span>个独立投顾-->
+            <!--</span>-->
+            <!--<span style="display: inline-block;width: 30%;min-width: 100px;max-width: 200px;">-->
+                <!--<span style="color: #009999">{{userInfo.investAdvis}}</span>个投资顾问-->
+            <!--</span>-->
+            <!--<span style="display: inline-block;width: 30%;min-width: 100px;max-width: 200px;">-->
+                <!--<span style="color: #009999">{{userInfo.investAdmin}}</span>个投资经理-->
+            <!--</span>-->
+            <!--<span style="display: inline-block;width: 30%;min-width: 100px;max-width: 200px;margin-left: 20px;">-->
+                <!--<span style="color: #009999">{{userInfo.searchPerson}}</span>个查询员-->
+            <!--</span>-->
+            <!--<span style="display: inline-block;width: 30%;min-width: 100px;max-width: 200px;">-->
+                <!--<span style="color: #009999">{{userInfo.riskPerson}}</span>个风控员-->
+            <!--</span>-->
+            <!--<span style="display: inline-block;width: 30%;min-width: 100px;max-width: 200px;">-->
+                <!--<span style="color: #009999">{{userInfo.unwindPerson}}</span>个平仓员-->
+            <!--</span>-->
+            <!--<span style="display: inline-block;width: 30%;min-width: 100px;max-width: 200px;margin-left: 20px;">-->
+                <!--<span style="color: #009999">{{userInfo.ordersPerson}}</span>个接单员-->
+            <!--</span>-->
+            <!--<span style="display: inline-block;width: 30%;min-width: 100px;max-width: 200px;">-->
+                <!--<span style="color: #009999">{{userInfo.transPerson}}</span>个交易员-->
+            <!--</span>-->
+        <!--</div>-->
+        <!--<div style="height: 233px;line-height: 233px;white-space: nowrap;">-->
+            <!--<span style="display: inline-block;height: 232px;line-height:232px;width: 30%;min-width: 100px;max-width: 200px;margin-left: 20px;">-->
+                <!--<span style="color: #009999">{{userInfo.productNum}}</span>个产品-->
+            <!--</span>-->
+            <!--<span style="display: inline-block;height: 232px;line-height:232px;width: 30%;min-width: 100px;max-width: 200px;">-->
+                <!--<span style="color: #009999">{{userInfo.interfaceNum}}</span>个接口单-->
+            <!--</span>-->
+            <!--<span style="display: inline-block;height: 232px;line-height:232px;width: 30%;min-width: 100px;max-width: 200px;">-->
+                <!--<span style="color: #009999">{{userInfo.apiNum}}</span>个API-->
+            <!--</span>-->
+        <!--</div>-->
+    <!--</div>-->
+    <!-- /.col -->
+</div><!-- /.row -->

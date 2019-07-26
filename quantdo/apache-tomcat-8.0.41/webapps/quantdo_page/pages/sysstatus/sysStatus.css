@@ -1,0 +1,77 @@
+.windColoerTr{
+	background:#eee;
+}
+.fontred{
+    color: red;
+}
+.closeMonitor{
+    background: #ffffff;
+    color: #B7B7B7;
+    border-radius: 10px;
+    line-height: 20px;
+    text-align: center;
+    height: 20px;
+    width: 20px;
+    font-size: 10px;
+    top: 9px;
+    right: 60px;
+    position: absolute;
+    cursor: pointer;
+    opacity: 0.6;
+}
+.closeMonitor::after {
+    content: "\2716";
+}
+.closeMonitor:hover{
+    background: #E6E6E6;
+    opacity: 1;
+    /*color: #ffffff;*/
+}
+.colseSeatDeatil{
+    background: #ffffff;
+    color: #B7B7B7;
+    border-radius: 10px;
+    line-height: 20px;
+    text-align: center;
+    height: 20px;
+    width: 20px;
+    font-size: 10px;
+    top: 5px;
+    right: 5px;
+    position: absolute;
+    cursor: pointer;
+    opacity: 0.6;
+}
+.colseSeatDeatil::after {
+    content: "\2716";
+}
+.colseSeatDeatil:hover{
+    background: #E6E6E6;
+    opacity: 1;
+    /*color: #ffffff;*/
+}
+.smallWindowScroll::-webkit-scrollbar {
+    width: .5rem;
+    height: .5rem;
+}
+.smallWindowScroll::-webkit-scrollbar-button    {
+    /*background-color:#FF7677;*/
+}
+.smallWindowScroll::-webkit-scrollbar-track     {
+    /*background:#445566;*/
+}
+.smallWindowScroll::-webkit-scrollbar-track-piece {
+    /*background-color: #445566;*/
+}
+.smallWindowScroll::-webkit-scrollbar-thumb{
+    background:#ccc;
+    border-radius:.4rem;
+}
+.table-description{
+    margin: 5px;
+    padding:5px;
+}
+
+#111 table tbody tr td:nth-child(2){
+    text-align:left;
+}

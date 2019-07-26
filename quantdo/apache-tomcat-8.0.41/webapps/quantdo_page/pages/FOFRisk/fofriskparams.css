@@ -1,0 +1,29 @@
+.riskParams-select-style{
+    width:inherit;
+}
+.select-style-w{
+    width:156px;
+}
+.input-style-w{
+	 width:156px;
+}
+
+.modal-width{
+    width: 900px;
+}
+
+.label-style {
+    width: 118px;
+}
+#settleDate{
+    width: 138px;
+}
+.control-label{
+	white-space: nowrap;
+}
+.title-style{
+	margin-left: 30px;
+}
+.lable-text-rigth{
+	text-align: right;
+}

@@ -1,0 +1,1163 @@
+<link rel="stylesheet" href="product/fundProduct.css" />
+<div class="row" ng-controller="fundProductController">
+		<form class="form-12">
+		<div class="form-row" >
+                <div class="row-col-one">
+                    <label class="word-style">机构代码<span
+							style="color: red;">*</span></label>
+							<select ng-model="queryEntity.instClientID" required
+								class="value-style" ng-disabled="isInstClient "
+								id="instClientID" name="instClientID" ng-change="querySelect(queryEntity.instClientID)"
+								onkeydown="myKeyup(event,this)"
+								ng-options="op.instClientID as op.instClientID+'_'+ op.instClientAbbrName for op in instClientlistEntitys">
+								<option value="">全部</option>
+							</select> 
+					</div>
+					
+				
+					<div class="row-col-one">
+						<label class="word-style">产品代码</label>
+						<!--<input type="text" class="form-control" ng-model="queryEntity.traderID" name="traderID"/>-->
+						<select class="word-style" ng-model="queryEntity.fundProductID">
+							<option value="">全部</option>
+							<option ng-repeat="fundProduct in fundProductTems"
+								value="{{fundProduct.fundProductID}}">
+								{{fundProduct.fundProductID}}_{{fundProduct.shortProductName}}</option>
+						</select>
+					
+					</div>
+					</div>
+				<div class="btn-beyond-one-row">
+      	      		<button type="button" class="btn btn-query btn-word-two"  ng-click="find(queryEntity)" ng-disabled="isQuery"> 查询</button>
+    			</div>
+    			
+    			<div class="row-form row-btn-operation" ng-show="fundProduct_add">
+    				<div class="row-btn-icon">
+               			<span class="btn-add-icon"></span>
+						<input type="button" class="btn btn-add btn-icon-two" value="新增"  ng-show=" fundProduct_add"
+							ng-click="initParameter()" data-toggle="modal" data-target="#fundProductModal">
+					</div>
+                </div>
+				
+				
+		</form>
+	<!---  -->
+	<!-- <div class="col-xs-12">
+		<div class="row">
+			<div class="col-xs-12">
+				<div class="clearfix">
+					<div class="pull-right tableTools-container"></div>
+				</div>
+				div.table-responsive
+				div.dataTables_borderWrap
+				<div>
+					<table id="fundProduct-dynamic-table"
+						class="table table-striped table-bordered table-hover"
+						datatable="ng">
+						<thead>
+							<tr>
+								<th class="center"><label class="pos-rel"> <span
+										class="ace" />序号<span class="lbl"></span>
+								</label></th>
+								<th>产品编号</th>
+								<th>产品简称</th>
+								<th>所属机构</th>
+								<th>产品类型</th>
+								<th>工作流默认方式</th>
+								<th>创建人</th>
+								<th class="hidden-480">创建时间</th>
+								<th>操作</th>
+							</tr>
+						</thead>
+
+						<tbody>
+							<tr ng-repeat="listEntity in listEntitys">
+								<td class="center">{{($index+1)}}</td>
+								<td ng-bind="listEntity.fundProductID"></td>
+								<td ng-bind="listEntity.shortProductName"></td>
+								<td>{{transInstClient(listEntity.instClientID)}}</td>
+								<td>{{transFundProductType(listEntity.fundProductType)}}</td>
+								<td>{{transDefaultModes(listEntity.defaultMode)}}</td>
+								<td ng-bind="listEntity.creator"></td>
+								<td ng-bind="listEntity.createDate">
+									<p ng-hide="true" ng-bind="listEntity.updateIndex"></p>
+								</td>
+								<td>
+									<div class="hidden-sm hidden-xs action-buttons">
+										<a class="blue" ng-click="initUpdate($index,listEntity)"
+											data-toggle="modal" style="cursor: pointer"
+											ng-show="!isInstClient  || (isInstClient && isAllowControl )"
+											data-target="#fundProductModal">[修改]</a> 
+										<a class="blue" ng-click="initDetial(listEntity)"
+											data-toggle="modal" style="cursor: pointer"
+											ng-show="isInstClient && !isAllowControl "
+											data-target="#fundProductModal">[详情]</a> 
+											
+										<a class="blue" ng-click="showWorkFlowList(listEntity)"
+										ng-show="!isInstClient || (isInstClient && isAllowControl ) "
+											data-toggle="modal" style="cursor: pointer"
+											data-target="#workFlowMsg">[工作流设置]</a> 
+											
+										<a class="blue" ng-click="initUpdateRisknode($index,listEntity)"
+										
+										ng-show="!isInstClient  || (isInstClient && isAllowControl ) "
+											data-toggle="modal" style="cursor: pointer"
+											data-target="#riskNoteListModal">[风控节点]</a>
+
+									</div>
+								</td>
+							</tr>
+						</tbody>
+					</table>
+				</div>
+
+			</div>
+		</div>
+		PAGE CONTENT ENDS
+	</div> -->
+	
+	<div class="col-xs-12 clear-padding-right">
+        <div class="row">
+            <div class="col-xs-12 clear-padding-right">
+                <div>
+                    <table id="fundProduct_dynamic_table" class="cell-border stripe" cellspacing="0" width="100%">
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+	<!-- /.col -->
+
+	<!-- 模态框（Modal） -->
+	<div class="modal fade" id="fundProductModal" tabindex="-1"
+		role="dialog" aria-labelledby="myModalLabel" aria-hidden="true"
+		data-backdrop="static" data-keyboard="false">
+		<div class="modal-dialog">
+			<div class="modal-content" style="width: 800px">
+				<div class="modal-header">
+					<button type="button" class="close" data-dismiss="modal"
+						aria-hidden="true">&times;</button>
+					<h4 class="modal-title" id="myModalLabel">产品信息维护</h4>
+				</div>
+				<div class="modal-body">
+					<!-- 添加表单内容-->
+					<form class="form-horizontal" role="form" name="myForm" novalidate>
+					<div class="panel panel-default panel-no-border">
+							<div class="panel-body">
+						
+								<div class="row">
+									<div class="col-xs-6">
+										<div class="row form-group">
+											<label for="fundProductType" class="col-sm-4 control-label">机构代码<span
+												style="color: red;">*</span></label>
+											<div class="col-xs-8">
+												<select ng-model="ModalEntity.instClientID" required
+													ng-disabled="isUpdate || isInstClient " class="form-control two-columns-modal-input"
+													id="instClientID" name="instClientID" 
+														ng-change="isInstClientSelect(ModalEntity.instClientID)"
+													onkeydown="myKeyup(event,this)" tab="4"
+													ng-options="op.instClientID as op.instClientID+'_'+ op.instClientAbbrName for op in instClientlistEntitys">
+												</select> <span
+													ng-show=" myForm.instClientID.$dirty &&  myForm.instClientID.$invalid"
+													style="color: red;">机构代码为必填项</span>
+											</div>
+										</div>
+									</div>
+								
+									<div class="col-xs-6">
+										<div class="row form-group">
+											<label for="fundProductID" class="col-sm-4 control-label">产品编号<span
+												style="color: red;">*</span></label>
+
+											<div class="col-xs-6">
+												<input type="text" class="form-control two-columns-modal-input" id="fundProductID"
+													placeholder="请输入产品编号" ng-model="ModalEntity.fundProductID"
+													name="fundProductID"  minlength="4" maxlength="4" required  ng-pattern="/^[0-9]*$/"  
+													ng-readonly="isUpdate" onkeydown="myKeyup(event,this)"
+													tab="1" /> <span
+													ng-show="myForm.fundProductID.$dirty && myForm.fundProductID.$invalid"
+													style="color: red;">产品编号为必填项且为4位数值类型</span>
+											</div>
+											<span  style="color: red;">保存后不可删除</span>
+										</div>
+									</div>
+								</div>
+								<div class="row">
+									<div class="col-xs-6">
+										<div class="row form-group">
+											<label for="fundProductName" class="col-sm-4 control-label">产品简称<span
+												style="color: red;">*</span></label>
+
+											<div class="col-xs-8">
+												<input type="text" class="form-control two-columns-modal-input"
+													id="shortProductName" placeholder="请输入产品简称"
+													ng-model="ModalEntity.shortProductName" ng-pattern="/^[^\'\u0022]{1,8}?$/"
+													name="shortProductName" maxlength="8" required tab="2"
+													onkeydown="myKeyup(event,this)" /> <input type="hidden"
+													class="form-control" /> <span
+													ng-show="myForm.shortProductName.$dirty && myForm.shortProductName.$invalid"
+													style="color: red;">产品简称为必填项，且不能输入单引号及双引号</span>
+											</div>
+										</div>
+									</div>
+
+									<div class="col-xs-6">
+										<div class="row form-group">
+											<label for="fundProductName" class="col-sm-4 control-label">产品全称<span
+												style="color: red;">*</span></label>
+
+											<div class="col-xs-8" >
+												<input type="text" class="form-control two-columns-modal-input" id="fundProductName"
+													placeholder="请输入产品全称"
+													ng-model="ModalEntity.fundProductName"
+													ng-pattern="/^[^\'\u0022]{1,20}?$/"
+													name="fundProductName" maxlength="20" required tab="3"
+													onkeydown="myKeyup(event,this)" /> <input type="hidden"
+													class="form-control"  /> <span
+													ng-show="myForm.fundProductName.$dirty && myForm.fundProductName.$invalid"
+													style="color: red;">产品全称为必填项，且不能输入单引号及双引号</span>
+											</div>
+										</div>
+									</div>
+								</div>
+								<div class="row">
+									<div class="col-xs-6">
+										<div class="row form-group">
+											<label for="fundProductType" class="col-sm-4 control-label">产品类型<span
+												style="color: red;">*</span></label>
+											<div class="col-xs-6">
+												<select ng-model="ModalEntity.fundProductType" required
+													ng-disabled="isUpdate" 
+													class="form-control two-columns-modal-input"
+													id="fundProductType" name="fundProductType"
+													onkeydown="myKeyup(event,this)" tab="4"
+													ng-options="op.key as op.text for op in fundProductTypes">
+												</select> <span
+													ng-show=" myForm.fundProductType.$dirty &&  myForm.fundProductType.$invalid"
+													style="color: red;">产品类型为必填项</span>
+											</div>
+										</div>
+										</div>
+										<div class="col-xs-6">
+										<div class="row form-group">
+											<label for="productManage" class="col-sm-4 control-label">产品经理</label>
+											<div class="col-xs-6">
+												<input type="text" class="form-control two-columns-modal-input" id="productManage"
+													placeholder="请输入产品经理" ng-model="ModalEntity.productManage"
+													name="productManage" maxlength="10" required
+													onkeydown="myKeyup(event,this)" tab="5" />
+											</div>
+										</div>
+										</div>
+									</div>
+									<div class="row">
+										<div class="col-xs-6">
+										<div class="row form-group">
+											<label for="productAdmin" class="col-sm-4 control-label">产品管理人</label>
+											<div class="col-xs-6">
+												<input type="text" class="form-control two-columns-modal-input" id="productAdmin"
+													placeholder="请输入产品管理人" ng-model="ModalEntity.productAdmin"
+													name="productAdmin" maxlength="20" required
+													onkeydown="myKeyup(event,this)" tab="6" />
+											</div>
+										</div>
+										</div>
+									<div class="col-xs-6">
+										<div class="row form-group">
+											<label for="productAdminTelephone" class="col-sm-4 control-label">产品管理人联系方式</label>
+											<div class="col-xs-6">
+												<input type="text" class="form-control two-columns-modal-input" id="productAdminTelephone"
+													placeholder="请输入产品管理人联系方式"
+													ng-model="ModalEntity.productAdminTelephone" name="productAdminTelephone"
+													maxlength="50" required onkeydown="myKeyup(event,this)"
+													tab="7" />
+											</div>
+										</div>
+										</div>
+									</div>
+									<div class="row">
+										<div class="col-xs-6">
+										<div class="row form-group">
+											<label for="productConsultant" class="col-sm-4 control-label">投资顾问</label>
+											<div class="col-xs-6">
+												<input type="text" class="form-control two-columns-modal-input" id="productConsultant"
+													placeholder="请输入投资顾问" ng-model="ModalEntity.productConsultant"
+													name="productConsultant" maxlength="20" required
+													onkeydown="myKeyup(event,this)" tab="8" />
+											</div>
+										</div>
+										</div>
+										<div class="col-xs-6">
+										<div class="row form-group">
+											<label for="productConsultantTelephone" class="col-sm-4 control-label">投资顾问联系方式</label>
+											<div class="col-xs-6" >
+												<input type="text" class="form-control two-columns-modal-input" id="productConsultantTelephone"
+													placeholder="请输入投资顾问联系方式" ng-model="ModalEntity.productConsultantTelephone"
+													name="productConsultantTelephone" maxlength="50" required
+													onkeydown="myKeyup(event,this)" tab="9" />
+											</div>
+										</div>
+										</div>
+								    </div>
+								    <div class="row">
+										<div class="col-xs-6">
+										<div class="row form-group">
+											<label for="productReceiver" class="col-sm-4 control-label">产品对接人</label>
+											<div class="col-xs-6">
+												<input type="text" class="form-control two-columns-modal-input" id="productReceiver"
+													placeholder="请输入产品对接人" ng-model="ModalEntity.productReceiver"
+													name="productReceiver" maxlength="20" required
+													onkeydown="myKeyup(event,this)" tab="10" />
+											</div>
+										</div>
+										</div>
+										<div class="col-xs-6">
+										<div class="row form-group">
+											<label for="productReceiverTelephone" class="col-sm-4 control-label">产品对接人联系方式</label>
+											<div class="col-xs-6">
+												<input type="text" class="form-control two-columns-modal-input" id="productReceiverTelephone"
+													placeholder="请输入产品对接人联系方式" ng-model="ModalEntity.productReceiverTelephone"
+													name="productReceiverTelephone" maxlength="50" required
+													onkeydown="myKeyup(event,this)" tab="11" />
+											</div>
+										</div>
+										</div>
+								    </div>
+									<div class="row">
+                                      <div class="col-xs-6">
+										<div class="row form-group">
+											<label for="productDeposit" class="col-sm-4 control-label">产品托管人</label>
+											<div class="col-xs-6">
+												<input type="text" class="form-control two-columns-modal-input" id="productDeposit"
+													placeholder="请输入产品托管人"
+													ng-model="ModalEntity.productDeposit" name="productDeposit"
+													maxlength="20" required onkeydown="myKeyup(event,this)"
+													tab="12" />
+											</div>
+										</div>
+										</div>
+								<div class="col-xs-6">
+										<div class="row form-group">
+											<label for="productAdminFee" class="col-sm-4 control-label">产品管理费</label>
+											<div class="col-xs-6">
+												<input class="form-control two-columns-modal-input" type="text"
+													 placeholder="请输入产品管理费"
+													ng-model="ModalEntity.productAdminFee" 
+													name="productAdminFee" id="productAdminFee" maxlength="40"  required
+													onkeydown="myKeyup(event,this)" tab="13"/>
+										
+											</div>
+												<label for="productAdminFee" class="col-sm-1 control-label behind-input">%</label>
+										</div>
+										</div>
+									</div>
+									<div class="row">
+									<div class="col-xs-6">
+										<div class="row form-group">
+											<label for="productDepositFee" class="col-sm-4 control-label">产品托管费</label>
+											<div class="col-xs-6">
+												<input type="text" class="form-control two-columns-modal-input"
+													id="productDepositFee" placeholder="请输入产品托管费"
+													ng-model="ModalEntity.productDepositFee"
+													name="productDepositFee" maxlength="40" required
+													onkeydown="myKeyup(event,this)" tab="14"  />
+												
+											</div>
+											<label for="productDepositFee" class="col-sm-1 control-label behind-input">%</label>
+										</div>
+										</div>
+
+										<div class="col-xs-6" >
+										<div class="row form-group">
+											<label for="startDate" class="col-sm-4 control-label">开始日期<span
+												style="color: red;">*</span></label>
+											<div class="col-xs-6">
+												<input class="form-control two-columns-modal-input" type="text" 
+												onchange="" onfocus="WdatePicker({lang:'zh-cn',dateFmt:'yyyyMMdd'})"
+												 	ng-disabled="isUpdate" 
+													ng-readonly="true" placeholder="请选择起始日期" required
+													ng-model="ModalEntity.startDate" name="startDate"
+													id="startDate" onkeydown="myKeyup(event,this)" tab="15"
+													maxlength="8" />
+														<span
+													ng-show=" myForm.startDate.$dirty &&  myForm.startDate.$invalid"
+													style="color: red;">起始日期为必输项</span>
+											</div>
+										</div>
+										</div>
+									</div>
+									<div class="row">
+										<div class="col-xs-6">
+										<div class="row form-group">
+											<label for="endDate" class="col-sm-4 control-label">到期日期</label>
+											<div class="col-xs-6">
+												<input class="form-control two-columns-modal-input" type="text" 
+												onchange="" onfocus="WdatePicker({lang:'zh-cn',dateFmt:'yyyyMMdd'})"
+													ng-readonly="true" placeholder="请选择到期日期"  ng-disabled="showEndDate" 
+													ng-model="ModalEntity.endDate" name="endDate"
+													id="endDate" onkeydown="myKeyup(event,this)" tab="16"
+													maxlength="8" />
+											</div>
+										</div>
+										</div>
+										<div class="col-xs-6">
+										<div class="row form-group">
+											<label for="notOpenDate" class="col-sm-4 control-label">暂停开仓日期</label>
+											<div class="col-xs-6">
+												<input class="form-control two-columns-modal-input" type="text" 
+												onchange="" onfocus="WdatePicker({lang:'zh-cn',dateFmt:'yyyyMMdd'})"
+													ng-readonly="true" placeholder="请选择暂停开仓日期"
+													ng-model="ModalEntity.notOpenDate" name="notOpenDate"
+													id="notOpenDate" onkeydown="myKeyup(event,this)" tab="17"
+													maxlength="8" />
+											</div>
+										</div>
+										</div>
+								    </div>
+									<div class="row">
+									    <div class="col-xs-6">
+											<div class="row form-group">
+												<label for="fundProductQuota" class="col-sm-4 control-label">产品份额<span
+												style="color: red;">*</span></label>
+												<div class="col-xs-6">
+													<input type="text" class="form-control two-columns-modal-input"
+														id="fundProductQuota" placeholder="请输入产品份额"
+														ng-model="ModalEntity.fundProductQuota"   ng-pattern="/^\d{1,14}(\.\d{0,6})?$/"
+														  
+														name="fundProductQuota" maxlength="22" required
+														onkeydown="myKeyup(event,this)" tab="18"  />
+														<span
+														ng-show=" myForm.fundProductQuota.$dirty &&  myForm.fundProductQuota.$invalid"
+														style="color: red;">产品份额为必输项且大于零且最大14位整数最多六位小数</span>
+												</div>
+											</div>
+										</div>
+										<div class="col-xs-6">
+											<div class="row form-group">
+												<label for="linkAccountType" class="col-sm-4 control-label">产品级别<span
+													style="color: red;">*</span></label>
+												<div class="col-xs-6" >
+													<select ng-model="ModalEntity.linkAccountType" required
+														class="form-control two-columns-modal-input"
+														id="linkAccountType" name="linkAccountType"
+														onkeydown="myKeyup(event,this)" tab="19"
+														ng-options="op.key as op.text for op in linkAccountTypes"
+														ng-disabled="amType =='1' || isUpdate">
+													</select> <span
+														ng-show=" myForm.linkAccountType.$dirty &&  myForm.linkAccountType.$invalid"
+														style="color: red;">产品级别为必填项</span>
+												</div>
+											</div>
+										</div>
+									</div>
+									<div class="row">
+										<div class="col-xs-6">
+										<div class="row form-group">
+											<label for="remark" class="col-sm-4 control-label">备注</label>
+											<div class="col-xs-6">
+												<input type="text" class="form-control two-columns-modal-input" id="remark"
+													placeholder="请输入备注"
+													ng-model="ModalEntity.remark" name="remark"
+													maxlength="20" required onkeydown="myKeyup(event,this)"
+													tab="19" />
+											</div>
+										</div>
+										</div>
+										
+										
+										
+										<!-- <div class="col-xs-6">
+											<div class="row form-group">
+												<label for="defaultMode" class="col-sm-3 control-label" style="margin-left: -12px;margin-right: 12px;">工作流默认方式<span
+												style="color: red;">*</span></label>
+												<div class="col-xs-6">
+													<select class="fundProduct-select-style"
+														id="defaultMode" name="defaultMode" required
+														ng-model="ModalEntity.defaultMode"
+														ng-options="op.key as op.text for op in defaultModes"
+														onkeydown="myKeyup(event,this)" tab="14" ></select>
+														<span
+														ng-show="myForm.defaultMode.$dirty &&  myForm.defaultMode.$invalid"
+														style="color: red;">工作流默认方式为必选项</span>
+												</div>
+											</div>
+										</div> -->
+								  </div>
+							</div>
+					</div>
+					</form>
+					<!--End  添加表单内容-->
+				</div>
+				<div class="modal-footer">
+					<span class="btn btn-info btn-sm popover-info" data-rel="popover" ng-show ="!isDetail"
+						data-placement="bottom" title="" 
+						ng-click="canClick || myForm.fundProductID.$invalid || myForm.fundProductName.$invalid || myForm.fundProductQuota.$invalid || 
+						myForm.defaultMode.$invalid || myForm.startDate.$invalid || myForm.shortProductName.$invalid || save(ModalEntity)"
+						ng-disabled=" canClick || myForm.fundProductID.$invalid || myForm.fundProductName.$invalid || myForm.fundProductQuota.$invalid || 
+						myForm.defaultMode.$invalid || myForm.startDate.$invalid || myForm.shortProductName.$invalid">&nbsp;确定&nbsp;</span>
+					<span class="btn btn-close btn-sm popover-info" data-rel="popover"
+						data-placement="bottom" title="" data-dismiss="modal">&nbsp;取消&nbsp;</span>
+				</div>
+				<!--  -->
+			</div>
+		</div>
+	</div>
+	<!-- /.modal -->
+	
+	<!-- 风控节点部分 -->
+	<!-- riskNoteListModal -->
+	<div class="modal fade" id="riskNoteListModal" tabindex="-1"
+		role="dialog" aria-labelledby="myModalLabel" aria-hidden="true"
+		data-backdrop="static" data-keyboard="false">
+
+		<div class="modal-dialog">
+
+			<div class="modal-content" style="width: 950px">
+				<div class="modal-header">
+					<button type="button" class="close" data-dismiss="modal"
+						aria-hidden="true">&times;</button>
+					<h4 class="modal-title" id="myModalLabel">风控节点设置</h4>
+				</div>
+				<div class="modal-body">
+					
+                   	<div class="col-xs-12" ng-show="risknode_add">
+					   <button class="btn btn-add btn-icon-two" id="bootbox-options"
+						    ng-click="initRisknodeParameter()" data-toggle="modal"
+						    data-target="#addFofNodeModal">添加节点</button>
+					</div>
+				 	<div class="clearfix">
+						<div class="pull-right tableTools-container"></div>
+					</div>
+					<div style="margin-top:10px;">
+					<table id="riskNode_dynamic_table"
+						class="cell-border stripe"
+						cellspacing="0" width="100%"
+						></table>
+					</div>
+					
+					<!-- <table id="riskNode_dynamic_table"
+						class="cell-border stripe"
+						cellspacing="0" width="100%"
+						datatable="ng">
+						<thead>
+							<tr>
+								<th class="center"><label class="pos-rel"> <span
+										class="ace" /> <span class="lbl"></span> 序号
+								</label></th>
+								<th>风控节点名称</th>
+								<th>IP</th>
+								<th>端口</th>
+								<th>频率设置</th>
+								<th>用户</th>
+								<th>操作</th>
+								<th>状态</th>
+							</tr>
+						</thead>
+
+						<tbody>
+							<tr ng-repeat="risknodeEntity in risknodeEntitys" class="center">
+								<td class="center">{{($index+1)}}</td>
+								<td ng-bind="risknodeEntity.risknodeName"></td>
+								<td ng-bind="risknodeEntity.userIp"></td>
+								<td ng-bind="risknodeEntity.userPort"></td>
+								<td ng-if="risknodeEntity.updateStyle=='1'" >{{risknodeEntity.updateFreq}} s</td>
+								<td ng-if="risknodeEntity.updateStyle=='0'" ng-bind="risknodeEntity.sendTime"></td>
+								<td ng-bind="risknodeEntity.userName"></td>
+								<td>
+									<div class="hidden-sm hidden-xs action-buttons">
+										<a class="blue" ng-click="initUpdaterisknodeParam($index,risknodeEntity)"
+											style="cursor: pointer" data-toggle="modal"
+											data-target="#addFofNodeModal">[修改]</a> 
+										<a class="blue"   ng-click="initDatarightModal($index,risknodeEntity)"
+											style="cursor: pointer" data-toggle="modal"
+											data-target="#datarightSetModal">[权限设置]</a>
+										<a class="blue"
+											style="cursor: pointer" ng-click="removeRisknode($index,risknodeEntity)">[删除]</a>
+									</div>
+								</td>
+								<td>{{transRisknodestatusTypes(risknodeEntity.risknodeStatus)}}</td>
+								<div>
+									<input type="hidden" ng-bind="risknodeEntity.recordIndex">
+								</div>
+							</tr>
+						</tbody>
+					</table> -->
+				</div>
+				<!-- /.col -->
+
+			</div>
+
+		</div>
+
+	</div>
+	<!-- end riskNoteListModal -->
+
+	<!-- --------------------母基金风控节点---------------------------------------- -->
+	<!-- 新增 修改 addFofNodeModal .Modal -->
+	<div class="modal fade" id="addFofNodeModal" tabindex="-1"
+		role="dialog" aria-labelledby="myModalLabel" aria-hidden="true"
+		data-backdrop="static" data-keyboard="false">
+		<div class="modal-dialog">
+			<div class="modal-content">
+				<div class="modal-header">
+					<button type="button" class="close" data-dismiss="modal"
+						aria-hidden="true">&times;</button>
+					<h4 class="modal-title" id="myModalLabel">新增风控节点信息维护</h4>
+				</div>
+				
+				<div class="modal-body">
+					<!-- 添加表单内容-->
+					
+					<form class="form-horizontal" role="form" name="myForm1" novalidate>
+						
+							<div class="form-group">
+									<label  class="col-sm-4 control-label">母基金分配的机构代码
+									<span style="color: red;">*</span>
+									</label>
+									<div class="col-xs-6">
+										<input class="form-control" type="text" required
+											placeholder="请输入母基金分配的机构代码"
+											ng-model="ModalrisknodeEntity.fofRiskNodeInstID" name="fofRiskNodeInstID" id="fofRiskNodeInstID"
+											onkeydown="myKeyup(event,this)" tab="0" maxlength="20" />
+											<span
+									  ng-show=" myForm1.fofRiskNodeInstID.$dirty &&  myForm1.fofRiskNodeInstID.$invalid"
+									  style="color: red;">母基金分配的机构代码为必填项</span>
+									</div>
+							</div>
+							
+							<div class="form-group">
+									<label  class="col-sm-4 control-label">母基金分配的产品代码
+									<span style="color: red;">*</span>
+									</label>
+									<div class="col-xs-6">
+										<input class="form-control" type="text" required
+											placeholder="请输入母基金分配的产品代码"
+											ng-model="ModalrisknodeEntity.fofRiskNodeFundID" name="fofRiskNodeFundID" id="fofRiskNodeFundID"
+											onkeydown="myKeyup(event,this)" tab="1" maxlength="50" />
+											<span
+									  ng-show=" myForm1.fofRiskNodeFundID.$dirty &&  myForm1.fofRiskNodeFundID.$invalid"
+									  style="color: red;">母基金分配的产品代码为必填项</span>
+									</div>
+							</div>
+							
+							<div class="form-group">
+								<label  class="col-sm-4 control-label">风控节点名称
+								<span style="color: red;">*</span>
+								</label>
+								<div class="col-xs-6">
+									<input class="form-control" type="text"  required
+										placeholder="请输入风控节点名称"
+										ng-model="ModalrisknodeEntity.risknodeName" name="risknodeName" id="risknodeName"
+										onkeydown="myKeyup(event,this)" tab="2" maxlength="50" />
+										<span
+								  ng-show=" myForm1.risknodeName.$dirty &&  myForm1.risknodeName.$invalid"
+								  style="color: red;">风控节点名称为必填项</span>
+								</div>
+							</div>
+							
+							<div class="form-group">
+								<label  class="col-sm-4 control-label">用户名
+								<span style="color: red;">*</span>
+								</label>
+								<div class="col-xs-6">
+									<input class="form-control" type="text" required
+										placeholder="请输入用户名"
+										ng-model="ModalrisknodeEntity.userName" name="userName" id="userName"
+										onkeydown="myKeyup(event,this)" tab="3" maxlength="15" />
+										<span
+								  ng-show=" myForm1.userName.$dirty &&  myForm1.userName.$invalid"
+								  style="color: red;">用户名为必填项</span>
+								</div>
+							</div>
+							
+							<div class="form-group">
+								<label  class="col-sm-4 control-label">密码
+								<span style="color: red;">*</span>
+								</label>
+								<div class="col-xs-6">
+									<input class="form-control" type="password"  required
+										placeholder="请输入密码"
+										ng-model="ModalrisknodeEntity.userPasswd" name="userPasswd" id="userPasswd"
+										onkeydown="myKeyup(event,this)" tab="4" maxlength="20" />
+										<span
+								  ng-show=" myForm1.userPasswd.$dirty &&  myForm1.userPasswd.$invalid"
+								  style="color: red;">密码为必填项</span>
+								</div>
+							</div>
+							
+							<div class=" form-group">
+								<label  class="col-sm-4 control-label">IP
+								<span style="color: red;">*</span>
+								</label>
+								<div class="col-xs-6">
+									<input class="form-control" type="text"  required
+										ng-pattern="/^([0-9]{1,3}\.){3}[0-9]{1,3}$/"
+										placeholder="请输入IP"
+										ng-model="ModalrisknodeEntity.userIp" name="userIp" id="userIp"
+										onkeydown="myKeyup(event,this)" tab="5" maxlength="15" />
+										<span
+								  ng-show=" myForm1.userIp.$dirty &&  myForm1.userIp.$invalid"
+								  style="color: red;">Ip:127.0.0.1</span>
+								</div>
+							</div>
+					
+							<div class=" form-group">
+								<label  class="col-sm-4 control-label">端口
+								<span style="color: red;">*</span>
+								</label>
+								<div class="col-xs-6">
+									<input class="form-control" type="text"  required
+										placeholder="请输入端口号"
+										ng-model="ModalrisknodeEntity.userPort" name="userPort" id="userPort"
+										onkeydown="myKeyup(event,this)" tab="6" maxlength="8" />
+										<span
+								  ng-show=" myForm1.userPort.$dirty &&  myForm1.userPort.$invalid"
+								  style="color: red;">端口为必填项</span>
+								</div>
+							</div>
+							
+							<div class=" form-group">
+								<label  class="col-sm-4 control-label">母基金机构代码
+								<span style="color: red;">*</span>
+								</label>
+								<div class="col-xs-6">
+									<input class="form-control" type="text"  required
+										placeholder="请输入母基金机构代码"
+										ng-model="ModalrisknodeEntity.fofInstID" name="fofInstID" id="fofInstID"
+										onkeydown="myKeyup(event,this)" tab="7" maxlength="20" />
+										<span
+								  ng-show=" myForm1.fofInstID.$dirty &&  myForm1.fofInstID.$invalid"
+								  style="color: red;">母基金机构代码为必填项</span>
+								</div>
+							</div>
+					
+							 <div class="form-group">
+							    <label for="fundProductType" class="col-sm-4 control-label">频率方式
+							    <span style="color: red;">*</span>
+							    </label>							
+								  <div class="col-xs-6">
+								  <select ng-model="ModalrisknodeEntity.updateStyle" required
+									    class="form-control"
+									   id="updateStyle" name="updateStyle"
+									   onkeydown="myKeyup(event,this)" tab="8"
+									   ng-options="op.key as op.text for op in risknodeupdateStyle"
+									   ng-change="changeStyle()" >
+								  </select> <span
+									  ng-show=" myForm1.updateStyle.$dirty &&  myForm1.updateStyle.$invalid"
+									  style="color: red;">机构代码为必填项</span>
+							     </div>
+							</div>
+						
+							<div class="form-group">
+							 
+								<label  class="col-sm-4 control-label">频率
+								<span ng-show="ModalrisknodeEntity.updateStyle=='1'" style="color: red;">*</span>
+								</label>
+								
+								<div class="col-xs-6">
+									<input class="form-control" type="text" required
+										placeholder="请输入频率"
+										ng-pattern="/^([5-9]|([1-9][0-9]{1,}))\.{0,1}[0-9]{0,}$/"
+										ng-model="ModalrisknodeEntity.updateFreq" name="updateFreq" id="updateFreq"
+										ng-disabled="ModalrisknodeEntity.updateStyle=='0'"
+										onkeydown="myKeyup(event,this)" tab="9" maxlength="10" />	
+								 <!--   <span>s &nbsp;</span> -->
+								   <span
+								       ng-show=" myForm1.updateFreq.$dirty &&  myForm1.updateFreq.$invalid && ModalrisknodeEntity.updateStyle=='1'"
+								       style="color: red;">频率须>5s</span>
+								</div>
+								<label class="col-sm-1 control-label behind-input">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;s&nbsp;</label>
+							</div>
+							
+							<div class="form-group">
+								<label  class="col-sm-4 control-label">发送时间
+								<span ng-show="ModalrisknodeEntity.updateStyle=='0'" style="color: red;">*</span>
+								</label>
+								<div class="col-xs-6">
+									<input  style="width:80px"  type="text"  required
+										ng-pattern="/^(([0-9])|(1[0-9])|(2[0-3]))$/"						   
+										ng-model="ModalrisknodeEntity.sendTimeHour" name="sendTimeHour" id="sendTimeHour"  
+										ng-disabled="ModalrisknodeEntity.updateStyle=='1'"
+										onkeydown="myKeyup(event,this)" tab="10" maxlength="2" />
+								    <span>:</span>
+								  <input   style="width:80px" type="text"  required
+										ng-pattern="/^(([0-9])|([0-5][0-9]))$/" 						   
+										ng-model="ModalrisknodeEntity.sendTimeMinu" name="sendTimeMinu" id="sendTimeMinu"  
+										ng-disabled="ModalrisknodeEntity.updateStyle=='1'"
+										onkeydown="myKeyup(event,this)" tab="11" maxlength="2" />			  
+								<span
+								       ng-show="((myForm1.sendTimeHour.$dirty &&  myForm1.sendTimeHour.$invalid)||(myForm1.sendTimeMinu.$dirty &&  myForm1.sendTimeMinu.$invalid)) && ModalrisknodeEntity.updateStyle=='0'"
+								       style="color: red;">范围(0~23):(0~59)</span>
+								
+								</div>
+							</div>
+							
+							
+							<div class="form-group">
+							 
+								<label  class="col-sm-4 control-label">单次最大发送记录数</label>
+								
+								<div class="col-xs-6">
+									<input class="form-control" type="text" 
+										placeholder="请输入单次最大发送记录数,为空则不限制"
+										ng-pattern="/^[0-9]{1,10}?$/"
+										ng-model="ModalrisknodeEntity.maxTransferRecord" name="maxTransferRecord" id="maxTransferRecord"
+										onkeydown="myKeyup(event,this)" tab="12" maxlength="10" />	
+							<!-- 	   <span>条 &nbsp;</span> -->
+								   <span
+								       ng-show=" myForm1.maxTransferRecord.$dirty &&  myForm1.maxTransferRecord.$invalid"
+								       style="color: red;">单次最大发送记录数仅可填入数字和空，为空表示不限制单次发送数量</span>
+								</div>
+								<label class="col-sm-1 control-label behind-input">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;条 &nbsp;</label>
+							</div>
+					</form>
+					
+					<!--End  添加表单内容-->
+				</div>
+				
+				<div class="modal-footer">
+				
+					<span class="btn btn-info btn-sm popover-info" data-rel="popover"
+						data-placement="bottom" title="" 
+						ng-click="canClick||myForm1.fofRiskNodeInstID.$invalid || myForm1.risknodeName.$invalid|| myForm1.userPasswd.$invalid 
+						|| myForm1.userIp.$invalid || myForm1.fofRiskNodeFundID.$invalid || myForm1.fofInstID.$invalid || myFrom1.maxTransferRecord.$invalid || 
+						myForm1.userPort.$invalid || (myForm1.updateFreq.$invalid && ModalrisknodeEntity.updateStyle=='1') ||
+						(myForm1.sendTimeHour.$invalid && ModalrisknodeEntity.updateStyle=='0') || 
+						(myForm1.sendTimeMinu.$invalid && ModalrisknodeEntity.updateStyle=='0') || saveRisknode(ModalrisknodeEntity)"
+						ng-disabled="canClick||myForm1.fofRiskNodeInstID.$invalid || myForm1.risknodeName.$invalid|| myForm1.userPasswd.$invalid 
+						|| myForm1.userIp.$invalid || myForm1.fofRiskNodeFundID.$invalid || myForm1.fofInstID.$invalid || myFrom1.maxTransferRecord.$invalid || 
+						myForm1.userPort.$invalid || (myForm1.updateFreq.$invalid && ModalrisknodeEntity.updateStyle=='1') ||
+						(myForm1.sendTimeHour.$invalid && ModalrisknodeEntity.updateStyle=='0') || 
+						(myForm1.sendTimeMinu.$invalid && ModalrisknodeEntity.updateStyle=='0')">&nbsp;确定&nbsp;</span>
+					<span class="btn btn-close btn-sm popover-info" data-rel="popover"
+						data-placement="bottom" title="" data-dismiss="modal">&nbsp;取消&nbsp;</span>
+				</div>
+			</div>
+		</div>
+	</div>
+	
+	<!-- 权限设置 datarightSetModal .Modal -->
+	<div class="modal fade" id="datarightSetModal" tabindex="-1"
+		role="dialog" aria-labelledby="myModalLabel" aria-hidden="true"
+		data-backdrop="static" data-keyboard="false">
+		<div class="modal-dialog">
+			<div class="modal-content" style="width: 800px">
+				<div class="modal-header">
+					<button type="button" class="close" data-dismiss="modal"
+						aria-hidden="true">&times;</button>
+					<h4 class="modal-title" id="myModalLabel">数据权限</h4>
+				</div>
+				<div class="modal-body">
+			      
+			      
+			      
+			      <div class="panel panel-default">
+                  <div class="panel-heading">
+                      <h3 class="panel-title">数据权限设置</h3>
+                  </div>
+                <div class="panel-body" style="height:400px;">
+                    
+               <div class="wcmmodalbodydiv">
+               <div style="width:250px;float:left;height:500px;">
+                <!-- left -->
+                <div class="wcmoverflatLeftTitleDiv" style="width:200px;">
+                        <table >
+                            <thead class="specthead">
+                            <tr class="container-tr-row">
+                                <th>未设置权限</th>
+                               
+                            </tr>
+                            </thead>
+                        </table>
+                    </div>
+                    <div class="wcmoverflatLeftDiv" style="width:200px;">
+                        <table class="cell-border stripe">
+                            
+                            <tbody class="spectbody">
+                            <tr class="hoverTr" ng-repeat="unselectedRight in unselectedRightGroup" ng-class="{windColoerTr:$index%2 == 0}">
+                                <td ng-class="{selectActive:unselectedRight.isSelectActive == true}"   ng-dblclick="addGroup($index,unselectedRight)" ng-click="addGroupSelect($index,unselectedRight)">{{transrisknodedatarightTypes(unselectedRight.rightId)}}</td><!-- ng-bind="unselectedRight.rightName" -->
+                                
+                            </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <!-- Midd -->
+                    <div  class="wcmoverflatMidDiv" style="width:100px;">       
+	                     <div class="move-container operation-container">
+		                    <span class="move-icon" ng-click="addSelectRightEntity()">&gt;</span>
+		                    <span class="move-icon icon-move-right" ng-click="addAllRightEntity()"></span>
+		                    <span class="move-icon icon-move-left" ng-click="deleteAllRightEntity()" ></span>
+		                    <span class="move-icon" ng-click="deleteSelectRightEntity()">&lt;</span>
+               		 	</div>
+               		 </div>
+                    <!-- right  -->
+                    <div style="width:250px;">
+                     <div class="wcmoverflatRightTitleDiv" style="width:200px;">
+                        <table >
+                            <thead class="specthead">
+                            <tr class="container-tr-row">
+                                <th>已设置权限</th>
+                                
+                            </tr>
+                            </thead>
+                        </table>
+                    </div>
+                       <div  class="wcmoverflatRightDiv" style="width:200px;">
+                        <table>
+                            <tbody class="spectbody">
+                            <tr  class="hoverTr"  ng-repeat="selectedRight in selectedRightGroup" ng-class="{windColoerTr:$index%2 == 0}">
+                               <td ng-class="{selectActive:selectedRight.isSelectActive == true}"   ng-dblclick="deleteGroup($index,selectedRight)" ng-click="deleteGroupSelect($index,selectedRight)">{{transrisknodedatarightTypes(selectedRight.rightId)}}</td>
+                               
+                            </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    </div>
+                    </div>
+                   </div>
+                </div>
+			
+			    
+			    
+			    
+			    
+			    </div>
+			    <div class="modal-footer">
+					<span class="btn btn-info btn-sm popover-info" data-rel="popover"
+						data-placement="bottom" title="" ng-click="canClick || saveSelectedRight()"
+						ng-disabled="canClick"
+						>&nbsp;确定&nbsp;</span>
+					<span class="btn btn-close btn-sm popover-info" data-rel="popover"
+						data-placement="bottom" title="" data-dismiss="modal">&nbsp;取消&nbsp;</span>
+				</div>
+			</div>	
+		</div>
+	</div>
+	</div>
+	<!-- /.modal -->
+	
+	<!-- --------------------工作流---------------------------------------- -->
+	<!-- 工作流查看 -->
+    <div class="modal fade" id="workFlowMsg" tabindex="-1" role="dialog"
+		aria-labelledby="myModalLabel" aria-hidden="true"
+		data-backdrop="static" data-keyboard="false">
+		<div class="modal-dialog">
+			<div class="modal-content" style="width:1000px">
+				<div class="modal-header">
+					<button type="button" class="close" data-dismiss="modal"
+						aria-hidden="true">&times;</button>
+					<h4 class="modal-title" id="myModalLabel">工作流设置</h4>
+				</div>
+				<div class="modal-body">
+					<form class="form-horizontal" role="form" name="workFlowMsgForm" novalidate>
+							<div class="row">
+								<div class="col-xs-12" >
+								    <div class="col-xs-12" ng-show="workflow_add">
+										<button class="btn btn-query btn-word-two" id="bootbox-options"
+											ng-click="initWorkFlow()" data-toggle="modal"
+											data-target="#workFlowParams">添加工作流</button>
+									</div>
+									<div class="clearfix">
+										<div class="pull-right tableTools-container"></div>
+									</div>
+									<div style="margin-top:10px;">
+										<table id="workFlow_dynamic_table"
+											class="cell-border stripe"
+											cellspacing="0" width="100%"
+											>
+										</table>
+									<!-- 	<table id="workFlow-dynamic-table"
+											class="cell-border stripe"
+											cellspacing="0" width="100%"
+											datatable="ng">
+											<thead>
+												<tr>
+													<th class="center"><label class="pos-rel"> 	<span class="ace" /> <span class="lbl"></span>
+													</label></th>
+												
+													<th>工作流名称</th>
+													<th>机构代码</th>
+													<th>账号</th>
+													<th>工作流类型</th>
+													<th>流程节点</th>
+													<th>默认方式</th>
+													<th>操作</th>
+												</tr>
+											</thead>
+					
+											<tbody>
+												<tr ng-repeat="workFlowEntity in workFlowEntitys ">
+													<td class="center">{{($index+1)}}</td>
+													<td ng-bind="workFlowEntity.workFlowName"></td>
+													<td ng-bind="workFlowEntity.instClientID"></td>
+													<td ng-bind="workFlowEntity.innerAccountID"></td>
+													<td>{{transModelTypes(workFlowEntity.modelType)}}</td>
+													<td>{{transProcedures(workFlowEntity.modelType)}}</td>
+													<td>{{transDefaultModes(workFlowEntity.defaultMode)}}</td>
+													<input type="hidden" ng-bind="workFlowEntity.recordIndex"
+														value="{{$index}}" />								
+													<td>
+														<div class="hidden-sm hidden-xs action-buttons">
+															<a class="blue"
+																ng-click="updateWorkFlowParam($index,workFlowEntity)"
+																style="cursor:pointer"
+																data-toggle="modal" data-target="#workFlowParams">[修改]</a>
+															<a class="blue" style="cursor:pointer"
+																ng-click="removeWorkFlow($index,workFlowEntity)">[删除]</a>
+														</div>
+													</td>
+												</tr>
+											</tbody>
+										</table> -->
+									</div>
+								</div>
+							<!-- PAGE CONTENT ENDS -->
+						</div>
+					</form>
+				</div>
+				<div class="modal-footer">
+                   <span class="btn btn-close btn-sm popover-info" data-rel="popover"
+                         data-placement="bottom" title="" data-dismiss="modal">&nbsp;取消&nbsp;</span>
+                </div>
+			</div>
+		</div>
+	</div>
+    <!-- end -->
+    
+    <!-- 工作流增删 -->
+    <div class="modal fade" id="workFlowParams" tabindex="-1" role="dialog"
+		aria-labelledby="myModalLabel" aria-hidden="true"
+		data-backdrop="static" data-keyboard="false">
+		<div class="modal-dialog">
+			<div class="modal-content" style="width:1200px">
+				<div class="modal-header">
+					<button type="button" class="close" data-dismiss="modal"
+						aria-hidden="true">&times;</button>
+					<h4 class="modal-title" id="myModalLabel">工作流设置</h4>
+				</div>
+				<div class="modal-body">
+					<form class="form-horizontal" role="form" name="workFlowParamForm" novalidate>
+						<div class="row">
+							<div class="col-xs-6">
+								<div class="row form-group">
+									<label class="col-xs-4 control-label label-style">工作流名称<span
+										style="color: red;">*</span></label>
+									<div class="col-xs-7">
+										<input type="text" ng-model="workFlowParam.workFlowName" required
+											ng-disabled="isUpdate" class="form-control two-columns-modal-input" maxlength="50"
+											id="workFlowName" name="workFlowName">
+										<span ng-show="workFlowParamForm.workFlowName.$dirty && workFlowParamForm.workFlowName.$invalid"
+											style="color: red;">工作流名称为必填项</span>
+									</div>
+								</div>
+							</div>
+						</div>
+						<div class="row">
+							<div class="col-xs-6">
+								<div class="row form-group">
+									<label class="col-xs-4 control-label label-style">账号<span
+										style="color: red;">*</span></label>
+									<div class="col-xs-6">
+										<select class="" ng-model="workFlowParam.innerAccountID" 
+											ng-options="op.innerAccountID as op.innerAccountID+'_'+op.accountName for op in capitalAccountEntitys"
+											ng-change="queryUserByInnerAccountIDList(workFlowParam.innerAccountID)" required >
+                                       	</select>
+									</div>
+								</div>
+							</div>
+						</div>
+						<div class="row">
+							<div class="col-xs-6">
+								<div class="row form-group">
+									<label class="col-xs-4 control-label label-style">默认方式<span
+										style="color: red;">*</span></label>
+									<div class="col-xs-6">
+										<select ng-model="workFlowParam.defaultMode" required
+											class=""
+											ng-options="op.key as op.text for op in defaultModes"
+											id="defaultMode" name="defaultMode"></select>
+										<!-- <span style="color:red;display:block;margin-top:5px">默认方式请在产品界面进行统一修改</span> -->
+									</div>
+								</div>
+							</div>
+						</div>
+						
+						<div class="panel panel-default">
+							<div class="panel-heading">
+								<h3 class="panel-title">交易流程</h3>
+							</div>
+							<div class="panel-body">
+								<div class="row">
+									<div class="col-xs-6">
+										<div class="row form-group">
+											<label class="col-xs-4 control-label label-style">交易模板<span
+												style="color: red;">*</span></label>
+											<div class="col-xs-6">
+												<select ng-model="workFlowParam.modelType" required
+													class="" ng-change="changeModelType(workFlowParam.modelType)"
+													ng-options="op.key as op.text for op in modelTypes"
+													id="modelType" name="modelType"></select>
+											</div>
+										</div>
+									</div>
+								</div>
+								
+								<div class="row">
+									<table id="workFlowTable" class="cell-border stripe" cellspacing="0" width="100%">
+		                                <tbody>
+		                                    <tr>
+		                                        <th style="width: 120px;">角色</th>
+		                                        <th ng-show="isTriple" style="width: 150px;">投资顾问</th>
+		                                        <th style="width: 150px;">投资经理</th>
+		                                        <th style="width: 150px;">投资交易员</th>
+		                                        <th style="width: 150px;">默认投资交易员</th>
+		                                    </tr>
+		                                    <tr>
+		                                       <td>用户</td>
+		                                       <td ng-show="isTriple">
+		                                            <select id="100" class="" ng-change="showChoose(workFlowParam,'1')" ng-model="workFlowParam.investAdviser" multiple="multiple">
+		                                            </select>
+		                                        </td>
+		                                        <td>
+		                                            <select id="101" class="" ng-change="showChoose(workFlowParam,'2')" ng-model="workFlowParam.investManager" required
+		                                            	ng-options="op.userID as op.userID+'_'+op.userName for op in investManagers">
+		                                            </select>
+		                                        </td>
+		                                        <td>
+		                                            <select id="102" class="" ng-change="showChoose(workFlowParam,'3')" ng-model="workFlowParam.tradeUser"  multiple="multiple">
+		                                            </select>
+		                                        </td>
+		                                        <td>
+		                                            <select id="103" class="" ng-change="showChoose(workFlowParam,'4')" ng-model="workFlowParam.defaultTradeUser" required
+		                                            	ng-options="op.userID as op.userID+'_'+op.userName for op in defaultTradeUsers">
+		                                            </select>
+		                                        </td>
+		                                    </tr>
+		                                    <tr>
+		                                       <td>已选用户</td>
+		                                       <td ng-show="isTriple">{{investAdviserStr}}</td>
+		                                       <td>{{investManagerStr}}</td>
+		                                       <td>{{tradeUserStr}}</td>
+		                                       <td>{{defaultTradeUserStr}}</td>
+		                                    </tr>
+		                                </tbody>
+		                            </table>
+								</div>
+							</div>	
+						</div>
+					</form>
+				</div>
+				<div class="modal-footer">
+                   <span class="btn btn-info btn-sm popover-info" data-rel="popover"
+                         data-placement="bottom" title=""
+                         ng-click="workFlowParamForm.$invalid || saveWorkFlow(workFlowParam)"
+                       ng-disabled="workFlowParamForm.$invalid">&nbsp;确定&nbsp;</span>
+                   <span class="btn btn-close btn-sm popover-info" data-rel="popover"
+                         data-placement="bottom" title="" data-dismiss="modal">&nbsp;取消&nbsp;</span>
+                </div>
+			</div>
+		</div>
+	</div>
+    <!-- end -->
+	
+</div>

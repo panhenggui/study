@@ -1,0 +1,115 @@
+th{
+    text-align:center;
+    white-space:nowrap;
+}
+
+td{
+    white-space:nowrap;
+}
+.modal-width{
+    width: 800px;
+}
+.control-label{
+	white-space: nowrap;
+}
+.date-style{
+    padding-top: 0px;
+    padding-bottom: 0px;
+    width: 170px;
+}
+
+.traderReg-label-style{
+    width: 115px;
+}
+
+.input-style{
+    width:170px;
+    padding-left: 2px;
+    padding-right: 2px;
+}
+.select-style{
+    width:243px;
+}
+
+.modal-dialog{
+	width:800px;
+}
+
+.file_text_length{
+	width:100px;
+}
+
+span.ace-file-input{
+	width: 160px;
+	height: 30px;
+}
+
+.label-left{
+	margin-top: 8px;
+}
+
+b{
+	display: none;
+}
+a {
+  color: #3C6E31;
+  text-decoration: none;
+}
+
+.traderReg-checkboxstyle{
+	float: left;
+}
+.traderReg-label-style{
+	white-space: nowrap;
+}
+.traderReg-select-style{
+    width:170px;
+    margin-left:15px;
+}
+.traderReg-control-radio{
+	padding-left:100px;
+}
+
+.traderReg-radio-style{
+	float:left;
+}
+.traderReg-radio-style1{
+	float:left;
+	margin-left:-10px !important;
+	margin-right:10px !important;
+}
+.traderReg-label-style1{
+	white-space: nowrap;
+  	padding-left: 10px;
+    width: 105px;
+}
+.traderReg-label-style2{
+	white-space: nowrap;
+  	padding-left: 0;
+    width: 105px;
+}
+.traderReg-col-xs-4 {
+  width: 33.333%;
+  margin-bottom: 30px;
+}
+.traderReg-modal-footer {
+  padding-top: 12px;
+  padding-bottom: 14px;
+  border-top-color: #e4e9ee;
+  -webkit-box-shadow: none;
+  box-shadow: none;
+  background-color: #eff3f8;
+  margin-top: 20px;
+}
+.traderReg-checkboxstyle{
+	float: left;
+}
+.traderReg-label-style3{
+	white-space: nowrap;
+  	padding-right: 10px;
+    width: 95px;
+}
+.traderReg-select-style1{
+    width:220px;
+    margin-left:50px;
+}

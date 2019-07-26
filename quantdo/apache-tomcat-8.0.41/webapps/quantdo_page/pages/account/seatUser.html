@@ -1,0 +1,306 @@
+<link rel="stylesheet" href="account/seatUser.css" />
+<div class="row" ng-controller="SeatUserController">
+	<!-- start 定义表单查询-->
+	<form class="form-12">
+	    <div class="row-col-one" >
+        	<label class="word-style">机构代码</label>
+            <select ng-model="queryEntity.instClientID" required 
+				ng-disabled="isInstClient " class="value-style"
+				ng-change="isInstClientSelect(queryEntity.instClientID)"
+				ng-options="op.instClientID as op.instClientID+'_'+ op.instClientAbbrName for op in queryinstClientlists">
+				<option value="">全部</option>
+			</select>
+        </div>
+        
+         <div class="row-col-one" >
+        	<label class="word-style">经纪商交易通道</label>
+            <select ng-model="queryEntity.seatID" required  class="value-style"
+               ng-change="seatIDSelect(queryEntity.instClientID,queryEntity.seatID)"
+				ng-options="op.seatID as op.seatID +'_' +op.seatName for op in selectSeatEntitys">
+				<option value="">全部</option>
+			</select>
+        </div>
+
+        
+        <div class="row-col-one" >
+        	<label class="word-style">席位用户</label>
+            <select ng-model="queryEntity.seatUserID" required  class="value-style"
+				ng-options="op.seatUserID as transSeat(op.seatID)+'_'+op.seatUserID for op in selectSeatUserEntitys">
+				<option value="">全部</option>
+			</select>
+        </div>
+        
+		<div class="btn-beyond-one-row"  ng-show="seatUser_query">
+      	      <button type="button" class="btn btn-query btn-word-two"  ng-click="find()" ng-disabled="isQuery">查询</button>
+    	</div>
+		<div class="row-form row-btn-operation"  ng-show="seatUser_add">
+          	<div class="row-btn-icon" >
+               <span class="btn-add-icon"></span>
+               <input type="button" class="btn btn-add btn-icon-two" value="新增" data-toggle='modal'
+                      data-target='#seatUserModal' ng-click="initParameter()">
+           </div>
+        </div>
+	</form>
+	<!--End 表单查询 -->
+	
+	
+	<!--PAGE CONTENT START-->
+	<div class="col-xs-12 clear-padding-right">
+        <div class="row">
+            <div class="col-xs-12 clear-padding-right">
+                <div>
+                    <table id="seatUser_dynamic_table" class="cell-border stripe" cellspacing="0" width="100%">
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!--PAGE CONTENT END-->
+
+	<!--机构参数管理 新增 修改 模态框（Modal） -->
+	<div class="modal fade" id="seatUserModal" tabindex="-1" role="dialog"
+		aria-labelledby="myModalLabel" aria-hidden="true"
+		data-backdrop="static" data-keyboard="false">
+		<div class="modal-dialog">
+			<div class="modal-content" style="width:700px">
+				<div class="modal-header">
+					<button type="button" class="close" data-dismiss="modal"
+						aria-hidden="true">&times;</button>
+					<h4 class="modal-title" id="myModalLabel">席位用户信息维护</h4>
+				</div>
+				<div class="modal-body">
+					<!-- 添加表单内容-->
+					<form class="form-horizontal" role="form" name="seatUserForm" novalidate>
+						<div class="row">
+							<div class="col-xs-6">
+								<div class="row form-group">
+									<label for="instClientID" class="col-sm-4 control-label">机构代码<span
+										style="color: red;">*</span></label>
+									<div class="col-sm-8">
+										<select ng-model="modalEntity.instClientID" required class="form-control two-columns-modal-input"
+											ng-disabled="isInstClient " class="form-control"
+											id="instClientID" name="instClientID" 
+											onkeydown="myKeyup(event,this)" tab="3101"
+											ng-options="op.instClientID as op.instClientID+'_'+ op.instClientAbbrName for op in queryinstClientlists">
+										</select> 
+										<span ng-show=" seatUserForm.instClientID.$dirty &&  seatUserForm.instClientID.$invalid" 
+											style="color: red;">机构代码为必填项</span>
+									</div>
+								</div>
+							</div>
+							<div class="col-xs-6" style="padding-left:0;">
+								<div class="row form-group">
+									<label for="seatID" class="col-sm-4 control-label" style="position:relative;left:-5px;">经纪商交易通道<span
+										style="color: red;">*</span></label>
+									<div class="col-sm-8">
+										<select class="form-control two-columns-modal-input" ng-model="modalEntity.seatID" name="seatID" id="seatID"
+											ng-options="op.seatID as op.seatID+'_'+op.seatName for op in selectSeatEntitys" ng-click="changeSeat(capitalEntity.seatID)"
+											onkeydown="myKeyup(event,this)" tab="3102"  >
+										
+										</select>
+										<span ng-show=" seatUserForm.seatID.$dirty &&  seatUserForm.seatID.$invalid" 
+											style="color: red;">经纪商交易通道为必填项</span>
+									</div>
+								</div>
+							</div>
+						</div>
+						<div class="row">
+							<div class="col-xs-6">
+								<div class="row form-group">
+									<label for="seatUserID" class="col-sm-4 control-label">席位用户<span style="color: red;">*</span></label>
+									<div class="col-sm-8">
+										<input type="text" class="form-control two-columns-modal-input" id="seatUserID"
+											placeholder="请输入席位用户" ng-model="modalEntity.seatUserID"
+											name="seatUserID" maxlength="128" required onkeydown="myKeyup(event,this)" tab="3102">
+										<span ng-show=" seatUserForm.seatUserID.$dirty &&  seatUserForm.seatUserID.$invalid" 
+											style="color: red;">席位用户为必填项</span>
+									</div>
+								</div>
+							</div>
+							
+						</div>
+
+						<div class="row">
+							<div class="col-xs-6">
+								<div class="row form-group">
+									<label for="password"
+										class="col-sm-4 control-label">密码<span style="color: red;">*</span></label>
+									<div class="col-sm-8">
+							        	<input type="password" class="form-control two-columns-modal-input" id="password"
+											placeholder="请输入密码" ng-model="modalEntity.password"
+											ng-pattern="/^[^\u4e00-\u9fa5\uFF00-\uFFFF\'\u0022,]{1,30}?$/"
+											name="password" maxlength="30" required ng-change="showLow(modalEntity.password)"
+											onkeydown="myKeyup(event,this)" onkeyup="kEvent(event,this)" tab="9"> 
+										<span ng-show="seatUserForm.password.$dirty &&  seatUserForm.password.$invalid" 
+											style="color: red;">密码不可为汉字，全角字符，单引号，双引号，逗号</span>
+									</div>
+								</div>
+							</div>
+							<div class="col-xs-6">
+								<div class="row form-group"  style="margin-left:-48px;">
+									<label class="col-sm-4 control-label" id="passText">密码强度：</label>
+									<div class="col-sm-8"  style="margin-top:15px;margin-left:-10px;">
+										<div id="seatUser_passStrength"></div>
+									</div>
+								</div>
+							</div>
+						</div>
+						
+						<div class="row">
+							<div class="col-xs-6">
+								<div class="row form-group">
+									<label for="rePassword"
+										class="col-sm-4 control-label">确认密码<span style="color: red;">*</span></label>
+									<div class="col-sm-8">
+										<input type="password" class="form-control two-columns-modal-input" id="rePassword"
+											placeholder="请再次输入密码" ng-model="modalEntity.rePassword"
+											ng-pattern="/^[^\u4e00-\u9fa5\uFF00-\uFFFF\'\u0022,]{1,30}?$/"
+											ng-change="showLowag(modalEntity.rePassword)" name="rePassword" maxlength="30" required 
+											onkeydown="myKeyup(event,this)" onkeyup="kEvent(event,this)" tab="10">	
+										<span ng-show="seatUserForm.rePassword.$dirty &&  seatUserForm.rePassword.$invalid" 
+											style="color: red;">确认密码不可为汉字，全角字符，单引号，双引号，逗号</span>	
+									</div>
+								</div>
+							</div>
+							<div class="col-xs-6">
+								<div class="row form-group" style="margin-left:-48px;">
+									<label class="col-sm-4 control-label" id="passText">密码强度：</label>
+									<div class="col-sm-8" style="margin-top:15px;margin-left:-10px;">
+										<div id="seatUser_passStrengthag"></div>
+									</div>
+								</div>
+							</div>
+						</div>
+						
+					    <div class="row">
+							<div class="col-xs-6" >
+								<div class="row form-group">
+									<label class="col-sm-4 control-label">验证码</label>
+									<div class="col-sm-8">
+										<input type="text" class="form-control two-columns-modal-input" placeholder="请输入验证码" 
+											name="validcode" ng-model="modalEntity.validcode" maxlength="4" id="seatUserValidcode" onkeydown="myKeyup(event,this)" tab="3"/>
+									</div>
+								</div>
+							</div>
+							<div class="col-xs-6" >
+								<div class="row form-group">
+									<div class="pass-wrap">
+										<img id="seatUserValidImg" src="" style="width:100px;height:34px;"/>
+									</div>
+								</div>
+							</div>
+						</div>
+						
+						<input type="hidden" ng-bind="modalEntity.recordIndex">
+					</form>
+					<!--End  添加表单内容-->
+				</div>
+				<div class="modal-footer">
+					<input class="btn btn-info btn-sm popover-info" data-rel="popover" type="button" value="确定"
+						ng-disabled = "seatUserForm.instClientID.$invalid || seatUserForm.seatID.$invalid || seatUserForm.seatUserID.$invalid 
+						|| seatUserForm.password.$invalid || seatUserForm.rePassword.$invalid"
+						data-placement="bottom" title="" ng-click="seatUserForm.instClientID.$invalid || seatUserForm.seatID.$invalid 
+						|| seatUserForm.seatUserID.$invalid || seatUserForm.password.$invalid || seatUserForm.rePassword.$invalid 
+						|| save(modalEntity)" tab="3111" onkeydown="myKeyup(event,this)">
+					<input class="btn btn-close btn-sm popover-info" data-rel="popover" type="button" value="取消" tab="3112" onkeydown="myKeyup(event,this)"
+						data-placement="bottom" title="" data-dismiss="modal">
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<!-- modal end -->
+	<!-- 密码重置 -->
+    <div class="modal fade" id="seatUSerPwdReset" tabindex="-1" role="dialog" 
+         aria-labelledby="myModalLabel" aria-hidden="true"
+         data-backdrop="static" data-keyboard="false">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal"
+                            aria-hidden="true">&times;</button>
+                    <h4 class="modal-title" >席位用户密码信息维护</h4>
+                </div>
+                <div class="modal-body">
+                    <!-- 添加表单内容-->
+                    <form class="form-horizontal" role="form" name="seatUserFormPwdReset" novalidate>
+                        <div class="panel panel-default">
+                            <!-- <div class="panel-heading">
+                                <h3 class="panel-title">密码重置</h3>
+                            </div> -->
+                            <div class="panel-body">
+                            <div class="form-group">
+                                <label  class="col-sm-3 control-label">密码<span style="color: red;">*</span></label>
+                                <div class="col-sm-5">
+                                    <input type="password" class="form-control"  placeholder="请输入密码"
+                                    	ng-change="showLowtwo(ModalPwdEntity.password)"
+                                    	ng-pattern="/^[^\u4e00-\u9fa5\uFF00-\uFFFF\'\u0022,]{1,30}?$/"
+                                    	name="password" ng-model="ModalPwdEntity.password" required maxlength="30" onkeydown="myKeyup(event,this)" onkeyup="kEvent(event,this)" tab="11" />
+                                    <span ng-show="seatUserFormPwdReset.password.$dirty && seatUserFormPwdReset.password.$invalid" style="color: red;">
+                                    	密码不可为汉字，全角字符，单引号，双引号，逗号
+                                    </span>
+                                       <div class="pass-wrap">
+										        <em id="passText" >密码强度：</em>
+										        <div id="seatUser_passStrengthtwo"></div>
+										 </div>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label  class="col-sm-3 control-label">确认密码<span style="color: red;">*</span></label>
+                                <div class="col-sm-5">
+                                    <input type="password" class="form-control"  placeholder="请输入确认密码"
+                                    	ng-change="showLowtwoag(ModalPwdEntity.reSeatPassword)"
+                                    	ng-pattern="/^[^\u4e00-\u9fa5\uFF00-\uFFFF\'\u0022,]{1,30}?$/"
+                                        name="reSeatPassword" ng-model="ModalPwdEntity.reSeatPassword" required maxlength="30"  onkeydown="myKeyup(event,this)" onkeyup="kEvent(event,this)"  tab="12" />
+                                    <span ng-show="seatUserFormPwdReset.reSeatPassword.$dirty && seatUserFormPwdReset.reSeatPassword.$invalid" style="color: red;">
+                                    	确认密码不可为汉字，全角字符，单引号，双引号，逗号
+                                    </span>
+                                      <div class="pass-wrap">
+										        <em id="passText" >密码强度：</em>
+										        <div id="seatUser_passStrengthtwoag"></div>
+										 </div>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label  class="col-sm-3 control-label">是否实时上场<span style="color: red;">*</span></label>
+                                <div class="col-sm-5">
+                                    <select ng-model="ModalPwdEntity.isTrade" required
+										class="capitalAccount-select-style" id="isTrade" name="isTrade"
+										onkeydown="myKeyup(event,this)" tab="12"
+										ng-options="op.key as op.key+'_'+op.text for op in isNotDatas">
+									</select>
+                                </div>
+                            </div>
+                            <div class="row form-group">
+								<label class="col-sm-3 control-label" >验证码</label>
+								<div class="col-sm-4">
+									<span class="input-icon input-icon-right" style="margin-right:20px;">
+										<input type="text" class="form-control" style="padding-right:0px; width:120px;" placeholder="请输入验证码" 
+										name="validcode" ng-model="ModalPwdEntity.validcode" maxlength="4" id="seatUserPwdResetValidcode" onkeydown="myKeyup(event,this)" tab="3"/>
+									</span>
+								</div>
+								<div class="col-sm-4">
+									<span>
+										<img id="seatUserPwdResetValidImg" src="" style="width:100px;height:34px;float: right;"/>
+									</span>
+								</div>
+							</div>
+                            </div>
+                        </div>
+      
+                    </form>
+                    <!--End  添加表单内容-->
+                </div>
+                <div class="modal-footer">
+                   <span class="btn btn-info btn-sm popover-info" data-rel="popover"
+                         data-placement="bottom" title=""
+                         ng-click="seatUserFormPwdReset.reSeatPassword.$invalid || seatUserFormPwdReset.password.$invalid || seatUserFormPwdReset.isTrade.$invalid || updateResetPwd(ModalPwdEntity)"
+                         ng-disabled="seatUserFormPwdReset.reSeatPassword.$invalid || seatUserFormPwdReset.password.$invalid || seatUserFormPwdReset.isTrade.$invalid">&nbsp;确定&nbsp;</span>
+                   <span class="btn btn-close btn-sm popover-info" data-rel="popover"
+                         data-placement="bottom" title="" data-dismiss="modal">&nbsp;关闭&nbsp;</span>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- end 密码重置 -->
+</div>

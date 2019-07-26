@@ -1,0 +1,200 @@
+<link rel="stylesheet" href="userriskvariety/userriskvariety.css" />
+<title>交易品种限制</title>
+<div>
+	<ol class="breadcrumb">
+		<li><a>资产单元管理</a></li>
+		<li class="active">交易品种限制</li>
+	</ol>
+</div>
+<br>
+<div class="row" ng-controller="UserriskVariety">
+	<!-- start 瀹氫箟琛ㄥ崟鏌ヨ-->
+	<form class="form-horizontal">
+		<div class="row">
+			<div class="col-sm-3">
+				<div class="form-group">
+					<label class="col-sm-4 control-label">资产单元</label>
+					<div class="col-sm-4">
+						<select ng-model="QuerysubAccount.subAccountID" id="subAccount"
+								name="subAccount" ng-options="s.subAccountID as s.subAccountID for s in subCapitalAccountTradingLimitEntitys">
+							<option value="">全部</option>		
+						</select>
+					</div>
+				</div>
+			</div>
+
+			<div class="" >
+				<div class="form-group" id="search">
+					<button class="btn btn-success" id="bootbox-options1"
+							ng-click="find(QuerysubAccount)" >查询</button>
+					<button class="btn btn-success" ng-click="del(queryEntity)"
+							ng-disabled="isQuery">批量删除
+					</button>
+				</div>
+			</div>
+		</div>
+	</form>
+
+	<div class="col-xs-12">
+		<div class="row">
+			<div class="col-xs-12">
+			<div class="" style="float: left; margin-right: 40px;">
+				<div class="form-group" id="insert">
+					<button class="btn btn-success" data-toggle="modal"  data-target="#myModalInsert" ng-click="insert()" >新增</button>
+					<button class="btn btn-success" data-toggle="modal" data-target="#copyModal" ng-click="copyQuery()" >复制</button>
+				</div>
+			</div>
+				<div class="clearfix">
+					<div class="pull-right tableTools-container"></div>
+				</div>
+				<div>
+					<table id="dynamic-table"
+						   class="table table-striped table-bordered table-hover"
+						   datatable="ng">
+						<thead>
+						<tr>
+							<th>选项</th>
+							<!-- <th>资金账号</th>
+							<th>名称</th>
+							<th>操作员</th>
+							<th>操作日期</th>
+							<th>操作</th> -->
+							<th>资产单元</th>
+							<th>名称</th>
+							<th>操作</th>
+						</tr>
+						</thead>
+						<tbody>
+						<tr ng-repeat="listEntity in listEntitys">
+							<td>
+								<input type="checkbox" ng-model="flag" ng-click="checkAdd(flag,listEntity)" />
+							</td>
+							<td ng-bind="listEntity.subAccountID"></td>
+							<td ng-bind="listEntity.subAccountName"></td>
+							<!-- <td ng-bind="listEntity.operatorID"></td>
+							<td ng-bind="listEntity.operateTime"></td> -->
+							<td>
+								<div class="hidden-sm hidden-xs action-buttons">
+									<a class="green" ng-click="search(listEntity)"
+									   data-toggle="modal" data-target="#myModalInsert" title="详细"><i
+											class="ace-icon fa fa-search bigger-130"></i></a>
+									<a class="green" ng-click="findHeYue(listEntity)"
+									   data-toggle="modal" data-target="#myModalInsert" title="修改"><i
+											class="ace-icon fa fa-pencil bigger-130"></i></a>
+									<a class="red" ng-click="delete(listEntity)"
+									   data-toggle="modal" data-target="#del" title="删除"><i
+											class="ace-icon fa fa-trash-o bigger-130"></i></a>
+								</div>
+							</td>
+						</tr>
+						</tbody>
+					</table>
+				</div>
+			</div>
+		</div>
+		
+		<!-- PAGE CONTENT ENDS -->
+	</div>
+
+	<!--新增、修改-->
+	<div class="modal fade" id="myModalInsert" tabindex="-1" role="dialog"
+		 aria-labelledby="myModalLabel" aria-hidden="true"
+		 data-backdrop="static" data-keyboard="false">
+		<div class="modal-dialog">
+			<div class="modal-content">
+				<div class="modal-header">
+					<button type="button" class="close" data-dismiss="modal"
+							aria-hidden="true">&times;</button>
+					<h4 class="modal-title" >交易品种限制</h4>
+				</div>
+				<div class="modal-body">
+					<!-- 添加表单内容-->
+					<form class="form-horizontal" role="form" name="myForm" novalidate>
+						<div class="form-group">
+							<label class="col-sm-3 control-label">资产单元<span
+									style="color: red;"></span></label>
+							<div class="col-xs-8">
+								<select ng-model="subAccount" name="subAccountID" ng-options="subAccount.subAccountID for subAccount in subAccounts" class="select-style" >
+									<option value="">请选择</option>
+								</select>
+							</div>
+						</div>
+							<div class="form-group" style="float: left">
+								<label class="col-sm-3 control-label"><span
+										style="color: red;"></span></label>
+								<div class="col-xs-3">
+									<ul id="ztree2" class="ztree" ></ul>
+								</div>
+							</div>
+							<div class="form-group">
+								<label class="col-sm-3 control-label"><span
+										style="color: red;"></span></label>
+								<div class="col-xs-3"  style="right: 80px">
+									<ul class="ztree" id="radio_li">
+									<!--  ng-checked="isChecked==0" -->
+										<li><input  type="checkbox" ng-model="allChecked"  ng-click="addCheckAll(allChecked)"/>全部</li>
+										<li ng-repeat="i in instrumentEntitys" class="empty"><input type="checkbox" ng-checked="i.att.bool == 0" ng-model="flag" ng-click="addCheck(flag,i)"  />{{i.anotherName}}</li>
+									</ul>
+								</div>
+							</div>
+						<div class="form-group">
+							<label class="col-sm-3 control-label">禁止开仓<span
+										style="color: red;"></span></label>
+							<div class="col-sm-3">
+								<input  type="radio"  checked="checked" style="margin-top: 11px" />
+							</div>
+						</div>
+						<div class="modal-footer">
+						<span ng-show="btnOK"  class="btn btn-info btn-sm popover-info" data-rel="popover"
+							  data-placement="bottom" title=""
+							  ng-click="savePinzhong(subAccount)">&nbsp;确定&nbsp;</span>
+						<span class="btn btn-info btn-sm popover-info" data-rel="popover"
+							  data-placement="bottom" title="" data-dismiss="modal">&nbsp;关闭&nbsp;</span>
+						</div>
+					</form>
+					<!--End  添加表单内容-->
+				</div>
+
+			</div>
+		</div>
+	</div>
+
+	<div class="modal fade" id="copyModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" data-backdrop="static" data-keyboard="false">
+		<div class="modal-dialog">
+			<div class="modal-content">
+				<div class="modal-header">
+					<button type="button" class="close" data-dismiss="modal"
+							aria-hidden="true">&times;</button>
+					<h4 class="modal-title" >交易品种复制</h4>
+				</div>
+				<div class="modal-body">
+					<form class="form-horizontal" role="form" name="myForm" novalidate>
+						<div class="form-group">
+							<label class="col-sm-3 control-label">源账号</label>
+							<div class="col-sm-8">
+								<select ng-model="sourceSubAccount" name="subAccount" ng-options="s.subAccountID for s in subCapitalAccountTradingLimitEntitys">
+									<option value="">请选择</option>
+								</select>
+							</div>
+						</div>
+						<div class="form-group">
+							<label class="col-sm-3 control-label">目的账号</label>
+							<div class="col-sm-8">
+								<select ng-model="targetSubAccount" name="subAccount" ng-options="t.subAccountID for t in subAccounts">
+									<option value="">请选择</option>
+								</select>
+							</div>
+						</div>
+						<div class="modal-footer">
+							<span class="btn btn-info btn-sm popover-info" data-rel="popover"
+								  data-placement="bottom" title="" 
+								  ng-click="copy(sourceSubAccount,targetSubAccount)">&nbsp;确定&nbsp;</span>
+							<span class="btn btn-info btn-sm popover-info" data-rel="popover"
+								  data-placement="bottom" title="" data-dismiss="modal">&nbsp;关闭&nbsp;</span>
+						</div>
+					</form>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>

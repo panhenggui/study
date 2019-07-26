@@ -1,0 +1,213 @@
+<div class="row" ng-controller="SubMoneyIOController">
+	<!-- start 定义表单查询-->
+	<form class="form-12" name="queryForm" >
+		 <div class="form-row">
+			       <div class="row-col-one" >
+		                <label class="word-style">资产单元</label>
+						<select ng-model="queryEntity.subAccountID" class="value-style"
+                            ng-options="op.subAccountID as op.subAccountID+'_'+op.subAccountName for op in QuerySubAccounts">
+                            <option value="">全部</option>
+                        </select>
+                   </div>
+                    <div class="row-col-one" >
+		                <label class="word-style">开始日期</label>
+						<input  onchange="" class="Wdate value-style word-style" onfocus="WdatePicker({lang:'zh-cn',dateFmt:'yyyyMMdd'})"
+						type="text"   name="startDate"
+						ng-readonly="true" ng-model="queryEntity.startDate" />             		
+					</div>
+             		<div class="row-col-one" >
+		                <label class="word-style">结束日期</label>
+		                <input onchange="" class="Wdate value-style word-style" onfocus="WdatePicker({lang:'zh-cn',dateFmt:'yyyyMMdd'})" type="text" 
+		                name="endDate"
+						ng-readonly="true" ng-model="queryEntity.endDate" />
+             		</div>
+             		<div class="row-col-one">
+			            <label class="word-style">类型</label>
+			            <select ng-model="queryEntity.type" class="value-style" ng-options="op.key as op.text for op in types">
+			                <option value="">全部</option>
+			            </select>
+			            
+			        </div>
+            </div>
+            <div class="btn-beyond-one-row" ng-show="subMoneyIO_query">
+      	      		<button type="button" class="btn btn-query btn-word-two"  ng-click="find()"  ng-disabled="queryForm.startDate.$invalid ||
+					queryForm.endDate.$invalid || isQuery"> 查询</button>
+    		</div>
+    		<div class="row-form row-btn-operation">
+		          	<div class="row-btn-icon" ng-show="subMoneyIO_inAdd">
+		               <span class="btn-add-icon"></span>
+		               <input type="button"  ng-click="initAddParam(1)"  class="btn btn-add btn-icon-two" value="新增入金" data-toggle='modal' >
+		           </div>
+		           <div class="row-btn-icon" ng-show="subMoneyIO_outAdd">
+		               <span class="btn-add-icon"></span>
+		               <input type="button"  ng-click="initAddParam(2)"  class="btn btn-add btn-icon-two" value="新增出金" data-toggle='modal' >
+		           </div>
+		     </div>
+	</form>
+	<!--End 表单查询 -->
+	
+	
+	<!--PAGE CONTENT START-->
+	<div class="col-xs-12 clear-padding-right">
+        <div class="row">
+            <div class="col-xs-12 clear-padding-right">
+                <div>
+                    <table id="SubMoneyIO_dynamic_table" class="cell-border stripe" cellspacing="0" width="100%">
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!--PAGE CONTENT END-->	
+
+	<!-- 新增 修改 模态框（Modal） -->
+	<div class="modal fade" id="subMoneyIOModal" tabindex="-1" role="dialog"
+		aria-labelledby="myModalLabel" aria-hidden="true"
+		data-backdrop="static" data-keyboard="false">
+		<div class="modal-dialog">
+			<div class="modal-content">
+				<div class="modal-header">
+					<button type="button" class="close" data-dismiss="modal"
+						aria-hidden="true">&times;</button>
+					<h4 class="modal-title" id="myModalLabel">
+					<span ng-if="modalEntity.operType==1">入</span><span ng-if="modalEntity.operType==2">出</span>金信息新增
+					</h4>
+				</div>
+				<div class="modal-body">
+					<!-- 添加表单内容-->
+					<form class="form-horizontal" role="form" name="myForm" novalidate>
+					
+					
+					
+						<div class="form-group">
+							<label class="col-sm-3 control-label">是否实时上场</label>
+							<div class="col-sm-4">
+								<select class="form-control" ng-model="modalEntity.isNotData"  
+								 ng-change="isRunTimeTrade(modalEntity.isNotData)"
+								name="isNotData"
+									ng-options="op.key as op.text for op in isNotDatas"></select>
+							</div>
+				        </div>
+				        <div class="form-group">
+                            <label for="settleDate" class="col-sm-3 control-label">发生日期<span
+                                style="color: red;">*</span></label>
+
+                            <div class="col-sm-4">
+                                <input type="text"  onchange="" class="form-control"  onfocus="WdatePicker({lang:'zh-cn',dateFmt:'yyyyMMdd'})"
+                                placeholder="请选择结算日期"
+                                      ng-readonly="true"
+                                    ng-model="modalEntity.settleDate" name="settleDate"
+                                    maxlength="8" required> <span
+                                    ng-show="myForm.settleDate.$dirty && myForm.settleDate.$invalid"
+                                    style="color: red;">发生日期为必填项</span>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="subAccountID" class="col-sm-3 control-label">资产单元<span
+										style="color: red;">*</span></label>
+                            <div class="col-sm-8">
+                                <select ng-model="modalEntity.subAccountID" class="form-control" required name="subAccountID"
+                                    ng-options="op.subAccountID as op.subAccountID+'_'+op.subAccountName for op in SubAccounts"
+                                    ng-change="getSubAccountCurrency(modalEntity.subAccountID)">
+                                </select>
+                                <span ng-show="myForm.subAccountID.$dirty && myForm.subAccountID.$invalid"
+									style="color: red;">资产单元为必填项</span>
+                            </div>
+                        </div>
+						<div class="form-group" ng-hide="modalEntity.operType==1">
+							<label for="moneyOut" class="col-sm-3 control-label">出金金额<span
+								style="color: red;">*</span></label>
+
+							<div class="col-sm-8">
+								<input type="text" class="form-control" placeholder="请输入出金金额" 
+									ng-model="modalEntity.moneyOut" name="moneyOut" maxlength="16"
+									required ng-pattern="/^[0-9]+(\.[0-9]{0,2})?$/"> <span
+									ng-show="myForm.moneyOut.$dirty && myForm.moneyOut.$invalid"
+									style="color: red;">出金金额为必填项，且为浮点数字型，最多录入2位小数，例：98.66</span>
+							</div>
+						</div>
+						<div class="form-group" ng-hide="modalEntity.operType==2">
+							<label for="moneyIn" class="col-sm-3 control-label">入金金额<span
+								style="color: red;">*</span></label>
+
+							<div class="col-sm-8">
+								<input type="text" class="form-control" placeholder="请输入金金额" 
+									ng-model="modalEntity.moneyIn" name="moneyIn" maxlength="16"
+									required ng-pattern="/^[0-9]+(\.[0-9]{0,2})?$/"> <span
+									ng-show="myForm.moneyIn.$dirty && myForm.moneyIn.$invalid"
+									style="color: red;">入金金额为必填项，且为浮点数字型，最多录入2位小数，例：98.66</span>
+							</div>
+						</div>
+						<div class="form-group">
+                            <label for="currency" class="col-sm-3 control-label">类型<span
+										style="color: red;">*</span></label>
+                            <div class="col-sm-8">
+                                <select ng-model="modalEntity.type" class="form-control" 
+                                	name="type" id="type" ng-options="op.key as op.text for op in types" required>
+                                </select>
+                                <span
+                                    ng-show="myForm.type.$dirty && myForm.type.$invalid"
+                                    style="color: red;">类型为必填项</span>
+                            </div>
+                        </div>
+                        <div class="form-group" ng-show="modalEntity.type == '2'">
+                            <label for="currency" class="col-sm-3 control-label">交易所</label>
+                            <div class="col-sm-8">
+                                <select ng-model="modalEntity.exchID" class="form-control" 
+                                	name="exchID" id="exchID" ng-options="op.exchID as op.exchID+'_'+op.exchName for op in exchangeDatas">
+                                	<option value=""></option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="form-group" ng-show="modalEntity.type == '2'">
+                            <label for="instrumentID" class="col-sm-3 control-label">期货合约</label>
+                            <div class="col-sm-8">
+                                <input type="text" class="form-control" placeholder="请输入期货合约" 
+									ng-model="modalEntity.instrumentID" name="instrumentID" maxlength="30"> 
+                            </div>
+                        </div>
+						<div class="form-group">
+                            <label for="currency" class="col-sm-3 control-label">币种<span
+										style="color: red;">*</span></label>
+                            <div class="col-sm-8">
+                                <select ng-model="modalEntity.currency" class="form-control" 
+                                	name="currency" id="currency" required ng-disabled="notRunTime"
+                                    ng-options="op.key as op.text for op in currencyEntity">
+                                </select>
+                                <span style="font-size:smaller;color:red">(默认取资产单元的基础币种)</span>
+                                <span
+                                    ng-show="myForm.currency.$dirty && myForm.currency.$invalid"
+                                    style="color: red;">币种为必填项</span>
+                            </div>
+                        </div>
+						<div class="form-group">
+                            <label class="col-sm-3 control-label">备注</label>
+                            <div class="col-sm-8">
+                                <textarea class="form-control" placeholder="请输入备注信息"
+                              style="width: 275px; height: 50px; resize: none;"
+                                    ng-model="modalEntity.remark" name="remark" maxlength="255">
+                                </textarea> 
+                            </div>
+                        </div>
+						<div>
+							<input type="hidden" ng-bind="modalEntity.recordIndex">
+						</div>
+					</form>
+					<!--End  添加表单内容-->
+				</div>
+				<div class="modal-footer">
+					<span class="btn btn-info btn-sm popover-info" data-rel="popover"
+						data-placement="bottom" title="" 
+						ng-click="myForm.settleDate.$invalid || myForm.type.$invalid || myForm.moneyOut.$invalid || myForm.subAccountID.$invalid||
+						myForm.moneyIn.$invalid || myForm.currency.$invalid || save(modalEntity)"
+						ng-disabled="myForm.settleDate.$invalid || myForm.type.$invalid || myForm.moneyOut.$invalid || myForm.subAccountID.$invalid||
+						myForm.moneyIn.$invalid || myForm.currency.$invalid ">&nbsp;确定&nbsp;</span>
+					<span class="btn btn-close btn-sm popover-info" data-rel="popover"
+						data-placement="bottom" title="" data-dismiss="modal">&nbsp;取消&nbsp;</span>
+				</div>
+			</div>
+		</div>
+	</div>
+	<!-- /.modal -->
+
+</div>

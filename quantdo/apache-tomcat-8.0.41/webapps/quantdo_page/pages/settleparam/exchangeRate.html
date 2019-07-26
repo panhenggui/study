@@ -1,0 +1,256 @@
+<link rel="stylesheet" href="settleparam/exchangeRate.css"/>
+<title>汇率管理</title>
+<div>
+    <ol class="breadcrumb">
+        <li><a>日终结算</a></li>
+        <li class="active">汇率管理</li>
+    </ol>
+</div>
+<br>
+<div class="row" ng-controller="ExchangeRateController">
+    <!-- start 定义表单查询-->
+    <form class="form-12">
+        <div class="row">
+            <div class=col-xs-12>
+                <div class="alert alert-success" ng-show="resultInfo">汇率保存成功!</div>
+            </div>
+        </div>
+         <div class="form-row">
+            <div class="row-col-one">
+                    <label class="word-style">汇率日期</label>
+                        <input type="text"  ng-readonly="true"  onchange="" class="Wdate value-style word-style" onfocus="WdatePicker({lang:'zh-cn',dateFmt:'yyyyMMdd'})"
+                        ng-model="queryEntity.exchangeDate" name="exchangeDate" />
+            </div>
+            <div class="row-col-one">
+                    <label class="word-style">币种</label>
+                        <select ng-model="queryEntity.currency" class="value-style" ng-options="op.key as op.text for op in currenys">
+                            <option value="">全部</option>
+                        </select>
+            </div>
+            <div class="row-col-one">
+                    <label class="word-style">转换币种</label>
+                        <select ng-model="queryEntity.exchangeCurrency" class="value-style" ng-options="op.key as op.text for op in currenys">
+                            <option value="">全部</option>
+                        </select>
+            </div>
+          <!--   <div class="col-xs-3">
+                <div class="form-group button-left-style">
+                    <button class="btn btn-success" id="bootbox-options1" ng-click="find(queryEntity)" ng-disabled="isQuery"> 查询</button>
+                </div>
+            </div> -->
+        </div>
+        
+        <div class="btn-beyond-one-row" ng-show="exchangeRate_query">
+      	      		<button type="button" class="btn btn-query btn-word-two"  ng-click="find(queryEntity)"> 查询</button>
+    		</div>
+    			
+    		<div class="row-form row-btn-operation">
+    				<div class="row-btn-icon">
+               		<span class="btn-add-icon"></span>
+					<button class="btn btn-add btn-icon-two"  ng-show="exchangeRate_add"
+						ng-click="initParameter()" data-toggle="modal"
+						data-target="#exchangeRateModal">新增</button>
+						</div>
+						<div class="row-btn-icon">
+						<button class="btn btn-reset btn-word-two" id="bootbox-upload"  ng-show="exchangeRate_import && false"
+						ng-click="initParameter()" data-toggle="modal" 
+						data-target="#exchangeRateUploadModal">导入</button>
+						</div>
+						<div class="row-btn-icon">
+						<button class="btn btn-reset btn-word-two"  ng-show="exchangeRate_batchDelete" 
+						ng-click="delExchangeRateList()">批量删除</button>
+						</div>
+             </div>
+    </form>
+    <!--End 表单查询 -->
+
+    <!--PAGE CONTENT -->
+    <div class="col-xs-12 clear-padding-right">
+        <div class="row">
+            <div class="col-xs-12 clear-padding-right">
+                <div>
+                    <table id="exchangeRate_dynamic_table" class="cell-border stripe" cellspacing="0" width="100%">
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- <div class="col-xs-12">
+        <div class="col-xs-12">
+	    	<button class="btn btn-success" id="bootbox-options" ng-click="initParameter()" data-toggle="modal"
+	                data-target="#exchangeRateModal">新增
+	        </button>
+	        <button class="btn btn-success" id="bootbox-upload" data-toggle="modal"
+	            	data-target="#exchangeRateUploadModal">导入</button>
+	        <button class="btn btn-success" id="bootbox-options" 
+					ng-click="delExchangeRateList()">批量删除
+			</button>
+		</div>
+        <div class="row">
+            <div class="col-xs-12">
+                <div class="clearfix">
+                    <div class="pull-right tableTools-container"></div>
+                </div>
+                <div>
+                    <table id="dynamic-table" class="cell-border stripe" datatable="ng">
+                        <thead>
+                        <tr>
+                        <th class="center" ><input type="checkbox" ng-click="chooseAll()"></th>
+                            <th class="center">
+                                <label class="pos-rel">
+                                    <span class="ace"/>
+                                    <span class="lbl"></span>
+                                序号</label>
+                            </th>
+                            <th>汇率日期</th>
+                            <th>汇率时间</th>
+                            <th class="hidden-180">币种</th>
+                            <th class="hidden-180">转换币种</th>
+                            <th class="hidden-180">汇率</th>
+                            <th class="hidden-480">操作员</th>
+                            <th class="hidden-480">操作日期</th>
+                            <th class="hidden-480">操作时间</th>
+                            <th>操作</th>
+                        </tr>
+                        </thead>
+
+                        <tbody>
+                        <tr ng-repeat="listEntity in listEntitys">
+                        	<td class="center" ><input type="checkbox" name="del" id="del" ng-model="x" 
+								ng-click="changeSelected(x,listEntity)" ng-checked="isSelected"></td>
+                            <td class="center">
+                                {{($index+1)}}
+                            </td>
+                            <td ng-bind="listEntity.exchangeDate"></td>
+                            <td ng-bind="listEntity.exchangeTime"></td>
+                            <td>{{transCurrencys(listEntity.currency)}}</td>
+                            <td>{{transCurrencys(listEntity.exchangeCurrency)}}</td>
+                            <td >{{listEntity.exchangeRate | number:6}}</td>
+                            <td ng-bind="listEntity.operatorID"></td>
+                            <td ng-bind="listEntity.operateDate"></td>
+                            <td ng-bind="listEntity.operateTime"></td>
+                            <div><input type="hidden" ng-bind="listEntity.recordIndex"></div>
+                            <td>
+                                <div class="hidden-sm hidden-xs action-buttons">
+                                    <a class="blue" ng-click="initUpdateParam($index,listEntity)" data-toggle="modal"
+                                       data-target="#exchangeRateModal" style="cursor:pointer">[修改]</a>
+                                    <a class="blue" style="cursor:pointer"
+                                       ng-click="remove($index,listEntity)">[删除]</a>
+                                </div>
+                            </td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+            </div>
+        </div>
+        
+        PAGE CONTENT ENDS
+    </div> -->
+    <!-- /.col -->
+
+    <!-- 新增 修改 模态框（Modal） -->
+    <div class="modal fade" id="exchangeRateModal" tabindex="-1" role="dialog"
+         aria-labelledby="myModalLabel" aria-hidden="true" data-backdrop="static" data-keyboard="false">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close"
+                            data-dismiss="modal" aria-hidden="true">
+                        &times;
+                    </button>
+                    <h4 class="modal-title" id="myModalLabel">
+                       汇率维护
+                    </h4>
+                </div>
+                <div class="modal-body">
+                    <!-- 添加表单内容-->
+                    <form class="form-horizontal" role="form" name="myForm" novalidate>
+                        <div class="form-group">
+                            <label for="exchangeDate" class="col-sm-3 control-label">汇率日期<span style="color: red;">*</span></label>
+                            <div class="col-sm-8">
+                                <input type="text" onchange="" class="form-control" onfocus="WdatePicker({lang:'zh-cn',dateFmt:'yyyyMMdd'})" id="exchangeDate" placeholder="请选择汇率日期"
+                                       ng-model="ModalEntity.exchangeDate"   ng-readonly="true" ng-disabled="isUpdate" 
+                                       name="exchangeDate" maxlength="8" required >
+                                <span ng-show="myForm.exchangeDate.$dirty && myForm.exchangeDate.$invalid" style="color: red;">汇率日期为必填项</span>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="exchangeTime" class="col-sm-3 control-label">汇率时间</label>
+                            <div class="col-sm-8">
+                                <input type="text" class="form-control" id="exchangeTime" placeholder="请输入汇率时间" title="时间格式:hh:mm:ss" 
+                                       ng-pattern="/^(?:[01]\d|2[0-3])(?::[0-5]\d){2}$/" ng-readonly="isUpdate"
+                                       ng-model="ModalEntity.exchangeTime" name="exchangeTime" maxlength="8" required>
+                                <span ng-show="myForm.exchangeTime.$dirty && myForm.exchangeTime.$invalid" style="color: red;">汇率时间为必填项，时间格式为：hh:mm:ss，列：13:56:58</span>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                        	<label for="currency" class="col-sm-3 control-label">币种</label>
+                        	<div class="col-sm-8">
+                        		<select ng-model="ModalEntity.currency" ng-disabled="isUpdate" class="form-control"
+                        				ng-options="op.key as op.text for op in currenys"
+                                        id="currency" disabled></select>
+                        	</div>
+                        </div>
+                        <div class="form-group">
+                        	<label for="exchangeCurrency" class="col-sm-3 control-label">转换币种</label>
+                        	<div class="col-sm-8">
+                        		<select ng-model="ModalEntity.exchangeCurrency" ng-disabled="isUpdate" class="form-control"
+                        				ng-options="op.key as op.text for op in currenys"
+                                        id="exchangeCurrency" disabled></select>
+                        	</div>
+                        </div>
+                        <div class="form-group">
+                        	<label for="exchangeRate" class="col-sm-3 control-label">汇率<span style="color: red;">*</span></label>
+                        	<div class="col-sm-8">
+                        		<input type="text" class="form-control" id="exchangeRate" placeholder="请输入汇率"  
+                        			ng-model="ModalEntity.exchangeRate" ng-pattern="/^\d{1,9}(\.\d{0,6})?$/" name="exchangeRate" maxlength="16" required>
+                        	    <span ng-show="myForm.exchangeRate.$dirty && myForm.exchangeRate.$invalid" style="color: red;">
+                        	    	汇率为必填项，且为浮点数字型，最多录入9位整数6位小数，例：123456789.123456</span>
+                        	</div>
+                        </div>
+                        <div class="form-group">
+                        	<input type="hidden" id="isCurrent" ng-bind="ModalEntity.isCurrent=1">
+                        </div>
+                        <div><input type="hidden" ng-bind="ModalEntity.recordIndex"></div>
+                    </form>
+                    <!--End  添加表单内容-->
+                </div>
+                <div class="modal-footer">
+                    <span class="btn btn-info btn-sm popover-info" data-rel="popover" data-placement="bottom" title=""
+                          ng-click="myForm.exchangeDate.$invalid || myForm.exchangeTime.$invalid || myForm.exchangeRate.$invalid||save(ModalEntity)"
+                          ng-disabled="myForm.exchangeDate.$invalid || myForm.exchangeTime.$invalid || myForm.exchangeRate.$invalid">&nbsp;确定&nbsp;</span>
+                    <span class="btn btn-close btn-sm popover-info" data-rel="popover" data-placement="bottom" title=""
+                          data-dismiss="modal">&nbsp;取消&nbsp;</span>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- /.modal -->
+    
+    <div class="modal fade" id="exchangeRateUploadModal" tabindex="-1" role="dialog"
+     aria-labelledby="myModalLabel" aria-hidden="true" data-backdrop="static" data-keyboard="false">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close"
+                        data-dismiss="modal" aria-hidden="true">
+                    &times;
+                </button>
+                <h4 class="modal-title" id="uploadtxt">
+                    汇率导入
+                </h4>
+            </div>
+            <div class="modal-body">
+                <!-- 添加表单内容-->
+                <form class="form-horizontal" role="form" name="uploadForm" novalidate>
+                    <div class="form-group upload_wedge">
+                        <div id="exchangeRateFileuploader">upload</div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+</div>

@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<configuration>
+	<!-- 控制台输出日志 -->
+	<appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
+		<encoder>
+			<pattern>[standard-A] %d{yyyy-MM-dd hh:mm:ss} %-5level %logger{36} [%thread]>>> %msg%n</pattern>
+		</encoder>
+	</appender>
+
+	<!-- 按照固定窗口模式生成日志文件，当文件大于20MB时，生成新的日志文件。窗口大小是1到3，当保存了3个归档文件后，将覆盖最早的日志 -->
+	<!--
+	<appender name="SizeFILE"
+		class="ch.qos.logback.core.rolling.RollingFileAppender">
+		<file>logs/log.log</file>
+
+		<rollingPolicy class="ch.qos.logback.core.rolling.FixedWindowRollingPolicy">
+			<fileNamePattern>logs/log.%i.log</fileNamePattern>
+			<minIndex>1</minIndex>
+			<maxIndex>20</maxIndex>
+		</rollingPolicy>
+
+		<triggeringPolicy
+			class="ch.qos.logback.core.rolling.SizeBasedTriggeringPolicy">
+			<maxFileSize>10MB</maxFileSize>
+		</triggeringPolicy>
+		<encoder>
+			<pattern>[standard-A] %d{yyyy-MM-dd hh:mm:ss} %-5level %logger{36} [%thread]>>> %msg%n
+			</pattern>
+		</encoder>
+	</appender>
+    -->
+	<!--每天生成一个日志文件，保存10天的日志文件。 -->
+	<appender name="DayFile"
+		class="ch.qos.logback.core.rolling.RollingFileAppender">
+		<rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+			<fileNamePattern>logs/logFile.%d{yyyy-MM-dd}.log</fileNamePattern>
+			<maxHistory>10</maxHistory>
+		</rollingPolicy>
+		<encoder>
+			<pattern>[standard-A] %d{yyyy-MM-dd hh:mm:ss} %-5level %logger{36} [%thread]>>> %msg%n</pattern>
+		</encoder>
+	</appender>
+	
+	<!--指定logger name为包名或类全名 指定级别 additivity设置是否传递到root logger -->
+	<logger name="slf4j" level="ERROR" additivity="false">
+		<appender-ref ref="STDOUT" />
+		<appender-ref ref="DayFile" />
+	</logger>
+	<!--slf4j2包下的类在ERROR级别时候传递到root logger中 -->
+	<logger name="slf4j2" level="ERROR" />
+	<logger name="org.springframework" level="ERROR" />
+	<logger name="org.hibernate" level="ERROR" />
+	<logger name="org.jboss.logging" level="ERROR" />
+	<logger name="com.mchange.v2" level="ERROR" />
+	<logger name="org.apache.http" level="ERROR" />
+	<logger name="com.alibaba.dubbo" level="ERROR" />
+	<logger name="org.eclipse.jetty" level="ERROR" />
+	<logger name="org.apache.zookeeper" level="ERROR" />
+	<logger name="me.chyxion" level="ERROR" />
+	<logger name="org.apache.kafka" level="ERROR" />
+	<logger name="kafka" level="ERROR" />
+	<logger name="mybatis_com.quantdo" level="ERROR" />
+	<logger name="com.dev.framework.service" level="ERROR"/>
+	<logger name="com.quantdo.orgClear.service.RiskInitsDataServiceImpl" level="INFO"/>
+	<logger name="com.quantdo.orgClear.service.realrisk.RealRiskInitsDataServiceImpl" level="INFO"/>
+	<logger name="com.quantdo.riskPlatform.iceApi.QdamIceTraderSpiI" level="INFO"/>
+	<logger name="com.quantdo.riskPlatform.iceApi.QdamIcePreRiskApiI" level="INFO"/>
+	<logger name="com.quantdo.riskPlatform.iceApi.QdpFtdcRiskClient" level="INFO"/>
+	<logger name="com.quantdo.riskPlatform.iceApi.TraderPreRiskSC" level="INFO"/>
+	<logger name="com.quantdo.riskPlatform.service.RiskStormTopology" level="INFO"/>
+	<logger name="com.quantdo.riskPlatform.spout.RiskRtnReceiveSpout" level="INFO"/>
+	<logger name="com.quantdo.riskPlatform.iceApi.IceHeartThread" level="INFO"/>
+	<logger name="com.quantdo.riskPlatform.service.MarketDataReceive" level="INFO"/>
+	<logger name="com.quantdo.orgClear.service.RiskActionCalcServiceImpl" level="INFO"/>
+	<logger name="com.quantdo.orgClear.service.realrisk.PreRiskCalcServiceImpl" level="INFO"/>
+	<logger name="com.quantdo.qdiammd.jni" level="INFO"/>
+	<logger name="com.quantdo.orgClear.service.realrisk.RealRiskFundProductCalcRateServiceImpl" level="INFO"/>
+	<logger name="com.quantdo.riskPlatform.service.MarketDataReceiveThread" level="INFO"/>
+	<logger name="com.quantdo.riskPlatform.service.MdListener" level="INFO"/>
+	<!--根logger控制 -->
+	<root level="ERROR">
+		<appender-ref ref="STDOUT" />
+		<appender-ref ref="DayFile" />
+	</root>
+</configuration>

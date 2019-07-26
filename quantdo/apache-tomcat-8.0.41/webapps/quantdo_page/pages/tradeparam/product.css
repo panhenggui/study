@@ -1,0 +1,35 @@
+th{
+    text-align:center;
+    white-space:nowrap;
+}
+
+td{
+    white-space:nowrap;
+}
+.product-modal-width{
+    width: 740px;
+}
+
+.product-date-style{
+    padding-top: 0px;
+    padding-bottom: 0px;
+    width: 170px;
+}
+
+.product-label-style{
+    width: 118px;
+    white-space: nowrap;
+}
+
+.product-input-style{
+    width:170px !important;
+    padding-left: 2px!important;
+    padding-right: 2px!important;
+}
+.product-select-style{
+    width:170px;
+}
+.product-control-label{
+	white-space: nowrap;
+	padding: 5px 0 0 30px;
+}

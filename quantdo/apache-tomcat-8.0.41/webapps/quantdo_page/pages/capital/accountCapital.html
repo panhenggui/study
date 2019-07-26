@@ -1,0 +1,445 @@
+<link rel="stylesheet" href="capital/accountCapital.css"/>
+<title>账户资金管理</title>
+<div>
+    <ol class="breadcrumb">
+        <li><a>资金管理</a></li>
+        <li class="active">账户资金管理</li>
+    </ol>
+</div>
+<br>
+<div class="row" ng-controller="AccountCapitalController">
+    <!-- start 定义表单查询-->
+    <form class="form-horizontal">
+		<div class="row">
+			<div class=col-xs-12>
+				<div class="alert alert-success" ng-show="resultFlag"><span ng-bind="resultInfo"></span></div>
+			</div>
+		</div>
+		<div class="row">
+            <div class="col-xs-3">
+                <div class="form-group">
+                    <label class="col-sm-5 control-label">开始日期</label>
+
+                    <div class="col-sm-5">
+                        <input type="text" class="form-control" ng-model="queryEntity.startDate" id="startDate" forType="date"/>
+                    </div>
+                </div>
+            </div>
+            <div class="col-xs-3">
+                <div class="form-group">
+                    <label class="col-sm-5 control-label">截止日期</label>
+
+                    <div class="col-sm-5">
+                        <input type="text" class="form-control" ng-model="queryEntity.endDate" id="endDate" forType="date"/>
+                    </div>
+                </div>
+            </div>
+            <div class="col-xs-3">
+                <div class="form-group">
+                    <label class="col-sm-5 control-label">资金账号</label>
+
+                    <div class="col-sm-5">
+                        <select ng-model="queryEntity.innerAccountID" class="select-style"
+                                ng-options="op.innerAccountID as op.accountID for op in accounts">
+                            <option value="">全部</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+            <div class="col-xs-2">
+                <div class="form-group">
+                    <button class="btn btn-success" id="bootbox-options1" ng-click="find(queryEntity)" ng-disabled="isQuery"> 查询</button>
+                </div>
+            </div>
+        </div>
+    </form>
+    <!--End 表单查询 -->
+
+    <!--PAGE CONTENT -->
+    <div class="col-xs-12">
+        <div class="row">
+            <div class="col-xs-12">
+                <div class="clearfix">
+                    <div class="pull-right tableTools-container"></div>
+                </div>
+                <div>
+                    <table id="dynamic-table" class="table table-striped table-bordered table-hover" datatable="ng">
+                        <thead>
+                        <tr>
+                            <th class="center sorting_disabled">
+                                <label class="pos-rel">
+                                    <span class="ace"/>
+                                    <span class="lbl"></span>
+                                序号</label>
+                            </th>
+                            <th class="hidden-180 sorting_disabled">结算日期</th>
+                            <th class="hidden-180 sorting_disabled">资金账号</th>
+                            <th class="hidden-180 sorting_disabled">总保证金</th>
+                            <th class="hidden-180 sorting_disabled">交易保证金</th>
+                            <th class="hidden-180 sorting_disabled">交割保证金</th>
+                            <th class="hidden-180 sorting_disabled">当日盈亏</th>
+                            <th class="hidden-180 sorting_disabled">交易手续费</th>
+                            <th class="hidden-180 sorting_disabled">结算手续费</th>
+                            <th class="hidden-180 sorting_disabled">交割执行手续费</th>
+                            <th class="hidden-180 sorting_disabled">留存手续费</th>
+                            <th class="hidden-180 sorting_disabled">权利金收入</th>
+                            <th class="hidden-180 sorting_disabled">权利金支出</th>
+                            <th class="hidden-180 sorting_disabled">抵押品实际可用金额</th>
+                            <th class="hidden-180 sorting_disabled">抵押品保证金占用</th>
+                            <th class="hidden-180 sorting_disabled">配资</th>
+                            <th class="hidden-180 sorting_disabled">出金</th>
+                            <th class="hidden-180 sorting_disabled">入金</th>
+                            <th class="hidden-180 sorting_disabled">自有现金总额</th>
+                            <th class="hidden-180 sorting_disabled">结算准备金</th>
+                            <th class="hidden-180 sorting_disabled">昨日自有现金总额</th>
+                            <th>操作</th>
+                        </tr>
+                        </thead>
+
+                        <tbody>
+                        <tr ng-repeat="listEntity in listEntitys">
+                            <td class="center">
+                                {{($index+1)}}
+                            </td>
+                            <td ng-bind="listEntity.settleDate"></td>
+                            <td ng-bind="listEntity.innerAccountID"></td>
+                            <td ng-bind="listEntity.totalMargin"></td>
+                            <td ng-bind="listEntity.tradeMargin"></td>
+                            <td ng-bind="listEntity.delivMargin"></td>
+                            <td ng-bind="listEntity.profitloss"></td>
+                            <td ng-bind="listEntity.tradeFee"></td>
+                            <td ng-bind="listEntity.settleFee"></td>
+                            <td ng-bind="listEntity.delivFee"></td>
+                            <td ng-bind="listEntity.remainFee"></td>
+                            <td ng-bind="listEntity.premiumIn"></td>
+                            <td ng-bind="listEntity.premiumOut"></td>
+                            <td ng-bind="listEntity.mortAvailMoney"></td>
+                            <td ng-bind="listEntity.mortMargin"></td>
+                            <td ng-bind="listEntity.withFunding"></td>
+                            <td ng-bind="listEntity.moneyOut"></td>
+                            <td ng-bind="listEntity.moneyIn"></td>
+                            <td ng-bind="listEntity.totalOwnMoney"></td>
+                            <td ng-bind="listEntity.reserve"></td>
+                            <td ng-bind="listEntity.lastTotalOwnMoney"></td>
+								<td>
+									<div>
+										<input type="hidden" ng-bind="listEntity.recordIndex">
+									</div>
+									<div class="hidden-sm hidden-xs action-buttons">
+										<a class="green" ng-click="initUpdateParam(listEntity,$index)"
+											data-toggle="modal" data-target="#myModal"><i
+											class="ace-icon fa fa-pencil bigger-130"></i> </a> <a class="red"><i
+											class="ace-icon fa fa-trash-o bigger-130"
+											ng-click="remove(listEntity,$index)"></i> </a>
+									</div>
+								</td>
+							</tr>
+                        </tbody>
+                    </table>
+                </div>
+
+            </div>
+        </div>
+		<button class="btn btn-success" id="bootbox-options"
+			ng-click="initAddParam()" data-toggle="modal" data-target="#myModal">新增
+		</button>
+	</div>
+    <!-- PAGE CONTENT ENDS -->
+        
+	<!-- 新增 修改 模态框（Modal） -->
+	<div class="modal fade" id="myModal" tabindex="-1" role="dialog"
+		aria-labelledby="myModalLabel" aria-hidden="true"
+		data-backdrop="static" data-keyboard="false">
+		<div class="modal-dialog modal-width">
+			<div class="modal-content modal-width">
+				<div class="modal-header">
+					<button type="button" class="close" data-dismiss="modal"
+						aria-hidden="true">&times;</button>
+					<h4 class="modal-title" id="myModalLabel">账户资金信息维护</h4>
+				</div>
+				<div class="modal-body">
+					<!-- 添加表单内容-->
+					<form class="form-inline" name="myForm" novalidate>
+						<div class="row">
+							<div class="col-xs-6">
+								<div class="row form-group">
+									<label class="col-xs-6 control-label label-style">结算日期<span style="color: red;">*</span></label>
+									<div class="col-xs-6">
+										<input class="date-style" type="text" forType="date"
+											ng-readonly="true" placeholder="请选择结算日期"
+											ng-model="modalEntity.settleDate" name="settleDate"
+											maxlength="8" required />
+											<span ng-show="myForm.settleDate.$dirty && myForm.settleDate.$invalid"
+											style="color: red;">结算日期为必填项</span>
+									</div>
+								</div>
+							</div>
+							<div class="col-xs-6">
+								<div class="row form-group">
+									<label class="col-xs-6 control-label label-style">资金账号<span style="color: red;">*</span></label>
+									<div class="col-xs-6">
+										<input class="input-style" type="text"
+											ng-model="modalEntity.innerAccountID" placeholder="请输入资金账号"
+											name="innerAccountID" maxlength="50" required/>
+											<span ng-show="myForm.innerAccountID.$dirty && myForm.innerAccountID.$invalid"
+											style="color: red;">资金账号为必填项</span>
+									</div>
+								</div>
+							</div>
+						</div>
+						<div class="row">
+							<div class="col-xs-6">
+								<div class="row form-group">
+									<label class="col-xs-6 control-label label-style">总保证金<span style="color: red;">*</span></label>
+									<div class="col-xs-6">
+										<input class="date-style" type="text" placeholder="请输入总保证金"
+											ng-model="modalEntity.totalMargin" name="totalMargin"
+											ng-pattern="/^[0-9]+(\.[0-9]{0,2})?$/" maxlength="16" required/>
+											<span ng-show="myForm.totalMargin.$dirty && myForm.totalMargin.$invalid"
+											style="color: red;">总保证金为必填项，且为浮点数字型，最多录入2位小数，例：98.66</span>
+									</div>
+								</div>
+							</div>
+							<div class="col-xs-6">
+								<div class="row form-group">
+									<label class="col-xs-6 control-label label-style">交易保证金<span style="color: red;">*</span></label>
+									<div class="col-xs-6">
+										<input class="input-style" type="text" placeholder="请输入交易保证金"
+											ng-model="modalEntity.tradeMargin" name="tradeMargin"
+											ng-pattern="/^[0-9]+(\.[0-9]{0,2})?$/" maxlength="16" required/>
+											<span ng-show="myForm.tradeMargin.$dirty && myForm.tradeMargin.$invalid"
+											style="color: red;">交易保证金为必填项，且为浮点数字型，最多录入2位小数，例：98.66</span>
+									</div>
+								</div>
+							</div>
+						</div>
+						<div class="row">
+							<div class="col-xs-6">
+								<div class="row form-group">
+									<label class="col-xs-6 control-label label-style">交割保证金<span style="color: red;">*</span></label>
+									<div class="col-xs-6">
+										<input class="date-style" type="text" placeholder="请输入交割保证金"
+											ng-model="modalEntity.delivMargin" name="delivMargin"
+											ng-pattern="/^[0-9]+(\.[0-9]{0,2})?$/" maxlength="16" required/>
+											<span ng-show="myForm.delivMargin.$dirty && myForm.delivMargin.$invalid"
+											style="color: red;">交割保证金为必填项，且为浮点数字型，最多录入2位小数，例：98.66</span>
+									</div>
+								</div>
+							</div>
+							<div class="col-xs-6">
+								<div class="row form-group">
+									<label class="col-xs-6 control-label label-style">当日盈亏<span style="color: red;">*</span></label>
+									<div class="col-xs-6">
+										<input class="input-style" type="text" placeholder="请输入当日盈亏"
+											ng-model="modalEntity.profitloss" name="profitloss"
+											ng-pattern="/^[0-9]+(\.[0-9]{0,2})?$/" maxlength="16" required/>
+											<span ng-show="myForm.profitloss.$dirty && myForm.profitloss.$invalid"
+											style="color: red;">当日盈亏为必填项，且为浮点数字型，最多录入2位小数，例：98.66</span>
+									</div>
+								</div>
+							</div>
+						</div>
+						<div class="row">
+							<div class="col-xs-6">
+								<div class="row form-group">
+									<label class="col-xs-6 control-label label-style">交易手续费<span style="color: red;">*</span></label>
+									<div class="col-xs-6">
+										<input class="date-style" type="text" placeholder="请输入交易手续费"
+											ng-model="modalEntity.tradeFee" name="tradeFee"
+											ng-pattern="/^[0-9]+(\.[0-9]{0,2})?$/" maxlength="16" required/>
+											<span ng-show="myForm.tradeFee.$dirty && myForm.tradeFee.$invalid"
+											style="color: red;">交易手续费为必填项，且为浮点数字型，最多录入2位小数，例：98.66</span>
+									</div>
+								</div>
+							</div>
+							<div class="col-xs-6">
+								<div class="row form-group">
+									<label class="col-xs-6 control-label label-style">结算手续费<span style="color: red;">*</span></label>
+									<div class="col-xs-6">
+										<input class="input-style" type="text" placeholder="请输入结算手续费"
+											ng-model="modalEntity.settleFee" name="settleFee"
+											ng-pattern="/^[0-9]+(\.[0-9]{0,2})?$/" maxlength="16" required/>
+											<span ng-show="myForm.settleFee.$dirty && myForm.settleFee.$invalid"
+											style="color: red;">结算手续费为必填项，且为浮点数字型，最多录入2位小数，例：98.66</span>
+									</div>
+								</div>
+							</div>
+						</div>
+						<div class="row">
+							<div class="col-xs-6">
+								<div class="row form-group">
+									<label class="col-xs-6 control-label label-style">交割执行手续费<span style="color: red;">*</span></label>
+									<div class="col-xs-6">
+										<input class="date-style" type="text" placeholder="请输入交割执行手续费"
+											ng-model="modalEntity.delivFee" name="delivFee"
+											ng-pattern="/^[0-9]+(\.[0-9]{0,2})?$/" maxlength="16" required/>
+											<span ng-show="myForm.delivFee.$dirty && myForm.delivFee.$invalid"
+											style="color: red;">交割执行手续费为必填项，且为浮点数字型，最多录入2位小数，例：98.66</span>
+									</div>
+								</div>
+							</div>
+							<div class="col-xs-6">
+								<div class="row form-group">
+									<label class="col-xs-6 control-label label-style">留存手续费<span style="color: red;">*</span></label>
+									<div class="col-xs-6">
+										<input class="input-style" type="text" placeholder="请输入留存手续费"
+											ng-model="modalEntity.remainFee" name="remainFee"
+											ng-pattern="/^[0-9]+(\.[0-9]{0,2})?$/" maxlength="16" required/>
+											<span ng-show="myForm.remainFee.$dirty && myForm.remainFee.$invalid"
+											style="color: red;">留存手续费为必填项，且为浮点数字型，最多录入2位小数，例：98.66</span>
+									</div>
+								</div>
+							</div>
+						</div>
+						<div class="row">
+							<div class="col-xs-6">
+								<div class="row form-group">
+									<label class="col-xs-6 control-label label-style">权利金收入<span style="color: red;">*</span></label>
+									<div class="col-xs-6">
+										<input class="date-style" type="text" placeholder="请输入权利金收入"
+											ng-model="modalEntity.premiumIn" name="premiumIn"
+											ng-pattern="/^[0-9]+(\.[0-9]{0,2})?$/" maxlength="16" required/>
+											<span ng-show="myForm.premiumIn.$dirty && myForm.premiumIn.$invalid"
+											style="color: red;">权利金收入为必填项，且为浮点数字型，最多录入2位小数，例：98.66</span>
+									</div>
+								</div>
+							</div>
+							<div class="col-xs-6">
+								<div class="row form-group">
+									<label class="col-xs-6 control-label label-style">权利金支出<span style="color: red;">*</span></label>
+									<div class="col-xs-6">
+										<input class="input-style" type="text" placeholder="请输入权利金支出"
+											ng-model="modalEntity.premiumOut" name="premiumOut"
+											ng-pattern="/^[0-9]+(\.[0-9]{0,2})?$/" maxlength="16" required/>
+											<span ng-show="myForm.premiumOut.$dirty && myForm.premiumOut.$invalid"
+											style="color: red;">权利金支出为必填项，且为浮点数字型，最多录入2位小数，例：98.66</span>
+									</div>
+								</div>
+							</div>
+						</div>
+						<div class="row">
+							<div class="col-xs-6">
+								<div class="row form-group">
+									<label class="col-xs-6 control-label label-style">抵押品实际可用金额<span style="color: red;">*</span></label>
+									<div class="col-xs-6">
+										<input class="date-style" type="text" placeholder="请输入抵押品实际可用金额"
+											ng-model="modalEntity.mortAvailMoney" name="mortAvailMoney"
+											ng-pattern="/^[0-9]+(\.[0-9]{0,2})?$/" maxlength="16" required/>
+											<span ng-show="myForm.mortAvailMoney.$dirty && myForm.mortAvailMoney.$invalid"
+											style="color: red;">抵押品实际可用金额为必填项，且为浮点数字型，最多录入2位小数，例：98.66</span>
+									</div>
+								</div>
+							</div>
+							<div class="col-xs-6">
+								<div class="row form-group">
+									<label class="col-xs-6 control-label label-style">抵押品保证金占用<span style="color: red;">*</span></label>
+									<div class="col-xs-6">
+										<input class="input-style" type="text" placeholder="请输入抵押品保证金占用"
+											ng-model="modalEntity.mortMargin" name="mortMargin"
+											ng-pattern="/^[0-9]+(\.[0-9]{0,2})?$/" maxlength="16" required/>
+											<span ng-show="myForm.mortMargin.$dirty && myForm.mortMargin.$invalid"
+											style="color: red;">抵押品保证金占用为必填项，且为浮点数字型，最多录入2位小数，例：98.66</span>
+									</div>
+								</div>
+							</div>
+						</div>
+						<div class="row">
+							<div class="col-xs-6">
+								<div class="row form-group">
+									<label class="col-xs-6 control-label label-style">配资<span style="color: red;">*</span></label>
+									<div class="col-xs-6">
+										<input class="date-style" type="text" placeholder="请输入配资"
+											ng-model="modalEntity.withFunding" name="withFunding"
+											ng-pattern="/^[0-9]+(\.[0-9]{0,2})?$/" maxlength="16" required/>
+											<span ng-show="myForm.withFunding.$dirty && myForm.withFunding.$invalid"
+											style="color: red;">配资为必填项，且为浮点数字型，最多录入2位小数，例：98.66</span>
+									</div>
+								</div>
+							</div>
+							<div class="col-xs-6">
+								<div class="row form-group">
+									<label class="col-xs-6 control-label label-style">出金<span style="color: red;">*</span></label>
+									<div class="col-xs-6">
+										<input class="input-style" type="text" placeholder="请输入出金"
+											ng-model="modalEntity.moneyOut" name="moneyOut"
+											ng-pattern="/^[0-9]+(\.[0-9]{0,2})?$/" maxlength="16" required/>
+											<span ng-show="myForm.moneyOut.$dirty && myForm.moneyOut.$invalid"
+											style="color: red;">出金为必填项，且为浮点数字型，最多录入2位小数，例：98.66</span>
+									</div>
+								</div>
+							</div>
+						</div>
+						<div class="row">
+							<div class="col-xs-6">
+								<div class="row form-group">
+									<label class="col-xs-6 control-label label-style">入金<span style="color: red;">*</span></label>
+									<div class="col-xs-6">
+										<input class="date-style" type="text" placeholder="请输入入金"
+											ng-model="modalEntity.moneyIn" name="moneyIn"
+											ng-pattern="/^[0-9]+(\.[0-9]{0,2})?$/" maxlength="16" required/>
+											<span ng-show="myForm.moneyIn.$dirty && myForm.moneyIn.$invalid"
+											style="color: red;">入金为必填项，且为浮点数字型，最多录入2位小数，例：98.66</span>
+									</div>
+								</div>
+							</div>
+							<div class="col-xs-6">
+								<div class="row form-group">
+									<label class="col-xs-6 control-label label-style">自有现金总额<span style="color: red;">*</span></label>
+									<div class="col-xs-6">
+										<input class="input-style" type="text" placeholder="请输入自有现金总额"
+											ng-model="modalEntity.totalOwnMoney" name="totalOwnMoney"
+											ng-pattern="/^[0-9]+(\.[0-9]{0,2})?$/" maxlength="16" required/>
+											<span ng-show="myForm.totalOwnMoney.$dirty && myForm.totalOwnMoney.$invalid"
+											style="color: red;">自有现金总额必填项，且为浮点数字型，最多录入2位小数，例：98.66</span>
+									</div>
+								</div>
+							</div>
+						</div>
+						<div class="row">
+							<div class="col-xs-6">
+								<div class="row form-group">
+									<label class="col-xs-6 control-label label-style">结算准备金<span style="color: red;">*</span></label>
+									<div class="col-xs-6">
+										<input class="date-style" type="text" placeholder="请输入结算准备金"
+											ng-model="modalEntity.reserve" name="reserve"
+											ng-pattern="/^[0-9]+(\.[0-9]{0,2})?$/" maxlength="16" required/>
+											<span ng-show="myForm.reserve.$dirty && myForm.reserve.$invalid"
+											style="color: red;">结算准备金为必填项，且为浮点数字型，最多录入2位小数，例：98.66</span>
+									</div>
+								</div>
+							</div>
+							<div class="col-xs-6">
+								<div class="row form-group">
+									<label class="col-xs-6 control-label label-style">昨日自有现金总额<span style="color: red;">*</span></label>
+									<div class="col-xs-6">
+										<input class="input-style" type="text" placeholder="请输入昨日自有现金总额"
+											ng-model="modalEntity.lastTotalOwnMoney" name="lastTotalOwnMoney"
+											ng-pattern="/^[0-9]+(\.[0-9]{0,2})?$/" maxlength="16" required/>
+											<span ng-show="myForm.lastTotalOwnMoney.$dirty && myForm.lastTotalOwnMoney.$invalid"
+											style="color: red;">昨日自有现金总额必填项，且为浮点数字型，最多录入2位小数，例：98.66</span>
+									</div>
+								</div>
+							</div>
+						</div>
+
+
+
+						<div>
+							<input type="hidden" ng-bind="ModalEntity.recordIndex">
+						</div>
+					</form>
+					<!--End  添加表单内容-->
+				</div>
+				<div class="modal-footer">
+					<span class="btn btn-info btn-sm popover-info" data-rel="popover"
+						data-placement="bottom" title="" ng-click="save(modalEntity)"
+						ng-disabled="myForm.settleDate.$invalid || myForm.innerAccountID.$invalid || myForm.totalMargin.$invalid || myForm.tradeMargin.$invalid || myForm.delivMargin.$invalid || myForm.profitloss.$invalid || myForm.tradeFee.$invalid || myForm.settleFee.$invalid || myForm.delivFee.$invalid || myForm.remainFee.$invalid || myForm.premiumIn.$invalid || myForm.premiumOut.$invalid || myForm.mortAvailMoney.$invalid || myForm.mortMargin.$invalid || myForm.withFunding.$invalid || myForm.moneyOut.$invalid || myForm.moneyIn.$invalid || myForm.totalOwnMoney.$invalid || myForm.reserve.$invalid || myForm.lastTotalOwnMoney.$invalid">&nbsp;提交&nbsp;</span>
+					<span class="btn btn-info btn-sm popover-info" data-rel="popover"
+						data-placement="bottom" title="" data-dismiss="modal">&nbsp;关闭&nbsp;</span>
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<!-- /.modal -->
+</div><!-- /.row -->

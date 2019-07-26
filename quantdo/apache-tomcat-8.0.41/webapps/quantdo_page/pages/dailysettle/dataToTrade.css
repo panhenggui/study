@@ -1,0 +1,75 @@
+.date-show-position{
+    margin-top: 15px;
+}
+.date-show-color{
+    color: #066BDD;
+}
+.clear-process-bottom{
+    margin-bottom: 0;
+}
+.process-data-position{
+    margin: 5px;
+}
+.table-no-scroll-head{
+    padding-right: 10px;
+}
+.table-body-scroll{
+    overflow-y:auto;
+    height: auto;
+    max-height:400px
+}
+.table-body-scroll::-webkit-scrollbar{
+    width:10px;
+    height:10px;
+}
+.table-body-scroll::-webkit-scrollbar-resizer{
+    background-color: #000;
+}
+
+.table-body-scroll::-webkit-scrollbar-track{
+    -webkit-box-shadow: inset 0 0 6px rgba(0,0,0,0.1);
+    border-radius: 10px;
+    background-color: #F5F5F5;
+}
+
+.table-body-scroll::-webkit-scrollbar-thumb{
+    border-radius: 6px;
+    -webkit-box-shadow: inset 0 0 6px rgba(0,0,0,.2);
+    background-color: #dddddd;
+    height: 20px;
+    width: 20px;
+}
+
+.table-body-scroll::-webkit-scrollbar-corner {
+    background-color: #E9EDFF;
+}
+table.angular-datatable tbody tr:hover{
+    color: #444;
+}
+
+table.hover-table-gray tbody tr:hover{
+    color: #444;
+}
+
+#dateToTradeTable tr:hover{
+	color:#444 !important;
+}
+
+#uploadUniInstrumentModal .ajax-file-upload{
+	padding-left:15px;
+	padding-right:15px;
+	width:60px;
+	margin-left:15px;
+}
+
+.ajax-file-upload{
+    background-color: #dbe1e4 !important;
+	border: 1px solid #bac0c4 !important;
+	color: #444 !important;
+	border-radius: 5px;
+}
+
+.ajax-file-upload:hover,.ajax-file-upload:active{
+    background-color: #717476 !important; 
+    color: #ffffff !important;
+}

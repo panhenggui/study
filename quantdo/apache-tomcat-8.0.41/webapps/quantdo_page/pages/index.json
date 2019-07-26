@@ -1,0 +1,1243 @@
+{
+    "menus": [
+        {
+            "title": "基础管理",
+            "titleShort": "jcgl",
+            "ngShow": "menu:home1",
+            "submenus": [
+                {
+                    "title": "机构管理",
+                    "titleShort": "jggl",
+                    "ngShow": "menu:home1_1",
+                    "lastmenus": [
+                        {
+                            "title": "机构设置",
+                            "titleShort": "jgsz",
+                            "ngShow": "menu:instClient",
+                            "controller": "instClientController",
+                            "url": "account/instClient.html",
+                            "href": "#instClient",
+                            "lastmenus": ""
+                        },
+                        {
+                            "title": "机构参数设置",
+                            "titleShort": "jgcssz",
+                            "ngShow": "menu:instParameter",
+                            "controller": "InstParameterController",
+                            "url": "account/instParameter.html",
+                            "href": "#instParameter",
+                            "lastmenus": ""
+                        }
+                    ]
+                },
+                {
+                    "title": "经纪公司管理",
+                    "titleShort": "jjgsgl",
+                    "ngShow": "menu:home1_2",
+                    "lastmenus": [
+                        {
+                            "title": "设置经纪公司",
+                            "titleShort": "szjjgs",
+                            "ngShow": "menu:brokerageFirm",
+                            "controller": "BrokerageFirmController",
+                            "url": "account/brokerageFirm.html",
+                            "href": "#brokerageFirm",
+                            "lastmenus": ""
+                        }
+                    ]
+                },
+                {
+                    "title": "用户管理",
+                    "titleShort": "yhgl",
+                    "ngShow": "menu:home1_3",
+                    "lastmenus": [
+                        {
+                            "title": "角色管理",
+                            "titleShort": "jsgl",
+                            "ngShow": "menu:roleManage",
+                            "controller": "RoleManageController",
+                            "url": "user/roleManage.html",
+                            "href": "#roleManage",
+                            "lastmenus": ""
+                        },
+                        {
+                            "title": "用户管理",
+                            "titleShort": "yhsz",
+                            "ngShow": "menu:userManage",
+                            "controller": "UserManageController",
+                            "url": "user/userManage.html",
+                            "href": "#userManage",
+                            "lastmenus": ""
+                        },
+                        {
+                            "title": "交易端认证码维护",
+                            "titleShort": "jydrzmwh",
+                            "ngShow": "menu:tradeUserProductCheck",
+                            "controller": "TradeUserProductCheckController",
+                            "url": "user/tradeUserProductCheck.html",
+                            "href": "#tradeUserProductCheck",
+                            "lastmenus": ""
+                        },
+                        {
+                            "title": "在线交易用户管理",
+                            "titleShort": "zxjyyhgl",
+                            "ngShow": "menu:userOnlineManage",
+                            "controller": "UserOnlineManageController",
+                            "url": "user/userOnlineManage.html",
+                            "href": "#userOnlineManage",
+                            "lastmenus": ""
+                        },
+                        {
+                            "title": "用户关联账号",
+                            "titleShort": "yhglzh",
+                            "ngShow": "menu:accountLink",
+                            "controller": "UserManageController",
+                            "url": "user/accountLink.html",
+                            "href": "#accountLink",
+                            "lastmenus": ""
+                        },
+                        {
+                            "title": "用户关联产品",
+                            "titleShort": "yhglcp",
+                            "ngShow": "menu:productLink",
+                            "controller": "UserFundProductController",
+                            "url": "product/productLink.html",
+                            "href": "#productLink",
+                            "lastmenus": ""
+                        }
+                    ]
+                },
+                {
+                    "title": "产品管理",
+                    "titleShort": "cpgl",
+                    "ngShow": "menu:home1_4",
+                    "lastmenus": [
+                        {
+                            "title": "设置产品基础信息",
+                            "titleShort": "szcpjcxx",
+                            "ngShow": "menu:fundProduct",
+                            "controller": "FundProductController",
+                            "url": "product/fundProduct.html",
+                            "href": "#fundProduct",
+                            "lastmenus": ""
+                        },
+                        {
+                            "title": "产品固收资产设置",
+                            "titleShort": "cpgszcsz",
+                            "ngShow": "menu:fixedIncomeSet",
+                            "controller": "FixedIncomeSetController",
+                            "url": "product/fixedIncomeSet.html",
+                            "href": "#fixedIncomeSet",
+                            "lastmenus": ""
+                        },
+                        {
+                            "title": "产品其他权益设置",
+                            "titleShort": "cpqtqysz",
+                            "ngShow": "menu:otherIncomeSet",
+                            "controller": "OtherIncomeSetController",
+                            "url": "product/otherIncomeSet.html",
+                            "href": "#otherIncomeSet",
+                            "lastmenus": ""
+                        }
+                    ]
+                },
+                {
+                    "title": "业务组管理",
+                    "titleShort": "ywzgl",
+                    "ngShow": "menu:home1_6_qdgts",
+                    "lastmenus": [
+                        {
+                            "title": "业务组设置",
+		                    "titleShort": "ywzgl",
+		                    "ngShow": "menu:businessGroup",
+		                    "controller": "businessGroupManageController",
+		                    "url": "account/businessGroupManage.html",
+		                    "href": "#businessGroupManage",
+		                    "lastmenus": ""
+                        }
+                    ]
+                },{
+                    "title": "席位用户管理",
+                    "titleShort": "xwyhgl",
+                    "ngShow": "menu:home1_6",
+                    "lastmenus": [
+                        {
+                            "title": "席位用户设置",
+                            "titleShort": "xwyhsz",
+                            "ngShow": "menu:seatUser",
+                            "controller": "SeatUserController",
+                            "url": "account/seatUser.html",
+                            "href": "#seatUser",
+                            "lastmenus": ""
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "title": "账户管理",
+            "titleShort": "zhgl",
+            "ngShow": "menu:home2",
+            "submenus": [
+                {
+                    "title": "资金账号",
+                    "titleShort": "zjzh",
+                    "ngShow": "menu:home2_1",
+                    "lastmenus": [
+                        {
+                            "title": "设置账号信息",
+                            "titleShort": "szzhxx",
+                            "ngShow": "menu:capitalAccount",
+                            "controller": "capitalAccountController",
+                            "url": "account/capitalAccount.html",
+                            "href": "#capitalAccount",
+                            "lastmenus": ""
+                        },
+                        {
+                            "title": "设置账号分组",
+                            "titleShort": "szzhfz",
+                            "ngShow": "menu:accountGroup",
+                            "controller": "AccountGroupController",
+                            "url": "account/accountGroup.html",
+                            "href": "#accountGroup",
+                            "lastmenus": ""
+                        }
+                    ]
+                },
+                {
+                    "title": "资产单元",
+                    "titleShort": "fxzh",
+                    "ngShow": "menu:home2_2",
+                    "lastmenus": [
+                        {
+                            "title": "资产单元维护",
+                            "titleShort": "fxzhwh",
+                            "ngShow": "menu:subCapitalAccount",
+                            "controller": "SubCapitalAccountController",
+                            "url": "account/subCapitalAccount.html",
+                            "href": "#subCapitalAccount",
+                            "lastmenus": ""
+                        },
+                        {
+                            "title": "资产单元资金划拨",
+                            "titleShort": "fxzhzjhb",
+                            "ngShow": "menu:subMoneyIO",
+                            "controller": "SubMoneyIOController",
+                            "url": "settleparam/subMoneyIO.html",
+                            "href": "#subMoneyIO",
+                            "lastmenus": ""
+                        }
+                    ]
+                },
+                {
+                    "title": "一键式开户",
+                    "titleShort": "ygskh",
+                    "ngShow": "menu:home2_3",
+                    "lastmenus": [
+                        {
+                            "title": "资产单元开户管理",
+                            "titleShort": "zcdykhgl",
+                            "ngShow": "menu:subCapitalAccountProcess",
+                            "controller": "SubCapitalAccountProcessController",
+                            "url": "process/subCapitalAccountProcess.html",
+                            "href": "#subCapitalAccountProcess",
+                            "lastmenus": ""
+                        }
+                    ]
+                },
+                {
+                    "title": "会员管理",
+                    "titleShort": "hygl",
+                    "ngShow": "menu:member",
+                    "controller": "MemberController",
+                    "url": "account/member.html",
+                    "href": "#member",
+                    "lastmenus": ""
+                },
+                {
+                    "title": "交易编码管理",
+                    "titleShort": "jybmgl",
+                    "ngShow": "menu:exchClient",
+                    "controller": "ExchClientController",
+                    "url": "account/exchClient.html",
+                    "href": "#exchClient",
+                    "lastmenus": ""
+                }
+            ]
+        },
+        {
+            "title": "系统管理",
+            "titleShort": "xtgl",
+            "ngShow": "menu:home4",
+            "submenus": [
+                {
+                    "title": "交易参数管理",
+                    "titleShort": "jycsgl",
+                    "ngShow": "menu:home4_1",
+                    "lastmenus": [
+                        {
+                            "title": "交易所设置",
+                            "titleShort": "jyssz",
+                            "ngShow": "menu:exchange",
+                            "controller": "exchangeController",
+                            "url": "tradeparam/exchange.html",
+                            "href": "#exchange",
+                            "lastmenus": ""
+                        },
+                        {
+                            "title": "品种设置",
+                            "titleShort": "pzsz",
+                            "ngShow": "menu:product",
+                            "controller": "ProductController",
+                            "url": "tradeparam/product.html",
+                            "href": "#product",
+                            "lastmenus": ""
+                        },
+                        {
+                            "title": "合约设置",
+                            "titleShort": "hysz",
+                            "ngShow": "menu:instrument",
+                            "controller": "InstrumentController",
+                            "url": "tradeparam/instrument.html",
+                            "href": "#instrument",
+                            "lastmenus": ""
+                        },
+                        {
+                            "title": "组合保证金品种组管理",
+                            "titleShort": "zhbzjpzzgl",
+                            "ngShow": "menu:singleEdgeProductGroup",
+                            "controller": "SingleEdgeProductGroupController",
+                            "url": "combmargin/singleEdgeProductGroup.html",
+                            "href": "#singleEdgeProductGroup",
+                            "lastmenus": ""
+                        }
+                    ]
+                },
+                {
+                    "title": "系统日志",
+                    "titleShort": "xtrz",
+                    "ngShow": "menu:home4_2",
+                    "lastmenus": [
+                        {
+                            "title": "操作日志查询",
+                            "titleShort": "czrzcx",
+                            "ngShow": "menu:logManage",
+                            "controller": "LogManageController",
+                            "url": "user/logManage.html",
+                            "href": "#logManage",
+                            "lastmenus": ""
+                        },
+                        {
+                            "title": "用户登录信息统计",
+                            "titleShort": "yhdlxxtj",
+                            "ngShow": "menu:userSession",
+                            "controller": "UserSessionController",
+                            "url": "usersession/userSession.html",
+                            "href": "#userSession",
+                            "lastmenus": ""
+                        }
+                    ]
+                },
+                {
+                    "title": "监管参数管理",
+                    "titleShort": "jgcsgl",
+                    "ngShow": "menu:tradeUserIPCheck",
+                    "controller": "TradeUserIPCheckController",
+                    "url": "user/tradeUserIPCheck.html",
+                    "href": "#tradeUserIPCheck",
+                    "lastmenus": ""
+                },
+                {
+                    "title": "资产分类管理",
+                    "titleShort": "zcflgl",
+                    "ngShow": "menu:assetGroup",
+                    "controller": "assetGroupControllerForManagement",
+                    "url": "windControl/assetGroupForManagement.html",
+                    "href": "#assetGroupForManagement",
+                    "lastmenus": ""
+                },
+                {
+                    "title": "证券附加信息导入",
+                    "titleShort": "zqfjxxdr",
+                    "ngShow": "menu:stockAddInformationImport",
+                    "controller": "stockAddInformationImportController",
+                    "url": "windControl/stockAddInformationImport.html",
+                    "href": "#stockAddInformationImport",
+                    "lastmenus": ""
+                }
+            ]
+        },
+        {
+            "title": "费率管理",
+            "titleShort": "flgl",
+            "ngShow": "menu:home5",
+            "submenus": [
+                {
+                    "title": "默认费率管理",
+                    "titleShort": "mrflgl",
+                    "ngShow": "menu:home5_1",
+                    "lastmenus": [
+                        {
+                            "title": "默认品种保证金率设置",
+                            "titleShort": "mrpzbzjlsz",
+                            "ngShow": "menu:defaultMarginSet",
+                            "controller": "FuturesDefaultMarginSetController",
+                            "url": "marginset/futures/defaultMarginSet.html",
+                            "href": "#defaultMarginSet",
+                            "lastmenus": ""
+                        },
+                        {
+                            "title": "默认合约保证金率设置",
+                            "titleShort": "mrhybzjlsz",
+                            "ngShow": "menu:defaultInstrumentMarginSet",
+                            "controller": "DefaultInstrumentMarginSetController",
+                            "url": "marginset/defaultInstrumentMarginSet.html",
+                            "href": "#defaultInstrumentMarginSet",
+                            "lastmenus": ""
+                        },
+                        {
+                            "title": "默认手续费率设置",
+                            "titleShort": "mrpzsxflsz",
+                            "ngShow": "menu:defaultFeeSet",
+                            "controller": "DefaultFeeSetController",
+                            "url": "feeset/defaultFeeSet.html",
+                            "href": "#defaultFeeSet",
+                            "lastmenus": ""
+                        }
+                    ]
+                },
+                {
+                    "title": "账号费率管理",
+                    "titleShort": "zhflgl",
+                    "ngShow": "menu:home5_2",
+                    "lastmenus": [
+                        {
+                            "title": "品种保证金率",
+                            "titleShort": "pzbzjl",
+                            "ngShow": "menu:subProductMarginSet",
+                            "controller": "SubProductMarginSetController",
+                            "url": "marginset/subProductMarginSet.html",
+                            "href": "#subProductMarginSet",
+                            "lastmenus": ""
+                        },
+                        {
+                            "title": "合约保证金率",
+                            "titleShort": "hybzjl",
+                            "ngShow": "menu:subInstrumentMarginSet",
+                            "controller": "SubInstrumentMarginSetController",
+                            "url": "marginset/subInstrumentMarginSet.html",
+                            "href": "#subInstrumentMarginSet",
+                            "lastmenus": ""
+                        },
+                        {
+                            "title": "账号手续费率设置",
+                            "titleShort": "zhsxflsz",
+                            "ngShow": "menu:subProductFeeSet",
+                            "controller": "SubProductFeeSetController",
+                            "url": "feeset/subProductFeeSet.html",
+                            "href": "#subProductFeeSet",
+                            "lastmenus": ""
+                        }
+                    ]
+                },
+                {
+                    "title": "交易手续费率实时设置",
+                    "titleShort": "jysxflsssz",
+                    "ngShow": "menu:operInvestorFee",
+                    "controller": "operInvestorFeeController",
+                    "url": "feeset/operInvestorFee.html",
+                    "href": "#operInvestorFee",
+                    "lastmenus": ""
+                },
+                {
+                    "title": "交易保证金率实时设置",
+                    "titleShort": "jybzjlsssz",
+                    "ngShow": "menu:operInvestorMargin",
+                    "controller": "operInvestorMarginController",
+                    "url": "marginset/operInvestorMargin.html",
+                    "href": "#operInvestorMargin",
+                    "lastmenus": ""
+                },
+                {
+                    "title": "期权交易手续费设置",
+                    "titleShort": "qqjysxfsz",
+                    "ngShow": "menu:operInvestorOptionFee",
+                    "controller": "operInvestorOptionFeeController",
+                    "url": "feeset/operInvestorOptionFee.html",
+                    "href": "#operInvestorOptionFee",
+                    "lastmenus": ""
+                },
+                {
+                    "title": "费率模板管理",
+                    "titleShort": "flmbgl",
+                    "ngShow": "menu:home5_3",
+                    "lastmenus": [
+                        {
+                            "title": "手续费模板",
+                            "titleShort": "sxfmb",
+                            "ngShow": "menu:feeTemplate",
+                            "controller": "FeeTemplateController",
+                            "url": "feeset/feeTemplate.html",
+                            "href": "#feeTemplate",
+                            "lastmenus": ""
+                        },
+                        {
+                            "title": "保证金模板",
+                            "titleShort": "bzjmb",
+                            "ngShow": "menu:marginTemplate",
+                            "controller": "MarginTemplateController",
+                            "url": "marginset/marginTemplate.html",
+                            "href": "#marginTemplate",
+                            "lastmenus": ""
+                        },
+                        {
+                            "title": "对应费率模板",
+                            "titleShort": "dyflmb",
+                            "ngShow": "menu:subAccountTemplate",
+                            "controller": "SubAccountTemplateController",
+                            "url": "marginset/subAccountTemplate.html",
+                            "href": "#subAccountTemplate",
+                            "lastmenus": ""
+                        }
+                    ]
+                },
+                {
+                	"title": "证券费率设置",
+                	"titleShort": "zqflsz",
+                    "ngShow": "menu:home5_4",
+                    "lastmenus": [
+                        {
+                            "title": "默认证券品种费率设置",
+                            "titleShort": "mrzqpzflsz",
+                            "ngShow": "menu:defaultStockProductFeeSet",
+                            "controller": "DefaultStockProductFeeSetController",
+                            "url": "feeset/defaultStockProductFeeSet.html",
+                            "href": "#defaultStockProductFeeSet",
+                            "lastmenus": ""
+                        },
+                        {
+                            "title": "证券品种费率设置",
+                            "titleShort": "zqpzflsz",
+                            "ngShow": "menu:stockProductFeeSet",
+                            "controller": "StockProductFeeSetController",
+                            "url": "feeset/stockProductFeeSet.html",
+                            "href": "#stockProductFeeSet",
+                            "lastmenus": ""
+                        }
+                    ]
+                },
+                {
+                    "title": "递延费率设置",
+                    "titleShort": "dyflsz",
+                    "ngShow": "menu:deferredFeeSet",
+                    "controller": "DeferredFeeSetController",
+                    "url": "feeset/deferredFeeSet.html",
+                    "href": "#deferredFeeSet",
+                    "lastmenus": ""
+                }
+            ]
+        },
+        {
+            "title": "监控管理",
+            "titleShort": "jkgl",
+            "ngShow": "menu:home7",
+            "submenus": [
+                {
+                    "title": "运行监控",
+                    "titleShort": "yxjk",
+                    "ngShow": "menu:runMonitor",
+                    "controller": "RunMonitorController",
+                    "url": "monitor/runMonitor.html",
+                    "href": "#runMonitor",
+                    "lastmenus": ""
+                },
+                {
+                    "title": "运维监控",
+                    "titleShort": "xtztjk",
+                    "ngShow": "menu:sysStatus",
+                    "controller": "SysStatusController",
+                    "url": "sysstatus/sysStatus.html",
+                    "href": "#sysStatus",
+                    "lastmenus": ""
+                },
+
+                {
+                  "title":"通道监控",
+                  "titleShort":"通道监控",
+                  "ngShow":"menu:operSeat",
+                  "controller":"OperSeatController",
+                  "url":"operseat/operSeat.html",
+                  "href":"#operSeat",
+                  "lastmenus":""
+                },
+                {
+                    "title": "业务稽核",
+                    "titleShort": "ywjh",
+                    "ngShow": "menu:busAudit",
+                    "controller": "BusAuditController",
+                    "url": "busaudit/busAudit.html",
+                    "href": "#busAudit",
+                    "lastmenus": ""
+                }
+            ]
+        },
+        {
+            "title": "日终结算",
+            "titleShort": "rzjs",
+            "ngShow": "menu:home8",
+            "submenus": [
+                {
+                    "title": "结算数据准备",
+                    "titleShort": "jssjzb",
+                    "ngShow": "menu:home8_1",
+                    "lastmenus": [
+                        {
+                            "title": "资产单元成交单维护",
+                            "titleShort": "fxzhcjdwh",
+                            "ngShow": "menu:trade",
+                            "controller": "tradeController",
+                            "url": "dailysettle/trade.html",
+                            "href": "#trade",
+                            "lastmenus": ""
+                        },
+                        {
+                            "title": "资金账号成交单维护",
+                            "titleShort": "zjzhcjdwh",
+                            "ngShow": "menu:capTrade",
+                            "controller": "capTradeController",
+                            "url": "dailysettle/capTrade.html",
+                            "href": "#capTrade",
+                            "lastmenus": ""
+                        },
+                        {
+                            "title": "其他资产类型成交维护",
+                            "titleShort": "qtzclxcjwh",
+                            "ngShow": "menu:otherTradeMaintain",
+                            "controller": "OtherTradeMaintainController",
+                            "url": "dailysettle/otherTradeMaintain.html",
+                            "href": "#otherTradeMaintain",
+                            "lastmenus": ""
+                        },
+                        {
+                            "title": "结算价维护",
+                            "titleShort": "jsjwh",
+                            "ngShow": "menu:settlePrice",
+                            "controller": "SettlePriceController",
+                            "url": "tradeparam/settlePrice.html",
+                            "href": "#settlePrice",
+                            "lastmenus": ""
+                        },
+                        {
+                            "title": "汇率管理",
+                            "titleShort": "hlgl",
+                            "ngShow": "menu:exchangeRate",
+                            "controller": "ExchangeRateController",
+                            "url": "settleparam/exchangeRate.html",
+                            "href": "#exchangeRate",
+                            "lastmenus": ""
+                        },
+                        {
+                            "title": "期权行权信息维护",
+                            "titleShort": "xqxxwh",
+                            "ngShow": "menu:exerciseTrade",
+                            "controller": "ExerciseTradeController",
+                            "url": "dailysettle/exerciseTrade.html",
+                            "href": "#exerciseTrade",
+                            "lastmenus": ""
+                        }
+                        
+                    ]
+                },
+                {
+                    "title": "日终结算",
+                    "titleShort": "rzjs",
+                    "ngShow": "menu:home8_2",
+                    "lastmenus": [
+                        {
+                            "title": "日终结算",
+                            "titleShort": "rzjs",
+                            "ngShow": "menu:dailySettle",
+                            "controller": "dailySettleController",
+                            "url": "dailysettle/dailySettle.html",
+                            "href": "#dailySettle",
+                            "lastmenus": ""
+                        },
+                        {
+                            "title": "结算回退",
+                            "titleShort": "jsht",
+                            "ngShow": "menu:settleRollback",
+                            "controller": "settleRollbackController",
+                            "url": "dailysettle/settleRollback.html",
+                            "href": "#settleRollback",
+                            "lastmenus": ""
+                        }
+                    ]
+                },
+                {
+                    "title": "资金账号组合持仓导入",
+                    "titleShort": "zjzhzhccdr",
+                    "ngShow": "menu:uploadCombPOsitionDetail",
+                    "controller": "uploadCombPositionDetailController",
+                    "url": "windControl/uploadCombPOsitionDetail.html",
+                    "href": "#uploadCombPOsitionDetail",
+                    "lastmenus": ""
+                },
+                {
+                    "title": "黄金客户账户资金导入",
+                    "titleShort": "hjkhzhzjdr",
+                    "ngShow": "menu:uploadHoldFund",
+                    "controller": "uploadHoldFundController",
+                    "url": "upload/uploadHoldFund.html",
+                    "href": "#uploadHoldFund",
+                    "lastmenus": ""
+                },
+                {
+                    "title": "客户账户资金导入",
+                    "titleShort": "khzhzjdr",
+                    "ngShow": "menu:uploadFund",
+                    "controller": "uploadFundController",
+                    "url": "upload/uploadFund.html",
+                    "href": "#uploadFund",
+                    "lastmenus": ""
+                },
+                {
+                    "title": "客户持仓导入",
+                    "titleShort": "khccdr",
+                    "ngShow": "menu:uploadHoldDate",
+                    "controller": "uploadHoldDateController",
+                    "url": "upload/uploadHoldDate.html",
+                    "href": "#uploadHoldDate",
+                    "lastmenus": ""
+                },
+                {
+                    "title": "上场数据生成",
+                    "titleShort": "scsjsc",
+                    "ngShow": "menu:dataToTrade",
+                    "controller": "DataToTradeController",
+                    "url": "dailysettle/dataToTrade.html",
+                    "href": "#dataToTrade",
+                    "lastmenus": ""
+                }
+            ]
+        },
+        {
+            "title": "风控参数管理",
+            "titleShort": "fkcsgl",
+            "ngShow": "menu:home14",
+            "submenus": [
+            	{
+                    "title": "分仓账号顺序设置",
+                    "titleShort": "fczhsxsz",
+                    "ngShow": "menu:capitalAccountSequence",
+                    "controller": "CapitalAccountSequenceController",
+                    "url": "riskparam/capitalAccountSequence.html",
+                    "href": "#capitalAccountSequence",
+                    "lastmenus": ""
+                },
+            	{
+                    "title": "开平仓顺序设置",
+                    "titleShort": "kpcyxsx",
+                    "ngShow": "menu:offsetSequence",
+                    "controller": "OffsetSequenceController",
+                    "url": "riskparam/offsetSequence.html",
+                    "href": "#offsetSequence",
+                    "lastmenus": ""
+                },
+                 {
+                    "title": "限仓设置",
+                    "titleShort": "xcsz",
+                    "ngShow": "menu:positionLimit",
+                    "controller": "PositionLimitController",
+                    "url": "riskparam/positionLimit.html",
+                    "href": "#positionLimit",
+                    "lastmenus": ""
+                },
+            	{
+                    "title": "限额设置",
+                    "titleShort": "xesz",
+                    "ngShow": "menu:capitalAccountLimit",
+                    "controller": "CapitalAccountLimitController",
+                    "url": "riskparam/capitalAccountLimit.html",
+                    "href": "#capitalAccountLimit",
+                    "lastmenus": ""
+                },
+                {
+                    "title": "风控参数",
+                    "titleShort": "fkcs",
+                    "ngShow": "menu:partitionPositionConfig",
+                    "controller": "PartitionPositionConfigController",
+                    "url": "riskparam/partitionPositionConfig.html",
+                    "href": "#partitionPositionConfig",
+                    "lastmenus": ""
+                }
+            ]
+        },
+        {
+            "title": "资金管理",
+            "titleShort": "zjgl",
+            "ngShow": "menu:home9",
+            "submenus": [
+                {
+                    "title": "出入金一次录入",
+                    "titleShort": "crjyclr",
+                    "ngShow": "menu:tmpMoneyIO",
+                    "controller": "tmpMoneyIOController",
+                    "url": "settleparam/tmpMoneyIO.html",
+                    "href": "#tmpMoneyIO",
+                    "lastmenus": ""
+                },
+                {
+                    "title": "出入金复核",
+                    "titleShort": "crjfh",
+                    "ngShow": "menu:moneyIORecheck",
+                    "controller": "moneyIORecheckController",
+                    "url": "settleparam/moneyIORecheck.html",
+                    "href": "#moneyIORecheck",
+                    "lastmenus": ""
+                },
+                {
+                    "title": "出入金流水查询",
+                    "titleShort": "crjlscx",
+                    "ngShow": "menu:moneyIO",
+                    "controller": "moneyIOController",
+                    "url": "settleparam/moneyIO.html",
+                    "href": "#moneyIO",
+                    "lastmenus": ""
+                }
+            ]
+        },
+        {
+            "title": "信息查询",
+            "titleShort": "xxcx",
+            "ngShow": "menu:home12",
+            "submenus": [
+                {
+                    "title": "实时查询",
+                    "titleShort": "sscx",
+                    "ngShow": "menu:home12_1",
+                    "lastmenus": [
+                        {
+                            "title": "产品净值查询",
+                            "titleShort": "cpjzcx",
+                            "ngShow": "menu:fundNetValue",
+                            "controller": "FundNetValueController",
+                            "url": "query/fundNetValue.html",
+                            "href": "#fundNetValue",
+                            "lastmenus": ""
+                        },
+                        {
+                            "title": "实时流量查询",
+                            "titleShort": "ssllcx",
+                            "ngShow": "menu:flowQuery",
+                            "controller": "FlowQueryController",
+                            "url": "query/flowQuery.html",
+                            "href": "#flowQuery",
+                            "lastmenus": ""
+                        },
+                        {
+                            "title": "实时持仓查询",
+                            "titleShort": "sscccx",
+                            "ngShow": "menu:operClientPositionQuery",
+                            "controller": "OperClientPositionQueryController",
+                            "url": "query/operClientPositionQuery.html",
+                            "href": "#operClientPositionQuery",
+                            "lastmenus": ""
+                        },
+                        {
+                            "title": "实时资金查询",
+                            "titleShort": "sszjcx",
+                            "ngShow": "menu:realTimeAccountQuery",
+                            "controller": "RealTimeAccountQueryController",
+                            "url": "query/realTimeAccountQuery.html",
+                            "href": "#realTimeAccountQuery",
+                            "lastmenus": ""
+                        },
+                        {
+                            "title": "实时委托查询",
+                            "titleShort": "sswtcx",
+                            "ngShow": "menu:operWFOrder",
+                            "controller": "OperWFOrderServiceController",
+                            "url": "query/operWFOrder.html",
+                            "href": "#operWFOrder",
+                            "lastmenus": ""
+                        },
+                        {
+                            "title": "实时成交查询",
+                            "titleShort": "sscjcx",
+                            "ngShow": "menu:operWFTrade",
+                            "controller": "OperWFTradeController",
+                            "url": "query/operWFTrade.html",
+                            "href": "#operWFTrade",
+                            "lastmenus": ""
+                        },
+                        {
+                            "title": "实时错单查询",
+                            "titleShort": "sscdcx",
+                            "ngShow": "menu:operWFOrderInsertFailed",
+                            "controller": "OperWFOrderInsertFailedController",
+                            "url": "query/operWFOrderInsertFailed.html",
+                            "href": "#operWFOrderInsertFailed",
+                            "lastmenus": ""
+                        },
+                        {
+                            "title": "实时指令查询",
+                            "titleShort": "sszlcx",
+                            "ngShow": "menu:operAdviceOrder",
+                            "controller": "operAdviceOrderController",
+                            "url": "query/operAdviceOrder.html",
+                            "href": "#operAdviceOrder",
+                            "lastmenus": ""
+                        },
+                        {
+                            "title": "实时行权申请查询",
+                            "titleShort": "ssxqsqcx",
+                            "ngShow": "menu:operExerciseOrder",
+                            "controller": "OperExerciseOrderController",
+                            "url": "query/operExerciseOrder.html",
+                            "href": "#operExerciseOrder",
+                            "lastmenus": ""
+                        },
+                        {
+                            "title": "实时自动对冲申请查询",
+                            "titleShort": "sszddcsqcx",
+                            "ngShow": "menu:operOptionSelfClose",
+                            "controller": "OperOptionSelfCloseController",
+                            "url": "query/operOptionSelfClose.html",
+                            "href": "#operOptionSelfClose",
+                            "lastmenus": ""
+                        }
+                    ]
+                },
+                {
+                    "title": "历史查询",
+                    "titleShort": "lscx",
+                    "ngShow": "menu:home12_2",
+                    "lastmenus": [
+                        {
+                            "title": "历史净值查询",
+                            "titleShort": "lsjzcx",
+                            "ngShow": "menu:hisFundNetValue",
+                            "controller": "HisFundNetValueController",
+                            "url": "his/hisFundNetValue.html",
+                            "href": "#hisFundNetValue",
+                            "lastmenus": ""
+                        },
+                        {
+                            "title": "历史资金查询",
+                            "titleShort": "lszjcx",
+                            "ngShow": "menu:hisInvestorAccount",
+                            "controller": "HisInvestorAccountController",
+                            "url": "his/hisInvestorAccount.html",
+                            "href": "#hisInvestorAccount",
+                            "lastmenus": ""
+                        },
+                        {
+                            "title": "历史委托查询",
+                            "titleShort": "lswtcx",
+                            "ngShow": "menu:hisWFOrder",
+                            "controller": "HisWFOrderServiceController",
+                            "url": "his/hisWFOrder.html",
+                            "href": "#hisWFOrder",
+                            "lastmenus": ""
+                        },
+                        {
+                            "title": "历史成交查询",
+                            "titleShort": "lscjcx",
+                            "ngShow": "menu:hisWFTrade",
+                            "controller": "HisWFTradeServiceController",
+                            "url": "his/hisWFTrade.html",
+                            "href": "#hisWFTrade",
+                            "lastmenus": ""
+                        },
+                        {
+                            "title": "历史持仓查询",
+                            "titleShort": "lschcx",
+                            "ngShow": "menu:hisPositionQuery",
+                            "controller": "HisPositionQueryController",
+                            "url": "his/hisPosition.html",
+                            "href": "#hisPositionQuery",
+                            "lastmenus": ""
+                        },
+                        {
+                            "title": "历史指令查询",
+                            "titleShort": "lszlcx",
+                            "ngShow": "menu:hisAdviceOrder",
+                            "controller": "HisAdviceorderQueryController",
+                            "url": "his/hisAdviceOrder.html",
+                            "href": "#hisAdviceOrder",
+                            "lastmenus": ""
+                        },
+                        {
+                            "title": "历史错单查询",
+                            "titleShort": "lscdcx",
+                            "ngShow": "menu:hisWFOrderInsertFailed",
+                            "controller": "HisWFOrderInsertFailedController",
+                            "url": "his/hisWFOrderInsertFailed.html",
+                            "href": "#hisWFOrderInsertFailed",
+                            "lastmenus": ""
+                        },
+                        {
+                            "title": "历史行权申请查询",
+                            "titleShort": "lsxqsqcx",
+                            "ngShow": "menu:hisExerciseOrder",
+                            "controller": "HisExerciseOrderController",
+                            "url": "his/hisExerciseOrder.html",
+                            "href": "#hisExerciseOrder",
+                            "lastmenus": ""
+                        },
+                        {
+                            "title": "历史自动对冲申请查询",
+                            "titleShort": "lszddcsqcx",
+                            "ngShow": "menu:hisOptionSelfClose",
+                            "controller": "HisOptionSelfCloseController",
+                            "url": "his/hisOptionSelfClose.html",
+                            "href": "#hisOptionSelfClose",
+                            "lastmenus": ""
+                        },
+                        {
+                            "title": "日结单查询",
+                            "titleShort": "rjdcx",
+                            "ngShow": "menu:dailySettleQuery",
+                            "controller": "DailySettleQueryController",
+                            "url": "his/dailySettleQuery.html",
+                            "href": "#dailySettleQuery",
+                            "lastmenus": ""
+                        }
+                    ]
+                },
+                {
+                    "title": "结算数据查询",
+                    "titleShort": "jssjcx",
+                    "ngShow": "menu:home12_3",
+                    "lastmenus": [
+                        {
+                            "title": "资产单元成交查询",
+                            "titleShort": "fxzhcjcx",
+                            "ngShow": "menu:tradeQuery",
+                            "controller": "TradeQueryController",
+                            "url": "query/tradeQuery.html",
+                            "href": "#tradeQuery",
+                            "lastmenus": ""
+                        },
+                        {
+                            "title": "资产单元资金对账",
+                            "titleShort": "fxzhzjdz",
+                            "ngShow": "menu:subAccountCapitalQuery",
+                            "controller": "SubAccountCapitalController",
+                            "url": "query/subAccountCapital.html",
+                            "href": "#subAccountCapitalQuery",
+                            "lastmenus": ""
+                        },
+                        {
+                            "title": "资产单元资金查询",
+                            "titleShort": "fxzhzjcx",
+                            "ngShow": "menu:subAccountCapitalQuerySingle",
+                            "controller": "SubAccountCapitalQuerySingleController",
+                            "url": "query/subAccountCapitalQuerySingle.html",
+                            "href": "#subAccountCapitalQuerySingle",
+                            "lastmenus": ""
+                        },
+                        {
+                            "title": "资产单元持仓查询",
+                            "titleShort": "fxzhcccx",
+                            "ngShow": "menu:subPositionQuery",
+                            "controller": "SubPositionController",
+                            "url": "query/subPosition.html",
+                            "href": "#subPositionQuery",
+                            "lastmenus": ""
+                        },
+                        {
+                            "title": "资产单元日账单",
+                            "titleShort": "fxzhrzd",
+                            "ngShow": "menu:billquery",
+                            "controller": "BillQuery",
+                            "url": "billquery/billquery.html",
+                            "href": "#billquery",
+                            "lastmenus": ""
+                        },
+                        {
+                            "title": "资产单元备兑组合查询",
+                            "titleShort": "zcdybdzhcx",
+                            "ngShow": "menu:subCombPositionDetail",
+                            "controller": "SubCombPositionDetailController",
+                            "url": "query/subCombPositionDetail.html",
+                            "href": "#subCombPositionDetail",
+                            "lastmenus": ""
+                        },
+                        {
+                            "title": "日盈亏报表",
+                            "titleShort": "rykbb",
+                            "ngShow": "menu:dailyProfitloss",
+                            "controller": "dailyProfitlossController",
+                            "url": "query/dailyProfitloss.html",
+                            "href": "#dailyProfitloss",
+                            "lastmenus": ""
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "title": "计算器管理",
+            "titleShort": "jsqgl",
+            "ngShow": "menu:home15",
+            "submenus": [
+                {
+                    "title": "杠杆计算器",
+                    "titleShort": "ggjsq",
+                    "ngShow": "menu:leverageCalculator",
+                    "controller": "LeverageCalculatorController",
+                    "url": "syspecial/leverageCalculator.html",
+                    "href": "#leverageCalculator",
+                    "lastmenus": ""
+                },
+                {
+                    "title": "设置资产单元名义本金",
+                    "titleShort": "szzjzhmybj",
+                    "ngShow": "menu:capitalAccountPrincipal",
+                    "controller": "CapitalAccountPrincipalController",
+                    "url": "syspecial/capitalAccountPrincipal.html",
+                    "href": "#capitalAccountPrincipal",
+                    "lastmenus": ""
+                },
+                {
+                    "title": "持仓变动表",
+                    "titleShort": "ccbdb",
+                    "ngShow": "menu:leverageCalculatorPosition",
+                    "controller": "LeverageCalculatorPositionController",
+                    "url": "syspecial/leverageCalculatorPosition.html",
+                    "href": "#leverageCalculatorPosition",
+                    "lastmenus": ""
+                },
+                {
+                    "title": "持仓汇总表",
+                    "titleShort": "cchzb",
+                    "ngShow": "menu:leverageCalculatorPositionCollect",
+                    "controller": "LeverageCalculatorPositionCollectController",
+                    "url": "syspecial/leverageCalculatorPositionCollect.html",
+                    "href": "#leverageCalculatorPositionCollect",
+                    "lastmenus": ""
+                }
+            ]
+        },
+        {
+            "title": "FOF风控管理",
+            "titleShort": "FOFfkgl",
+            "ngShow": "menu:home13",
+            "submenus": [
+                {
+                    "title": "风控子节点实时查询",
+                    "titleShort": "fkzjdsscx",
+                    "ngShow": "menu:home13_1",
+                    "lastmenus": [
+                        {
+                            "title": "持仓查询",
+                            "titleShort": "cccx",
+                            "ngShow": "menu:fofriskoperClientPosition",
+                            "controller": "FofriskoperClientPositionController",
+                            "url": "FOFRisk/fofriskoperClientPosition.html",
+                            "href": "#fofriskoperClientPosition",
+                            "lastmenus": ""
+                        },
+                        {
+                            "title": "委托查询",
+                            "titleShort": "wtcx",
+                            "ngShow": "menu:fofriskoperOrder",
+                            "controller": "FofriskOperOrderController",
+                            "url": "FOFRisk/fofriskoperOrder.html",
+                            "href": "#fofriskoperOrder",
+                            "lastmenus": ""
+                        },
+                        {
+                            "title": "成交查询",
+                            "titleShort": "cjcx",
+                            "ngShow": "menu:fofriskoperTrade",
+                            "controller": "FofriskOperTradeController",
+                            "url": "FOFRisk/fofriskoperTrade.html",
+                            "href": "#fofriskoperTrade",
+                            "lastmenus": ""
+                        },
+                        {
+                            "title": "资金查询",
+                            "titleShort": "zjcx",
+                            "ngShow": "menu:fofriskOperInvestorAccount",
+                            "controller": "FofriskOperInvestorAccountController",
+                            "url": "FOFRisk/fofriskOperInvestorAccount.html",
+                            "href": "#fofriskOperInvestorAccount",
+                            "lastmenus": ""
+                        },
+                        {
+                            "title": "风控参数查询",
+                            "titleShort": "fkcscx",
+                            "ngShow": "menu:fofriskparams",
+                            "controller": "fofRiskParamsController",
+                            "url": "FOFRisk/fofriskparams.html",
+                            "href": "#fofriskparams",
+                            "lastmenus": ""
+                        }
+                    ]
+                },
+                {
+                    "title": "风控子节点配置",
+                    "titleShort": "fkzjdpz",
+                    "ngShow": "menu:home13_2",
+                    "lastmenus": [
+                        {
+                            "title": "子产品机构配置",
+                            "titleShort": "zcpjgpz",
+                            "ngShow": "menu:fofinstclient",
+                            "controller": "fofInstClientController",
+                            "url": "foffund/fofinstclient.html",
+                            "href": "#fofinstclient",
+                            "lastmenus": ""
+                        },
+                        {
+                            "title": "风控子节点配置",
+                            "titleShort": "fkzjdpz",
+                            "ngShow": "menu:fofrisksubnode",
+                            "controller": "fofRiskSubNodeController",
+                            "url": "foffund/fofrisksubnode.html",
+                            "href": "#fofrisksubnode",
+                            "lastmenus": ""
+                        }
+                    ]
+                },
+                {
+                    "title": "产品组风控",
+                    "titleShort": "cpzfk",
+                    "ngShow": "menu:home13_3",
+                    "lastmenus": [
+                        {
+                            "title": "产品组配置",
+                            "titleShort": "cpzpz",
+                            "ngShow": "menu:foffundgroup",
+                            "controller": "fofFundGroupController",
+                            "url": "foffund/foffundgroup.html",
+                            "href": "#foffundgroup",
+                            "lastmenus": ""
+                        }
+                    ]
+                },
+                {
+                    "title": "风控预警查询",
+                    "titleShort": "fkyjcx",
+                    "ngShow": "menu:fofriskPrewarn",
+                    "controller": "testController",
+                    "url": "FOFRisk/fofriskPrewarn.html",
+                    "href": "#fofriskPrewarn",
+                    "lastmenus": ""
+                },
+                {
+                    "title": "持仓分布",
+                    "titleShort": "ccfb",
+                    "ngShow": "menu:fofriskPositionDistribution",
+                    "controller": "testController",
+                    "url": "FOFRisk/fofriskPositionDistribution.html",
+                    "href": "#fofriskPositionDistribution",
+                    "lastmenus": ""
+                }
+            ]
+        }
+        
+    ]
+}

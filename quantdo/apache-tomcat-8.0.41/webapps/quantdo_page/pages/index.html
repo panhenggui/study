@@ -1,0 +1,1130 @@
+<!DOCTYPE html>
+<html lang="en" ng-app="myApp">
+<head>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+    <meta charset="utf-8" />
+    <title>全球交易系统</title>
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0" />
+
+    <!--[if !IE]> -->
+    <link rel="stylesheet" href="../framework/ui-ace-finally/assets/css/pace.css" />
+
+    <script data-pace-options='{ "ajax": true, "document": true, "eventLag": false, "elements": false }' src="../framework/ui-ace-finally/assets/js/pace.js"></script>
+
+    <!-- <![endif]-->
+
+    <!-- bootstrap & fontawesome -->
+    <link rel="stylesheet" href="../framework/ui-ace-finally/assets/css/bootstrap.css" />
+    <link rel="stylesheet" href="../framework/ui-ace-finally/assets/css/bootstrap-datepicker.css">
+
+    <!-- ace styles -->
+    <link rel="stylesheet" href="../framework/ui-ace-finally/assets/css/ace.css" class="ace-main-stylesheet" id="main-ace-style" />
+
+    <link rel="stylesheet" href="../framework/ui-ace-finally/assets/css/upper-page.css">
+    <link rel="stylesheet" href="../framework/ui-ace-finally/dataTables/jquery.dataTables.min.css">
+    <link rel="stylesheet" href="../framework/ui-ace-finally/assets/css/main.css">
+    
+    <link rel="stylesheet" href="../framework/ui-ace-finally/select2/select2.css">
+	<!--<link rel="stylesheet" href="../framework/ui-ace/assets/css/multiselect/prettify.css" />-->
+	<!--<link rel="stylesheet" href="../framework/ui-ace/assets/css/multiselect/jquery-ui.css" />-->
+	
+	<!-- <link rel="stylesheet" href="../framework/ui-ace-finally/jqueryClockTimePicker/css/htmleaf-demo.css"> -->
+	<!-- <link rel="stylesheet" href="../framework/ui-ace-finally/jqueryClockTimePicker/css/normalize.css"> -->
+
+    <!--[if lte IE 9]>
+    <link rel="stylesheet" href="../framework/ui-ace-finally/assets/css/ace-part2.css" class="ace-main-stylesheet" />
+    <![endif]-->
+
+    <!--[if lte IE 9]>
+    <link rel="stylesheet" href="../framework/ui-ace-finally/assets/css/ace-ie.css" />
+    <![endif]-->
+
+    <link rel="stylesheet" href="../framework/ui-ace-finally/assets/css/close.css">
+
+    <!-- ace settings handler -->
+    <script src="../framework/ui-ace-finally/assets/js/ace-extra.js"></script>
+
+    <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
+
+	<link rel="stylesheet" href="../framework/libraries/ztree/css/zTreeStyle/zTreeStyle.css"/>
+
+    <!--[if lte IE 8]>
+    <script src="../framework/ui-ace-finally/assets/js/html5shiv.js"></script>
+    <script src="../framework/ui-ace-finally/assets/js/respond.js"></script>
+    <![endif]-->
+</head>
+
+<body class="no-skin" ng-controller="indexController">
+<!-- #section:basics/navbar.layout -->
+<div id="navbar" class="navbar navbar-default">
+    <script type="text/javascript">
+        try{ace.settings.check('navbar' , 'fixed')}catch(e){}
+    </script>
+
+    <div class="navbar-container"  id="navbar-container">
+	        <!-- /section:basics/sidebar.mobile.toggle -->
+	        <div class="navbar-header pull-left">
+	            <!-- #section:basics/navbar.layout.brand -->
+	            <a href="#" class="navbar-brand">
+	                <span class="icon-logo"></span>
+	                	
+	            </a>
+	        </div>
+			<div class="navbar-header pull-right logout page-right" ng-click="logonOut()">
+				<span class="icon-exit"></span>
+				<a href="">
+						   退出
+				</a>
+			</div>
+			<div class="navbar-header pull-right logout" ng-click="index_pass_init()" data-toggle="modal" data-target="#index_myModal">
+				<span class="icon-updatepassword"></span>
+				<a href="#home">
+						  密码修改
+				</a>
+			</div>
+			<div class="navbar-header pull-right logout" style="width:200px;">
+				<a>欢迎[{{userName}}]登录</a>
+			</div>
+			<div class="navbar-header pull-right logout" style="width:200px;">
+				 <a>所属机构： {{instShortName}}</a>
+			</div>
+	        <div class="skin-choice" ng-click="changeSkin()">
+            <div class="skin-choice-left"></div>
+            <div class="skin-choice-right"></div>
+        </div>
+        	<div class="modal fade" id="index_myModal" tabindex="-1"
+             role="dialog" aria-labelledby="myModalLabel" aria-hidden="true"
+             data-backdrop="static" data-keyboard="false">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal"
+                                aria-hidden="true">&times;</button>
+                        <h4 class="modal-title" id="myModalLabel">修改密码</h4>
+                    </div>
+                    <div class="modal-body">
+                        <!-- 添加表单内容-->
+                        					<form class="form-horizontal" role="form"
+								name="indexPwdChangeForm" novalidate>
+								<div class="form-group">
+									<label for="password" class="col-sm-3 control-label">原密码<span
+										style="color: red;">*</span></label>
+									<div class="col-sm-8">
+										<input type="password" class="form-control" id="password"
+											placeholder="请输入原密码" ng-model="modalEntity.password"
+											name="password" maxlength="20" required
+											ng-change="showIndLow(modalEntity.password) ; isBlank(modalEntity)" onkeyup="kEvent(event,this)"
+											onkeydown="myKeyup(event,this)" tab="1"> <span
+											ng-show="indexPwdChangeForm.password.$dirty && indexPwdChangeForm.password.$invalid"
+											style="color: red;">原密码为必填项</span>
+											 <div class="pass-wrap">
+											        <em id="passText" >密码强度：</em>
+											        <div id="passStrengthind"></div>
+										 </div>
+									</div>
+								</div>
+
+								<div class="form-group">
+									<label for="newPassword" class="col-sm-3 control-label">新密码<span
+										style="color: red;">*</span></label>
+									<div class="col-sm-8">
+										<input type="password" class="form-control" id="newPassword"
+											placeholder="请输入新密码" ng-model="modalEntity.newPassword"
+										ng-change="showIndLowag(modalEntity.newPassword); isBlank(modalEntity)"  name="newPassword"
+											maxlength="20" required onkeyup="kEvent(event,this)"
+											onkeydown="myKeyup(event,this)" tab="2"> <span
+											ng-show="indexPwdChangeForm.newPassword.$dirty && indexPwdChangeForm.newPassword.$invalid"
+											style="color: red;">新密码为必填项</span>
+											 <div class="pass-wrap">
+											        <em id="passText" >密码强度：</em>
+											        <div id="passStrengthindag"></div>
+										 </div>
+									</div>
+								</div>
+
+								<div class="form-group">
+									<label for="pwdag" class="col-sm-3 control-label">确认新密码<span
+										style="color: red;">*</span></label>
+									<div class="col-sm-8">
+										<input type="password" class="form-control" id="pwdag"
+											placeholder="请输入确认新密码" ng-model="modalEntity.pwdag"
+										ng-change="showIndLowtwo(modalEntity.pwdag); isBlank(modalEntity)" name="pwdag" maxlength="20"
+											required onkeyup="kEvent(event,this)"
+											onkeydown="myKeyup(event,this)" tab="3"> <span
+											ng-show="indexPwdChangeForm.pwdag.$dirty && indexPwdChangeForm.pwdag.$invalid"
+											style="color: red;">确认新密码为必填项</span>
+											 <div class="pass-wrap">
+											        <em id="passText" >密码强度：</em>
+											        <div id="passStrengthindtwo"></div>
+										 </div>
+									</div>
+								</div>
+								<div class="form-group" ng-show="checkPwd !='false'">
+									<div class="row form-group">
+										<label class="col-sm-10 control-label" ><span style="color: red;">密码必须大于等于8位字符且包含数字、字母、特殊字符！</span></label>
+											
+									</div>
+								</div>
+								<div class="form-group">
+									<label class="col-sm-3 control-label" >验证码</label>
+									<div class="col-sm-4">
+										<span class="input-icon input-icon-right" style="margin-right:20px;">
+											<input type="text" class="form-control" style="padding-right:6px;width:120px" placeholder="请输入验证码" 
+											name="validcode" ng-model="modalEntity.validcode" maxlength="4" id="indexPwdResetValidcode" onkeydown="myKeyup(event,this)" />
+										</span>
+										
+									</div>
+									<div class="col-sm-5">
+										<span>
+											<img id="indexPwdResetValidImg" src="" style="width:100px;height:34px;"/>
+										</span>
+									</div>
+								</div>
+							</form>
+                        <!--End  添加表单内容-->
+                    </div>
+                    <div class="modal-footer">
+							<span class="btn btn-query btn-sm popover-info" data-rel="popover"
+                                  data-placement="bottom" title="" ng-click="savePwd(modalEntity)"
+                                  ng-disabled="indexPwdChangeForm.$invalid || pwdBlank">&nbsp;确定&nbsp;</span>
+							<span class="btn btn-close btn-sm popover-info" data-rel="popover"
+                                  data-placement="bottom" title="" data-dismiss="modal">&nbsp;取消&nbsp;</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- /section:basics/navbar.layout -->
+<div class="main-container" id="main-container">
+	<script type="text/javascript">
+		try{ace.settings.check('main-container' , 'fixed')}catch(e){}
+	</script>
+
+	<div class="toggle-sidebar toggle-hide" ng-click="showSidebar()" id="hideSideBar">
+		<span class="toggle-sidebar-default toggle-open"></span>
+		<span class="toggle-sidebar-hover toggle-open">展开</span>
+	</div>
+	<!-- #section:basics/sidebar -->
+	<div id="sidebar" class="sidebar responsive">
+		<script type="text/javascript">
+			try{ace.settings.check('sidebar' , 'fixed')}catch(e){}
+		</script>
+
+    <!--搜索栏-->
+    <span id="btn-search" class="btn-search" ng-click="serachMenu()"></span>
+    <i class="icon-close" id="icon-close" ng-click="clearSearchContext()"></i>
+    <input type="search" ng-maxlength="4" class="sidebar-serach" placeholder="首字母检索" id="menuSearch" ng-model="queryMenu" ng-keydown="indexKeyDown($event);">
+    <div class="toggle-sidebar" ng-click="hideSidebar()">
+        <span class="toggle-sidebar-default toggle-close"></span>
+        <span class="toggle-sidebar-hover toggle-close">收起</span>
+    </div>
+    <!--菜单栏-->
+    <ul class="nav nav-list">
+        	<li class="" ng-repeat="menuEntity in menuEntitys|filter:queryMenu">
+            <a href="#" class="dropdown-toggle" ng-hide="menuEntity.submenus.length == 0 || menuEntity.submenus == null">
+                <span class="menu-text">
+                    {{menuEntity.title}}
+                </span>
+
+                <b class="arrow fa fa-angle-down"></b>
+            </a>
+
+            <b class="arrow"></b>
+
+            <ul class="submenu">
+                <li class="" ng-repeat="submenu in menuEntity.submenus">
+                    <span class="btn-submenu"></span>
+                    <!--只有二级菜单-->
+                    <a data-url="page/typography" href="{{submenu.href}}" title="{{submenu.title}}" ng-if="submenu.title.length>4"
+                       ng-click="addPane('',menuEntity.title,submenu.title,submenu.controller,submenu.url)" ng-show="submenu.lastmenus.length==0">
+                        {{submenu.title}}
+                    </a>
+                    <a data-url="page/typography" href="{{submenu.href}}" ng-if="submenu.title.length<=4"
+                       ng-click="addPane('',menuEntity.title,submenu.title,submenu.controller,submenu.url)" ng-show="submenu.lastmenus.length==0">
+                        {{submenu.title}}
+                    </a>
+
+                    <!--有三级菜单-->
+                    <a href="#" class="dropdown-toggle" ng-hide="submenu.lastmenus.length==0">
+                        {{submenu.title}}
+                    </a>
+                    <b class="arrow" ng-hide="submenu.lastmenus.length==0"></b>
+                    <ul class="submenu" ng-hide="submenu.lastmenus.length==0">
+                        <li class="" ng-repeat="lastmenu in submenu.lastmenus"  ng-click="addPane(menuEntity.title,submenu.title,lastmenu.title,lastmenu.controller,lastmenu.url)">
+                            <span class="btn-submenu last-menu"></span>
+                            <a data-url="page/typography" href="{{lastmenu.href}}" title="{{lastmenu.title}}">
+                                {{lastmenu.title}}
+                            </a>
+
+                            <b class="arrow"></b>
+                        </li>
+                    </ul>
+                </li>
+            </ul>
+        </li>
+    </ul>
+
+
+    <!-- /section:basics/sidebar.layout.minimize -->
+    <script type="text/javascript">
+        try{ace.settings.check('sidebar' , 'collapsed')}catch(e){}
+    </script>
+</div>
+    <div class="main-content" id="main-content">
+        <div class="main-content-inner">
+            <!-- #section:basics/content.breadcrumbs -->
+
+            <div class="page-content">
+                <tabs>
+                    <pane ng-repeat="pane in panes | filter:{includedInTabView:true}"
+                          tab-title="{{pane.name}}" top-title="{{pane.topmenu}}" sub-title="{{pane.submenu}}" controller="{{pane.controller}}" template="{{pane.partial}}">
+                    </pane>
+                </tabs>
+                <div class="page-content-area" data-ajax-content="false">
+                    <!-- ajax content goes here -->
+                </div>
+                <input type="hidden" ng-model="modelFlag" />
+                <!-- /.page-content-area -->
+            </div>
+            <!-- /.page-content -->
+        </div>
+    </div>
+
+    <div class="footer">
+			<div class="footer-inner" id="footer-inner">
+				<!-- #section:basics/footer -->
+				<div class="footer-content">
+					<span class="bigger-120"> <small><span
+							class="blue bolder">GTS_V1.0.7_P2_octopus_20181017_3</span></small>
+							<small>&copy;Copyright 2018 <a href="http://www.quantdo.com.cn" target="_blank">quantdo.com.cn</a>
+							Inc. All Rights Reserved.
+					</small>
+					</span>
+				</div>
+
+				<!-- /section:basics/footer -->
+			</div>
+		</div>
+
+<a href="#" id="btn-scroll-up" class="btn-scroll-up btn btn-sm btn-inverse">
+    <i class="ace-icon icon-upper"></i>
+</a>
+</div><!-- /.main-container -->
+<!-- basic scripts -->
+
+<!--[if !IE]> -->
+<script type="text/javascript">
+    window.jQuery || document.write("<script src='../framework/ui-ace-finally/assets/js/jquery.js'>"+"<"+"/script>");
+</script>
+<script src="../framework/ui-ace-finally/assets/js/jquery.js"></script>
+
+<!-- <![endif]-->
+
+<script src="../framework/ui-ace-finally/assets/js/multiselect/jquery-ui.min.js"></script>
+
+<script type="text/javascript">
+    if('ontouchstart' in document.documentElement) document.write("<script src='../framework/ui-ace-finally/assets/js/jquery.mobile.custom.js'>"+"<"+"/script>");
+</script>
+<script src="../framework/ui-ace-finally/assets/js/bootstrap.js"></script>
+<script src="../framework/ui-ace-finally/assets/js/date-time/bootstrap-datepicker.js"></script>
+<script src="../framework/ui-ace-finally/assets/js/date-time/locales/bootstrap-datepicker.zh-CN.js"></script>
+<script src="../framework/ui-ace-finally/assets/js/date-time/bootstrap-timepicker.js"></script>
+
+<!--datePicker-->
+<script src="../framework/ui-ace-finally/My97DatePicker/WdatePicker.js"></script>
+<!-- jquery datatables -->
+<script src="../framework/ui-ace-finally/dataTables/jquery.dataTables.min.js"></script>
+<script src="../framework/ui-ace-finally/dataTables/jquery.dataTables.bootstrap.js"></script>
+<script src="../framework/ui-ace-finally/dataTables/extensions/TableTools/js/dataTables.tableTools.js"></script>
+<script src="../framework/ui-ace-finally/dataTables/extensions/ColVis/js/dataTables.colVis.js"></script>
+<script src="../framework/ui-ace-finally/dataTables/extensions/FixedColumns/js/dataTables.fixedColumns.min.js"></script>
+<!-- end jquery datatables -->
+
+<script src="../framework/ui-ace-finally/dataTables/extensions/Buttons/js/dataTables.buttons.min.js"></script>
+<!--<script src="https://cdn.datatables.net/buttons/1.2.2/js/dataTables.buttons.min.js"></script>-->
+<script src="../framework/ui-ace-finally/dataTables/jszip.min.js"></script>
+<script src="../framework/ui-ace-finally/dataTables/pdfmake.min.js"></script>
+<script src="../framework/ui-ace-finally/dataTables/vfs_fonts.js"></script>
+<link rel="stylesheet" href="../framework/ui-ace-finally/dataTables/extensions/Buttons/css/buttons.dataTables.min.css"/>
+<link rel="stylesheet" href="../framework/ui-ace-finally/dataTables/extensions/FixedColumns/css/fixedColumns.dataTables.css"/>
+
+<!-- angularjs -->
+<script src="../framework/ui-ace-finally/angular/1.4.3/angular.min.js"></script>
+<script src="../framework/ui-ace-finally/angular/1.4.3/angular-route.min.js"></script>
+<script src="../framework/ui-ace-finally/angular/directives/angular-datatables.min.js"></script>
+
+<script src="../framework/ui-ace-finally/isjs/is.min.js"></script>
+
+<!--tab栏-->
+<link rel="stylesheet" href="../framework/ui-ace-finally/angularjsTab/angularTab.css"/>
+<script src="../framework/ui-ace-finally/angularjsTab/angular-ajax-tabs.js"></script>
+<script src="app.js"></script>
+
+<link rel="stylesheet" href="../framework/ui-ace-finally/assets/css/light-skin.css" id="light-skin" disabled>
+
+<!-- jquery upload file -->
+<script src="../framework/ui-ace-finally/jquery/jquery.form/jquery.form.js"></script>
+<script src="../framework/ui-ace-finally/jquery/upload-file/jquery.uploadfile.min.js"></script>
+<link rel="stylesheet" href="../framework/ui-ace-finally/jquery/upload-file/uploadfile.custom.css" />
+<link rel="stylesheet" href="../framework/ui-ace-finally/jquery/upload-file/uploadfile.css" />
+
+
+<!-- angular upload file -->
+<script src="../framework/ui-ace-finally/angular/ng-file-upload-master/ng-file-upload-shim.min.js"></script>
+<script src="../framework/ui-ace-finally/angular/ng-file-upload-master/ng-file-upload.min.js"></script>
+
+<!--autocomplete-->
+<script src="../framework/ui-ace-finally/autocomplete/jquery.autocomplete.js"></script>
+<script src="../framework/ui-ace-finally/autocomplete/jquery.ajaxQueue.js"></script>
+<script src="../framework/ui-ace-finally/autocomplete/jquery.bgiframe.min.js"></script>
+<script src="../framework/ui-ace-finally/autocomplete/thickbox-compressed.js"></script>
+<link rel="stylesheet" href="../framework/ui-ace-finally/autocomplete/thickbox.css"/>
+<link rel="stylesheet" href="../framework/ui-ace-finally/autocomplete/jquery.autocomplete.css"/>
+<link rel="stylesheet" href="../framework/common/angucomplete.css"/>
+
+
+
+<!-- 弹框组件 -->
+<script src="../framework/ui-ace-finally/assets/js/layer/layer.js"></script>
+<script src="../framework/libraries/framework.js"></script>
+<script src="../framework/ui-ace-finally/util/Namespace.js"></script>
+<script src="../framework/libraries/websocket/WebsocketClient.js"></script>
+<script src="../config.js"></script>
+
+<!-- jquery multiselect -->
+<script src="../framework/ui-ace-finally/assets/js/multiselect/prettify.js"></script>
+<script src="../framework/ui-ace-finally/assets/js/multiselect/jquery.multiselect.js"></script>
+<link href="../framework/ui-ace-finally/assets/css/multiselect/jquery.multiselect.css" rel="stylesheet">
+
+
+<script type="text/javascript" src="../framework/libraries/ztree/js/jquery.ztree.core-3.5.js"></script>
+<script type="text/javascript" src="../framework/libraries/ztree/js/jquery.ztree.excheck-3.5.js"></script>
+<script type="text/javascript" src="../framework/libraries/ztree/js/jquery.ztree.exedit.js"></script>
+
+
+<script src="../framework/ui-ace-finally/select2/select2.js"></script>
+
+<!-- service js -->
+<script src="../service/LogonCheckService.js"></script>
+	<script src="../service/LogonService.js"></script>
+<script src="../constants.js"></script>
+<script src="./home.js"></script>
+<script src="../service/CommonQueryService.js"></script>
+<script src="../service/RunMonitorService.js"></script>
+<script src="../service/CapitalAccountService.js"></script>
+<!-- 权限初始化 -->
+<script src="../service/InitMenusService.js"></script>
+
+	<!--委托流量查询-->
+	<script src="./query/flowQuery.js"></script>
+	<script src="../service/FlowQueryService.js"></script>
+	
+	<!--用户在线管理-->
+	<script src="./user/userOnlineManage.js"></script>
+	<script src="../service/UserOnlineManageService.js"></script>
+    <!--日志管理-->
+	<script src="./user/logManage.js"></script>
+	<script src="../service/LogManageService.js"></script>
+
+	<!--角色管理-->
+	<script src="./user/roleManage.js"></script>
+	<script src="../service/RoleManageService.js"></script>
+
+	<!--用户管理-->
+	<script src="./user/userManage.js"></script>
+	<script src="../service/UserManageService.js"></script>
+	
+	<!--交易员IP校验-->
+	<script src="./user/tradeUserIPCheck.js"></script>
+	<script src="../service/TradeUserIPCheckService.js"></script>
+	
+	<!--交易员产品校验-->
+	<script src="./user/tradeUserProductCheck.js"></script>
+	<script src="../service/TradeUserProductCheckService.js"></script>
+	
+	<!--用户关联账号-->
+	<script src="./user/accountLink.js"></script>
+	<script src="../service/AccountLinkService.js"></script>
+
+    <!--用户关联产品-->
+	<script src="./product/productLink.js"></script>
+	<script src="../service/UserFundProductService.js"></script>
+
+	<!--交易导入-->
+	<script src="./upload/upload.js"></script>
+	<script src="../service/UploadService.js"></script>
+
+	<!--成交维护-->
+	<script src="../service/TradeService.js"></script>
+	<script src="./dailysettle/trade.js"></script>
+	
+	<!--行权维护-->
+	<script src="../service/ExerciseTradeService.js"></script>
+	<script src="./dailysettle/exerciseTrade.js"></script>
+	
+	
+	
+	<!--成交维护-->
+	<script src="./dailysettle/capTrade.js"></script>
+	<!--盘后成交维护-->
+	<script src="../service/AfterHourTradeService.js"></script>
+	<script src="./dailysettle/afterHourTrade.js"></script>
+
+	<!--资产单元开户-->
+	<script src="./account/traderReg.js"></script>
+	<script src="../service/TraderRegService.js"></script>
+
+	<!--资产单元开户-->
+	<script src="./account/subCapitalAccountReg.js"></script>
+	<script src="../service/SubCapitalAccountRegService.js"></script>
+
+	<!--资产单元资料维护-->
+	<script src="./account/trader.js"></script>
+	<script src="../service/TraderService.js"></script>
+
+	<!--资金账户维护-->
+	<script src="./account/capitalAccount.js"></script>
+	<script src="../service/CapitalAccountService.js"></script>
+
+	<!--账户分组管理-->
+	<script src="./account/accountGroup.js"></script>
+	<script src="../service/AccountGroupService.js"></script>
+	
+	<!-- 席位用户管理-->
+	<script src="./account/seatUser.js"></script>
+	<script src="../service/SeatUserService.js"></script>
+
+	<!--银行账户管理-->
+	<script src="./settleparam/bankAccount.js"></script>
+	<script src="../service/BankAccountService.js"></script>
+
+	<!--质押管理-->
+	<script src="./settleparam/mortMoney.js"></script>
+	<script src="../service/MortMoneyService.js"></script>
+
+	<!--资产单元开户流程-->
+	<script src="./process/subCapitalAccountProcess.js"></script>
+	<script src="../service/SubCapitalAccountProcessService.js"></script>
+
+
+	<!--资产单元管理-->
+	<script src="./account/subCapitalAccount.js"></script>
+	<script src="../service/SubCapitalAccountService.js"></script>
+
+	<!--资产分类管理-->
+    <script src="./windControl/assetGroupForManagement.js"></script>
+	<script src="../service/RiskStromDataService.js"></script>
+
+    <!--证券附加信息导入-->
+    <script src="./windControl/stockAddInformationImport.js"></script>
+	<script src="../service/StockAddInformationImportService.js"></script>
+
+    <!--递延费率设置-->
+    <script src="./feeset/deferredFeeSet.js"></script>
+	<script src="../service/DeferredFeeSetService.js"></script>
+
+    <!--默认证券品种费率设置-->
+    <script src="./feeset/defaultStockProductFeeSet.js"></script>
+	<script src="../service/DefaultStockProductFeeSet.js"></script>
+    <!--证券品种费率-->
+    <script src="./feeset/stockProductFeeSet.js"></script>
+	<script src="../service/StockProductFeeSet.js"></script>
+ 	
+	<!--分组管理-->
+	<script src="./account/subAccountGroup.js"></script>
+	<script src="../service/SubAccountGroupService.js"></script>
+
+	<!--交易用户管理-->
+	<script src="./account/tradeUser.js"></script>
+	<script src="../service/TradeUserService.js"></script>
+
+	<!--会员管理-->
+	<script src="./account/member.js"></script>
+	<script src="../service/MemberService.js"></script>
+
+	<!--用户交易员关系管理-->
+	<script src="./account/userTrader.js"></script>
+	<script src="../service/UserTraderService.js"></script>
+
+	<!--交易客户管理-->
+	<script src="./account/exchClient.js"></script>
+	<script src="../service/ExchClientService.js"></script>
+
+	<!--单边产品组管理-->
+	<script src="./combmargin/singleEdgeProductGroup.js"></script>
+	<script src="../service/SingleEdgeProductGroupService.js"></script>
+
+	<!-- 资产单元模板关系 -->
+	<script src="../service/SubAccountTemplateService.js"></script>
+	<!--不参与单边合约管理-->
+	<script src="./combmargin/notSingleEdgeInstrument.js"></script>
+	<script src="../service/NotSingleEdgeInstrumentService.js"></script>
+
+	<!--配资管理-->
+	<script src="./settleparam/withFunding.js"></script>
+	<script src="../service/WithFundingService.js"></script>
+
+	<!--账户资金管理-->
+	<script src="../service/AccountCapitalService.js"></script>
+	<script src="./capital/accountCapital.js"></script>
+
+	<!--汇率管理-->
+	<script src="./settleparam/exchangeRate.js"></script>
+	<script src="../service/ExchangeRateService.js"></script>
+
+	<!--经纪公司管理-->
+	<script src="./account/brokerageFirm.js"></script>
+	<script src="../service/BrokerageFirmService.js"></script>
+
+	<!--基金产品管理-->
+	<script src="./product/fundProduct.js"></script>
+	<script src="../service/FundProductService.js"></script>
+
+    <!--资产单元产品管理-->
+	<script src="./product/fixedIncomeSet.js"></script>
+	<script src="../service/FixedIncomeSetService.js"></script>
+
+    <!--其他权益管理-->
+	<script src="./product/otherIncomeSet.js"></script>
+	<script src="../service/OtherIncomeSetService.js"></script>
+
+
+	<!--出入金管理-->
+	<script src="./settleparam/tmpMoneyIO.js"></script>
+	<script src="../service/TmpMoneyIOService.js"></script>
+
+	<!--出入金复核-->
+	<script src="./settleparam/moneyIORecheck.js"></script>
+
+	<!--子资金出入金管理-->
+	<script src="./settleparam/subMoneyIO.js"></script>
+	<script src="../service/SubMoneyIOService.js"></script>
+
+	<!--出入金流水查询-->
+	<script src="./settleparam/moneyIO.js"></script>
+	<script src="../service/MoneyIOService.js"></script>
+
+	<!--品种管理-->
+	<script src="./tradeparam/product.js"></script>
+	<script src="../service/ProductService.js"></script>
+	
+	<!-- 敞口管理-->
+	<script src="./tradeparam/weightUnit.js"></script>
+	<script src="../service/WeightUnitService.js"></script>
+	
+	<!-- 资金账号优先顺序-->
+	<script src="./riskparam/capitalAccountSequence.js"></script>
+	<script src="../service/CapitalAccountSequenceService.js"></script>
+	<!-- 开平仓顺序设置-->
+	<script src="./riskparam/offsetSequence.js"></script>
+	<script src="../service/OffsetSequenceService.js"></script>
+	<!-- 限额设置-->
+	<script src="./riskparam/capitalAccountLimit.js"></script>
+	<script src="../service/CapitalAccountLimitService.js"></script>
+	<!-- 限仓设置-->
+	<script src="./riskparam/positionLimit.js"></script>
+	<script src="../service/PositionLimitService.js"></script>
+	<!-- 报撤单比例设置-->
+	<script src="./riskparam/revokeTradeLimit.js"></script>
+	<script src="../service/RevokeTradeLimitService.js"></script>
+	<!-- 风控参数管理-->
+	<script src="./riskparam/partitionPositionConfig.js"></script>
+	<script src="../service/PartitionPositionConfigService.js"></script>
+	
+	
+	
+
+	<!--结算参数管理-->
+	<script src="./settleparam/settleParamInfo.js"></script>
+	<script src="../service/SettleParamService.js"></script>
+
+	<!--合约管理-->
+	<script src="./tradeparam/instrument.js"></script>
+	<script src="../service/InstrumentService.js"></script>
+
+	<!--期权系列管理-->
+	<script src="./tradeparam/optionSeries.js"></script>
+	<script src="../service/OptionSeriesService.js"></script>
+
+	<!--交易通道管理-->
+	<script src="./account/seat.js"></script>
+	<script src="../service/SeatService.js"></script>
+	
+	<!--资金账户导入-->
+    <script src="./upload/uploadFund.js"></script>
+    	
+	<!--黄金客户账户资金账户导入-->
+    <script src="./upload/uploadHoldFund.js"></script>
+    <!--客户持仓导入-->
+    <script src="./upload/uploadHoldDate.js"></script>
+
+
+     <!--结算文件导入-->
+    <script src="./upload/uploadSettleFile.js"></script>
+	<script src="../service/UploadService.js"></script>
+
+	<!--结算价管理-->
+	<script src="./tradeparam/settlePrice.js"></script>
+	<script src="../service/SettlePriceService.js"></script>
+	
+	<!--期现价格维护-->
+	<script src="./tradeparam/fSGetPrice.js"></script>
+	<script src="../service/FSGetPriceService.js"></script>
+
+	<!--默认保证金设置(期货)-->
+	<script src="./marginset/futures/defaultMarginSet.js"></script>
+	<script src="../service/DefaultMarginSetService.js"></script>
+
+	<!--产品保证金设置(期货)-->
+	<script src="./marginset/futures/productMarginSet.js"></script>
+	<script src="../service/ProductMarginSetService.js"></script>
+
+	<!--合约保证金设置(期货)-->
+	<script src="./marginset/futures/instrumentMarginSet.js"></script>
+	<script src="../service/InstrumentMarginSetService.js"></script>
+
+
+
+	<!--默认保证金设置(期权)-->
+	<script src="./marginset/option/defaultMarginSet.js"></script>
+	<script src="../service/DefaultMarginSetService.js"></script>
+
+	<!--产品保证金设置(期权)-->
+	<script src="./marginset/option/productMarginSet.js"></script>
+	<script src="../service/ProductMarginSetService.js"></script>
+
+	<!--合约保证金设置(期权)-->
+	<script src="./marginset/option/instrumentMarginSet.js"></script>
+	<script src="../service/InstrumentMarginSetService.js"></script>
+
+
+	<!--默认手续费设置-->
+	<script src="./feeset/defaultFeeSet.js"></script>
+	<script src="../service/DefaultFeeSetService.js"></script>
+
+	<!-- 资金账号组合持仓导入 -->
+	<script src="./windControl/uploadCombPOsitionDetail.js"></script>
+	<script src="../service/UploadCombPositionDetailService.js"></script>
+	
+	<!--产品手续费设置-->
+	<script src="./feeset/productFeeSet.js"></script>
+	<script src="../service/ProductFeeSetService.js"></script>
+
+	<!-- 手续费模板 -->
+	<script src="./feeset/feeTemplate.js"></script>
+	<script src="../service/FeeTemplateService.js"></script>
+	<script src="../service/FeeTemplateProductService.js"></script>
+
+	<!-- 客户资金帐号对应模板 -->
+	<script src="./marginset/subAccountTemplate.js"></script>
+	<script src="../service/SubAccountTemplateService.js"></script>
+
+	<!--合约手续费(期货)-->
+	<script src="./feeset/futures/instrumentFeeSet.js"></script>
+	<script src="../service/InstrumentFeeSetService.js"></script>
+
+	<!--合约手续费(期权)-->
+	<script src="./feeset/option/instrumentFeeSet.js"></script>
+	<script src="../service/InstrumentFeeSetService.js"></script>
+
+
+	<!--资产单元产品手续费-->
+	<script src="./feeset/subProductFeeSet.js"></script>
+	<script src="../service/SubProductFeeSetService.js"></script>
+
+	<!--资产单元合约手续费-->
+	<script src="./feeset/subInstrumentFeeSet.js"></script>
+	<script src="../service/SubInstrumentFeeSetService.js"></script>
+
+	<!--默认合约保证金-->
+	<script src="./marginset/defaultInstrumentMarginSet.js"></script>
+	<script src="../service/DefaultInstrumentMarginSetService.js"></script>
+
+	<!--期权手续费实时设置-->
+	<script src="./feeset/operInvestorOptionFee.js"></script>
+	<script src="../service/OperInvestorOptionFeeService.js"></script>
+
+	<!--资产单元产品保证金-->
+	<script src="./marginset/subProductMarginSet.js"></script>
+	<script src="../service/SubProductMarginSetService.js"></script>
+
+	<!--品种保证金模板-->
+	<script src="../service/MarginTemplateProductService.js"></script>
+
+	<!--保证金模板-->
+	<script src="./marginset/marginTemplate.js"></script>
+	<script src="../service/MarginTemplateService.js"></script>
+
+
+	<!--资产单元合约保证金-->
+	<script src="./marginset/subInstrumentMarginSet.js"></script>
+	<script src="../service/SubInstrumentMarginSetService.js"></script>
+
+	<!--标的指数收盘价-->
+	<script src="./settleparam/underlyingPrice.js"></script>
+	<script src="../service/UnderlyingPriceService.js"></script>
+
+	<!--日终结算-->
+	<script src="./dailysettle/dailySettle.js"></script>
+	<script src="../service/DailySettleService.js"></script>
+	<script src="../service/SysCalendarService.js"></script>
+
+	<!--资金结算-->
+	<script src="./dailysettle/moneySettle.js"></script>
+
+	<!--结算回退-->
+	<script src="./dailysettle/settleRollback.js"></script>
+
+	<!--上场数据生成-->
+	<script src="./dailysettle/dataToTrade.js"></script>
+	<script src="../service/DataToTradeService.js"></script>
+
+	<!--交易所信息维护-->
+	<script src="./tradeparam/exchange.js"></script>
+	<script src="../service/ExchangeService.js"></script>
+	<!--运行监控  runMonitor-->
+	<script src="./monitor/runMonitor.js"></script>
+	<script src="../service/RunMonitorService.js"></script>
+	<!-- 系统运行状态监控 systatus -->
+	<script src="./sysstatus/sysStatus.js"></script>
+	<script src="../service/SysStatusService.js"></script>
+	<!--业务稽核  busAudit-->
+	<script src="./busaudit/busAudit.js"></script>
+	<script src="../service/BusAuditService.js"></script>
+	<!--登录信息查询 userSession -->
+	<script src="./usersession/userSession.js"></script>
+	<script src="../service/UserSessionService.js"></script>
+	<!--Begin查询类业务-->
+
+	<script src="../service/CommonQueryService.js"></script>
+	<!--到期合约持仓查询-->
+	<script src="./query/dueSubPositionQuery.js"></script>
+	<!--资产单元资金查询-->
+	<script src="./query/subAccountCapital.js"></script>
+	<script src="./query/subAccountCapitalQuerySingle.js"></script>
+	<!--账户资金查询-->
+	<script src="./query/accountCapital.js"></script>
+	<!--账户持仓查询-->
+	<script src="./query/position.js"></script>
+	<!--资产单元持仓查询-->
+	<script src="./query/subPosition.js"></script>
+	<!--客户实时持仓查询-->
+	<script src="./query/operClientPositionQuery.js"></script>
+	<script src="../service/OperClientPositionService.js"></script>
+	<!--子账号组合备兑明细表-->
+	<script src="./query/subCombPositionDetail.js"></script>
+	<script src="../service/SubCombPositionDetailService.js"></script>
+	<!--客户实时成交查询-->
+	<script src="./query/operTrade.js"></script>
+	<script src="../service/OperTradeService.js"></script>
+	<script src="./query/operWFTrade.js"></script>
+	<script src="../service/OperWFTradeService.js"></script>
+	<!--客户实时错单查询-->
+	<script src="./query/operOrderInsertFailed.js"></script>
+	<script src="../service/OperOrderInsertFailedService.js"></script>
+	<script src="./query/operWFOrderInsertFailed.js"></script>
+	<script src="../service/OperWFOrderInsertFailedService.js"></script>
+	<!--客户实时委托查询-->
+	<script src="./query/operOrder.js"></script>
+	<script src="../service/OperOrderService.js"></script>
+	<script src="./query/operWFOrder.js"></script>
+	<script src="../service/OperWFOrderService.js"></script>
+	<!--客户历史委托查询-->
+	<script src="./his/hisOrder.js"></script>
+	<script src="../service/HisOrderService.js"></script>
+	<script src="./his/hisWFOrder.js"></script>
+	<script src="../service/HisWFOrderService.js"></script>
+	<!--客户历史成交查询-->
+	<script src="./his/hisTrade.js"></script>
+	<script src="../service/HisTradeService.js"></script>
+	<script src="./his/hisWFTrade.js"></script>
+	<script src="../service/HisWFTradeService.js"></script>
+	<!--历史净值查询-->
+	<script src="./his/hisFundNetValue.js"></script>
+	<script src="../service/HisFundNetValueService.js"></script>
+     <!--产品净值查询-->
+	<script src="./query/fundNetValue.js"></script>
+	<script src="../service/FundNetValueService.js"></script>
+	<!--历史资金查询-->
+	<script src="./his/hisInvestorAccount.js"></script>
+	<script src="../service/HisInvestorAccountService.js"></script>
+	<!--历史资金查询-->
+	<script src="./his/hisPosition.js"></script>
+	<script src="../service/HisPositionService.js"></script>
+	<!--历史资金查询-->
+	<script src="./his/hisWFOrderInsertFailed.js"></script>
+	<script src="../service/HisWFOrderInsertFailedService.js"></script>
+	<!--日结单查询-->
+	<script src="./his/dailySettleQuery.js"></script>
+	<script src="../service/DailySettleQueryService.js"></script>
+	
+	
+	<!--客户实时账户资金查询-->
+	<script src="./query/operInvestorAccountQuery.js"></script>
+	<script src="../service/OperInvestorAccountService.js"></script>
+	<!--客户实时账户资金查询-->
+	<script src="./query/operInvestorAccountQuery.js"></script>
+	<script src="../service/OperInvestorAccountService.js"></script>
+	<!-- 实时资产汇总 -->
+	<script src="./query/operAssetSummary.js"></script>
+	<script src="../service/OperAssetSummaryService.js"></script>
+	<!--成交查询-->
+	<script src="./query/tradeQuery.js"></script>
+	<!--通用数据字典-->
+	<script src="../service/DictionaryService.js"></script>
+	<!--查询系统操作员信息-->
+	<script src="../service/SystemParamService.js"></script>
+	<!-- 设置资产单元参数 -->
+	<script src="./userriskparameter/userriskparameter.js"></script>
+	<script src="../service/SubAccountRiskParamService.js"></script>
+	<script src="../service/AccountTradeComplianceService.js"></script>
+
+	<!-- 设置资产单元参数 -->
+	<script src="./userriskparameter/userriskparameterfof.js"></script>
+	<!-- 设置资产单元限制交易的交易品种 -->
+	<script src="./userriskvariety/userriskvariety.js"></script>
+	<script src="../service/SubCapitalAccountTradingLimitService.js"></script>
+	<script src="./newUserriskvariety/newUserriskvariety.js"></script>
+	<script src="./newUserriskvariety/newUserriskvarietyfof.js"></script>
+
+	<!-- 日账单查询 -->
+	<script src="./billquery/billquery.js"></script>
+	<script src="../service/SubAccountCapitalService.js"></script>
+	<script src="../service/SubPositionDetailService.js"></script>
+	
+	<!-- 日盈亏报表-->
+	<script src="./query/dailyProfitloss.js"></script>
+	<script src="../service/DailyProfitlossService.js"></script>
+	
+	
+	<!-- 杠杆计算器 -->
+	<script src="./syspecial/leverageCalculator.js"></script>
+	<script src="../servicesyspecial/LeverageCalculatorService.js"></script>
+	
+	<script src="./syspecial/capitalAccountPrincipal.js"></script>
+	<script src="../servicesyspecial/CapitalAccountPrincipalService.js"></script>
+
+	<script src="./syspecial/leverageCalculatorPosition.js"></script>
+	<script src="../servicesyspecial/LeverageCalculatorPositionService.js"></script>
+
+	<script src="./syspecial/leverageCalculatorPositionCollect.js"></script>
+	<script src="../servicesyspecial/LeverageCalculatorPositionCollectService.js"></script>
+	
+
+	<!-- 交易员管理 -->
+	<script src="./tradermanage/tradermanage.js"></script>
+
+	<!-- 交易员管理 -->
+	<script src="./tradermanage/tradermanagefof.js"></script>
+
+	<!-- 风控员管理 -->
+	<script src="./windcontrolmanage/windcontrolmanage.js"></script>
+	<!-- 风控员管理 -->
+	<script src="./windcontrolmanage/windcontrolmanagefof.js"></script>
+	
+	<!-- 工作流设置 -->
+	<script src="./account/workFlowSet.js"></script>
+	<script src="../service/WorkFlowSetService.js"></script>
+	
+	<script src="../service/FundWorkFlowService.js"></script>
+
+	<!-- 杠杆基数设置 -->
+	<script src="./account/leverage.js"></script>
+	<script src="../service/LeverageService.js"></script>
+
+	<!--  -->
+	<script src="../service/UserAccountGroupService.js"></script>
+	<script src="../service/UserAccountService.js"></script>
+
+	<!-- 操作员管理 -->
+	<script src="./operationalmanage/operationalmanage.js"></script>
+	<!-- 实时资金查询 -->
+	<script src="./query/realTimeAccountQuery.js"></script>
+	<script src="../service/OperInvestorAccountService.js"></script>
+
+	<!-- 机构管理 -->
+	<script src="./account/instClient.js"></script>
+	<script src="../service/InstClientService.js"></script>
+	<script src="../service/InstAdminService.js"></script>
+	<!-- 机构参数管理 -->
+	<script src="./account/instParameter.js"></script>
+	<script src="../service/InstParameterService.js"></script>
+	
+	<!-- 产品级风控 -->
+	<script src="./riskparam/fundProductRiskParam.js"></script>
+	<script src="../service/FundProductRiskParamService.js"></script>
+	
+	<!-- 产品级风控界面 -->
+	<script src="./riskparam/riskControl.js"></script>
+	<script src="../service/RiskWarnResultService.js"></script>
+	
+	<!-- 资金账户级风控 -->
+	<script src="./riskparam/capitalRiskParam.js"></script>
+	<!-- 资金账户级风控 -->
+	<script src="./riskparam/subCapitalRiskParam.js"></script>
+	
+	<!-- 多选框 -->
+    <script src="../framework/ui-ace/multiselect/js/prettify.js"></script>
+    <script src="../framework/ui-ace/multiselect/js/jquery.multiselect.js"></script>
+    
+        
+    <!-- 交易手续费率 -->
+    <script src="./feeset/operInvestorFee.js"></script>
+	<script src="../service/OperInvestorFeeService.js"></script>
+	
+	<!-- 交易保证金率 -->
+    <script src="./marginset/operInvestorMargin.js"></script>
+	<script src="../service/OperInvestorMarginService.js"></script>
+	
+	<!-- 现货交易 -->
+    <script src="./spot/spottrade.js"></script>
+	<script src="../service/SpotTradeService.js"></script>
+	
+	<!-- 现货库存 -->
+    <script src="./spot/spotstorage.js"></script>
+	<script src="../service/SpotStorageService.js"></script>
+	
+	<!-- 期货成交 -->
+    <script src="./spot/futuresTrade.js"></script>
+	<script src="../service/FuturesTradeService.js"></script>
+	
+	<!-- 期货成交 -->
+    <script src="./spot/futuresTradeUpload.js"></script>
+	<script src="../service/FuturesTradeUploadService.js"></script>
+	
+	<!-- 设置策略信息 -->
+    <script src="./strategy/strategy.js"></script>
+	<script src="../service/StrategyService.js"></script>
+	
+	<!-- 抵押品管理  -->
+	<script src="./mortgage/mortgage.js"></script>
+	<script src="../service/MortgageService.js"></script>
+	
+	<!-- 持仓报表-->
+	<script src="settleparam/hisPositionReport.js"></script>
+	<script src="../service/HisPositionReportService.js"></script>
+	
+	<!-- 项目简表-->
+	<script src="settleparam/projectBrief.js"></script>
+	
+	<!-- 账号自成交控制 -->
+	<script src="./riskparam/accountSelfTradeControl.js"></script>
+	<script src="../service/AccountSelfTradeControlService.js"></script>
+	
+	<!-- 产品基础信息查询 -->
+	<script src="./product/fundProductInfoQuery.js"></script>
+	
+    <!-- 产品风控参数查询 -->
+    <script src="./product/productRiskParamsQuery.js"></script>
+    <script src="../service/ProductRiskParamsQueryService.js"></script>
+
+
+	<!-- 其他资产类型成交维护 -->
+	<script src="./dailysettle/otherTradeMaintain.js"></script>
+	<script src="../service/OtherTradeMaintainService.js"></script>
+	
+	<!-- -------------------------------------fof子节点菜单js--------------------------------------------------- -->
+    <!-- FOFRisk风控管理 -->
+    
+    <script src="../service/FundProductRisknodeService.js"></script>
+    <!-- 母基金机构配置 -->
+    <script src="./foffund/fofinstclient.js"></script>
+    <script src="../fofservice/FOFInstClientService.js"></script>
+   
+    <!-- 风控子节点配置 -->
+    <script src="./foffund/fofrisksubnode.js"></script>
+    <script src="../fofservice/FOFRiskSubNodeService.js"></script>
+    
+    <!-- 风控产品组 -->
+    <script src="./foffund/foffundgroup.js"></script>
+    <script src="../fofservice/FOFFundGroupService.js"></script>
+    <script src="../fofservice/FOFRiskFundGroupWithFundProductService.js"></script>
+    <script src="../fofservice/FOFRiskFundGroupNetRiskParamService.js"></script>
+    <script src="../fofservice/FOFRiskProductProvisionParamService.js"></script>
+   
+   <!-- FOFRisk风控管理     信息查询-->
+     <!-- 持仓查询 -->
+    <script src="./FOFRisk/fofriskoperClientPosition.js"></script>
+    <script src="../fofservice/FOFriskoperClientPositionService.js"></script>
+    <!-- 委托查询 -->
+    <script src="./FOFRisk/fofriskoperOrder.js"></script>
+    <script src="../fofservice/FOFriskoperOrderService.js"></script>
+    <!-- 成交查询 -->
+    <script src="./FOFRisk/fofriskoperTrade.js"></script>
+    <script src="../fofservice/FOFriskoperTradeService.js"></script>
+    <!-- 资金查询 -->
+    <script src="./FOFRisk/fofriskOperInvestorAccount.js"></script>
+    <script src="../fofservice/FOFriskOperInvestorAccountService.js"></script>
+    <!-- 风控参数查询 -->
+    <script src="./FOFRisk/fofriskparams.js"></script>
+    <script src="../fofservice/FOFRiskParamsService.js"></script>
+	<!-- 实时指令查询 -->
+    <script src="./query/operAdviceOrder.js"></script>
+    <script src="../service/OperAdviceOrderService.js"></script>
+	<!-- 实时自动对冲申请查询 -->
+	<script src="./query/operOptionSelfClose.js"></script>
+	<script src="../service/OperOptionSelfCloseService.js"></script>
+	<!-- 实时行权申请查询 -->
+	<script src="./query/operExerciseOrder.js"></script>
+	<script src="../service/OperExerciseOrderService.js"></script>
+
+	<!-- 历史自动对冲申请查询 -->
+	<script src="./his/hisOptionSelfClose.js"></script>
+	<script src="../service/HisOptionSelfCloseService.js"></script>
+	<!-- 历史行权申请查询 -->
+	<script src="./his/hisExerciseOrder.js"></script>
+	<script src="../service/HisExerciseOrderService.js"></script>
+
+    <!-- 历史指令查询 --> 
+    <script src="./his/hisAdviceOrder.js"></script>
+    <script src="../service/HisAdviceOrderService.js"></script>
+    
+     <!-- 风控预警信息 -->
+    <script src="./FOFRisk/fofriskPrewarn.js"></script>
+    <script src="../fofservice/FOFRiskPrewarnService.js"></script>
+    
+     <!-- 持仓分布 -->
+    <script src="./FOFRisk/fofriskPositionDistribution.js"></script>
+    <script src="../service/FofriskPositionDistributionService.js"></script>
+	
+	<!-- 业务组设置 -->
+ 	<script src="./account/businessGroupManage.js"></script>
+    <script src="../service/BusinessGroupManageService.js"></script>
+
+<!-- ace scripts -->
+<script src="../framework/ui-ace-finally/assets/js/ace/elements.scroller.js"></script>
+<script src="../framework/ui-ace-finally/assets/js/ace/elements.colorpicker.js"></script>
+<script src="../framework/ui-ace-finally/assets/js/ace/elements.fileinput.js"></script>
+<script src="../framework/ui-ace-finally/assets/js/ace/elements.typeahead.js"></script>
+<script src="../framework/ui-ace-finally/assets/js/ace/elements.wysiwyg.js"></script>
+<script src="../framework/ui-ace-finally/assets/js/ace/elements.spinner.js"></script>
+<script src="../framework/ui-ace-finally/assets/js/ace/elements.treeview.js"></script>
+<script src="../framework/ui-ace-finally/assets/js/ace/elements.wizard.js"></script>
+<script src="../framework/ui-ace-finally/assets/js/ace/elements.aside.js"></script>
+<script src="../framework/ui-ace-finally/assets/js/ace.js"></script>
+<script src="../framework/ui-ace-finally/assets/js/ace/ace.ajax-content.js"></script>
+<script src="../framework/ui-ace-finally/assets/js/ace/ace.touch-drag.js"></script>
+<script src="../framework/ui-ace-finally/assets/js/ace/ace.sidebar.js"></script>
+<script src="../framework/ui-ace-finally/assets/js/ace/ace.sidebar-scroll-1.js"></script>
+<script src="../framework/ui-ace-finally/assets/js/ace/ace.submenu-hover.js"></script>
+<script src="../framework/ui-ace-finally/assets/js/ace/ace.widget-box.js"></script>
+<script src="../framework/ui-ace-finally/assets/js/ace/ace.settings.js"></script>
+<script src="../framework/ui-ace-finally/assets/js/ace/ace.settings-rtl.js"></script>
+<script src="../framework/ui-ace-finally/assets/js/ace/ace.settings-skin.js"></script>
+<script src="../framework/ui-ace-finally/assets/js/ace/ace.widget-on-reload.js"></script>
+<script src="../framework/ui-ace-finally/assets/js/ace/ace.searchbox-autocomplete.js"></script>
+<script src="../framework/ui-ace-finally/highchart/highcharts.js"></script>
+<script src="../framework/ui-ace-finally/jqueryClockTimePicker/js/jquery-clock-timepicker.js"></script>
+
+
+<link rel="stylesheet" href="./css/special1.css" />
+
+<!-- 通道监控-->
+<script src="operseat/operSeat.js"></script>
+<script src="../service/OperSeatService.js"></script>
+</body>
+
+</html>

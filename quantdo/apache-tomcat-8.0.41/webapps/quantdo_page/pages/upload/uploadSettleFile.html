@@ -1,0 +1,69 @@
+<link rel="stylesheet" href="upload/uploadSettleFile.css" />
+<title>结算文件导入</title>
+<div>
+    <ol class="breadcrumb">
+        <li><a>结算管理</a></li>
+        <li class="active">结算文件导入</li>
+    </ol>
+</div>
+    
+</div><!-- /.row -->
+<div class="row" ng-controller="uploadSettleFileController">
+   <!--  start 定义表单查询 -->
+    <form class="form-12">
+    	<div class="form-row">
+            <div class="row-col-one">
+                <label class="word-style">查询类型</label>
+                <select ng-model="queryEntity.type" class="value-style" ng-change="changeType(queryEntity.type)" 
+                	ng-options="op.key as op.text for op in queryModels">
+                </select>
+            </div>
+            <div class="row-col-one" >
+		        <label class="word-style">成交日期</label>
+				<input  onchange="" class="Wdate value-style word-style" onfocus="WdatePicker({lang:'zh-cn',dateFmt:'yyyyMMdd'})"
+					type="text"   name="tradeDate"
+				    ng-readonly="true" ng-model="queryEntity.tradeDate" required/>             		
+			</div>
+			
+			<div class="row-col-one" ng-show="uploadSettle_query" style="margin-left:40px;">
+		    	<button type="button" class="btn btn-query btn-word-two" ng-click="find()" ng-disabled="isQuery">查询</button>       		
+			</div>
+			
+			<div class="row-col-one" style="margin-left:100px;">
+		    	<button type="button" class="btn btn-query btn-word-two" ng-show="uploadSettle_audit && isTrade" ng-click="audit()" ng-disabled="isDoAudit">成交明细稽核</button>       		
+			</div>
+        
+        </div>
+        
+     	<div class="btn-beyond-one-row" >
+			<div class="row-form row-btn-operation">
+				<div class="row-btn-icon">
+					<span class="btn-add-icon"></span> 
+					<div class="col-xs-12" style="margin-top:-18px;">
+	        			<div id="uploadDaySettleFileloader">Upload</div>
+	      			</div> 
+				</div>
+		    </div>
+		</div>
+   </form>
+  <!--   PAGE CONTENT -->
+    <div class="col-xs-12 clear-padding-right">
+       <div class="row">
+           <div class="col-xs-12 clear-padding-right">
+               <div>
+                   <table id="importTrade_dynamic_table"  ng-show="isImportTrade" class="cell-border stripe" cellspacing="0" width="100%">
+                   </table>
+                   <table id="importFuturesHold_dynamic_table"    ng-show="isImportFuturesHold" class="cell-border stripe" cellspacing="0" width="100%">
+                   </table>
+                   <table id="importInvestoraccount_dynamic_table"  ng-show="isImportInvestoraccount"  class="cell-border stripe" cellspacing="0" width="100%">
+                   </table>
+                   <table id="tradeCapAudit_dynamic_table" ng-show="isAudit"  class="cell-border stripe" cellspacing="0" width="100%">
+                   </table>
+                   <table id="tradeSubAudit_dynamic_table" ng-show="isAudit"  class="cell-border stripe" cellspacing="0" width="100%">
+                   </table>
+               </div>
+           </div>
+       </div>
+	</div>
+</div>
+	

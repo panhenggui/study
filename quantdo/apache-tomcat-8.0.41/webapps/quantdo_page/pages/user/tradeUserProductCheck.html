@@ -1,0 +1,115 @@
+<div class="row" ng-controller="TradeUserProductCheckController">
+	<!-- start 定义表单查询-->
+	<form class="form-12">
+		 <div class="form-row">
+			<div class="row-col-one" >
+				  <label class="word-style">用户代码</label>
+                  <input type="text" class="value-style" ng-model="queryEntity.userID"  name="userID"/>
+			</div>
+		</div>
+		<div class="btn-beyond-one-row" ng-show="tradeUserProductCheck_query">
+      	      <button type="button" class="btn btn-query btn-word-two"  ng-click="find(queryEntity)"> 查询</button>
+    	</div>
+        <div class="row-form row-btn-operation"  ng-show="tradeUserProductCheck_add">
+          	<div class="row-btn-icon">
+               <span class="btn-add-icon"></span>
+               <input type="button" class="btn btn-add btn-icon-two" value="新增" data-toggle='modal'  ng-click="init()">
+           </div>
+        </div>
+	</form>
+	<!--End 表单查询 -->
+	
+	
+	<!--PAGE CONTENT START-->
+	<div class="col-xs-12 clear-padding-right">
+        <div class="row">
+            <div class="col-xs-12 clear-padding-right">
+                <div>
+                    <table id="tradeUserProductCheck_dynamic_table" class="cell-border stripe" cellspacing="0" width="100%">
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!--PAGE CONTENT END-->
+		
+	
+	<!-- 用户Modal BEG-->
+	<div class="modal fade" id="tradeUserProductCheckModal" tabindex="-1" role="dialog" 
+		 aria-labelledby="myModalLabel" aria-hidden="true"
+		 data-backdrop="static" data-keyboard="false">
+		<div class="modal-dialog">
+			<div class="modal-content"  style="width:660px;">
+				<div class="modal-header">
+					<button type="button" class="close" data-dismiss="modal"
+							aria-hidden="true">&times;</button>
+					<h4 class="modal-title" >交易端认证码维护</h4>
+				</div>
+				<div class="modal-body">
+					<!-- 添加表单内容-->
+					<form class="form-horizontal" role="form" name="myFormUserProductCheck" ng-submit="signupForm(ModalEntity)" novalidate>
+						<div class="panel panel-default">
+							<div class="panel-body">
+ 	 							<div class="form-group">
+									<label  class="col-sm-3 control-label">机构代码<span style="color: red;">*</span></label>
+									<div class="col-sm-5">
+										<select ng-model="ModalEntity.instClientID" class="form-control " name="instClientID" value="ModalEntity.instClientID" ng-disabled="isInstClient || isUpdate" 
+											tab="111" ng-change="selectExchange(ModalEntity.instClientID)"
+											ng-options="op.instClientID as op.instClientID + '-' + op.instClientAbbrName for op in instClientListEntitys">
+										</select>
+									</div>
+								</div>
+								<div class="form-group">
+									<label  class="col-sm-3 control-label">用户代码<span style="color: red;">*</span></label>
+									<div class="col-sm-5">
+										<select ng-model="ModalEntity.userID" class="form-control " name="userID" value="ModalEntity.userID" ng-disabled="isUpdate" tab="111"
+												ng-options="op.userID as op.userID + '-' + op.userName for op in tradeUserListEntitys">
+										        <option value="">全部</option>
+										</select>
+									</div>
+								</div>
+								<div class="form-group">
+									<label  class="col-sm-3 control-label">交易端标识符</label>
+									<div class="col-sm-5">
+										<input type="text" class="form-control" placeholder="请输入交易端标识符" ng-disabled="isUpdate" id="productInfo" name="productInfo" ng-model="ModalEntity.productInfo"
+											   ng-maxlength="50" maxlength="50" onkeydown="myKeyup(event,this)" onkeyup="kEvent(event,this)" tab="112" />
+									</div>
+									<div class="col-sm-5">
+									<br>
+										<!-- <span ng-show="myFormUserProductCheck.productInfo.$invalid && myFormUserProductCheck.productInfo.$dirty" 
+										style="color: red;">交易端标识符为必填项且长度不超过50个字符！</span> -->
+									</div>
+								</div>
+								<div class="form-group">
+									<label  class="col-sm-3 control-label">授权编码</label>
+									<div class="col-sm-5">
+										<textarea class="input-style" onkeydown="myKeyup(event,this)" tab="5"
+										 style="width: 375px; height: 50px; resize: none;"
+											placeholder="请输入授权编码" ng-model="ModalEntity.authCode"
+											name="authCode" id="authCode" maxlength="128" ng-maxlength="128" ></textarea>
+									</div>
+									<div class="col-sm-3 control-label"></div>
+									<div class="col-sm-5">
+									<br>
+										<!-- <span ng-show="myFormUserProductCheck.authCode.$invalid && myFormUserProductCheck.authCode.$dirty" 
+										style="color: red;">授权编码为必填项且长度不超过128个字符！</span> -->
+									</div>
+								</div>
+							</div>
+						</div>
+						<div class="modal-footer">
+							<button type="submit" class="btn btn-info btn-sm popover-info" data-rel="popover" 
+								  ng-disabled="myFormUserProductCheck.authCode.$invalid || myFormUserProductCheck.productInfo.$invalid || myFormUserProductCheck.userID.$invalid || myFormUserProductCheck.instClientID.$invalid"
+								  ng-click="myFormUserProductCheck.authCode.$invalid || myFormUserProductCheck.productInfo.$invalid || myFormUserProductCheck.userID.$invalid || myFormUserProductCheck.instClientID.$invalid || save(ModalEntity)" 
+								  data-placement="bottom" title="">&nbsp;确定&nbsp;</button>
+							<span class="btn btn-close btn-sm popover-info" data-rel="popover"
+								  data-placement="bottom" title="" data-dismiss="modal">&nbsp;取消&nbsp;</span>
+						</div>
+					</form>
+					<!--End  添加表单内容-->
+				</div>
+			</div>
+		</div>
+	</div>
+	<!-- 用户Modal END-->
+</div>

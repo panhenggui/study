@@ -1,0 +1,1269 @@
+<!DOCTYPE html>
+<html lang="en" ng-app="myApp">
+<head>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1"/>
+    <meta charset="utf-8"/>
+    <title>机构结算</title>
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0"/>
+
+    <!--[if !IE]> -->
+    <link rel="stylesheet" href="../framework/ui-ace/assets/css/pace.css"/>
+
+    <script data-pace-options='{ "ajax": true, "document": true, "eventLag": false, "elements": false }'
+            src="../framework/ui-ace/assets/js/pace.js"></script>
+
+    <!-- <![endif]-->
+
+    <!-- bootstrap & fontawesome -->
+    <link rel="stylesheet" href="../framework/ui-ace/assets/css/bootstrap.css"/>
+    <link rel="stylesheet" href="../framework/ui-ace/assets/css/font-awesome.css"/>
+    <link rel="stylesheet" href="../framework/ui-ace/assets/css/bootstrap-datepicker.css">
+
+    <link rel="stylesheet" href="../framework/ui-ace/assets/css/bootstrap-duallistbox.css">
+    <link rel="stylesheet" href="../framework/ui-ace/assets/css/bootstrap-multiselect.css">
+
+    <!-- text fonts -->
+    <link rel="stylesheet" href="../framework/ui-ace/assets/css/ace-fonts.css"/>
+
+    <!-- ace styles -->
+    <link rel="stylesheet" href="../framework/ui-ace/assets/css/ace.css" class="ace-main-stylesheet"
+          id="main-ace-style"/>
+
+    <!--[if lte IE 9]>
+    <link rel="stylesheet" href="../framework/ui-ace/assets/css/ace-part2.css" class="ace-main-stylesheet"/>
+    <![endif]-->
+
+    <!--[if lte IE 9]>
+    <link rel="stylesheet" href="../framework/ui-ace/assets/css/ace-ie.css"/>
+    <![endif]-->
+
+    <!-- ace settings handler -->
+    <script src="../framework/ui-ace/assets/js/ace-extra.js"></script>
+
+    <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
+
+    <!--[if lte IE 8]>
+    <script src="../framework/ui-ace/assets/js/html5shiv.js"></script>
+    <script src="../framework/ui-ace/assets/js/respond.js"></script>
+    <![endif]-->
+    <script src="login/login.js"></script>
+    <script src="../service/LogonService.js"></script>
+
+</head>
+
+<body class="no-skin">
+<!-- #section:basics/navbar.layout -->
+<div id="navbar" class="navbar navbar-default">
+    <script type="text/javascript">
+        try {
+            ace.settings.check('navbar', 'fixed')
+        } catch (e) {
+        }
+    </script>
+
+    <div class="navbar-container" id="navbar-container">
+        <!-- #section:basics/sidebar.mobile.toggle -->
+        <button type="button" class="navbar-toggle menu-toggler pull-left" id="menu-toggler" data-target="#sidebar">
+            <span class="sr-only">Toggle sidebar</span>
+
+            <span class="icon-bar"></span>
+
+            <span class="icon-bar"></span>
+
+            <span class="icon-bar"></span>
+        </button>
+
+        <!-- /section:basics/sidebar.mobile.toggle -->
+        <div class="navbar-header pull-left">
+            <!-- #section:basics/navbar.layout.brand -->
+            <a href="#" class="navbar-brand">
+                <small>
+                    <i class="fa fa-leaf"></i>
+                    机构结算
+                </small>
+            </a>
+
+            <!-- /section:basics/navbar.layout.brand -->
+
+            <!-- #section:basics/navbar.toggle -->
+
+            <!-- /section:basics/navbar.toggle -->
+        </div>
+
+        <!-- /section:basics/navbar.dropdown -->
+    </div>
+    <!-- /.navbar-container -->
+</div>
+
+<!-- /section:basics/navbar.layout -->
+<div class="main-container" id="main-container">
+<script type="text/javascript">
+    try {
+        ace.settings.check('main-container', 'fixed')
+    } catch (e) {
+    }
+</script>
+
+<!-- #section:basics/sidebar -->
+<div id="sidebar" class="sidebar                  responsive">
+<script type="text/javascript">
+    try {
+        ace.settings.check('sidebar', 'fixed')
+    } catch (e) {
+    }
+</script>
+
+<div class="sidebar-shortcuts" id="sidebar-shortcuts">
+    <div class="sidebar-shortcuts-large" id="sidebar-shortcuts-large">
+        <button class="btn btn-success">
+            <i class="ace-icon fa fa-signal"></i>
+        </button>
+
+        <button class="btn btn-info">
+            <i class="ace-icon fa fa-pencil"></i>
+        </button>
+
+        <!-- #section:basics/sidebar.layout.shortcuts -->
+        <button class="btn btn-warning">
+            <i class="ace-icon fa fa-users"></i>
+        </button>
+
+        <button class="btn btn-danger">
+            <i class="ace-icon fa fa-cogs"></i>
+        </button>
+
+        <!-- /section:basics/sidebar.layout.shortcuts -->
+    </div>
+
+    <div class="sidebar-shortcuts-mini" id="sidebar-shortcuts-mini">
+        <span class="btn btn-success"></span>
+
+        <span class="btn btn-info"></span>
+
+        <span class="btn btn-warning"></span>
+
+        <span class="btn btn-danger"></span>
+    </div>
+</div>
+<!-- /.sidebar-shortcuts -->
+
+<!--菜单栏-->
+<ul class="nav nav-list">
+
+<li class="">
+    <a href="#" class="dropdown-toggle">
+        <i class="menu-icon fa fa-bank"></i>
+        <span class="menu-text"> 账户管理 </span>
+        <b class="arrow fa fa-angle-down"></b>
+    </a>
+
+    <b class="arrow"></b>
+
+    <ul class="submenu">
+        <li class="">
+            <a data-url="page/buttons" href="#brokerageFirm">
+                <i class="menu-icon fa fa-caret-right"></i>
+                经纪公司管理
+            </a>
+            <b class="arrow"></b>
+        </li>
+        <li class="">
+            <a data-url="page/buttons" href="#fundProduct">
+                <i class="menu-icon fa fa-caret-right"></i>
+                基金产品管理
+            </a>
+            <b class="arrow"></b>
+        </li>
+
+        <li class="">
+            <a data-url="page/buttons" href="#trader">
+                <i class="menu-icon fa fa-caret-right"></i>
+                交易员管理
+            </a>
+            <b class="arrow"></b>
+        </li>
+        <li class="">
+            <a data-url="page/buttons" href="#capitalAccount">
+                <i class="menu-icon fa fa-caret-right"></i>
+                资金账户管理
+            </a>
+            <b class="arrow"></b>
+        </li>
+        <li class="">
+            <a data-url="page/buttons" href="#subCapitalAccount">
+                <i class="menu-icon fa fa-caret-right"></i>
+                资产单元管理
+            </a>
+            <b class="arrow"></b>
+        </li>
+        <li class="">
+            <a data-url="page/buttons" href="#tradeUser">
+                <i class="menu-icon fa fa-caret-right"></i>
+                交易用户管理
+            </a>
+            <b class="arrow"></b>
+        </li>
+        <!-- 
+        <li class="">
+            <a data-url="page/buttons" href="#member">
+                <i class="menu-icon fa fa-caret-right"></i>
+                会员管理
+            </a>
+            <b class="arrow"></b>
+        </li>
+        <li class="">
+            <a data-url="page/buttons" href="#userTrader">
+                <i class="menu-icon fa fa-caret-right"></i>
+                用户交易员关系管理
+            </a>
+            <b class="arrow"></b>
+        </li>
+        <li class="">
+            <a data-url="page/buttons" href="#exchClient">
+                <i class="menu-icon fa fa-caret-right"></i>
+                交易客户管理
+            </a>
+            <b class="arrow"></b>
+        </li>
+        <li class="">
+            <a data-url="page/buttons" href="#singleEdgeProductGroup">
+                <i class="menu-icon fa fa-caret-right"></i>
+                大边产品组管理
+            </a>
+            <b class="arrow"></b>
+        </li>
+        <li class="">
+            <a data-url="page/buttons" href="#notSingleEdgeInstrument">
+                <i class="menu-icon fa fa-caret-right"></i>
+                不参与大边合约管理
+            </a>
+            <b class="arrow"></b>
+        </li>
+        -->
+    </ul>
+</li>
+
+<!-- 资金管理 -->
+
+<li class="">
+    <a href="#" class="dropdown-toggle">
+        <i class="menu-icon fa fa-rmb"></i>
+        <span class="menu-text"> 资金管理 </span>
+
+        <b class="arrow fa fa-angle-down"></b>
+    </a>
+
+    <b class="arrow"></b>
+
+    <ul class="submenu">
+        <li class="">
+            <a data-url="page/buttons" href="#bankAccount">
+                <i class="menu-icon fa fa-caret-right"></i>
+                银行账户管理
+            </a>
+            <b class="arrow"></b>
+        </li>
+        <li class="">
+            <a data-url="page/buttons" href="#tmpMoneyIO">
+                <i class="menu-icon fa fa-caret-right"></i>
+                资金账户出入金管理
+            </a>
+            <b class="arrow"></b>
+        </li>
+        <li class="">
+            <a data-url="page/buttons" href="#moneyIORecheck">
+                <i class="menu-icon fa fa-caret-right"></i>
+                资金账户出入金复核管理
+            </a>
+            <b class="arrow"></b>
+        </li>
+        <li class="">
+            <a data-url="page/buttons" href="#subMoneyIO">
+                <i class="menu-icon fa fa-caret-right"></i>
+                子资金账户出入金管理
+            </a>
+            <b class="arrow"></b>
+        </li>
+        <li class="">
+            <a data-url="page/buttons" href="#moneyIO">
+                <i class="menu-icon fa fa-caret-right"></i>
+                出入金流水查询
+            </a>
+            <b class="arrow"></b>
+        </li>
+        <li class="">
+            <a data-url="page/buttons" href="#mortMoney">
+                <i class="menu-icon fa fa-caret-right"></i>
+                质押管理
+            </a>
+            <b class="arrow"></b>
+        </li>
+        <li class="">
+            <a data-url="page/buttons" href="#withFunding">
+                <i class="menu-icon fa fa-caret-right"></i>
+                配资管理
+            </a>
+            <b class="arrow"></b>
+        </li>
+        <!-- <li class="">
+            <a data-url="page/buttons" href="#accountCapital">
+                <i class="menu-icon fa fa-caret-right"></i>
+                账户资金管理
+            </a>
+            <b class="arrow"></b>
+        </li> -->
+    </ul>
+</li>
+
+
+<!-- 交易参数 -->
+<li class="">
+    <a href="#" class="dropdown-toggle">
+        <i class="menu-icon fa fa-line-chart"></i>
+        <span class="menu-text"> 交易参数 </span>
+
+        <b class="arrow fa fa-angle-down"></b>
+    </a>
+
+    <b class="arrow"></b>
+
+    <ul class="submenu">
+        <li class="">
+            <a data-url="page/buttons" href="#exchange">
+                <i class="menu-icon fa fa-caret-right"></i>
+                交易所信息维护
+            </a>
+            <b class="arrow"></b>
+        </li>
+        <li class="">
+            <a data-url="page/buttons" href="#product">
+                <i class="menu-icon fa fa-caret-right"></i>
+                品种管理
+            </a>
+            <b class="arrow"></b>
+        </li>
+        <li class="">
+            <a data-url="page/buttons" href="#instrument">
+                <i class="menu-icon fa fa-caret-right"></i>
+                合约管理
+            </a>
+            <b class="arrow"></b>
+        </li>
+        <!-- 
+        <li class="">
+            <a data-url="page/buttons" href="#optionSeries">
+                <i class="menu-icon fa fa-caret-right"></i>
+                期权系列管理
+            </a>
+            <b class="arrow"></b>
+        </li>
+        -->
+    </ul>
+</li>
+
+<!-- 费率设置 -->
+<li class="">
+    <a href="#" class="dropdown-toggle">
+        <i class="menu-icon fa fa-cogs"></i>
+        <span class="menu-text">费率设置</span>
+        <b class="arrow fa fa-angle-down"></b>
+    </a>
+    <b class="arrow"></b>
+    <ul class="submenu">
+
+        <!--BEGIN-->
+
+        <li class="">
+            <a href="#" class="dropdown-toggle">
+                <i class="menu-icon fa fa-caret-right"></i>
+                保证金设置
+                <b class="arrow fa fa-angle-down"></b>
+            </a>
+            <b class="arrow"></b>
+            <ul class="submenu">
+                <!--期货保证金-->
+                <li class="">
+                    <a href="#" class="dropdown-toggle">
+                        <i class="menu-icon fa fa-angle-double-right"></i>
+                        期货
+                        <b class="arrow fa fa-angle-down"></b>
+                    </a>
+                    <b class="arrow"></b>
+
+                    <ul class="submenu">
+                    <!-- 
+                        <li class="">
+                            <a data-url="page/buttons" href="#defaultMarginSet">
+                                <i class="menu-icon fa fa-step-forward"></i>
+                                默认保证金设置
+                            </a>
+                            <b class="arrow"></b>
+                        </li>
+                         -->
+                        <li class="">
+                            <a data-url="page/buttons" href="#productMarginSet">
+                                <i class="menu-icon fa fa-step-forward"></i>
+                                产品保证金设置
+                            </a>
+                            <b class="arrow"></b>
+                        </li>
+                        <!-- 
+                        <li class="">
+                            <a data-url="page/buttons" href="#instrumentMarginSet">
+                                <i class="menu-icon fa fa-step-forward"></i>
+                                合约保证金设置
+                            </a>
+                            <b class="arrow"></b>
+                        </li>
+                         -->
+                    </ul>
+                </li>
+                <!--期权保证金-->
+                <!-- 
+                <li class="">
+                    <a href="#" class="dropdown-toggle">
+                        <i class="menu-icon fa fa-angle-double-right"></i>
+                        期权
+                        <b class="arrow fa fa-angle-down"></b>
+                    </a>
+                    <b class="arrow"></b>
+
+                    <ul class="submenu">
+                        <li class="">
+                            <a data-url="page/buttons" href="#defaultMarginSetOption">
+                                <i class="menu-icon fa fa-step-forward"></i>
+                                默认保证金设置
+                            </a>
+                            <b class="arrow"></b>
+                        </li>
+                        <li class="">
+                            <a data-url="page/buttons" href="#productMarginSetOption">
+                                <i class="menu-icon fa fa-step-forward"></i>
+                                产品保证金设置
+                            </a>
+                            <b class="arrow"></b>
+                        </li>
+                        <li class="">
+                            <a data-url="page/buttons" href="#instrumentMarginSetOption">
+                                <i class="menu-icon fa fa-step-forward"></i>
+                                合约保证金设置
+                            </a>
+                            <b class="arrow"></b>
+                        </li>
+                    </ul>
+                </li>
+                 -->
+
+            </ul>
+        </li>
+
+        <li class="">
+            <a href="#" class="dropdown-toggle">
+                <i class="menu-icon fa fa-caret-right"></i>
+                手续费设置
+                <b class="arrow fa fa-angle-down"></b>
+            </a>
+            <b class="arrow"></b>
+            <ul class="submenu">
+            <!-- 
+                <li class="">
+                    <a data-url="page/buttons" href="#defaultFeeSet">
+                        <i class="menu-icon fa fa-angle-double-right"></i>
+                        默认手续费设置
+                    </a>
+                    <b class="arrow"></b>
+                </li>
+                 -->
+                <li class="">
+                    <a data-url="page/buttons" href="#productFeeSet">
+                        <i class="menu-icon fa fa-angle-double-right"></i>
+                        产品手续费设置
+                    </a>
+                    <b class="arrow"></b>
+                </li>
+                <!-- 
+                <li class="">
+                    <a href="#" class="dropdown-toggle">
+                        <i class="menu-icon fa fa-angle-double-right"></i>
+                        合约手续费设置
+                        <b class="arrow fa fa-angle-down"></b>
+                    </a>
+                    <b class="arrow"></b>
+                    <ul class="submenu">
+                        <li class="">
+                            <a data-url="page/buttons" href="#instrumentFeeSet">
+                                <i class="menu-icon fa fa-angle-double-right"></i>
+                                合约手续费(期货)
+                            </a>
+                            <b class="arrow"></b>
+                        </li>
+                        <li class="">
+                            <a data-url="page/buttons" href="#instrumentFeeSetOption">
+                                <i class="menu-icon fa fa-angle-double-right"></i>
+                                合约手续费(期权)
+                            </a>
+                            <b class="arrow"></b>
+                        </li>
+                    </ul>
+                </li>
+                 -->
+            </ul>
+        </li>
+
+        <li class="">
+            <a href="#" class="dropdown-toggle">
+                <i class="menu-icon fa fa-caret-right"></i>
+                资产单元手续费设置
+                <b class="arrow fa fa-angle-down"></b>
+            </a>
+            <b class="arrow"></b>
+            <ul class="submenu">
+                <li class="">
+                    <a data-url="page/buttons" href="#subProductFeeSet">
+                        <i class="menu-icon fa fa-angle-double-right"></i>
+                        资产单元产品手续费
+                    </a>
+                    <b class="arrow"></b>
+                </li>
+                <!-- 
+                <li class="">
+                    <a data-url="page/buttons" href="#subInstrumentFeeSet">
+                        <i class="menu-icon fa fa-angle-double-right"></i>
+                        资产单元合约手续费
+                    </a>
+                    <b class="arrow"></b>
+                </li>
+                 -->
+            </ul>
+        </li>
+        <!--END-->
+
+    </ul>
+</li>
+
+<li class="">
+    <a href="#" class="dropdown-toggle">
+        <i class="menu-icon fa fa-desktop"></i>
+            <span class="menu-text">
+               日终结算
+            </span>
+        <b class="arrow fa fa-angle-down"></b>
+    </a>
+
+    <b class="arrow"></b>
+
+    <ul class="submenu">
+        <li class="" ng-hide="true">
+            <a data-url="page/typography" href="#tables">
+                <i class="menu-icon fa fa-caret-right"></i>
+                表格样例
+            </a>
+
+            <b class="arrow"></b>
+        </li>
+
+        <li class="" ng-hide="true">
+            <a data-url="page/elements" href="#file">
+                <i class="menu-icon fa fa-caret-right"></i>
+                文件操作
+            </a>
+
+            <b class="arrow"></b>
+        </li>
+
+        <li class="">
+            <!--<a data-url="page/content-slider" href="#upload">-->
+                <!--<i class="menu-icon fa fa-caret-right"></i>-->
+                <!--成交导入-->
+            <!--</a>-->
+            <!--<b class="arrow"></b>-->
+        </li>
+        <li class="">
+            <a data-url="page/buttons" href="#trade">
+                <i class="menu-icon fa fa-caret-right"></i>
+                交易维护
+            </a>
+            <b class="arrow"></b>
+        </li>
+
+        <li class="">
+            <a data-url="page/buttons" href="#settlePrice">
+                <i class="menu-icon fa fa-caret-right"></i>
+                结算价管理
+            </a>
+            <b class="arrow"></b>
+        </li>
+		<!-- 
+        <li class="">
+            <a data-url="page/buttons" href="#underlyingPrice">
+                <i class="menu-icon fa fa-caret-right"></i>
+                标的指数收盘价
+            </a>
+            <b class="arrow"></b>
+        </li>
+		 -->
+        <li class="">
+            <a data-url="page/buttons" href="#exchangeRate">
+                <i class="menu-icon fa fa-caret-right"></i>
+                汇率管理
+            </a>
+            <b class="arrow"></b>
+        </li>
+
+        <li class="">
+            <a data-url="page/buttons" href="#dailySettle">
+                <i class="menu-icon fa fa-caret-right"></i>
+                日终结算
+            </a>
+            <b class="arrow"></b>
+        </li>
+		<!-- 
+        <li class="">
+            <a data-url="page/buttons" href="#moneySettle">
+                <i class="menu-icon fa fa-caret-right"></i>
+                资金结算
+            </a>
+            <b class="arrow"></b>
+        </li>
+		--> 
+        <li class="">
+            <a data-url="page/buttons" href="#settleRollback">
+                <i class="menu-icon fa fa-caret-right"></i>
+                结算回退
+            </a>
+            <b class="arrow"></b>
+        </li>
+        <!-- 
+        <li class="">
+            <a data-url="page/buttons" href="#dataToTrade">
+                <i class="menu-icon fa fa-caret-right"></i>
+                上场数据生成
+            </a>
+            <b class="arrow"></b>
+        </li>
+        -->
+    </ul>
+</li>
+
+<li class="">
+    <a href="#" class="dropdown-toggle">
+        <i class="menu-icon fa fa fa-pie-chart"></i>
+        <span class="menu-text">报表管理</span>
+        <b class="arrow fa fa-angle-down"></b>
+    </a>
+    <b class="arrow"></b>
+    <ul class="submenu">
+    	<li class="">
+            <a data-url="page/buttons" href="#dueSubPositionQuery">
+                <i class="menu-icon fa fa-caret-right"></i>
+                到期合约持仓查询
+            </a>
+            <b class="arrow"></b>
+        </li>
+        <li class="">
+            <a data-url="page/buttons" href="#subAccountCapitalQuery">
+                <i class="menu-icon fa fa-caret-right"></i>
+                资产单元资金查询
+            </a>
+            <b class="arrow"></b>
+        </li>
+        <li class="">
+            <a data-url="page/buttons" href="#subPositionQuery">
+                <i class="menu-icon fa fa-caret-right"></i>
+                资产单元持仓查询
+            </a>
+            <b class="arrow"></b>
+        </li>
+        <li class="">
+            <a data-url="page/buttons" href="#accountCapitalQuery">
+                <i class="menu-icon fa fa-caret-right"></i>
+                资金账户资金查询
+            </a>
+            <b class="arrow"></b>
+        </li>
+        <li class="">
+            <a data-url="page/buttons" href="#positionQuery">
+                <i class="menu-icon fa fa-caret-right"></i>
+                资金账户持仓查询
+            </a>
+            <b class="arrow"></b>
+        </li>
+        <!-- 
+        <li class="">
+            <a data-url="page/buttons" href="#operClientPositionQuery">
+                <i class="menu-icon fa fa-caret-right"></i>
+                客户实时持仓查询
+            </a>
+            <b class="arrow"></b>
+        </li>
+        <li class="">
+            <a data-url="page/buttons" href="#operInvestorAccountQuery">
+                <i class="menu-icon fa fa-caret-right"></i>
+                客户实时账户资金查询
+            </a>
+            <b class="arrow"></b>
+        </li>
+         -->
+    </ul>
+</li>
+</ul>
+<!-- /.nav-list -->
+
+<!-- #section:basics/sidebar.layout.minimize -->
+<div class="sidebar-toggle sidebar-collapse" id="sidebar-collapse">
+    <i class="ace-icon fa fa-angle-double-left" data-icon1="ace-icon fa fa-angle-double-left"
+       data-icon2="ace-icon fa fa-angle-double-right"></i>
+</div>
+
+<!-- /section:basics/sidebar.layout.minimize -->
+<script type="text/javascript">
+    try {
+        ace.settings.check('sidebar', 'collapsed')
+    } catch (e) {
+    }
+</script>
+</div>
+
+<!-- /section:basics/sidebar -->
+<div class="main-content">
+    <div class="main-content-inner">
+        <!-- #section:basics/content.breadcrumbs -->
+        <div class="breadcrumbs" id="breadcrumbs">
+            <div class="row">
+                <div class="col-xs-11">
+
+                </div>
+                <div class="col-xs-1" style="white-space: nowrap">
+                    <ul class="breadcrumb">
+                        <li>
+                            <span class="ace-icon fa fa-home home-icon blue"></span>
+                            <a href="#home">首页</a>&nbsp;&nbsp;
+                            <span class="ace-icon fa fa-power-off red"></span>
+                            <a href="#home" onclick="logout()">退出</a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <div class="page-content">
+            <div ng-view></div>
+            <div class="page-content-area" data-ajax-content="false">
+                <!-- ajax content goes here -->
+            </div>
+            <!-- /.page-content-area -->
+        </div>
+        <!-- /.page-content -->
+    </div>
+</div>
+<!-- /.main-content -->
+
+<div class="footer">
+    <div class="footer-inner">
+        <!-- #section:basics/footer -->
+        <div class="footer-content">
+						<span class="bigger-120">
+						   <small><span class="blue bolder">机构结算</span></small>
+                           <small>&copy; Copyright 2015 <a href="http://www.quantdo.com.cn" target="_blank">quantdo.com.cn</a> Inc. All Rights Reserved.</small>
+						</span>
+        </div>
+
+        <!-- /section:basics/footer -->
+    </div>
+</div>
+
+<a href="#" id="btn-scroll-up" class="btn-scroll-up btn btn-sm btn-inverse">
+    <i class="ace-icon fa fa-angle-double-up icon-only bigger-110"></i>
+</a>
+</div>
+<!-- /.main-container -->
+<!-- basic scripts -->
+
+<!--[if !IE]> -->
+<script type="text/javascript">
+    window.jQuery || document.write("<script src='../framework/ui-ace/assets/js/jquery.js'>" + "<" + "/script>");
+</script>
+
+<!-- <![endif]-->
+
+<!--[if IE]>
+<script type="text/javascript">
+    window.jQuery || document.write("<script src='../framework/ui-ace/assets/js/jquery1x.js'>" + "<" + "/script>");
+</script>
+<![endif]-->
+
+<script type="text/javascript">
+    if ('ontouchstart' in document.documentElement) document.write("<script src='../framework/ui-ace/assets/js/jquery.mobile.custom.js'>" + "<" + "/script>");
+</script>
+<script src="../framework/ui-ace/assets/js/bootstrap.js"></script>
+<script src="../framework/ui-ace/assets/js/date-time/bootstrap-datepicker.js"></script>
+<script src="../framework/ui-ace/assets/js/date-time/locales/bootstrap-datepicker.zh-CN.js"></script>
+<script src="../framework/ui-ace/assets/js/date-time/bootstrap-timepicker.js"></script>
+
+<!-- jquery datatables -->
+<script src="../framework/ui-ace/assets/js/dataTables/jquery.dataTables.js"></script>
+<script src="../framework/ui-ace/assets/js/dataTables/jquery.dataTables.bootstrap.js"></script>
+<script src="../framework/ui-ace/assets/js/dataTables/extensions/TableTools/js/dataTables.tableTools.js"></script>
+<script src="../framework/ui-ace/assets/js/dataTables/extensions/ColVis/js/dataTables.colVis.js"></script>
+<!-- end jquery datatables -->
+
+<!-- angularjs -->
+<script src="../framework/libraries/angular/1.4.3/angular.min.js"></script>
+<script src="../framework/libraries/angular/1.4.3/angular-route.min.js"></script>
+<script src="../framework/libraries/angular/directives/angular-datatables.min.js"></script>
+
+<script src="../framework/libraries/isjs/is.min.js"></script>
+
+<!-- jquery upload file -->
+<script src="../framework/libraries/jquery/jquery.form/jquery.form.js"></script>
+<script src="../framework/libraries/jquery/upload-file/jquery.uploadfile.min.js"></script>
+<link rel="stylesheet" href="../framework/libraries/jquery/upload-file/uploadfile.custom.css"/>
+<link rel="stylesheet" href="../framework/libraries/jquery/upload-file/uploadfile.css"/>
+
+
+<!-- angular upload file -->
+<script src="../framework/libraries/angular/ng-file-upload-master/ng-file-upload-shim.min.js"></script>
+<script src="../framework/libraries/angular/ng-file-upload-master/ng-file-upload.min.js"></script>
+
+<!-- 弹框组件 -->
+<script src="../framework/ui-ace/assets/js/layer/layer.js"></script>
+
+<script src="../framework/libraries/framework.js"></script>
+<script src="../framework/libraries/util/Namespace.js"></script>
+<script src="../config.js"></script>
+
+
+<!--业务常量定义-->
+<script src="../constants.js"></script>
+<!-- 登录检查 -->
+<script src="../service/LogonCheckService.js"></script>
+
+<!-- angular js setting -->
+<script type="text/javascript">
+
+    myapp = angular.module('myApp', ['ngRoute', 'datatables', 'ngFileUpload']);
+
+    myapp.config(['$routeProvider', function ($routeProvider) {
+        // 页面跳转路由配置
+        $routeProvider
+                .when('/home', {
+                    templateUrl: 'home.html'
+                })
+                .when('/blank', {
+                    templateUrl: 'blank/blank.html'
+                })
+                .when('/tables', {
+                    templateUrl: 'table/tables.html'
+                })
+                .when('/file', {
+                    templateUrl: 'file/file.html'
+                })
+                .when('/upload', {
+                    templateUrl: 'upload/upload.html'
+                })
+                .when('/trade', {
+                    templateUrl: 'dailysettle/trade.html'
+                })
+                .when('/trader', {
+                    templateUrl: 'account/trader.html'
+                })
+                .when('/capitalAccount', {
+                    templateUrl: 'account/capitalAccount.html'
+                })
+                .when('/subCapitalAccount', {
+                    templateUrl: 'account/subCapitalAccount.html'
+                })
+                .when('/tradeUser', {
+                    templateUrl: 'account/tradeUser.html'
+                })
+                .when('/member', {
+                    templateUrl: 'account/member.html'
+                })
+                .when('/userTrader', {
+                    templateUrl: 'account/userTrader.html'
+                })
+                .when('/exchClient', {
+                    templateUrl: 'account/exchClient.html'
+                })
+                .when('/singleEdgeProductGroup', {
+                    templateUrl: 'combmargin/singleEdgeProductGroup.html'
+                })
+                .when('/notSingleEdgeInstrument', {
+                    templateUrl: 'combmargin/notSingleEdgeInstrument.html'
+                })
+                .when('/mortMoney', {
+                    templateUrl: 'settleparam/mortMoney.html'
+                })
+                .when('/withFunding', {
+                    templateUrl: 'settleparam/withFunding.html'
+                })
+                .when('/accountCapital', {
+                    templateUrl: 'capital/accountCapital.html'
+                })
+                .when('/exchangeRate', {
+                    templateUrl: 'settleparam/exchangeRate.html'
+                })
+                .when('/brokerageFirm', {
+                    templateUrl: 'account/brokerageFirm.html'
+                })
+                .when('/fundProduct', {
+                    templateUrl: 'account/fundProduct.html'
+                })
+                .when('/bankAccount', {
+                    templateUrl: 'settleparam/bankAccount.html'
+                })
+                .when('/tmpMoneyIO', {
+                    templateUrl: 'settleparam/tmpMoneyIO.html'
+                })
+                .when('/moneyIORecheck', {
+                    templateUrl: 'settleparam/moneyIORecheck.html'
+                })
+                .when('/subMoneyIO', {
+                    templateUrl: 'settleparam/subMoneyIO.html'
+                })
+                .when('/moneyIO', {
+                    templateUrl: 'settleparam/moneyIO.html'
+                })
+                .when('/product', {
+                    templateUrl: 'tradeparam/product.html'
+                })
+                .when('/settleParam', {
+                    templateUrl: 'settleparam/settleParamInfo.html'
+                })
+                .when('/instrument', {
+                    templateUrl: 'tradeparam/instrument.html'
+                })
+                .when('/optionSeries', {
+                    templateUrl: 'tradeparam/optionSeries.html'
+                })
+                .when('/settlePrice', {
+                    templateUrl: 'tradeparam/settlePrice.html'
+                })
+                .when('/defaultMarginSet', {
+                    templateUrl: 'marginset/futures/defaultMarginSet.html'
+                })
+                .when('/productMarginSet', {
+                    templateUrl: 'marginset/futures/productMarginSet.html'
+                })
+                .when('/instrumentMarginSet', {
+                    templateUrl: 'marginset/futures/instrumentMarginSet.html'
+                })
+                .when('/defaultMarginSetOption', {
+                    templateUrl: 'marginset/option/defaultMarginSet.html'
+                })
+                .when('/productMarginSetOption', {
+                    templateUrl: 'marginset/option/productMarginSet.html'
+                })
+                .when('/instrumentMarginSetOption', {
+                    templateUrl: 'marginset/option/instrumentMarginSet.html'
+                })
+                .when('/defaultFeeSet', {
+                    templateUrl: 'feeset/defaultFeeSet.html'
+                })
+                .when('/productFeeSet', {
+                    templateUrl: 'feeset/productFeeSet.html'
+                })
+                .when('/subProductFeeSet', {
+                    templateUrl: 'feeset/subProductFeeSet.html'
+                })
+                .when('/underlyingPrice', {
+                    templateUrl: 'settleparam/underlyingPrice.html'
+                })
+                .when('/subAccountCapitalQuery', {
+                    templateUrl: 'query/subAccountCapital.html'
+                })
+                .when('/accountCapitalQuery', {
+                    templateUrl: 'query/accountCapital.html'
+                })
+                .when('/positionQuery', {
+                    templateUrl: 'query/position.html'
+                })
+                .when('/subPositionQuery', {
+                    templateUrl: 'query/subPosition.html'
+                })
+                .when('/operClientPositionQuery', {
+                    templateUrl: 'query/operClientPositionQuery.html'
+                })
+                .when('/operInvestorAccountQuery', {
+                    templateUrl: 'query/operInvestorAccountQuery.html'
+                })
+                .when('/tradeQuery', {
+                    templateUrl: 'query/tradeQuery.html'
+                })
+                .when('/dueSubPositionQuery', {
+                    templateUrl: 'query/dueSubPositionQuery.html'
+                })
+                .when('/dailySettle', {
+                    templateUrl: 'dailysettle/dailySettle.html'
+                })
+                .when('/moneySettle', {
+                    templateUrl: 'dailysettle/moneySettle.html'
+                })
+                .when('/settleRollback', {
+                    templateUrl: 'dailysettle/settleRollback.html'
+                })
+                .when('/dataToTrade', {
+                    templateUrl: 'dailysettle/dataToTrade.html'
+                })
+                .when('/instrumentFeeSet', {
+                    templateUrl: 'feeset/futures/instrumentFeeSet.html'
+                })
+                .when('/instrumentFeeSetOption', {
+                    templateUrl: 'feeset/option/instrumentFeeSet.html'
+                })
+                .when('/subInstrumentFeeSet', {
+                    templateUrl: 'feeset/subInstrumentFeeSet.html'
+                })
+                .when('/exchange', {
+                    templateUrl: 'tradeparam/exchange.html'
+                })
+                .otherwise({
+                    redirectTo: '/home'
+                });
+    }]);
+</script>
+
+<!-- controller js -->
+<script src="./blank/blank.js"></script>
+<script src="./table/tables.js"></script>
+<script src="./file/file.js"></script>
+
+<!-- service js -->
+<script src="../service/TestService.js"></script>
+
+<!--交易导入-->
+<script src="./upload/upload.js"></script>
+<script src="../service/UploadService.js"></script>
+
+<!--成交维护-->
+<script src="../service/TradeService.js"></script>
+<script src="./dailysettle/trade.js"></script>
+
+<!--交易员维护-->
+<script src="./account/trader.js"></script>
+<script src="../service/TraderService.js"></script>
+
+<!--资金账户维护-->
+<script src="./account/capitalAccount.js"></script>
+<script src="../service/CapitalAccountService.js"></script>
+
+<!--银行账户管理-->
+<script src="./settleparam/bankAccount.js"></script>
+<script src="../service/BankAccountService.js"></script>
+
+<!--质押管理-->
+<script src="./settleparam/mortMoney.js"></script>
+<script src="../service/MortMoneyService.js"></script>
+
+<!--资产单元管理-->
+<script src="./account/subCapitalAccount.js"></script>
+<script src="../service/SubCapitalAccountService.js"></script>
+
+<!--交易用户管理-->
+<script src="./account/tradeUser.js"></script>
+<script src="../service/TradeUserService.js"></script>
+
+<!--会员管理-->
+<script src="./account/member.js"></script>
+<script src="../service/MemberService.js"></script>
+
+<!--用户交易员关系管理-->
+<script src="./account/userTrader.js"></script>
+<script src="../service/UserTraderService.js"></script>
+
+<!--交易客户管理-->
+<script src="./account/exchClient.js"></script>
+<script src="../service/ExchClientService.js"></script>
+
+<!--单边产品组管理-->
+<script src="./combmargin/singleEdgeProductGroup.js"></script>
+<script src="../service/SingleEdgeProductGroupService.js"></script>
+
+<!--不参与单边合约管理-->
+<script src="./combmargin/notSingleEdgeInstrument.js"></script>
+<script src="../service/NotSingleEdgeInstrumentService.js"></script>
+
+<!--配资管理-->
+<script src="./settleparam/withFunding.js"></script>
+<script src="../service/WithFundingService.js"></script>
+
+<!--账户资金管理-->
+<script src="../service/AccountCapitalService.js"></script>
+<script src="./capital/accountCapital.js"></script>
+
+<!--汇率管理-->
+<script src="./settleparam/exchangeRate.js"></script>
+<script src="../service/ExchangeRateService.js"></script>
+
+<!--经纪公司管理-->
+<script src="./account/brokerageFirm.js"></script>
+<script src="../service/BrokerageFirmService.js"></script>
+
+<!--基金产品管理-->
+<script src="./account/fundProduct.js"></script>
+<script src="../service/FundProductService.js"></script>
+
+<!--出入金管理-->
+<script src="./settleparam/tmpMoneyIO.js"></script>
+<script src="../service/TmpMoneyIOService.js"></script>
+
+<!--出入金复核-->
+<script src="./settleparam/moneyIORecheck.js"></script>
+
+<!--子资金出入金管理-->
+<script src="./settleparam/subMoneyIO.js"></script>
+<script src="../service/SubMoneyIOService.js"></script>
+
+<!--出入金流水查询-->
+<script src="./settleparam/moneyIO.js"></script>
+<script src="../service/MoneyIOService.js"></script>
+
+<!--品种管理-->
+<script src="./tradeparam/product.js"></script>
+<script src="../service/ProductService.js"></script>
+
+<!--结算参数管理-->
+<script src="./settleparam/settleParamInfo.js"></script>
+<script src="../service/SettleParamService.js"></script>
+
+<!--合约管理-->
+<script src="./tradeparam/instrument.js"></script>
+<script src="../service/InstrumentService.js"></script>
+
+<!--期权系列管理-->
+<script src="./tradeparam/optionSeries.js"></script>
+<script src="../service/OptionSeriesService.js"></script>
+
+<!--结算价管理-->
+<script src="./tradeparam/settlePrice.js"></script>
+<script src="../service/SettlePriceService.js"></script>
+
+<!--默认保证金设置(期货)-->
+<script src="./marginset/futures/defaultMarginSet.js"></script>
+<script src="../service/DefaultMarginSetService.js"></script>
+
+<!--产品保证金设置(期货)-->
+<script src="./marginset/futures/productMarginSet.js"></script>
+<script src="../service/ProductMarginSetService.js"></script>
+
+<!--合约保证金设置(期货)-->
+<script src="./marginset/futures/instrumentMarginSet.js"></script>
+<script src="../service/InstrumentMarginSetService.js"></script>
+
+
+<!--默认保证金设置(期权)-->
+<script src="./marginset/option/defaultMarginSet.js"></script>
+<script src="../service/DefaultMarginSetService.js"></script>
+
+<!--产品保证金设置(期权)-->
+<script src="./marginset/option/productMarginSet.js"></script>
+<script src="../service/ProductMarginSetService.js"></script>
+
+<!--合约保证金设置(期权)-->
+<script src="./marginset/option/instrumentMarginSet.js"></script>
+<script src="../service/InstrumentMarginSetService.js"></script>
+
+
+<!--默认手续费设置-->
+<script src="./feeset/defaultFeeSet.js"></script>
+<script src="../service/DefaultFeeSetService.js"></script>
+
+<!--产品手续费设置-->
+<script src="./feeset/productFeeSet.js"></script>
+<script src="../service/ProductFeeSetService.js"></script>
+
+<!--合约手续费(期货)-->
+<script src="./feeset/futures/instrumentFeeSet.js"></script>
+<script src="../service/InstrumentFeeSetService.js"></script>
+
+<!--合约手续费(期权)-->
+<script src="./feeset/option/instrumentFeeSet.js"></script>
+<script src="../service/InstrumentFeeSetService.js"></script>
+
+
+<!--资产单元产品手续费-->
+<script src="./feeset/subProductFeeSet.js"></script>
+<script src="../service/SubProductFeeSetService.js"></script>
+
+<!--资产单元合约手续费-->
+<script src="./feeset/subInstrumentFeeSet.js"></script>
+<script src="../service/SubInstrumentFeeSetService.js"></script>
+
+<!--标的指数收盘价-->
+<script src="./settleparam/underlyingPrice.js"></script>
+<script src="../service/UnderlyingPriceService.js"></script>
+
+<!--日终结算-->
+<script src="./dailysettle/dailySettle.js"></script>
+<script src="../service/DailySettleService.js"></script>
+
+<!--资金结算-->
+<script src="./dailysettle/moneySettle.js"></script>
+
+<!--结算回退-->
+<script src="./dailysettle/settleRollback.js"></script>
+
+<!--上场数据生成-->
+<script src="./dailysettle/dataToTrade.js"></script>
+<script src="../service/DataToTradeService.js"></script>
+
+<!--交易所信息维护-->
+<script src="./tradeparam/exchange.js"></script>
+<script src="../service/ExchangeService.js"></script>
+
+<!--Begin查询类业务-->
+
+<script src="../service/CommonQueryService.js"></script>
+<!--到期合约持仓查询-->
+<script src="./query/dueSubPositionQuery.js"></script>
+<!--资产单元资金查询-->
+<script src="./query/subAccountCapital.js"></script>
+<!--账户资金查询-->
+<script src="./query/accountCapital.js"></script>
+<!--账户持仓查询-->
+<script src="./query/position.js"></script>
+<!--资产单元持仓查询-->
+<script src="./query/subPosition.js"></script>
+<!--客户实时持仓查询-->
+<script src="./query/operClientPositionQuery.js"></script>
+<script src="../service/OperClientPositionService.js"></script>
+<!--客户实时账户资金查询-->
+<script src="./query/operInvestorAccountQuery.js"></script>
+<script src="../service/OperInvestorAccountService.js"></script>
+<!--成交查询-->
+<script src="./query/tradeQuery.js"></script>
+<!--查询系统操作员信息-->
+<script src="../service/SystemParamService.js"></script>
+
+<!--End查询-->
+<!-- end controller js -->
+<!-- directives -->
+<!--<script src="./directives/datatable.js"></script>-->
+
+<!-- ace scripts -->
+<script src="../framework/ui-ace/assets/js/ace/elements.scroller.js"></script>
+<script src="../framework/ui-ace/assets/js/ace/elements.colorpicker.js"></script>
+<script src="../framework/ui-ace/assets/js/ace/elements.fileinput.js"></script>
+<script src="../framework/ui-ace/assets/js/ace/elements.typeahead.js"></script>
+<script src="../framework/ui-ace/assets/js/ace/elements.wysiwyg.js"></script>
+<script src="../framework/ui-ace/assets/js/ace/elements.spinner.js"></script>
+<script src="../framework/ui-ace/assets/js/ace/elements.treeview.js"></script>
+<script src="../framework/ui-ace/assets/js/ace/elements.wizard.js"></script>
+<script src="../framework/ui-ace/assets/js/ace/elements.aside.js"></script>
+<script src="../framework/ui-ace/assets/js/ace.js"></script>
+<script src="../framework/ui-ace/assets/js/ace/ace.ajax-content.js"></script>
+<script src="../framework/ui-ace/assets/js/ace/ace.touch-drag.js"></script>
+<script src="../framework/ui-ace/assets/js/ace/ace.sidebar.js"></script>
+<script src="../framework/ui-ace/assets/js/ace/ace.sidebar-scroll-1.js"></script>
+<script src="../framework/ui-ace/assets/js/ace/ace.submenu-hover.js"></script>
+<script src="../framework/ui-ace/assets/js/ace/ace.widget-box.js"></script>
+<script src="../framework/ui-ace/assets/js/ace/ace.settings.js"></script>
+<script src="../framework/ui-ace/assets/js/ace/ace.settings-rtl.js"></script>
+<script src="../framework/ui-ace/assets/js/ace/ace.settings-skin.js"></script>
+<script src="../framework/ui-ace/assets/js/ace/ace.widget-on-reload.js"></script>
+<script src="../framework/ui-ace/assets/js/ace/ace.searchbox-autocomplete.js"></script>
+
+
+</body>
+</html>

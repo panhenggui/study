@@ -1,0 +1,36 @@
+<div ng-controller="positionQueryController" style="width: 100%;overflow: auto;">
+    <form>
+        <div class="position-header">
+        <label class="position-label">机构：</label>
+        <select ng-change="brokerIDChange()" ng-disabled = "positionQueryIsCanUser" ng-model="currentPositionEntity.brokerageFirmID"
+                ng-options="op.instClientID as op.instClientAbbrName for op in invesBrokerEntitys">
+            <option value=""> [-] 全部</option>
+        </select>
+        <label class="position-label">投资者：</label>
+        <select ng-model="currentPositionEntity.traderID"
+                ng-options="op.innerAccountID as op.innerAccountID+'-'+op.innerAccountName for op in investmentEntitys">
+            <option value=""> [-] 全部</option>
+        </select>
+        <label class="position-label">交易所：</label>
+        <select ng-model="currentPositionEntity.exchID"
+                ng-options="op.exchID as op.exchID+'_'+op.exchName for op in exchangeEntitys">
+            <option value=""> [-] 全部</option>
+        </select>
+        <label class="position-label">合约：</label>
+        <select ng-model="currentPositionEntity.instrumentID"
+                ng-options="op.instrumentID as op.instrumentID for op in instruments">
+            <option value=""> [-] 全部</option>
+        </select>
+        <label class="position-label">买卖：</label>
+        <select ng-model="currentPositionEntity.direction">
+            <option value=""> [-] 全部</option>
+            <option value="0"> [0] 买入</option>
+            <option value="1"> [1] 卖出</option>
+        </select>
+        <button ng-click="find(currentPositionEntity)" class="position-btn">筛选</button>
+        <button ng-click="resetQryForm()" class="position-btn">复位</button>
+    </div>
+    </form>
+    <table id="positionQuery_table" class="cell-border stripe" cellspacing="0" width="100%">
+    </table>
+</div>

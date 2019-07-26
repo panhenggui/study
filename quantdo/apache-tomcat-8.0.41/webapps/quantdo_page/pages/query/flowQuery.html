@@ -1,0 +1,114 @@
+<div class="row" ng-controller="FlowQueryController">
+	<!-- start 查询-->
+
+	
+	<form class="form-12">
+		 <div class="form-row">
+			<div class="row-col-one" >
+				  <label class="word-style">所属机构</label>
+                  <select ng-model="queryEntity.instClientID" class="value-style" 
+						ng-change="changeInstClient()" ng-disabled="isStart || noInst"
+						ng-options="op.instClientID as op.instClientAbbrName for op in instClientList">
+						<option value="">全部</option>
+				 </select>
+			</div>
+			<div class="row-col-one" >
+				  <label class="word-style">资金账号</label>
+                  <select ng-model="queryEntity.investorid"  class="value-style" ng-disabled="isStart"
+							ng-options="op.innerAccountID as op.innerAccountID+'_'+op.accountName for op in queryAccountEntitys">
+							<option value="">全部</option>
+				  </select>
+			</div>
+			<div class="row-col-one" >
+				  <label class="word-style">合约代码</label>
+                  <input type="text" class="value-style" ng-disabled="isStart"
+							ng-model="queryEntity.instrumentid" />
+			</div>
+			<div class="row-col-one" >
+				  <label class="word-style">委托笔数 &nbsp;>=</label>
+                  <input type="text" class="value-style" ng-disabled="isStart"
+							ng-model="queryEntity.orderNum" />
+			</div>
+			<div class="row-col-one" >
+				  <label class="word-style">撤单笔数 &nbsp;>=</label>
+                 <input type="text" class="value-style" ng-disabled="isStart"
+							ng-model="queryEntity.failNum" />
+			</div>
+		</div>
+		<div class="btn-beyond-one-row">
+		      <button type="button" class="btn btn-reset btn-beyond-two"  ng-click="find(queryEntity)" ng-disabled="isStart" ng-show="flowQuery_start">执行轮询</button>
+			  <button type="button" class="btn btn-reset btn-beyond-two"  ng-click="stop()" ng-disabled="isStop" ng-show="flowQuery_stop">停止轮询</button>	
+    	</div>
+		
+	</form>
+<!--PAGE CONTENT START-->
+	<div class="col-xs-12 clear-padding-right">
+        <div class="row">
+            <div class="col-xs-12 clear-padding-right">
+                <div>
+                    <table id="flowQuery_dynamic_table" class="cell-border stripe" cellspacing="0" width="100%">
+                    </table>
+                </div>
+            </div>
+        </div>
+        
+        <div class="row">
+        <div class="col-xs-12 clear-padding-right">
+				<label class="value-style" style="font-size: larger !important;margin-left:12px">{{status}}</label>
+			</div>
+        </div>
+    </div>
+
+
+<!-- 
+	<div class="col-xs-12">
+		<div class="row">
+			<div class="col-xs-12">
+				<div class="clearfix">
+					<div class="pull-right tableTools-container"></div>
+				</div>
+				<div>
+					<table id="dynamic-table"
+						   class="table table-striped table-bordered table-hover"
+						   datatable="ng">
+						<thead>
+						<tr>
+						
+						
+							<th>经纪公司</th>
+							<th>所属机构</th>
+							<th>资金账号</th>
+							<th>合约代码</th>
+							<th>委托笔数</th>
+							<th>撤单笔数</th>
+							<th>报撤单比例</th>
+						</tr>
+						</thead>
+						<tbody>
+						
+						<tr ng-repeat="listEntity in listEntitys">
+							<td ng-bind="listEntity.brokerageName"></td>
+							<td ng-bind="listEntity.instName"></td>
+							<td ng-bind="listEntity.investorid"></td>
+							<td ng-bind="listEntity.instrumentid"></td>
+							<td ng-bind="listEntity.orderNum"></td>
+							<td ng-bind="listEntity.failNum"></td>
+							
+							<td >{{listEntity.failNum == null || listEntity.failNum==0 ? 0.00 :listEntity.failNum*100/listEntity.orderNum | number:2}}%</td >
+
+						</tr>
+						</tbody>
+					</table>
+				</div>
+			</div>
+		</div>
+		
+		PAGE CONTENT ENDS
+		<div class="row">
+			<div class="col-xs-12">
+				<label class="col-sm-5 control-label" style="font-size: larger !important;margin-left:12px">{{status}}</label>
+			</div>
+		</div>
+	</div>
+ -->
+</div>

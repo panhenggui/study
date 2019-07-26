@@ -1,0 +1,37 @@
+<c3p0-config>
+	<default-config>
+		<property name="user">gts</property>
+		<property name="password">gts</property>
+		<property name="driverClass">com.mysql.jdbc.Driver</property>
+		<property name="jdbcUrl">jdbc:mysql://127.0.0.1:3306/gts?autoReconnect=true&amp;useUnicode=true&amp;characterEncoding=UTF-8
+		</property>
+		<property name="initialPoolSize">1</property>
+		<property name="maxIdleTime">1</property>
+		<property name="maxPoolSize">10</property>
+		<property name="minPoolSize">1</property>
+	</default-config>
+	<named-config name="sso">
+		<property name="user">gtssso</property>
+		<property name="password">gtssso</property>
+		<property name="driverClass">com.mysql.jdbc.Driver</property>
+		<property name="jdbcUrl">jdbc:mysql://127.0.0.1:3306/gtssso?autoReconnect=true&amp;useUnicode=true&amp;characterEncoding=UTF-8
+		</property>
+		<property name="initialPoolSize">1</property>
+		<property name="maxIdleTime">1</property>
+		<property name="maxPoolSize">10</property>
+		<property name="minPoolSize">1</property>
+	</named-config>
+
+	<named-config name="orgclear">
+		<property name="user">qdam</property>
+		<property name="password">qdam</property>
+		<property name="driverClass">com.mysql.jdbc.Driver</property>
+		<property name="jdbcUrl">jdbc:mysql://127.0.0.1:3306/qdam?autoReconnect=true&amp;useUnicode=true&amp;characterEncoding=UTF-8
+		</property>
+		<property name="initialPoolSize">1</property>
+		<property name="maxIdleTime">1</property>
+		<property name="maxPoolSize">10</property>
+		<property name="minPoolSize">1</property>
+	</named-config>
+
+</c3p0-config> 

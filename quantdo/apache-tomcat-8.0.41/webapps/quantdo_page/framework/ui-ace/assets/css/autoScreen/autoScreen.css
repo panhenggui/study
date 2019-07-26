@@ -1,0 +1,38 @@
+@media (max-width: 1920px){
+    .single-information{
+        float: left;
+        width: 30%;
+    }
+    .aboutDetail{
+        float: right;
+        width: 70%;
+    }
+    .product-risk-center {
+        width: 11%;
+    }
+    .product-risk-left {
+        width: 6%;
+    }
+    .product-risk-right{
+        width: 82%;
+    }
+}
+@media (max-width: 1600px){
+    .single-information{
+        float: left;
+        width: 41%;
+    }
+    .aboutDetail{
+        float: right;
+        width: 59%;
+    }
+    .product-risk-center {
+        width: 17%;
+    }
+    .product-risk-left {
+        width: 7%;
+    }
+    .product-risk-right{
+        width: 74%;
+    }
+}

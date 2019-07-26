@@ -1,0 +1,155 @@
+<link rel="stylesheet" href="strategy/strategy.css" />
+<div class="row" ng-controller="StrategyController">
+	<!-- start 定义表单查询-->
+	<form class="form-12">
+	    <div class="row-col-one" >
+        	<label class="word-style">机构代码</label>
+            <select ng-model="queryEntity.instClientID" 
+				ng-disabled="isInstClient " class="value-style"
+				ng-options="op.instClientID as op.instClientID+'_'+ op.instClientAbbrName for op in queryinstClientlists">
+				<option value="">全部</option>
+			</select>
+        </div>
+        <div class="row-col-one" >
+			<label class="word-style">策略代码</label>
+            <input type="text" class="value-style" ng-model="queryEntity.strategyID" />
+		</div>
+		
+		<div class="btn-beyond-one-row"  ng-show="strategy_query">
+      	      <button type="button" class="btn btn-query btn-word-two"  ng-click="find()"> 查询</button>
+    	</div>
+    	<div class="row-form row-btn-operation"  ng-show="strategy_add">
+          	<div class="row-btn-icon" >
+               <span class="btn-add-icon"></span>
+               <input type="button" class="btn btn-add btn-icon-two" value="新增" data-toggle='modal'
+                      data-target='#strategyModal' ng-click="initParameter()">
+           </div>
+        </div>
+		
+	</form>
+	<!--End 表单查询 -->
+	
+	
+	<!--PAGE CONTENT START-->
+	<div class="col-xs-12 clear-padding-right">
+        <div class="row">
+            <div class="col-xs-12 clear-padding-right">
+                <div>
+                    <table id="strategy_dynamic_table" class="cell-border stripe" cellspacing="0" width="100%">
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!--PAGE CONTENT END-->
+
+	<!--策略信息 新增 修改 模态框（Modal） -->
+	<div class="modal fade" id="strategyModal" tabindex="-1" role="dialog"
+		aria-labelledby="myModalLabel" aria-hidden="true"
+		data-backdrop="static" data-keyboard="false">
+		<div class="modal-dialog">
+			<div class="modal-content" style="width:650px">
+				<div class="modal-header">
+					<button type="button" class="close" data-dismiss="modal"
+						aria-hidden="true">&times;</button>
+					<h4 class="modal-title" id="myModalLabel">策略信息维护</h4>
+				</div>
+				<div class="modal-body">
+					<!-- 添加表单内容-->
+					<form class="form-horizontal" role="form" name="strategyForm" novalidate>
+						<div class="row">
+							<div class="col-xs-6">
+								<div class="row form-group">
+									<label for="instClientID" class="col-sm-4 control-label">机构代码<span
+										style="color: red;">*</span></label>
+									<div class="col-sm-8">
+										<select ng-model="modalEntity.instClientID" required class="form-control two-columns-modal-input"
+											ng-disabled="isUpdate || isInstClient " class="form-control"
+											id="instClientID" name="instClientID" 
+											onkeydown="myKeyup(event,this)" tab="3101"
+											ng-options="op.instClientID as op.instClientID+'_'+ op.instClientAbbrName for op in queryinstClientlists">
+										</select> 
+										<span ng-show=" strategyForm.instClientID.$dirty &&  strategyForm.instClientID.$invalid" 
+											style="color: red;">机构代码为必填项</span>
+									</div>
+								</div>
+							</div>
+							<div class="col-xs-6">
+								<div class="row form-group">
+									<label for="strategyID"
+										class="col-sm-4 control-label">策略代码<span
+										style="color: red;">*</span></label>
+									<div class="col-sm-8">
+										<input type="text" class="form-control two-columns-modal-input" id="strategyID"
+											placeholder="请输入策略代码" ng-model="modalEntity.strategyID" ng-pattern="/^[0-9a-zA-Z]+$/"
+											name="strategyID" maxlength="20" required ng-disabled="isUpdate"
+											onkeydown="myKeyup(event,this)" tab="3102"> <span
+											ng-show="strategyForm.strategyID.$dirty && strategyForm.strategyID.$invalid"
+											style="color: red;">策略代码为必填项，且仅能输入数字和字母</span>
+									</div>
+								</div>
+							</div>
+						</div>
+						<div class="row">
+							<div class="col-xs-6">
+								<div class="row form-group">
+									<label for="strategyAbbrName"
+										class="col-sm-4 control-label">策略简称<span
+										style="color: red;">*</span></label>
+									<div class="col-sm-8">
+										<input type="text" class="form-control two-columns-modal-input" id="strategyAbbrName"
+											placeholder="请输入策略简称" ng-model="modalEntity.strategyAbbrName"
+											name="strategyAbbrName" maxlength="100" required
+											onkeydown="myKeyup(event,this)" tab="3103"> <span
+											ng-show="strategyForm.strategyAbbrName.$dirty && strategyForm.strategyAbbrName.$invalid"
+											style="color: red;">策略简称为必填项</span>
+									</div>
+								</div>
+							</div>
+							<div class="col-xs-6">
+								<div class="row form-group">
+									<label for="strategyName"
+										class="col-sm-4 control-label">策略全称 </label>
+									<div class="col-sm-8">
+										<input type="text" class="form-control two-columns-modal-input" id="strategyName"
+											placeholder="请输入策略全称" ng-model="modalEntity.strategyName"
+											name="strategyName" maxlength="200" required
+											onkeydown="myKeyup(event,this)" tab="3104">
+											
+									</div>
+								</div>
+							</div>
+						</div>
+						<div class="row">
+							<div class="col-xs-6">
+								<div class="row form-group">
+									<label for="strategyInfo"
+										class="col-sm-4 control-label">策略信息</label>
+									<div class="col-sm-8">
+										<textarea class="form-control" id="strategyInfo" style="width: 435px; height: 50px; resize: none;"
+											placeholder="请输入策略信息" ng-model="modalEntity.strategyInfo"
+											name="strategyInfo" maxlength="255" tab="3106"
+											onkeydown="myKeyup(event,this)">
+										</textarea>
+									</div>
+								</div>
+							</div>
+						</div>
+						<input type="hidden" ng-bind="modalEntity.recordIndex">
+					</form>
+					<!--End  添加表单内容-->
+				</div>
+				<div class="modal-footer">
+					<input class="btn btn-info btn-sm popover-info" data-rel="popover" type="button" value="确定"
+						ng-disabled = "strategyForm.instClientID.$invalid ||  strategyForm.istrategyID.$invalid || strategyForm.strategyAbbrName.$invalid"
+						data-placement="bottom" title="" ng-click="strategyForm.instClientID.$invalid || strategyForm.istrategyID.$invalid 
+						|| strategyForm.strategyAbbrName.$invalid || save(modalEntity)" tab="3111" onkeydown="myKeyup(event,this)">
+					<input class="btn btn-close btn-sm popover-info" data-rel="popover" type="button" value="取消" tab="3112" onkeydown="myKeyup(event,this)"
+						data-placement="bottom" title="" data-dismiss="modal">
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<!-- modal end -->
+</div>

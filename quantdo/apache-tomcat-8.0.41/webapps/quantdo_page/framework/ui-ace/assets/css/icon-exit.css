@@ -1,0 +1,30 @@
+@font-face {
+    font-family: 'icomoon-exit';
+    src:    url('../fonts/icomoon-exit.eot?uo3ez5');
+    src:    url('../fonts/icomoon-exit.eot?uo3ez5#iefix') format('embedded-opentype'),
+        url('../fonts/icomoon-exit.ttf?uo3ez5') format('truetype'),
+        url('../fonts/icomoon-exit.woff?uo3ez5') format('woff'),
+        url('../fonts/icomoon-exit.svg?uo3ez5#icomoon-exit') format('svg');
+    font-weight: normal;
+    font-style: normal;
+}
+
+.icon-exit {
+    /* use !important to prevent issues with browser extensions that change fonts */
+    font-family: 'icomoon-exit' !important;
+    speak: none;
+    font-style: normal;
+    font-weight: normal;
+    font-variant: normal;
+    text-transform: none;
+    line-height: 1;
+
+    /* Better Font Rendering =========== */
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+}
+
+.icon-exit:before {
+    content: "\e900";
+}
+

@@ -1,0 +1,41 @@
+<link href="windControl/futureVarietiesRestriction.css" rel="stylesheet">
+<title>期货交易品种限制</title>
+<div ng-controller="futureVarietiesRestrictionController"
+	style="width: 100%; overflow: auto;">
+	<div style="height:10px;"></div>
+    <input type="button"  ng-show = "futureVaritAddButtonIsShow" value = &nbsp;&nbsp;&nbsp;新&nbsp;&nbsp;增&nbsp;&nbsp;&nbsp; name="FutureVarietiesRestrictionService.updateFutureVarietiesRestriction" class="backFilter myNewBtn" ng-click = "showDetail()">
+    <div style="height:15px;"></div>
+	
+	<div>
+		<table id="futureVarietiesRestriction_up_table" class="cell-border stripe" cellspacing="0" width="100%">
+		</table>
+	</div>
+	
+	<div ng-show = "futureVarietiesRestrictionShow">
+	<label class="detail-header">期货交易品种限制设置</label>
+	<div class="controlDetail">
+			 <div style="float:left;width:40%;margin-top: 12px;">
+				<table id="futureVarietiesRestriction_down_left_table" class="cell-border stripe" cellspacing="0" width="100%">
+				</table>
+			</div> 
+			<div style="float:right;width:50%;margin-top: 12px;">
+				<table id="futureVarietiesRestriction_down_right_table" class="cell-border stripe" cellspacing="0" width="100%">
+				</table>
+				<label style="color:red;">(系统暂时只支持：允许交易(全部勾选)，只可平仓（只勾选买平卖平），禁止交易（全部不勾选）三种设置)</label>
+			</div>	
+			<div class="operation-table">
+			    <div class="btn-add-left">
+		    	    <input type="button" value={{futureVarietiesRestriction_buttonName_save}}  class="backFilter myNewBtn" name="FutureVarietiesRestrictionService.saveFutureVarietiesRestriction"   ng-show="buttonEdit"  ng-click="saveFutureVarietiesRestriction()">					
+					<input type="button" value={{futureVarietiesRestriction_buttonName_update}}  class="backFilter myNewBtn" name="FutureVarietiesRestrictionService.updateFutureVarietiesRestriction" ng-show="!buttonEdit" ng-click="saveFutureVarietiesRestriction()">					
+		        </div>
+	   	    	<div class="btn-add-left">
+	   				<input type="button" value={{futureVarietiesRestriction_buttonName_detail_save}} class="backFilter myNewBtn" name="FutureVarietiesRestrictionService.saveFutureVarietiesRestriction"  ng-show="buttonEdit" ng-click="addFutureVarietiesRestriction()">
+		   		</div>
+		   		<div class="btn-add-left">
+	   				<input type="button" value={{futureVarietiesRestriction_buttonName_detail_update}} class="backFilter myNewBtn" name="FutureVarietiesRestrictionService.saveFutureVarietiesRestriction"  ng-show="!buttonEdit" ng-click="geveUpUpdate()">
+		   		</div>
+		    	
+	   	   </div>
+	</div>
+	</div>
+</div>

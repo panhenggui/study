@@ -1,0 +1,101 @@
+.select-style{
+    width:170px;
+}
+
+.modal-width{
+    width: 900px;
+}
+
+.label-style {
+    width: 118px;
+}
+.edit-font-size{
+	font-size: 13px;
+}
+.btn-background{
+	background-color: white;
+}
+.faUnlockAlt:before {
+  content: "\f13e";
+}
+.faUnlock:before {
+  content: "\f09c";
+}
+.wcmoverflatLeftDiv{
+    position:relative;
+    height:350px;
+    width:260px;
+    left:35px;
+    overflow:auto;
+     top:-1px;
+    border:1px solid silver;
+
+}
+.wcmoverflatLeftTitleDiv{
+    position:relative;
+    height:23px;
+    width:260px;
+    left:35px;
+    border:1px solid silver;
+}
+.wcmoverflatMidDiv{
+    height:100px;
+    width:30px;
+    top:-200px;
+    left:303px;
+    position:relative;
+}
+.wcmoverflatRightDiv{
+    position:relative;
+    height:350px;
+    width:260px;
+    left:345px;
+    top:-475px;
+    overflow:auto;
+    border:1px solid silver;
+}.wcmoverflatRightTitleDiv{
+    position:relative;
+    height:23px;
+    width:260px;
+    left:345px;
+    top:-474px;
+    overflow:auto;
+    border:1px solid silver;
+}
+
+.modal-footerdiv{
+  position:absolute;
+  left:360px;
+  top:350px;
+}
+.wcmmodalbodydiv{
+     height:380px;
+     width:650px;
+}
+thead tr th {
+    text-align:left;
+    width:130px;
+    line-height: 20px;
+    padding: 4px;
+    background: #f9f9f9;
+}
+
+tbody tr td {
+    text-align: left;
+    width:130px;
+    /*border-top:1px solid silver;*/
+    border-bottom:1px solid silver;
+    padding: 4px;
+    line-height: 20px;
+}
+
+.hoverTr:hover{
+    background:silver;
+}
+.windColoerTr{
+	background:#ffffff;
+}
+
+.selectActive{
+	 background:#e9f7ff;
+}

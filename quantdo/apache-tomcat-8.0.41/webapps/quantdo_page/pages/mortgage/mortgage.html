@@ -1,0 +1,324 @@
+<link rel="stylesheet" href="mortgage/mortgage.css" />
+<title>抵押品管理</title>
+<br>
+<div class="row" ng-controller="mortgageController">
+	<!-- start 定义表单查询-->
+	<form class="form-12">
+		<div class="form-row">
+			<div class="row-col-one">
+				<label class="word-style">开始日期</label> <input type="text"
+					onchange="" class="Wdate value-style word-style"
+					onfocus="WdatePicker({lang:'zh-cn',dateFmt:'yyyyMMdd'})"
+					ng-model="queryEntity.beginDate" ng-readonly="true"
+					ng-disabled="isStart" />
+			</div>
+
+			<div class="row-col-one">
+				<label class="word-style">结束日期</label> <input type="text"
+					onchange="" class="Wdate value-style word-style"
+					onfocus="WdatePicker({lang:'zh-cn',dateFmt:'yyyyMMdd'})"
+					ng-model="queryEntity.endDate" ng-readonly="true"
+					ng-disabled="isStart" />
+			</div>
+
+			<div class="row-col-one">
+				<label class="word-style">所属机构</label> <select
+					ng-model="queryEntity.instClientID" class="value-style"
+					ng-disabled="isStart || noInst"
+					ng-options="op.instClientID as op.instClientID+'_'+op.instClientAbbrName for op in instClientList">
+					<option value="">全部</option>
+				</select>
+			</div>
+			<div class="row-col-one">
+				<label class="word-style">抵押品</label> <select
+					ng-model="queryEntity.mortgageID" class="value-style"
+					ng-disabled="isStart"
+					ng-options="op.mortgageID as op.mortgageID for op in queryMortgages">
+					<option value="">全部</option>
+				</select>
+			</div>
+
+			<div class="row-col-one">
+				<label class="word-style">抵押合同编号</label> <input type="text"
+					class="value-style" ng-disabled="isStart"
+					ng-model="queryEntity.contractID" />
+			</div>
+
+			<div class="row-col-one">
+				<label class="word-style">抵押合同状态</label> <select
+					ng-model="queryEntity.mortgageStatus" class="value-style"
+					ng-options="op.key as op.text for op in mortgageStatus"
+					ng-disabled="isStart">
+					<option value="">全部</option>
+				</select>
+			</div>
+
+			<div class="btn-beyond-one-row">
+				<button class="btn btn-reset btn-beyond-two" id="bootbox-options1" ng-show="mortgage_deal"
+					ng-click="find(queryEntity)" ng-disabled="isStart">执行轮询</button>
+					<button class="btn btn-reset btn-beyond-two" id="bootbox-options1" ng-show="mortgage_stop"
+					ng-click="stop()" ng-disabled="isStop">停止轮询</button>
+			</div>
+
+			<div class="row-form row-btn-operation">
+				<div class="row-btn-icon">
+					<span class="btn-add-icon"></span>
+					<button class="btn btn-add btn-icon-two" id="bootbox-options" ng-show="mortgage_add"
+						ng-click="initParameter()" data-toggle="modal"
+						ng-disabled="isStart" data-target="#mortgageModal">新增</button>
+				</div>
+			</div>
+		</div>
+	</form>
+	<!--End 表单查询 -->
+
+	<!--PAGE CONTENT START-->
+	<div class="col-xs-12 clear-padding-right">
+		<div class="row">
+			<div class="col-xs-12 clear-padding-right">
+				<div>
+					<table id="mortgage_dynamic_table" class="cell-border stripe"
+						cellspacing="0" width="100%">
+					</table>
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<!-- 新增 修改 模态框（Modal） -->
+	<div class="modal fade" id="mortgageModal" tabindex="-1" role="dialog"
+		aria-labelledby="myModalLabel" aria-hidden="true"
+		data-backdrop="static" data-keyboard="false">
+		<div class="modal-dialog">
+			<div class="modal-content" style="width: 650px">
+				<div class="modal-header">
+					<button type="button" class="close" data-dismiss="modal"
+						aria-hidden="true">&times;</button>
+					<h4 class="modal-title" id="myModalLabel">抵押品信息维护</h4>
+				</div>
+				<div class="modal-body">
+					<!-- 添加表单内容-->
+					<form class="form-horizontal" name="myForm" novalidate>
+						<div class="panel panel-default panel-no-border">
+                			<div class="panel-body">   
+						<div class="row">
+							<div class="col-xs-6">
+								<div class="row form-group">
+									<label for="tradeDate"
+										class="col-sm-4 control-label">交易日期<span
+										style="color: red;">*</span></label>
+
+									<div class="col-sm-8">
+										<input type="text" ng-model="ModalEntity.tradeDate"
+											name="tradeDate" required class="form-control two-columns-modal-input"
+											ng-disabled="true" id="tradeDate">
+									</div>
+								</div>
+							</div>
+
+							<div class="col-xs-6">
+								<div class="row form-group">
+									<label for="instClientID"
+										class="col-sm-4 control-label">所属机构<span
+										style="color: red;">*</span></label>
+
+									<div class="col-sm-8">
+										<select ng-model="ModalEntity.instClientID"  class="form-control two-columns-modal-input"
+											ng-disabled="isUpdate" 
+											ng-options="op.instClientID as op.instClientID+'_'+op.instClientAbbrName for op in instClientList"
+											id="instClientID" onkeydown="myKeyup(event,this)" tab="1"
+											name="instClientID" required></select>
+									</div>
+								</div>
+							</div>
+
+						</div>
+
+						<div class="row">
+							<div class="col-xs-6">
+								<div class="row form-group">
+									<label for="contractID"
+										class="col-sm-4 control-label">抵押合同编号<span
+										style="color: red;">*</span></label>
+
+									<div class="col-sm-8">
+										<input type="text" ng-model="ModalEntity.contractID"
+											name="contractID" required class="form-control two-columns-modal-input"
+											ng-disabled="isUpdate" maxlength=20 placeholder="请输入抵押合同编号"
+											id="contractID" onkeydown="myKeyup(event,this)" tab="2">
+										<span
+											ng-show="myForm.contractID.$dirty && myForm.contractID.$invalid"
+											style="color: red;">抵押合同编号为必填项</span>
+									</div>
+								</div>
+							</div>
+
+							<div class="col-xs-6">
+								<div class="row form-group">
+									<label for="mortgageType"
+										class="col-sm-4 control-label">抵押品类型<span
+										style="color: red;">*</span></label>
+
+									<div class="col-sm-8">
+										<select ng-model="ModalEntity.mortgageType"
+											ng-disabled="isUpdate"  class="form-control two-columns-modal-input"
+											ng-options="op.key as op.text for op in mortgageTypes"
+											ng-change="loadMortgageByType(ModalEntity.mortgageType)"
+											id="mortgageType" onkeydown="myKeyup(event,this)" tab="3"
+											name="mortgageType" required></select>
+									</div>
+								</div>
+							</div>
+						</div>
+
+						<div class="row">
+							<div class="col-xs-6">
+								<div class="row form-group">
+									<label for="mortgageID"
+										class="col-sm-4 control-label">抵押品<span
+										style="color: red;">*</span></label>
+
+									<div class="col-sm-8">
+										<div style="white-space: nowrap;">
+											<select ng-model="ModalEntity.mortgageID"
+												ng-disabled="isUpdate"  class="form-control two-columns-modal-input"
+												ng-options="op.instrumentID as op.instrumentID+'_'+op.instrumentName for op in instruments"
+												id="mortgageID" onkeydown="myKeyup(event,this)" tab="4"
+												name="mortgageID" required></select>
+										</div>
+									</div>
+								</div>
+							</div>
+
+							<div class="col-xs-6">
+								<div class="row form-group">
+									<label for="mortgageValue"
+										class="col-sm-4 control-label">抵押金额<span
+										style="color: red;">*</span></label>
+
+									<div class="col-sm-8">
+										<div style="white-space: nowrap;">
+											<input type="text" class="form-control two-columns-modal-input" id="mortgageValue"
+												placeholder="请输入抵押金额" ng-model="ModalEntity.mortgageValue"
+												ng-pattern="/^\d{1,12}(\.\d{0,2})?$/" name="mortgageValue"
+												maxlength="15" required onkeydown="myKeyup(event,this)"
+												tab="5">
+										</div>
+										<span
+											ng-show="myForm.mortgageValue.$dirty && myForm.mortgageValue.$invalid"
+											style="color: red;">抵押金额为必填项，且最多录入12位整数2位小数，例：98.12</span>
+									</div>
+								</div>
+							</div>
+						</div>
+
+						<div class="row">
+							<div class="col-xs-6">
+								<div class="row form-group">
+									<label for="mortgageAmount"
+										class="col-sm-4 control-label">抵押数量<span
+										style="color: red;">*</span></label>
+
+									<div class="col-sm-8">
+										<input type="text" class="form-control two-columns-modal-input" id="mortgageAmount"
+											placeholder="请输入抵押数量" ng-model="ModalEntity.mortgageAmount"
+											ng-pattern="/^\d{1,8}?$/" name="mortgageAmount" maxlength="8"
+											required onkeydown="myKeyup(event,this)" tab="6"> <span
+											ng-show="myForm.mortgageAmount.$dirty && myForm.mortgageAmount.$invalid"
+											style="color: red;">抵押数量为必填项，且最多录入8位整数</span>
+									</div>
+								</div>
+							</div>
+
+							<div class="col-xs-6">
+								<div class="row form-group">
+									<label for="mortgageStatus"
+										class="col-sm-4 control-label">抵押合同状态<span
+										style="color: red;">*</span></label>
+
+									<div class="col-sm-8">
+										<div style="white-space: nowrap;">
+											<select ng-model="ModalEntity.mortgageStatus"  class="form-control two-columns-modal-input"
+												ng-disabled="isInit || ModalEntity.mortgageStatus == 2 "
+												ng-options="op.key as op.text for op in mortgageStatus"
+												id="mortgageStatus" name="mortgageStatus" required></select>
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+
+						<div class="row">
+							<div class="col-xs-6">
+								<div class="row form-group">
+									<label for="preWarnLine"
+										class="col-sm-4 control-label">预警线(%)<span
+										style="color: red;">*</span></label>
+
+									<div class="col-sm-8">
+										<input type="text" class="form-control two-columns-modal-input" id="preWarnLine"
+											placeholder="请输入预警线(%)" ng-model="ModalEntity.preWarnLine"
+											ng-pattern="/^\d{1,12}(\.\d{0,2})?$/" name="preWarnLine"
+											maxlength="8" required onkeydown="myKeyup(event,this)"
+											tab="7"> <span
+											ng-show="myForm.preWarnLine.$dirty && myForm.preWarnLine.$invalid"
+											style="color: red;">预警线为必填项，且最多录入2位小数</span>
+									</div>
+								</div>
+							</div>
+
+							<div class="col-xs-6">
+								<div class="row form-group">
+									<label for="stopLossLine"
+										class="col-sm-4 control-label">止损线(%)<span
+										style="color: red;">*</span></label>
+
+									<div class="col-sm-8">
+										<input type="text" class="form-control two-columns-modal-input" id="stopLossLine"
+											placeholder="请输入止损线(%)" ng-model="ModalEntity.stopLossLine"
+											ng-pattern="/^\d{1,12}(\.\d{0,2})?$/" name="stopLossLine"
+											maxlength="8" required onkeydown="myKeyup(event,this)"
+											tab="8"> <span
+											ng-show="myForm.stopLossLine.$dirty && myForm.stopLossLine.$invalid"
+											style="color: red;">止损线为必填项，且最多录入2位小数</span>
+									</div>
+								</div>
+							</div>
+						</div>
+
+						<div class="row">
+								<div class="row form-group" style="margin-left:0px;">
+									<label for="remarks" class="col-sm-2 control-label">备注</label>
+									<div class="col-sm-7" >
+										<textarea class="form-control" id="remarks"
+											style="width: 400px; height:50px;resize: none;"
+											placeholder="请输入备注" ng-model="ModalEntity.remarks"
+											name="remarks" maxlength="50" tab="9"
+											onkeydown="myKeyup(event,this)">
+										</textarea>
+									</div>
+								</div>
+							   </div>
+							 </div>
+                    	  </div>
+                    	  
+						<div>
+							<input type="hidden" ng-bind="ModalEntity.recordIndex">
+						</div>
+					</form>
+					<!--End  添加表单内容-->
+				</div>
+				<div class="modal-footer">
+					<span class="btn btn-info btn-sm popover-info" data-rel="popover"
+						data-placement="bottom" title="" ng-click="notClick || myForm.$invalid||save(ModalEntity)"
+						ng-disabled=" notClick || myForm.$invalid">&nbsp;确定&nbsp;</span> <span
+						class="btn btn-close btn-sm popover-info" data-rel="popover"
+						data-placement="bottom" title="" data-dismiss="modal">&nbsp;取消&nbsp;</span>
+				</div>
+			</div>
+		</div>
+	</div>
+	<!-- /.modal -->
+
+
+</div>

@@ -1,0 +1,46 @@
+.foffundgroup-label-style{
+    width: 100px;
+    white-space: nowrap;
+}
+.foffundgroup-select-style{
+    width:170px;
+}
+.foffundgroup-select-style1{
+    width:170px;
+    margin-left: 30px;
+}
+.foffundgroup-input-style{
+	width:160px;
+}
+th{
+    text-align:center;
+    white-space:nowrap;
+}
+td{
+    text-align:center;
+    white-space:nowrap;
+}
+.foffundgroup-modal-width{
+    width: 650px;
+    text-align:center;
+}
+
+.foffundgroup-date-style{
+    padding-top: 0px;
+    padding-bottom: 0px;
+    width: 170px;
+}
+.foffundgroup-radio-style1{
+	float:left;
+	margin : 7px 0 0 0 !important;
+	margin-left : 10px !important;
+}
+.foffundgroup-control-label{
+	white-space: nowrap;
+}
+.trBgColor{
+   background-color: #00b3ee !important;
+}
+.foffundgroup-rowspace{
+	margin-bottom:15px !important;
+}

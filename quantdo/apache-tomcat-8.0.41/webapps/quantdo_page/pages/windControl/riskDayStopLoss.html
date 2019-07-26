@@ -1,0 +1,64 @@
+<link href="windControl/riskDayStopLoss.css" rel="stylesheet">
+<div ng-controller="riskDayStopLossController" style="width: 100%;margin-top: 15px;">
+ <div style="height:10px;"></div>
+    <input type="button"  ng-show = "riskDayStopLossAddButtonIsShow" value = &nbsp;&nbsp;&nbsp;新&nbsp;&nbsp;增&nbsp;&nbsp;&nbsp; class="backFilter myNewBtn"  name="RiskDayStopLossService.addTmpRiskDayStopLossEntity" ng-click = "showDetail()">
+    <div style="height:15px;"></div>
+        <div id="riskday_outerContainer">
+            <div id="riskday_mytable">
+                <table id="riskDayStopLoss_table" class="cell-border stripe" cellspacing="0" width="100%">
+                </table>
+            </div>
+        </div>
+
+    <div ng-show = riskDayStopLossShow>
+        <label class="detail-header">日内最大回撤止损信息设置</label>
+        <div class="controlDetail">
+            <div class="single-information">
+                <div class="detailRow">
+                    <input style='cursor:pointer;' type="checkbox" ng-click="changeDateState()" ng-checked="dayStopLossEntitys.myDate" ng-model="dayStopLossEntitys.myDate">
+                    <label>生效日期</label>
+                    <input forType="date" type="text" ng-readonly="true" class="product-time" ng-disabled="dateNotEdit" ng-model="dayStopLossEntitys.startDate">至
+                    <input forType="date" type="text" ng-readonly="true" class="product-time" ng-disabled="dateNotEdit" ng-model="dayStopLossEntitys.endDate">
+                </div>
+                <div class="detailRow">
+                    <input style='cursor:pointer;' type="checkbox" ng-click="changeTimeState()" ng-checked="dayStopLossEntitys.myTime" ng-model="dayStopLossEntitys.myTime">
+                    <label>生效时间</label>
+                    <input type="text" ng-disabled="timeNotEdit" ng-readonly="true" name="startTime" class="product-time" id="riskday_myStartTime"
+                           onClick="WdatePicker({skin:'whyGreen',dateFmt:'HH:mm:ss',isShowClear:false,readOnly:true})" ng-model="dayStopLossEntitys.startTime">至
+                    <input type="text" ng-disabled="timeNotEdit" ng-readonly="true" name="endTime" class="product-time" id="riskday_myEndTime"
+                           onClick="WdatePicker({skin:'whyGreen',dateFmt:'HH:mm:ss',isShowClear:false,readOnly:true})" ng-model="dayStopLossEntitys.endTime">
+                </div>
+
+                <div class="detailRow">
+                    <input type="text" class="detail-text" ng-model="dayStopLossEntitys.lconval1" ng-keyup="numberControl(dayStopLossEntitys.lconval1,0)">
+                    <select ng-model="dayStopLossEntitys.lcontag1" class="detail-select"
+                            ng-options="cf.key as cf.text for cf in compareFlag">
+                    </select>
+                   &nbsp;回撤比例 &nbsp;
+                    <select ng-model="dayStopLossEntitys.rcontag1" class="detail-select"
+                            ng-options="cf.key as cf.text for cf in compareFlag">
+                    </select>
+                    <input type="text" class="detail-text" ng-model="dayStopLossEntitys.rconval1" ng-keyup="numberControl(dayStopLossEntitys.rconval1,1)">
+                </div>
+                <div class="detailRow">
+                    <label>风控方式：</label>
+                    <select ng-disabled = "riskDayStopLossActionCode" ng-model="dayStopLossEntitys.actionCode" class="value-select"
+                            ng-options="ca.key as ca.text for ca in riskWay">
+                    </select>
+                </div>
+            </div>
+            <div class="operation-table">
+                
+                <div class="btn-add-left">
+                    <input name="RiskStromDataService.addProductRiskDataIndexData" ng-show="riskDayStopLossButtonEdit" type="button" value={{riskDayStopLoss_buttonName_save}} class="backFilter myNewBtn" ng-click="saveDayStopLoss(dayStopLossEntitys)">
+                    <input name="RiskStromDataService.addProductRiskDataIndexData" ng-show="!riskDayStopLossButtonEdit" type="button" value={{riskDayStopLoss_buttonName_update}} class="backFilter myNewBtn" ng-click="saveDayStopLoss(dayStopLossEntitys)">
+                </div>
+                
+                <div class="btn-add-left">
+                    <input name="RiskStromDataService.addProductRiskDataIndexData" ng-show="riskDayStopLossButtonEdit" type="button" value={{riskDayStopLoss_buttonName_detail_save}} class="backFilter myNewBtn" title="新增回撤比例信息" ng-click="addDayStopLoss()">
+                    <input name="RiskStromDataService.addProductRiskDataIndexData" ng-show="!riskDayStopLossButtonEdit" type="button" value={{riskDayStopLoss_buttonName_detail_update}} class="backFilter myNewBtn" title="新增回撤比例信息" ng-click="giveUpUpdate()">
+                </div>
+            </div>
+        </div>
+        </div>
+</div>

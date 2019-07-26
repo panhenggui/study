@@ -1,0 +1,137 @@
+<link rel="stylesheet" href="settleparam/projectBrief.css" />
+<title>项目简表</title>
+<div>
+	<ol class="breadcrumb">
+		<li><a>交易数据查询</a></li>
+		<li class="active">项目简表</li>
+	</ol>
+</div>
+<br>
+<div class="row" ng-controller="ProjectBriefController">
+	<!-- start 定义表单查询-->
+	<form class="form-12">
+		<div class="form-row">
+			<div class="row-col-one">
+				<label class="word-style">开始日期</label> <input type="text"
+					onchange="" class="Wdate value-style word-style"
+					onfocus="WdatePicker({lang:'zh-cn',dateFmt:'yyyyMMdd'})"
+					ng-model="queryEntity.beginDate" ng-readonly="true" id="settleDate" />
+			</div>
+			<div class="row-col-one">
+				<label class="word-style">结束日期</label> <input type="text"
+					onchange="" class="Wdate value-style word-style"
+					onfocus="WdatePicker({lang:'zh-cn',dateFmt:'yyyyMMdd'})"
+					ng-model="queryEntity.endDate" ng-readonly="true" id="settleDate" />
+			</div>
+			<div class="row-col-one">
+				<label class="word-style">品种</label> <input type="text"
+					class="value-style" ng-model="queryEntity.productID" />
+			</div>
+			<div class="row-col-one">
+				<label class="word-style">类别</label> <select
+					ng-model="queryEntity.productType" class="value-style"
+					ng-options="op.key as op.key+'_'+op.text for op in productTypes">
+					<option value="">全部</option>
+				</select>
+			</div>
+		</div>
+		<div class="btn-beyond-one-row">
+			<div class="form-group">
+				<button class="btn btn-query btn-word-two" id="bootbox-options1"
+					ng-show="projectBrief_query" ng-click="find(queryEntity)"
+					ng-disabled="isQuery">查询</button>
+				<button type="button" class="btn btn-reset btn-word-two"
+					ng-click="reset()">重置</button>
+				<!-- <button type="button" class="btn btn-reset btn-word-two"
+					ng-click="showPicture()">显示折线图</button> -->
+			</div>
+		</div>
+	</form>
+	<!--End 表单查询 -->
+
+	<!--PAGE CONTENT START-->
+	<div class="col-xs-12 clear-padding-right">
+		<div class="row">
+			<div class="col-xs-12 clear-padding-right">
+				<div>
+					<table id="ProjectBrief_dynamic_table" class="cell-border stripe"
+						cellspacing="0" width="100%">
+						<tfoot class="projectBriefFoot">
+							<tr style="text-align: center">
+								<td style="text-align: center">合计</td>
+								<td style="text-align: center"></td>
+								<td style="text-align: center"></td>
+								<td style="text-align: center"></td>
+								<td style="text-align: center"></td>
+								<td style="text-align: center"></td>
+								<td style="text-align: center"></td>
+								<td style="text-align: center"></td>
+								<td style="text-align: center"></td>
+								<td style="text-align: center"></td>
+							</tr>
+						</tfoot>
+					</table>
+				</div>
+			</div>
+		</div>
+	</div>
+	<!--PAGE CONTENT END-->
+	<!--    <div>
+        <div style="position: absolute;left: 0;top: 0px;z-index: 999;height: 100%;width:100%;background-color: white" ng-show="picShow">
+            <div style="text-align: right;padding-right: 50px;margin-top: 10px;height: 20px;" ng-click="hidePicture()">
+                <div class="closeMonitor"></div>
+            </div>
+            <div id="projectBrief_container" style="min-width:600px;height:600px;width:1400px;margin-top: 1%"></div>
+        </div>
+    </div> 
+     -->
+	<div class="modal fade" id="pictureModal" tabindex="-1" role="dialog"
+		aria-labelledby="myModalLabel" aria-hidden="true"
+		data-backdrop="static" data-keyboard="false">
+		<div class="modal-dialog" style="position:relative;">
+			<div class="modal-content"
+				style="height: 800px; width: 1500px;">
+				<div class="modal-header">
+					<button type="button" class="close" data-dismiss="modal"
+						aria-hidden="true">&times;</button>
+					<h4 class="modal-title" id="myModalLabel">详细信息</h4>
+				</div>
+				<div class="modal-body">
+
+					<div style="position: absolute; left: 0; top: 0px; z-index: 999; height: 100%; width: 100%; background-color: white">
+						<!-- <div
+							style="text-align: right; padding-right: 50px; margin-top: 10px; height: 20px;"
+							ng-click="hidePicture()">
+							<div class="closeMonitor"></div>
+						</div> -->
+						<form class="form-horizontal" role="form" name="myForm" novalidate>
+							<div class="row-col-one">
+								<label class="word-style">开始日期</label> <input type="text"
+									onchange="" class="Wdate value-style word-style"
+									onfocus="WdatePicker({lang:'zh-cn',dateFmt:'yyyyMMdd'})"
+									ng-model="queryEntity.beginDate" ng-readonly="true"
+									id="settleDate" />
+							</div>
+							<div class="row-col-one">
+								<label class="word-style">结束日期</label> <input type="text"
+									onchange="" class="Wdate value-style word-style"
+									onfocus="WdatePicker({lang:'zh-cn',dateFmt:'yyyyMMdd'})"
+									ng-model="queryEntity.endDate" ng-readonly="true"
+									id="settleDate" />
+							</div>
+							<div class="row-col-one">
+								<button type="button" class="btn btn-reset btn-word-two"
+									ng-click="showPicture()">显示折线图</button>
+							</div>
+						</form>
+						<div ng-show="picShow">
+							<div id="projectBrief_container" style="min-width: 600px; height: 600px; width: 1400px; margin-top: 1%"></div>
+						</div>
+					</div>
+				</div>
+
+			</div>
+		</div>
+	</div>
+	<!-- /.modal -->
+</div>

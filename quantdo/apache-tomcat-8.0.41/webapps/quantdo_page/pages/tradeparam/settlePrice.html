@@ -1,0 +1,350 @@
+<link rel="stylesheet" href="tradeparam/settlePrice.css"/>
+<title>结算价管理</title>
+<div>
+    <ol class="breadcrumb">
+        <li><a>日终结算</a></li>
+        <li class="active">结算价维护</li>
+    </ol>
+</div>
+<br>
+<div class="row" ng-controller="SettlePriceController">
+<!-- start 定义表单查询-->
+<form class="form-12">
+    <div class="row">
+        <div class=col-xs-12>
+            <div class="alert alert-success" ng-show="resultInfo">结算价保存成功!</div>
+        </div>
+    </div>
+    <div class="form-row">
+        <div class="row-col-one" >
+                <label class="word-style">结算日期</label>
+		
+                    <input type="text" id="settleDate" onchange="" class="Wdate value-style word-style" onfocus="WdatePicker({lang:'zh-cn',dateFmt:'yyyyMMdd'})"
+                    ng-model="queryEntity.settleDate" ng-readonly="true"
+                           name="settleDate" value=""  />
+        </div>
+        <div class="row-col-one">
+                <label class="word-style">交易所</label>
+
+                    <select ng-model="queryEntity.exchID" class="value-style" ng-change="selectFindProduct(queryEntity.exchID)"
+                            ng-options="op.exchID as op.exchID+'_'+op.exchName for op in exchangeDatas">
+                            <option value="">全部</option>
+                            </select>
+        </div>
+        <div class="row-col-one">
+                <label class="word-style">品种代码</label>
+                    <select ng-model="queryEntity.productID" class="value-style" ng-change="selectFindInstrument(queryEntity.exchID,queryEntity.productID)"
+                            ng-options="op.productID as op.productID+'_'+op.productName for op in products"><option value="">全部</option></select>
+        </div>
+        <div class="row-col-one">
+                <label class="word-style">合约代码</label>
+                    <select ng-model="queryEntity.instrumentID" class="value-style"
+                            ng-options="op.instrumentID as op.instrumentID+'_'+op.instrumentName for op in instruments"><option value="">全部</option></select>
+        </div>
+       <!--  <div class="col-xs-3">
+            <div class="form-group button-left-style">
+                <button class="btn btn-success" id="bootbox-options1" ng-click="find(queryEntity)" ng-disabled="isQuery"> 查询</button>
+            </div>
+        </div> -->
+    </div>
+    <div class="btn-beyond-one-row" ng-show = "settlePrice_query">
+      	 <button type="button" class="btn btn-query btn-word-two"  ng-click="find(queryEntity)" ng-disabled="isQuery"> 查询</button>
+    </div>
+    			
+ 	<div class="row-form row-btn-operation">
+ 				<div class="row-btn-icon" ng-show = "settlePrice_add">
+            <span class="btn-add-icon"></span>
+		<button class="btn btn-add btn-icon-two"
+			ng-click="initParameter()" data-toggle="modal"
+			data-target="#settlePriceModal">新增</button>
+			</div>
+			<div class="row-btn-icon" ng-show = "settlePrice_get">
+			<button class="btn btn-reset btn-word-two" data-toggle="modal" data-target="#getSettlePriceModal"
+			 id="bootbox-copy" style="padding-left:25px;"
+			>获取结算价</button>
+			</div>
+     </div>
+</form>
+<!--End 表单查询 -->
+
+<!--PAGE CONTENT -->
+<div class="col-xs-12 clear-padding-right">
+        <div class="row">
+            <div class="col-xs-12 clear-padding-right">
+                <div>
+                    <table id="settlePrice_dynamic_table" class="cell-border stripe" cellspacing="0" width="100%">
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+<!-- <div class="col-xs-12">
+    <div class="row">
+        <div class="col-xs-12">
+	        <div  class="col-xs-12">
+	            <button class="btn btn-success" id="bootbox-options" ng-click="initParameter()" data-toggle="modal"
+	             data-target="#settlePriceModal">新增
+	    		</button>
+	    		<button class="btn btn-success" id="bootbox-copy" ng-click="copySettlePrice()" >获取结算价
+   			    </button>
+	        </div>
+            <div class="clearfix">
+                <div class="pull-right tableTools-container"></div>
+            </div>
+            <div>
+            
+    		<button class="btn btn-success" id="bootbox-upload" ng-click="uploadSettlePrice()" data-toggle="modal"
+            data-target="#settlePriceUploadModal">导入
+   			</button>
+
+                <table id="dynamic-table" class="cell-border stripe" datatable="ng">
+                    <thead>
+                    <tr>
+                        <th class="center">
+                            <label class="pos-rel">
+                                <span class="ace"/>
+                                <span class="lbl"></span>
+                            序号</label>
+                        </th>
+                        <th>结算日期</th>
+                        <th>交易所代码</th>
+                        <th class="hidden-180">品种代码</th>
+                        <th class="hidden-180">合约代码</th>
+                        <th class="hidden-180">结算价</th>
+                        <th class="hidden-480">上一日结算价</th>
+                        <th class="hidden-480">操作员</th>
+                        <th class="hidden-480">操作日期</th>
+                        <th class="hidden-480">操作时间</th>
+                        <th>操作</th>
+                    </tr>
+                    </thead>
+
+                    <tbody>
+                    <tr ng-repeat="listEntity in listEntitys">
+                        <td class="center">
+                            {{($index+1)}}
+                        </td>
+                        <td ng-bind="listEntity.settleDate"></td>
+                        <td ng-bind="listEntity.exchID"></td>
+                        <td ng-bind="listEntity.productID"></td>
+                        <td ng-bind="listEntity.instrumentID"></td>
+                        <td>{{listEntity.settlePrice | number:8}}</td>
+                        <td>{{listEntity.lastSettlePrice | number:8}}</td>
+                        <td ng-bind="listEntity.operatorID"></td>
+                        <td ng-bind="listEntity.operateDate"></td>
+                        <td ng-bind="listEntity.operateTime"></td>
+                        <div><input type="hidden" ng-bind="listEntity.recordIndex"></div>
+                        <td>
+                            <div class="hidden-sm hidden-xs action-buttons">
+                                <a class="blue" ng-click="initUpdateParam($index,listEntity)" data-toggle="modal"
+                                   data-target="#settlePriceModal" style="cursor:pointer">[修改]</a>
+                                <a class="blue" style="cursor:pointer" ng-click="remove($index,listEntity)">[删除]</a>
+                            </div>
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+    PAGE CONTENT ENDS
+</div> -->
+<!-- /.col -->
+
+
+<!-- 新增 模态框（addModal） -->
+<div class="modal fade" id="settlePriceModal" tabindex="-1" role="dialog"
+     aria-labelledby="myModalLabel" aria-hidden="true" data-backdrop="static" data-keyboard="false">
+    <div class="modal-dialog modal-width">
+        <div class="modal-content modal-width" ng-class="{selectActive:isShow == false}" >
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true"> &times;</button>
+                <h4 class="modal-title" id="myModalLabel"> 结算价维护</h4>
+            </div>
+            
+            <div class="page-header">           
+		              <label class="word-style" style="line-height:42px;margin-left: 15px;">结算日期:</label>
+		              <input type="text" id="settleDate" style="margin-top:5px;" onchange="" class="Wdate value-style word-style" onfocus="WdatePicker({lang:'zh-cn',dateFmt:'yyyyMMdd'})"
+		              ng-model="ModalEntity.settleDate" name="settleDate" ng-disabled="!isShow" ng-readonly="true" required/>
+		              <button class="btn btn-reset btn-icon-two" id="bootbox-options1" ng-click="getAddItems(ModalEntity.settleDate)" ng-show="isShow"  ng-disabled="isQuery">获取待结算数据</button>          	
+        	</div>
+        	
+            <div class="" style="overflow:auto;">
+            	<!-- 查询表格 -->
+           		<div class="col-xs-7" ng-show ="isShow">
+					<div class="clearfix">
+						<div class="pull-right tableTools-container"></div>
+					</div>
+					<div>
+						<table id="queryAdd-table" style="width:100% !important;"
+						class="cell-border stripe" datatable="ng" >
+						<thead>
+							<tr>
+								<th class="center"><label class="pos-rel"> <span
+										class="ace"></span> <span class="lbl"></span>
+								</label></th>
+								<th class="center">交易所代码</th>
+								<th class="center">品种代码</th>
+								<th class="center">合约代码</th>
+							</tr>
+						</thead>
+
+						<tbody>
+							<tr ng-repeat="queryAddEntity in queryAddEntitys" ng-click="selectedThis(queryAddEntity)" 
+							ng-class="{trBgColor:queryAddEntity.flag == 1}" class="center" >
+								<td ng-click="getqueryAddEntity(queryAddEntity)" class="center">{{($index+1)}}</td>
+								<td ng-click="getqueryAddEntity(queryAddEntity)" ng-bind="queryAddEntity.exchID"></td>
+								<td ng-click="getqueryAddEntity(queryAddEntity)" ng-bind="queryAddEntity.productID"></td>
+								<td ng-click="getqueryAddEntity(queryAddEntity)" ng-bind="queryAddEntity.instrumentID"></td>
+							</tr>
+						</tbody>
+						</table>
+					</div>
+				</div>
+                <!-- 添加表单内容-->
+                <div class="col-xs-5" style="border-left:1px solid #ccc;">
+                	<form class="form-horizontal" name="myAddForm" novalidate>
+                        <div class="form-group">
+                            <label class="col-xs-5 control-label label-style">交易所代码<span style="color: red;">*</span></label>
+
+                            <div class="col-xs-5">
+                                <select ng-model="ModalEntity.exchID" 
+                                		required name="exchID" ng-disabled="!isShow" ng-change="selectModalProduct(ModalEntity.exchID)"
+                                        ng-options="op.exchID as op.exchID+'_'+op.exchName for op in exchangeDatas" class=""></select>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+	                        <label class="col-xs-5 control-label label-style">产品代码<span style="color: red;">*</span></label>
+	                        <div class="col-xs-5">
+	                            <select ng-model="ModalEntity.productID" 
+	                            		required name="productID" ng-disabled="!isShow"
+	                                    ng-options="op.productID as op.productID+'_'+op.productName for op in modalProducts" class=""></select>
+	                        </div>
+                         </div>
+                         
+                        <div class="form-group">
+                            <label class="col-xs-5 control-label label-style">合约代码<span style="color: red;">*</span></label>
+                            <div class="col-xs-5">
+                            	<input type="text" class="form-control two-columns-modal-input" ng-disabled="!isShow"
+                                       ng-model="ModalEntity.instrumentID"  id="instrumentID" name="instrumentID" maxlength="30" required>
+                               <!--  <select ng-model="ModalEntity.instrumentID" required name="instrumentID" ng-disabled="true"
+                                        ng-options="op.instrumentID as op.instrumentID+'_'+op.instrumentName for op in instruments" class=""></select> -->
+                            </div>
+                    	</div>
+
+                        <div class="form-group">
+                            <label class="col-xs-5 control-label label-style">结算价<span style="color: red;">*</span></label>
+
+                            <div class="col-xs-5">
+                                <input type="text" class="form-control two-columns-modal-input" placeholder="请输入结算价" ng-pattern="/^([1-9]\d{0,13}|0)(\.\d{1,8})?$/" tab="1" onkeydown="myKeyup(event,this)"
+                                       ng-model="ModalEntity.settlePrice"  id="settlePrice" name="settlePrice" maxlength="23" required>
+                                <span ng-show="myAddForm.settlePrice.$dirty && myAddForm.settlePrice.$invalid" style="color: red;width:150px;display:inline-block;">结算价为必填项，且为浮点数字型，最多录入14位整数，8位小数，例：98.66</span>
+                            </div>
+                        </div>
+                        
+                        <div class="form-group" >
+                            <label class="col-xs-5 control-label label-style">上一日结算价<span style="color: red;">*</span></label>
+
+                            <div class="col-xs-5">
+                                <input type="text" class="form-control two-columns-modal-input" placeholder="请输入上一日结算价" ng-pattern="/^([1-9]\d{0,13}|0)(\.\d{1,8})?$/" 
+                                       ng-model="ModalEntity.lastSettlePrice"   name="lastSettlePrice" maxlength="23" required>
+                                <span ng-show="myAddForm.lastSettlePrice.$dirty && myAddForm.lastSettlePrice.$invalid" style="color: red;width:150px;display:inline-block;">上一日结算价必填项，且为浮点数字型，最多录入14位整数，8位小数，例：98.66</span>
+                            </div>
+                        </div>
+                        <div><input type="hidden" ng-bind="ModalEntity.recordIndex"></div>
+                	</form>
+                </div>
+                <!--End  添加表单内容-->
+            </div>
+            <div class="modal-footer" style="overflow:hidden;">
+                    <button class="btn btn-info btn-sm popover-info" data-rel="popover" data-placement="bottom" title=""
+                          ng-click="  myAddForm.exchID.$invalid || myAddForm.productID.$invalid || myAddForm.instrumentID.$invalid|| myAddForm.lastSettlePrice.$invalid || myAddForm.settlePrice.$invalid || ModalEntity.settleDate.$invalid ||save(ModalEntity)"  tab="2" onkeydown="myKeyup(event,this)"
+                          ng-disabled= " myAddForm.exchID.$invalid || myAddForm.productID.$invalid || myAddForm.instrumentID.$invalid|| myAddForm.lastSettlePrice.$invalid || myAddForm.settlePrice.$invalid || ModalEntity.settleDate.$invalid">&nbsp;确定&nbsp;</button>
+                              <span class="btn btn-info btn-sm popover-info" data-rel="popover" data-placement="bottom" title="" ng-show="isShow"
+                          ng-click="myAddForm.settlePrice.$invalid || myAddForm.lastSettlePrice.$invalid 
+                          || myAddForm.exchID.$invalid || myAddForm.productID.$invalid || myAddForm.instrumentID.$invalid || ModalEntity.settleDate.$invalid||continueSave(ModalEntity)"
+                          ng-disabled="myAddForm.settlePrice.$invalid || myAddForm.lastSettlePrice.$invalid 
+                          || myAddForm.exchID.$invalid || myAddForm.productID.$invalid || myAddForm.instrumentID.$invalid || ModalEntity.settleDate.$invalid">&nbsp;继续增加&nbsp;</span>
+                    <span class="btn btn-close btn-sm popover-info" data-rel="popover" data-placement="bottom" title=""
+                          data-dismiss="modal">&nbsp;取消&nbsp;</span>
+            </div>
+            
+        </div>
+    </div>
+</div>
+
+<!-- /.modal -->
+
+<div class="modal fade" id="getSettlePriceModal" tabindex="-1" role="dialog"
+     aria-labelledby="myModalLabel" aria-hidden="true" data-backdrop="static" data-keyboard="false">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close"
+                        data-dismiss="modal" aria-hidden="true">
+                    &times;
+                </button>
+                <h4 class="modal-title" id="uploadtxt">
+                    获取结算价
+                </h4>
+            </div>
+            <div class="modal-body">
+                <!-- 添加表单内容-->
+                <div class="row-form row-btn-operation" style="padding-bottom:20px;text-align:center;">
+                	<div class="row-col-one">            
+	                	<label class="word-style">结算价获取方式</label>
+		                <select class="value-style" id="settlePriceType">
+		                    <option value="settlementPrice">结算价</option>
+		                    <option value="closePrice">收盘价</option>
+		                </select>
+		             </div>
+	        		<div class="row-col-one">
+	        			<button class="btn btn-reset btn-icon-two" style="padding-left:20px;"
+								ng-click="copySettlePrice()" id="bootbox-copy">获取结算价</button>
+					</div>
+				</div>
+            </div>
+            
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="settlePriceUploadModal" tabindex="-1" role="dialog"
+     aria-labelledby="myModalLabel" aria-hidden="true" data-backdrop="static" data-keyboard="false">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close"
+                        data-dismiss="modal" aria-hidden="true">
+                    &times;
+                </button>
+                <h4 class="modal-title" id="uploadtxt">
+                    结算价导入
+                </h4>
+            </div>
+            <div class="modal-body">
+                <!-- 添加表单内容-->
+                <form class="form-horizontal" role="form" name="uploadForm" novalidate>
+                    <div class="form-group">
+                        <label class="col-sm-3 control-label upload_label">结算日期<span
+                                style="color: red;">*</span></label>
+
+                        <div class="col-xs-8">
+                            <input onchange="" class="Wdate value-style word-style" onfocus="WdatePicker({lang:'zh-cn',dateFmt:'yyyyMMdd'})"
+                                   style="padding-top: 0px; padding-bottom: 0px;"
+                                   id="uploadDate" type="text"   ng-readonly="true" placeholder="请选择结算价日期"
+                                   ng-model="UploadEntity.uploadDate" name="uploadDate" maxlength="8" required/>
+                        </div>
+                    </div>
+                    <div class="form-group upload_wedge">
+                        <div id="settlePriceFileuploader">upload</div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- /.modal -->
+</div>

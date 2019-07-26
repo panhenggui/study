@@ -1,0 +1,668 @@
+<link rel="stylesheet" href="riskparam/fundProductRiskParam.css" />
+<title>产品级风控</title>
+<div class="row" ng-controller="fundProductRiskParamController">
+	<!-- start 定义表单查询-->
+	<form class="form-horizontal">
+		<div class="col-xs-12">
+		 <div class="row header-information">
+		     <div class="col-xs-3" >
+                <div class="form-group">
+                    <label class="col-sm-5 control-label">机构代码<span
+							style="color: red;">*</span></label>
+					<div class="col-xs-3">
+						<select ng-model="queryEntity.instClientID" required
+							class="fundProduct-select-style" ng-disabled="isInstClient "
+							id="instClientID" name="instClientID" ng-change="isInstClientSelect(queryEntity.instClientID)"
+							onkeydown="myKeyup(event,this)"
+							ng-options="op.instClientID as op.instClientID+'_'+ op.instClientAbbrName for op in instClientlistEntitys">
+							<option value="">全部</option>
+						</select> 
+					</div>
+				</div>
+			</div>
+			<div class="col-xs-3">
+				<div class="form-group">
+					<label class="col-sm-5 capitalAccount-control-label">产品</label>
+					<div class="col-sm-5">
+						<select ng-model="queryEntity.fundProductID" 
+							ng-options="op.fundProductID as op.fundProductID+'_'+op.shortProductName for op in fundProductTems"
+							class="capitalAccount-select-style">
+							<option value="">全部</option>
+						</select>
+					</div>
+				</div>
+			</div>
+			<div class="col-xs-3">
+				<div class="form-group">
+					<label class="col-sm-5 control-label">风控指标</label>
+					<div class="col-sm-5">
+						<select ng-model="queryEntity.type" class="capitalAccount-select-style"
+								ng-options="op.key as op.text for op in riskTypes">
+							<option value="">全部</option>
+						</select>
+					</div>
+				</div>
+			</div>
+			<div class="col-xs-2">
+				<div class="form-group button-left-style">
+					<button class="btn btn-success" id="bootbox-options1"
+						ng-click="find(queryEntity)" ng-disabled="isQuery">查询</button>
+				</div>
+			</div>
+		</div>
+		</div>
+	</form>
+	<!--End 表单查询 -->
+
+	<!--PAGE CONTENT -->
+	<div class="col-xs-12">
+		<div class="row">
+			<div class="col-xs-12">
+			<div class="col-xs-12">
+				<button class="btn btn-success" id="bootbox-options"
+						ng-click="initRiskTypeParameter()" data-toggle="modal"
+						data-target="#chooseRiskTypeModal">新增</button>
+			</div>
+				<div class="clearfix">
+					<div class="pull-right tableTools-container"></div>
+				</div>
+				<div>
+					<table id="dynamic-table"
+						class="table table-striped table-bordered table-hover"
+						datatable="ng">
+						<thead>
+							<tr>
+								<th class="center"><label class="pos-rel"> <span
+										class="ace" /> <span class="lbl"></span>
+								序号</label></th>
+								<th>所属机构</th>
+								<th>产品简称</th>
+								<th>风控指标</th>
+								<th>品种</th>
+								<th>生效日期</th>
+								<th>生效时间</th>
+								<th>操作</th>
+							</tr>
+						</thead>
+
+						<tbody>
+							<tr ng-repeat="listEntity in listEntitys ">
+								<td class="center">{{($index+1)}}</td>
+								 <td>{{transInstClient(listEntity.instClientID)}}</td>
+								<td ng-bind="listEntity.shortProductName"></td>
+								<td>{{transRiskTypes(listEntity.type)}}</td>
+								<td ng-if="listEntity.productID != '' && listEntity.productID != null" ng-bind="listEntity.productID"></td>
+								<td ng-if="listEntity.productID == ''">全部</td>
+								<td ng-if="listEntity.productID == null">-</td>
+								<td>{{listEntity.startDate}} - {{listEntity.endDate}}</td>
+								<td>{{listEntity.startTime}} - {{listEntity.endTime}}</td>
+									<input type="hidden" ng-bind="listEntity.recordIndex"
+									value="{{$index}}" />								
+								<td>
+									<div class="hidden-sm hidden-xs action-buttons">
+										<a class="blue" style="cursor: pointer;"
+											ng-click="initUpdateParam($index,listEntity)"
+											data-toggle="modal" data-target="{{fundProductRiskParamUpdateTarget}}">[修改]</a> 
+										<a class="blue" style="cursor: pointer;" 
+											ng-click="remove(listEntity,$index)">
+										[删除]
+										</a> 
+									</div>
+								</td>
+							</tr>
+						</tbody>
+					</table>
+				</div>
+
+			</div>
+		</div>
+		<!-- PAGE CONTENT ENDS -->
+	</div>
+	<!-- /.col -->
+	
+	<!-- 新增 选择风控指标 模态框（Modal） -->
+	<div class="modal fade" id="chooseRiskTypeModal" tabindex="-1" role="dialog"
+		aria-labelledby="myModalLabel" aria-hidden="true"
+		data-backdrop="static" data-keyboard="false">
+		<div class="modal-dialog">
+			<div class="modal-content">
+				<div class="modal-header">
+					<button type="button" class="close" data-dismiss="modal"
+						aria-hidden="true">&times;</button>
+					<h4 class="modal-title" id="myModalLabel">选择风控指标</h4>
+				</div>
+				<div class="modal-body">
+					<!-- 添加表单内容-->
+					<form class="form-horizontal" role="form" name="chooseRiskTypeForm" novalidate>
+						<div class="form-group">
+
+							<label class="col-sm-3 control-label">风控指标</label>
+							<div class="col-xs-6">
+								<select ng-model="chosenRiskTypeEntity.riskType" class="capitalAccount-select-style"
+										ng-options="op.key as op.text for op in riskTypes">
+								</select>
+							</div>
+
+						</div>
+						
+					</form>
+					<!--End  添加表单内容-->
+				</div>
+				<div class="modal-footer">
+					<span class="btn btn-info btn-sm popover-info" data-rel="popover" data-toggle="modal"
+						data-target="{{fundRiskAddModal}}" data-placement="bottom" title="" 
+						ng-click="chooseRiskType(chosenRiskTypeEntity)"
+					>&nbsp;确定&nbsp;</span>
+					<span class="btn btn-info btn-sm popover-info" data-rel="popover"
+						data-placement="bottom" title="" data-dismiss="modal">&nbsp;取消&nbsp;</span>
+				</div>
+			</div>
+		</div>
+	</div>
+						
+
+	<!-- 新增 修改 净值模态框（Modal） -->
+	<div class="modal fade" id="fundNetRiskModal" tabindex="-1" role="dialog"
+		aria-labelledby="myModalLabel" aria-hidden="true"
+		data-backdrop="static" data-keyboard="false">
+		<div class="modal-dialog">
+			<div class="modal-content" style="width:850px">
+				<div class="modal-header">
+					<button type="button" class="close" data-dismiss="modal"
+						aria-hidden="true">&times;</button>
+					<h4 class="modal-title" id="myModalLabel">产品级风险参数设置—单位净值</h4>
+				</div>
+				<div class="modal-body">
+					<!-- 添加表单内容-->
+					<form class="form-horizontal" role="form" name="fundNetRiskForm" novalidate>
+						<div class="row">
+							<div class="col-xs-6">
+							<div class="row form-group">
+								<label for="instClientID" class="col-sm-3 control-label">机构代码<span
+									style="color: red;">*</span></label>
+								<div class="col-xs-5">
+									<select ng-model="netEntity.instClientID" required
+										ng-disabled="isUpdate || isInstClient " class="fundProductRiskParam-select-style"
+										id="instClientID" name="instClientID"  	ng-change="isInstClientSelect(netEntity.instClientID)"
+										onkeydown="myKeyup(event,this)" tab="0"
+										ng-options="op.instClientID as op.instClientID+'_'+ op.instClientAbbrName for op in instClientlistEntitys">
+									</select> <span
+										ng-show=" fundNetRiskForm.instClientID.$dirty &&  fundNetRiskForm.instClientID.$invalid"
+										style="color: red;">机构代码为必填项</span>
+								</div>
+							</div>
+							</div>
+							<div class="col-xs-6">
+								<div class="row form-group">
+									<label class="col-sm-3 control-label">产品</label>
+									<div class="col-xs-5">
+										<select ng-model="netEntity.fundProductID"
+											class="fundProductRiskParam-select-style"
+											onkeydown="myKeyup(event,this)" required
+											tab="20201" name="fundProductID"
+											ng-disabled="isUpdate" 
+											ng-options="op.fundProductID as op.fundProductID+'_'+op.shortProductName for op in fundProductTems">
+										</select> 
+									</div>
+								</div>
+							</div>
+						</div>
+						<div class="panel panel-default">
+							<div class="panel-heading">
+								<h3 class="panel-title">日期/时间信息</h3>
+							</div>
+							<div class="panel-body">
+								<div class="row">
+									<div class="col-xs-12">
+										<div class="row form-group">
+											<input type="checkbox" class="fundProductRiskParam-radio-style1"
+											ng-click="changeDateState()" ng-model="netEntity.selectedDate">
+											<label class="col-xs-3 fundRiskParam-control-label">生效日期</label>
+											<div class="col-xs-8">
+												<input type="text"  ng-disabled="dateNotEdit" onchange="" class="Wdate value-style word-style" onfocus="WdatePicker({lang:'zh-cn',dateFmt:'yyyyMMdd'})"
+				   									  ng-readonly="true" ng-model="netEntity.startDate" style="margin-right:20px;margin-left:50px"/>至
+				   								<input type="text"  ng-disabled="dateNotEdit" onchange="" class="Wdate value-style word-style" onfocus="WdatePicker({lang:'zh-cn',dateFmt:'yyyyMMdd'})"
+				   									  ng-readonly="true" ng-model="netEntity.endDate" style="margin-left:20px"/>  
+											</div>
+										</div>
+									</div>
+								</div>
+								
+								<div class="row">
+									<div class="col-xs-12">
+										<div class="row form-group">
+											<input type="checkbox" class="fundProductRiskParam-radio-style1"
+											ng-click="changeTimeState()" ng-model="netEntity.selectedTime">
+											<label class="col-xs-3 fundRiskParam-control-label">生效时间</label>
+											<div class="col-xs-8">
+												<input type="text" class="fundrisk-time-style" ng-disabled="timeNotEdit"
+				   									  ng-readonly="true" onClick="WdatePicker({skin:'whyGreen',dateFmt:'HH:mm',isShowClear:false,readOnly:true})" 
+				   									  ng-model="netEntity.startTime" id="netEntityStartTime" style="margin-right:20px;margin-left:50px"/>至
+				   								<input type="text" class="fundrisk-time-style" ng-disabled="timeNotEdit"
+				   									  ng-readonly="true" onClick="WdatePicker({skin:'whyGreen',dateFmt:'HH:mm',isShowClear:false,readOnly:true})" 
+				   									  ng-model="netEntity.endTime" id="netEntityEndTime" style="margin-left:20px"/>  
+											</div>
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+								
+						<div class="panel panel-default">
+							<div class="panel-heading">
+								<h3 class="panel-title">参数设置</h3>
+							</div>
+							<div class="panel-body" style="overflow: scroll;height:450px">
+								
+								<div class="row">
+									<div class="col-xs-12">
+										<button class="btn btn-success" id="bootbox-options"
+												ng-click="initNetRiskParameter(netEntity)" data-toggle="modal"
+												data-target="{{fundNetDetailTarget}}">新增</button>
+										<div class="clearfix">
+											<div class="pull-right tableTools-container"></div>
+										</div>
+										<div>
+											<table id="dynamic-table"
+												class="table table-striped table-bordered table-hover"
+												datatable="ng" style="display: block;overflow: scroll;">
+												<thead>
+													<tr>
+														<th class="center"><label class="pos-rel"> <span
+																class="ace" /> <span class="lbl"></span>
+														序号</label></th>
+														<th>单位净值</th>
+														<th>期货保证金占比(%)</th>
+														<th>净头寸保证金占比(%)</th>
+														<th>单品种保证金占比(%)</th>
+														<th>股指品种保证金占比(%)</th>
+														<th>期货合约价值占比(%)</th>
+														<th>合约价值多空轧差(%)</th>
+														<th>风险等级</th>
+														<th>风控方式</th>
+														<th>是否自动恢复</th>
+														<th>操作</th>
+													</tr>
+												</thead>
+						
+												<tbody>
+													<tr ng-repeat="fundNetRisk in fundNetRisks ">
+														<td class="center">{{($index+1)}}</td>
+														<td ng-if="fundNetRisk.lowerUnitNet == null">P <= {{fundNetRisk.upperUnitNet}}</td>
+														<td ng-if="fundNetRisk.upperUnitNet == null">{{fundNetRisk.lowerUnitNet}} < P</td>
+														<td ng-if="fundNetRisk.lowerUnitNet != null && fundNetRisk.upperUnitNet != null">{{fundNetRisk.lowerUnitNet}} < P<={{fundNetRisk.upperUnitNet}}</td>
+														<td ng-bind="fundNetRisk.marginRatio"></td>
+														<td ng-bind="fundNetRisk.netMarginRatio"></td>
+														<td ng-bind="fundNetRisk.singleMarginRatio"></td>
+														<td ng-bind="fundNetRisk.productGroupMarginRatio"></td>
+														<td ng-bind="fundNetRisk.positionCostRatio"></td>
+														<td ng-bind="fundNetRisk.netPosCostRatio"></td>
+														<td ng-bind="fundNetRisk.riskLevel"></td>
+														<td>{{transRiskWay(fundNetRisk.riskWay)}}</td>
+														<td>{{transIsNotDatas(fundNetRisk.isRecovery)}}</td>
+															<input type="hidden" ng-bind="fundNetRisk.recordIndex"
+															value="{{$index}}" />								
+														<td>
+															<div class="hidden-sm hidden-xs action-buttons">
+																<a class="blue" style="cursor: pointer;"
+																	ng-click="initFundNetRiskUpdateParam($index,fundNetRisk)"
+																	data-toggle="modal" data-target="#fundNetDetailModal">[修改]</a> 
+																<a class="blue" style="cursor: pointer;" 
+																	ng-click="removeFundNetRisk(fundNetRisk,$index)">
+																[删除]
+																</a> 
+															</div>
+														</td>
+													</tr>
+												</tbody>
+											</table>
+										</div>
+						
+									</div>
+								</div>
+							</div>
+						</div>
+					</form>
+					<!--End  添加表单内容-->
+				</div>
+				<div class="modal-footer">
+					<span class="btn btn-info btn-sm popover-info" data-rel="popover"
+						data-placement="bottom" title="" ng-click="saveFundNetRisk(netEntity)"
+						ng-disabled="fundNetRiskForm.$invalid">&nbsp;确定&nbsp;</span>
+					<span class="btn btn-info btn-sm popover-info" data-rel="popover"
+						data-placement="bottom" title="" data-dismiss="modal">&nbsp;取消&nbsp;</span>
+				</div>
+			</div>
+		</div>
+	</div>
+	<!-- /.modal -->
+	
+	<!-- 新增 修改 净值明细 模态框（Modal） -->
+	<div class="modal fade" id="fundNetDetailModal" tabindex="-1" role="dialog"
+		aria-labelledby="myModalLabel" aria-hidden="true"
+		data-backdrop="static" data-keyboard="false">
+		<div class="modal-dialog">
+			<div class="modal-content" style="width:800px">
+				<div class="modal-header">
+					<button type="button" class="close" data-dismiss="modal"
+						aria-hidden="true">&times;</button>
+					<h4 class="modal-title" id="myModalLabel">单位净值风控明细</h4>
+				</div>
+				<div class="modal-body">
+					<!-- 添加表单内容-->
+					<form class="form-horizontal" role="form" name="fundNetDetailForm" novalidate>
+						<div class="panel panel-default">
+							<div class="panel-heading">
+								<h3 class="panel-title">参数设置</h3>
+							</div>
+							<div class="panel-body">
+								<div class="row">
+									<div class="col-xs-12">
+										<div class="row form-group" style="margin-left:25px">
+											<div class="col-xs-12">
+												<input type="text" class="input-style" style="width:80px;margin-right:20px"
+														ng-pattern="/^[0-9]{1}\d*(\.\d{1,4})?$/" name="lowerUnitNet"
+														ng-model="fundNetDetail.lowerUnitNet" />
+												< 单位净值（P） <=
+				   								<input type="text" class="input-style" style="width:80px;margin-left:20px"
+				   										ng-pattern="/^[0-9]{1}\d*(\.\d{1,4})?$/" name="upperUnitNet"
+				   										ng-model="fundNetDetail.upperUnitNet" />  
+											</div>
+										</div>
+									</div>
+								</div>
+								<div class="row">
+									<div class="col-xs-12">
+										<div class="row form-group" style="margin-left:25px">
+											<div class="col-xs-12">
+												<span ng-show="fundNetDetailForm.lowerUnitNet.$dirty && fundNetDetailForm.lowerUnitNet.$invalid" 
+									  				style="color:red;float:left;text-align: right">最多支持四位小数</span>
+												<div class="col-xs-2"></div>
+				   								<span ng-show="fundNetDetailForm.upperUnitNet.$dirty && fundNetDetailForm.upperUnitNet.$invalid" 
+									  				style="color:red;float:left;text-align: right;margin-left:20px">最多支持四位小数</span> 
+											</div>
+										</div>
+									</div>
+								</div>
+								
+								<div class="row">
+									<div class="col-xs-6">
+										<div class="row form-group">
+											<label class="col-sm-5 control-label fundProductRiskParam-label-style">期货保证金占比(%)</label>
+
+											<div class="col-xs-6">
+												<input type="text" class="form-control"
+													placeholder="请输入期货保证金占比"
+													ng-model="fundNetDetail.marginRatio"
+													ng-pattern="/^[0-9]{1}\d*(\.\d{1,2})?$/"
+													name="marginRatio" maxlength="10" tab="301"
+													onkeydown="myKeyup(event,this)" />
+												<span ng-show="fundNetDetailForm.marginRatio.$dirty && fundNetDetailForm.marginRatio.$invalid" 
+									  				style="color:red;float:right;text-align: right">最多支持两位小数</span>
+											</div>
+										</div>
+									</div>
+									<div class="col-xs-6">
+										<div class="row form-group">
+											<label class="col-sm-5 control-label fundProductRiskParam-label-style">净头寸保证金占比(%)</label>
+
+											<div class="col-xs-6">
+												<input type="text" class="form-control"
+													placeholder="请输入净头寸保证金占比"
+													ng-model="fundNetDetail.netMarginRatio"
+													ng-pattern="/^[0-9]{1}\d*(\.\d{1,2})?$/"
+													name="netMarginRatio" maxlength="10" tab="302"
+													onkeydown="myKeyup(event,this)" />
+												<span ng-show="fundNetDetailForm.netMarginRatio.$dirty && fundNetDetailForm.netMarginRatio.$invalid" 
+									  				style="color:red;float:right;text-align: right">最多支持两位小数</span>
+											</div>
+										</div>
+									</div>
+								</div>
+								
+								<div class="row">
+									<div class="col-xs-6">
+										<div class="row form-group">
+											<label class="col-sm-5 control-label fundProductRiskParam-label-style">单品种保证金占比(%)</label>
+
+											<div class="col-xs-6">
+												<input type="text" class="form-control"
+													placeholder="请输入单品种保证金占比"
+													ng-model="fundNetDetail.singleMarginRatio"
+													ng-pattern="/^[0-9]{1}\d*(\.\d{1,2})?$/"
+													name="singleMarginRatio" maxlength="10" tab="303"
+													onkeydown="myKeyup(event,this)" />
+												<span ng-show="fundNetDetailForm.singleMarginRatio.$dirty && fundNetDetailForm.singleMarginRatio.$invalid" 
+									  				style="color:red;float:right;text-align: right">最多支持两位小数</span>
+											</div>
+										</div>
+									</div>
+									<div class="col-xs-6">
+										<div class="row form-group">
+											<label class="col-sm-5 control-label fundProductRiskParam-label-style">股指品种保证金占比(%)</label>
+
+											<div class="col-xs-6">
+												<input type="text" class="form-control"
+													placeholder="请输入股指品种保证金占比"
+													ng-model="fundNetDetail.productGroupMarginRatio"
+													ng-pattern="/^[0-9]{1}\d*(\.\d{1,2})?$/"
+													name="productGroupMarginRatio" maxlength="10" tab="304"
+													onkeydown="myKeyup(event,this)" />
+												<span ng-show="fundNetDetailForm.productGroupMarginRatio.$dirty && fundNetDetailForm.productGroupMarginRatio.$invalid" 
+									  				style="color:red;float:right;text-align: right">最多支持两位小数</span>
+											</div>
+										</div>
+									</div>
+								</div>
+								
+								<div class="row">
+									<div class="col-xs-6">
+										<div class="row form-group">
+											<label class="col-sm-5 control-label fundProductRiskParam-label-style">期货合约价值占比(%)</label>
+
+											<div class="col-xs-6">
+												<input type="text" class="form-control"
+													placeholder="请输入期货合约价值占比"
+													ng-model="fundNetDetail.positionCostRatio"
+													ng-pattern="/^[0-9]{1}\d*(\.\d{1,2})?$/"
+													name="positionCostRatio" maxlength="10" tab="305"
+													onkeydown="myKeyup(event,this)" />
+												<span ng-show="fundNetDetailForm.positionCostRatio.$dirty && fundNetDetailForm.positionCostRatio.$invalid" 
+									  				style="color:red;float:right;text-align: right">最多支持两位小数</span>
+											</div>
+										</div>
+									</div>
+									<div class="col-xs-6">
+										<div class="row form-group">
+											<label class="col-sm-5 control-label fundProductRiskParam-label-style">合约价值多空轧差(%)</label>
+
+											<div class="col-xs-6">
+												<input type="text" class="form-control"
+													placeholder="请输入合约价值多空轧差"
+													ng-model="fundNetDetail.netPosCostRatio"
+													ng-pattern="/^[0-9]{1}\d*(\.\d{1,2})?$/"
+													name="netPosCostRatio" maxlength="10" tab="306"
+													onkeydown="myKeyup(event,this)" />
+												<span ng-show="fundNetDetailForm.netPosCostRatio.$dirty && fundNetDetailForm.netPosCostRatio.$invalid" 
+									  				style="color:red;float:right;text-align: right">最多支持两位小数</span>
+											</div>
+										</div>
+									</div>
+								</div>
+								
+								<div class="row">
+									<div class="col-xs-6">
+										<div class="row form-group">
+											<label class="col-sm-5 control-label fundProductRiskParam-label-style">风险等级</label>
+											<div class="col-xs-6">
+												<select ng-model="fundNetDetail.riskLevel" class="form-control"
+													id="riskLevel" name="riskLevel" ng-options="op.key as op.key+'-'+op.text for op in riskLevels"
+													onkeydown="myKeyup(event,this)" tab="307">
+												</select>
+											</div>
+										</div>
+									</div>
+									<div class="col-xs-6">
+										<div class="row form-group">
+											<label class="col-sm-5 control-label fundProductRiskParam-label-style">风控方式</label>
+											<div class="col-xs-6">
+												<select ng-model="fundNetDetail.riskWay" class="form-control"
+													id="riskWay" name="riskWay"
+													onkeydown="myKeyup(event,this)" tab="308"
+													ng-options="op.key as op.text for op in riskWay">
+												</select>
+											</div>
+										</div>
+									</div>
+								</div>
+								
+								<div class="row">
+									<div class="col-xs-6">
+										<div class="row form-group">
+											<label class="col-sm-5 control-label fundProductRiskParam-label-style">是否自动恢复</label>
+											<div class="col-xs-6">
+												<select ng-model="fundNetDetail.isRecovery" class="form-control"
+													id="isRecovery" name="isRecovery"
+													onkeydown="myKeyup(event,this)" tab="309"
+													ng-options="op.key as op.text for op in isNotDatas">
+												</select>
+											</div>
+										</div>
+									</div>
+								</div>
+								
+								<div class="row">
+									<span style="color:red">备注： 保证金占比=相关保证金/当前产品净值；合约价值占比=相关持仓价值/当前产品净值</span>
+								</div>
+								
+							</div>
+						</div>
+					</form>
+				</div>
+				<div class="modal-footer">
+					<span class="btn btn-info btn-sm popover-info" data-rel="popover"
+						data-placement="bottom" title="" ng-click="saveFundNetDetail(fundNetDetail)"
+						ng-disabled="fundNetDetailForm.$invalid">&nbsp;确定&nbsp;</span>
+					<span class="btn btn-info btn-sm popover-info" data-rel="popover"
+						data-placement="bottom" title="" data-dismiss="modal">&nbsp;取消&nbsp;</span>
+				</div>
+			</div>
+		</div>
+	</div>
+	<!-- /.modal -->
+	
+	<!-- 新增 修改 交割期 模态框（Modal） -->
+	<div class="modal fade" id="fundDelivModal" tabindex="-1" role="dialog"
+		aria-labelledby="myModalLabel" aria-hidden="true"
+		data-backdrop="static" data-keyboard="false">
+		<div class="modal-dialog">
+			<div class="modal-content" style="width:650px">
+				<div class="modal-header">
+					<button type="button" class="close" data-dismiss="modal"
+						aria-hidden="true">&times;</button>
+					<h4 class="modal-title" id="myModalLabel">产品级风控参数设置—交割期</h4>
+				</div>
+				<div class="modal-body">
+					<!-- 添加表单内容-->
+					<form class="form-horizontal" role="form" name="fundDelivForm" novalidate>
+						<div class="row">
+						<div class="col-xs-6">
+						    <div class="form-group">
+								<label for="instClientID" class="col-sm-3 control-label">机构代码<span
+									style="color: red;">*</span></label>
+								<div class="col-xs-6">
+									<select ng-model="fundDeliv.instClientID" required
+										ng-disabled="isUpdate || isInstClient " class="fundProductRiskParam-select-style"
+										id="instClientID" name="instClientID"  	ng-change="isInstClientSelect(fundDeliv.instClientID)"
+										onkeydown="myKeyup(event,this)" tab="0"
+										ng-options="op.instClientID as op.instClientID+'_'+ op.instClientAbbrName for op in instClientlistEntitys">
+									</select> <span
+										ng-show=" fundDelivForm.instClientID.$dirty &&  fundDelivForm.instClientID.$invalid"
+										style="color: red;">机构代码为必填项</span>
+								</div>
+							</div>
+							</div>
+							<div class="col-xs-6">
+								<div class="form-group">
+									<label class="col-sm-3 control-label">产品</label>
+									<div class="col-xs-6">
+										<select ng-model="fundDeliv.fundProductID"
+											class="fundProductRiskParam-select-style"
+											onkeydown="myKeyup(event,this)" required
+											ng-disabled="isUpdate" 
+											ng-options="op.fundProductID as op.fundProductID+'_'+op.shortProductName for op in fundProductTems">
+										</select> 
+									</div>
+								</div>
+							</div>
+						</div>
+						<div class="panel panel-default">
+							<div class="panel-heading">
+								<h3 class="panel-title">参数设置</h3>
+							</div>
+							<div class="panel-body">
+								<div class="row">
+									
+										<div class="form-group">
+											<label class="col-sm-3 control-label">品种</label>
+
+											<div class="col-xs-6">
+												<textarea  class="form-control"
+													placeholder="请输入品种"
+													ng-model="fundDeliv.productID"
+													style="width: 275px; height: 50px; resize: none;"
+													name="productID" maxlength="300" tab="311"
+													onkeydown="myKeyup(event,this)" ></textarea>
+											<span style="color:red">当输入多品种时，可用,分隔开;为空表示全部品种</span>
+											</div>
+										</div>
+								
+								</div>
+								
+								<div class="row">
+										<div class="form-group">
+											<label class="col-sm-3 control-label">交割月前几月<span style="color:red">*</span></label>
+
+											<div class="col-xs-5">
+												<input type="text" class="fundProductRiskParam-select-style"
+													placeholder="请输入交割月前几月"
+													ng-model="fundDeliv.beforeDelivMonths"
+													ng-pattern="/^[0-9]{1}\d*?$/" required
+													name="beforeDelivMonths" maxlength="10" tab="312"
+													onkeydown="myKeyup(event,this)" />
+													<span ng-show="fundDelivForm.beforeDelivMonths.$dirty && fundDelivForm.beforeDelivMonths.$invalid" 
+									  				style="color:red;float:right;text-align: right">仅能输入非负整数</span>
+											</div>
+										</div>
+									
+								</div>
+								
+								<div class="row">
+									<div class="row form-group">
+										<label class="col-sm-3 control-label">交易权限<span style="color:red">*</span></label>
+										<div class="col-xs-5">
+											<select ng-model="fundDeliv.tradeRight" class="fundProductRiskParam-select-style"
+												id="tradeRight" name="tradeRight" required ng-disabled="true"
+												onkeydown="myKeyup(event,this)" tab="313"
+												ng-options="op.key as op.text for op in tradeRights">
+											</select>
+										</div>
+									</div>
+								</div>
+								
+							</div>
+						</div>
+					</form>
+				</div>
+				<div class="modal-footer">
+					<span class="btn btn-info btn-sm popover-info" data-rel="popover"
+						data-placement="bottom" title="" ng-click="saveFundDeliv(fundDeliv)"
+						ng-disabled="fundDelivForm.$invalid">&nbsp;确定&nbsp;</span>
+					<span class="btn btn-info btn-sm popover-info" data-rel="popover"
+						data-placement="bottom" title="" data-dismiss="modal">&nbsp;取消&nbsp;</span>
+				</div>
+			</div>
+		</div>
+	</div>
+	<!-- /.modal -->
+</div>

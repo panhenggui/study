@@ -1,0 +1,40 @@
+<div class="row" ng-controller="OperSeatController">
+		<!-- start 定义表单查询-->
+		<form class="form-12">
+			<div class="form-row">
+			 <div class="row-col-one" style="margin-top: 12px;">
+                 <label class="word-style">实时轮询 (/秒)</label>
+                 <input type="text" ng-model="queryEntity.seconds"/>
+            </div>
+			</div>
+			<div class="btn-beyond-one-row">
+				<button  class="btn btn-reset btn-beyond-two" ng-show="operSeat_start" ng-disabled="isStart"
+					ng-click="start()">执行轮询</button>
+				<button class="btn btn-reset btn-beyond-two" ng-show="operSeat_stop" ng-disabled="isStop"
+					ng-click="stop()">停止轮询</button>
+			</div>
+		</form>
+
+		<!--End 表单查询 -->
+
+		<!--PAGE CONTENT -->
+		<div class="col-xs-12">
+			<div class="clearfix">
+				<div class="pull-right tableTools-container"></div>
+			</div>
+			<div style="overflow: auto; width: 100%;">
+
+				<table id="operSeat_dynamic_table" class="cell-border stripe"
+					cellspacing="0" width="100%"></table>
+			</div>
+			<div class="row">
+        <div class="col-xs-12 clear-padding-right">
+				<label class="value-style" style="font-size: larger !important;margin-left:12px">{{status}}</label>
+			</div>
+        </div>
+		</div>
+		<!-- PAGE CONTENT ENDS -->
+	<!-- /.col -->
+</div>
+<!-- /.modal -->
+</div>

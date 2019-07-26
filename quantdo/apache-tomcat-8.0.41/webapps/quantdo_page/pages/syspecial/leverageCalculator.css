@@ -1,0 +1,33 @@
+#multiple-select button{
+	position:relative;
+	top:4px;
+}
+
+#multiple-select{
+	position:relative;
+	left:-15px;
+}
+
+.ui-multiselect-all,.ui-multiselect-none{
+	display: inline-block;
+	padding: 2px 6px;
+	color: #8e8e8e;
+	border: 1px solid #8e8e8e;
+	border-radius:3px;
+	text-decoration: none;
+}
+.ui-multiselect-all:hover,.ui-multiselect-none:hover{
+	color: #fff;
+	background-color: #8e8e8e;
+	text-decoration: none !important;
+}
+
+.leverageCalculatorMultiple[disabled]{
+	cursor: not-allowed;
+    background-color: #eeeeee;
+    opacity: 1;
+}
+
+.ui-multiselect-checkboxes li span{
+	word-break:break-all;
+}

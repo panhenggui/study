@@ -1,0 +1,19 @@
+#合约名，类型，交易所，币种，到期日
+#类型：  股票/STK、期货/FUT、期权/OPT、外汇/CASH、商品/CMDTY
+#交易所：美股/SMART、纳斯达克/ISLAND、纽交所/NYSE、港股/SEHK
+#币种：  美元/USD、港币/HKD、人民币/CNH
+
+#美股
+IBKR,STK,SMART
+
+#港股
+3918,STK,SEHK
+
+#商品
+XAUUSD,CMDTY
+
+#外汇
+USD,CASH,,CNH
+
+#期货
+CL,FUT,NYMEX,,20180320

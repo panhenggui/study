@@ -1,0 +1,174 @@
+<div class="row" ng-controller="FundNetValueController">
+	<!-- start 定义表单查询-->
+	<form class="form-12">
+		<div class="form-row">
+			<div class="row-col-one">
+				<label class="word-style">产品</label> <select
+					ng-model="queryEntity.fundProductID" class="value-style"
+					ng-options="op.fundProductID  as op.instClientID+'_'+ op.fundProductID+'_'+op.shortProductName for op in queryFundProEntitys">
+					<option value="">全部</option>
+				</select>
+			</div>
+		 <div class="btn-beyond-one-row">
+			<div class="form-group">
+				<button class="btn btn-query btn-word-two" id="bootbox-options1" ng-show="fundNetValue_query"
+					ng-click="find()" ng-disabled="isQuery" >查询</button>
+				<button class="btn btn-reset btn-beyond-two" id="bootbox-options2"
+					ng-click="exportExcelHFN(queryEntity)" ng-show="fundNetValue_export">导出excel</button>
+			</div>
+		 </div>
+		</div>
+	</form>
+	<!--End 表单查询 -->
+
+	<!--PAGE CONTENT START-->
+	<div class="col-xs-12 clear-padding-right">
+        <div class="row">
+            <div class="col-xs-12 clear-padding-right">
+                <div>
+                    <table id="FundNetValue_dynamic_table" class="cell-border stripe" cellspacing="0" width="100%">
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!--PAGE CONTENT END-->	
+
+	<!-- 新增 修改 模态框（Modal） -->
+	<div class="modal fade" id="fundModal" tabindex="-1" role="dialog"
+		aria-labelledby="myModalLabel" aria-hidden="true"
+		data-backdrop="static" data-keyboard="false">
+		<div class="modal-dialog">
+			<div class="modal-content" style="width: 650px">
+				<div class="modal-header">
+					<button type="button" class="close" data-dismiss="modal"
+						aria-hidden="true">&times;</button>
+					<h4 class="modal-title" id="myModalLabel">资金账户信息维护</h4>
+				</div>
+				<div class="modal-body">
+					<!-- 添加表单内容-->
+					<form class="form-horizontal" role="form" name="capitalAccountForm"
+						novalidate>
+						<div class="panel panel-default">
+							<div class="panel-heading">
+								<h3 class="panel-title">基本信息</h3>
+							</div>
+							<div class="panel-body">
+								<div class="row">
+									<div class="col-xs-6">
+										<div class="row form-group">
+											<label for="fundProductType"
+												class="col-xs-6  control-label label-style">机构代码<span
+												style="color: red;">*</span></label>
+											<div class="col-xs-6">
+												<select ng-model="capitalEntity.instClientID"
+													class="capitalAccount-select-style" ng-disabled="true"
+													class="form-control" id="instClientID" name="instClientID"
+													ng-change="isInstClientSelect(capitalEntity.instClientID)"
+													onkeydown="myKeyup(event,this)" tab="1"
+													ng-options="op.instClientID as op.instClientID+'_'+ op.instClientAbbrName for op in instClientlistEntitys">
+												</select>
+											</div>
+										</div>
+									</div>
+									<div class="col-xs-6">
+										<div class="row form-group">
+											<label for="settleDate"
+												class="col-xs-6  control-label label-style">结算日期<span
+												style="color: red;">*</span></label>
+											<div class="col-xs-6">
+												<input type="text" class="capitalAccount-input-style"
+													id="settleDate" ng-disabled="true"
+													ng-model="capitalEntity.settleDate" forType="date"
+													name="settleDate" onkeydown="myKeyup(event,this)" tab="2">
+											</div>
+										</div>
+									</div>
+								</div>
+								<div class="row">
+									<div class="col-xs-6">
+										<div class="row form-group">
+											<label for="shortProductName"
+												class="col-xs-6  control-label label-style">产品简称<span
+												style="color: red;">*</span></label>
+											<div class="col-xs-6">
+												<input type="text" class="capitalAccount-input-style"
+													id="shortProductName" placeholder="请输入账户名称"
+													ng-model="capitalEntity.shortProductName"
+													ng-disabled="true" name="shortProductName"
+													onkeydown="myKeyup(event,this)" tab="3">
+											</div>
+										</div>
+									</div>
+									<div class="col-xs-6">
+										<div class="row form-group">
+											<label for="fundNetValue"
+												class="col-xs-6  control-label label-style">产品资产净值<span
+												style="color: red;">*</span></label>
+											<div class="col-xs-6">
+												<input type="text" class="capitalAccount-input-style"
+													id="fundNetValue" ng-model="capitalEntity.fundNetValue"
+													ng-pattern="/^\d{1,8}(\.\d{0,2})?$/" name="fundNetValue"
+													maxlength="11" required onkeydown="myKeyup(event,this)"
+													tab="4"> <span
+													ng-show="capitalAccountForm.accountID.$dirty && capitalAccountForm.accountID.$invalid"
+													style="color: red;">产品资产净值为必填项且最多2位小数</span>
+											</div>
+										</div>
+									</div>
+								</div>
+								<div class="row">
+									<div class="col-xs-6">
+										<div class="row form-group">
+											<label for="unitNetValue"
+												class="col-xs-6  control-label label-style">产品单位净值<span
+												style="color: red;">*</span></label>
+											<div class="col-xs-6">
+												<input type="text" class="capitalAccount-input-style"
+													id="unitNetValue" ng-model="capitalEntity.unitNetValue"
+													ng-pattern="/^\d{1,8}(\.\d{0,4})?$/" name="unitNetValue"
+													maxlength="13" required onkeydown="myKeyup(event,this)"
+													tab="5"> <span
+													ng-show="capitalAccountForm.unitNetValue.$dirty && capitalAccountForm.unitNetValue.$invalid"
+													style="color: red;">产品单位净值为必填项且最多4位小数</span>
+											</div>
+										</div>
+									</div>
+									<div class="col-xs-6">
+										<div class="row form-group">
+											<label for="fundProductQuota"
+												class="col-xs-6  control-label label-style">产品份额<span
+												style="color: red;">*</span></label>
+											<div class="col-xs-6">
+												<input type="text" class="capitalAccount-input-style"
+													id="fundProductQuota"
+													ng-model="capitalEntity.fundProductQuota"
+													ng-disabled="true" name="fundProductQuota"
+													onkeydown="myKeyup(event,this)" tab="6">
+											</div>
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+
+						<div>
+							<input type="hidden" ng-bind="capitalEntity.fundProductID">
+							<input type="hidden" ng-bind="capitalEntity.netDate"> <input
+								type="hidden" ng-bind="capitalEntity.netTime">
+						</div>
+					</form>
+					<!--End  添加表单内容-->
+				</div>
+				<div class="modal-footer">
+					<span class="btn btn-info btn-sm popover-info" data-rel="popover"
+						data-placement="bottom" title="" ng-click="save(capitalEntity)"
+						ng-disabled=" capitalAccountForm.unitNetValue.$invalid || capitalAccountForm.fundNetValue.$invalid">&nbsp;确定&nbsp;</span>
+					<span class="btn btn-close btn-sm popover-info" data-rel="popover"
+						data-placement="bottom" title="" data-dismiss="modal">&nbsp;取消&nbsp;</span>
+				</div>
+			</div>
+		</div>
+	</div>
+
+</div>

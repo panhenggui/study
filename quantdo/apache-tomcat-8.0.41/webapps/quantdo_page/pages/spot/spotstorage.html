@@ -1,0 +1,149 @@
+<link rel="stylesheet" href="spot/spotstorage.css" />
+<div class="row" ng-controller="spotStorageController">
+	<!-- start 定义表单查询-->
+	<form class="form-12">
+		<div class="form-row">
+			<div class="row-col-one">
+				<label class="word-style">开始日期</label> <input type="text"
+					onchange="" class="Wdate value-style word-style" onfocus="WdatePicker({lang:'zh-cn',dateFmt:'yyyyMMdd'})" 
+					ng-model="queryEntity.beginDate"	ng-readonly="true"   />
+			</div>
+			<div class="row-col-one">
+				<label class="word-style">结束日期</label> <input type="text"
+					onchange="" class="Wdate value-style word-style" onfocus="WdatePicker({lang:'zh-cn',dateFmt:'yyyyMMdd'})" ng-model="queryEntity.endDate"
+					ng-readonly="true"  />
+			</div>
+			<div class="row-col-one">
+				<label class="word-style">交易员</label> <select
+					ng-model="queryEntity.trader" class="value-style"
+					ng-options="op.userID as op.userID+'_'+op.userName for op in traders">
+					<option value="">全部</option>
+				</select>
+			</div>
+			<div class="row-col-one">
+				<label class="word-style">品种</label> <select
+					ng-model="queryEntity.productID" class="value-style"
+					ng-options="op.productID as op.productID+'_'+op.productName for op in products">
+					<option value="">全部</option>
+				</select>
+			</div>
+		</div>
+
+		<div class="form-row">
+			<div class="row-col-one">
+				<label class="word-style">状态</label> <select
+					ng-model="queryEntity.status" class="value-style"
+					ng-options="op.key as op.text for op in spotStorageStatus">
+					<option value="">全部</option>
+				</select>
+			</div>
+			<div class="row-col-one">
+				<label class="word-style">公司</label> <input type="text"
+					class="value-style"
+					ng-model="queryEntity.companyTitle" />
+			</div>
+			<div class="row-col-one">
+				<label class="word-style">仓库名称</label> <input
+					type="text" class="value-style"
+					ng-model="queryEntity.warehouseName" />
+			</div>
+			<div class="row-col-one">
+				<label class="word-style">订单号</label> <input type="text"
+					class="value-style"
+					ng-model="queryEntity.orderNumber" />
+			</div>
+		</div>
+
+		<div class="form-row">
+			<div class="row-col-one">
+				<label class="word-style">供应商</label> <input type="text"
+					class="value-style" ng-model="queryEntity.supplyName" />
+			</div>
+			<div class="row-col-one">
+				<label class="word-style">票</label> <select
+					ng-model="queryEntity.ticketStatus"
+					class="value-style"
+					ng-options="op.key as op.text for op in spotValidateStatus">
+					<option value="">全部</option>
+				</select>
+			</div>
+		</div>
+		<div class="btn-beyond-one-row">
+			<button type="button" class="btn btn-query btn-word-two"
+				ng-show="spotstorage_query"
+				ng-click="find()" ng-disabled="isQuery">查询</button>
+		</div>
+		<div class="row-form row-btn-operation" ng-show="spotstorage_uploadExcel">
+			<div class="row-btn-icon">
+				 <input type="button"
+					data-target="#spotstorageUploadModal"
+					class="btn btn-reset btn-word-two" value="导入" data-toggle='modal'>
+			</div>
+		</div>
+	</form>
+	<!--End 表单查询 -->
+
+
+	<!--PAGE CONTENT START-->
+	<div class="col-xs-12 clear-padding-right">
+        <div class="row">
+            <div class="col-xs-12 clear-padding-right">
+                <div>
+                    <table id="spotStorage_dynamic_table" class="cell-border stripe" cellspacing="0" width="100%">
+                    	<tfoot>
+							<tr>
+								<th style="text-align:center">合计</th>
+								<th style="text-align:center"></th>
+								<th style="text-align:center"></th>
+								<th style="text-align:center"></th>
+								<th style="text-align:center"></th>
+								<th style="text-align:center"></th>
+								<th style="text-align:center"></th>
+								<th style="text-align:center"></th>
+								<th style="text-align:center"></th>
+								<th style="text-align:center"></th>
+								<th style="text-align:center"></th>
+								<th style="text-align:center"></th>
+								<th style="text-align:center"></th>
+								<th style="text-align:center"></th>
+								<th style="text-align:center"></th>
+								<th style="text-align:center"></th>
+								<th style="text-align:center"></th>
+								<th style="text-align:center"></th>
+								<th style="text-align:center"></th>
+								<th style="text-align:center"></th>
+								<th style="text-align:center"></th>
+							</tr>
+					 </tfoot>
+                  </table>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!--PAGE CONTENT END-->	
+	
+	<!-- 导入 -->
+	<div class="modal fade" id="spotstorageUploadModal" tabindex="-1"
+		role="dialog" aria-labelledby="myModalLabel" aria-hidden="true"
+		data-backdrop="static" data-keyboard="false">
+		<div class="modal-dialog">
+			<div class="modal-content"  style="height:100px;">
+				<div class="modal-header">
+					<button type="button" class="close" data-dismiss="modal"
+						aria-hidden="true">&times;</button>
+					<h4 class="modal-title" id="uploadtxt">导入</h4>
+				</div>
+				<div class="modal-body">
+					<!-- 添加表单内容-->
+					<form class="form-horizontal" role="form" name="uploadForm"
+						novalidate>
+						<div class="form-group upload_wedge">
+							<div id="spotstorageUploader">upload</div>
+						</div>
+					</form>
+				</div>
+			</div>
+		</div>
+	</div>
+
+</div>

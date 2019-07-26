@@ -1,0 +1,109 @@
+.select-style{
+    width:170px;
+}
+
+.modal-width{
+    width: 900px;
+}
+
+.label-style {
+    width: 118px;
+}
+.edit-font-size{
+	font-size: 13px;
+}
+.btn-background{
+	background-color: white;
+}
+.faUnlockAlt:before {
+  content: "\f13e";
+}
+.faUnlock:before {
+  content: "\f09c";
+}
+.productflatLeftDiv{
+    position:relative;
+    height:350px;
+    width:260px;
+    left:35px;
+    overflow:auto;
+     top:-1px;
+    border:1px solid silver;
+
+}
+.productflatLeftTitleDiv{
+    position:relative;
+    height:30px;
+    width:260px;
+    left:35px;
+    border:1px solid silver;
+}
+.productflatMidDiv{
+    height:100px;
+    width:30px;
+    top:-270px;
+    left:303px;
+    position:relative;
+}
+.productflatRightDiv{
+    position:relative;
+    height:350px;
+    width:260px;
+    left:345px;
+    top:-480px;
+    overflow:auto;
+    border:1px solid silver;
+}
+.productflatRightTitleDiv{
+    position:relative;
+    height:30px;
+    width:260px;
+    left:345px;
+    top:-480px;
+    overflow:auto;
+    border:1px solid silver;
+    border-bottom: none;
+}
+
+.modal-footerdiv{
+  position:absolute;
+  left:360px;
+  top:350px;
+}
+.prodcutbodydiv{
+     height:380px;
+     width:650px;
+}
+.specthead tr th {
+    text-align:left;
+    width:130px;
+    line-height: 20px;
+    padding: 4px;
+/*  background: #f9f9f9;*/
+}
+.spectbody tr td {
+    text-align: left;
+    width:130px;
+    border-top:1px solid silver;
+    border-bottom:1px solid silver;
+    padding: 4px;
+    line-height: 20px;
+} 
+.hoverTr:hover{
+    background:silver;
+}
+.windColoerTr{
+	background:#ffffff;
+}
+
+.selectActive{
+	 background:#e9f7ff;
+}
+
+.userform1{
+	margin-left :12px;
+	margin-right:12px;
+	margin-top:2px;
+	margin-bottom:2px;
+	width:170px;
+}

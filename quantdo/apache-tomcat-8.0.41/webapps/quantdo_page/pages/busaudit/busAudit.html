@@ -1,0 +1,46 @@
+<link rel="stylesheet" href="busaudit/busAudit.css"/>
+<div class="row" ng-controller="BusAuditController">
+    <form class="form-12">
+        <div class="row-form row-btn-operation row-btn-top-distance" >
+            <input type="button" value="盘前稽核" class="btn btn-reset btn-word-two" id="auditbefore" ng-click="auditBefore()" ng-show="busAudit_before">
+            <input type="button" value="盘中稽核" class="btn btn-reset btn-word-two" id="auditintra" ng-click="auditIntra()" ng-show="busAudit_intra">
+        </div>
+    </form>
+
+    <div class="col-xs-12">
+        <div class="row">
+            <div class="col-xs-12">
+                <div style="overflow-y:scroll;height: auto;max-height:400px">
+                    <table class="cell-border stripe dataTable" >
+                        <thead>
+                        <tr>
+                            <th class="center">
+                                <label class="pos-rel">
+                                    <span class="ace"/>
+                                    <span class="lbl"></span>
+                                序号</label>
+                            </th>
+                            <th class="hidden-180 sorting_disabled">稽核项</th>
+                            <th class="hidden-180 sorting_disabled">详情</th>
+                        </tr>
+                        </thead>
+
+	                    <tbody>
+	                        <tr ng-repeat="listEntity in listEntitys">
+	                            <td class="center">
+	                                {{($index+1)}}
+	                            </td>
+	                            <td ng-bind="listEntity.name" style="vertical-align: middle;" rowspan="{{listEntity.spanNum}}" ng-show="listEntity.flag == true"></td>
+	                            <td>
+	                            	 <span ng-if="listEntity.details == null" style="color: green;">检查通过！</span>
+	                            	 <span ng-if="listEntity.details != null" style="color: red;">{{listEntity.details}}</span>
+	                            </td>
+							</tr>
+	                    </tbody>
+	                </table>
+	            </div>
+            </div>
+        </div>
+	</div>
+
+</div>

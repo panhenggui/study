@@ -1,0 +1,475 @@
+*,html,body{
+    margin:0;
+    padding:0;
+}
+body {
+    font-size: 12px;
+    font-family: "Microsoft Yahei", "Helvetica Neue", Helvetica, STHeiTi, Arial, sans-serif;
+    color: #444;
+    /*margin: 30px 40px;*/
+}
+ul {
+    list-style-type: none;
+}
+
+.controls {
+    margin-bottom: 20px;
+}
+
+.gridster .gs-w {
+    cursor: pointer;
+    border: 1px solid #dddddd;
+}
+#first-frame{
+    border: 1px solid #dddddd;
+}
+.gridster .nav-tabs{
+    width: 100% !important;
+}
+.gridster .nav-tabs>li.active>a{
+    border-top-color: transparent;
+}
+.gridster .nav-tabs>li:first-child.active>a{
+    border-left-color: transparent;
+}
+.gridster .player {
+    background: #BBB;
+}
+.gridster .preview-holder {
+    border: none!important;
+    background: red!important;
+}
+.menu-header{
+    /*margin-bottom: 5px;*/
+    /*margin-left: 20px;*/
+    /*width: 200px;*/
+    height: 40px;
+    background-color: #F3F5FF;
+    margin-bottom: -5px;
+}
+.menu-header li:first-child{
+    margin-right: 10px;
+}
+#show-func{
+    /*margin-left: 20px;*/
+    margin-right: 20px;
+}
+.mymenu li ul{
+    margin-left: 12px;
+    position: absolute;
+    /*border: 1px solid #cccccc;*/
+    display: none;
+    background: #6477CC;
+    color: #ffffff;
+    
+}
+#menu-system{
+    width: 120px;
+    height: 25px;
+    color: #ffffff;
+
+}
+#menu-show{
+    width: 125px;
+    height: 320px;
+    margin-right: 3px;
+}
+#system-show{
+    width: 125px;
+   /*  height: 80px; */
+    margin-right: 3px;
+}
+#system-tradeRight{
+    width: 125px;
+   /*  height: 80px; */
+    margin-right: 3px;
+}
+#menu-system li,#menu-show li{
+    /*display: inline-block;*/
+    padding-left: 5px;
+    padding-right: 5px;
+    line-height: 25px;
+}
+.menu-header span{
+    padding-left: 5px;
+    padding-right: 20px;
+    line-height: 20px;
+    width: 145px;
+}
+.menu-header .mymenu li{
+    position: relative;
+    display: block;
+    float: left;
+    z-index: 10;
+    line-height: 25px;
+}
+.menu-header span,#menu-system li,#menu-show li{
+    border: 1px solid transparent;
+}
+#system-show li:hover,#menu-show li:hover{
+    background: #ffffff;
+    /*border-color: ;*/
+    cursor: pointer;
+    color: #6477CC;
+    width: 100%;
+}
+.mymenu li:hover #myfunc-show,.mymenu li:hover #myfunc-show{
+    /*border-color: #cccccc;*/
+    border-bottom: none;
+}
+.mymenu li:hover{
+    cursor: pointer;
+}
+.mymenu li:hover ul{
+    display: block !important;
+}
+/*#myfunc-show:hover ul{*/
+    /*display: block;*/
+/*}*/
+.header-left{
+    float: left;
+    margin-top: 6px;
+}
+.header-right{
+    float: right;
+    margin-right: 12px;
+    margin-top: 6px;
+}
+.set-time{
+    float: left;
+    margin-right: 15px;
+}
+.my-operation{
+    float: right;
+    margin-top: -1px;
+}
+.mybtn{
+    height: 26px; 
+    line-height: 20px;
+    padding-left: 5px;
+    padding-right: 5px;
+    margin-right: 5px;
+    border: 1px solid rgb(100, 119, 204);
+    -webkit-border-radius: 3px;
+    -moz-border-radius: 3px;
+    border-radius: 3px;
+    background: #6477CC;
+    color: #ffffff;
+}
+.myNewBtn{
+    height: 30px; 
+    line-height: 20px;
+    padding-left: 7px;
+    padding-right: 5px;
+    margin-right: 5px;
+    border: 1px solid rgb(100, 119, 204);
+    -webkit-border-radius: 3px;
+    -moz-border-radius: 3px;
+    border-radius: 3px;
+    background: #6477CC;
+    color: #ffffff;
+}
+.myexit{
+    display: inline-block;
+    width: 40px !important;
+    padding: 2px 5px !important;
+    text-align: center;
+    cursor: pointer;
+}
+.my-operation input:hover,.button-query,.detail-add:hover
+{
+    background: #ffffff !important;
+    border: 1px solid #dddddd !important;
+    color: #444 !important;
+}
+a:hover{
+    text-decoration: none;
+}
+a:focus{
+    outline: none !important;
+    outline-offset: 0 !important;
+    text-decoration: none !important;
+}
+.tab-content{
+    margin-top: .4rem;
+    margin-left: .6rem;
+}
+.main-content{
+    /*height: 400px;*/
+}
+.second-page{
+    display: inline-block;
+    width: 100%;
+}
+.riskLeft{
+    float: left;
+    width: 50%;
+    background: #ffffff;
+    border: 1px solid #B7C2F1;
+}
+.riskRight{
+    float: right;
+    width: 49.7%;
+    background: #ffffff;
+    border: 1px solid #B7C2F1;
+}
+.myleft,.myright{
+    border: 1px solid #dddddd;
+}
+.bottom-page{
+    border: 1px solid #dddddd;
+}
+table.dataTable thead th, table.dataTable tfoot th{
+    font-weight: normal !important;
+}
+.nav-tabs{
+    background: #6477cc;
+}
+.dataTables_scrollHeadInner{
+    width: 100% !important;
+}
+input[type="text"]{
+    padding: 4px 6px;
+    height: 25px;
+    border: 1px solid #cccccc;
+    line-height: 25px;
+}
+input[readonly]{
+    color: #939192;
+    background: #F5F5F5;
+}
+.modal-dialog{
+    width: 800px;
+}
+.button-add{
+    display: inline-block;
+    padding: 4px 14px;
+    font-size: 12px;
+    line-height: 20px;
+    -webkit-border-radius: 4px;
+    -moz-border-radius: 4px;
+    border-radius: 4px;
+    cursor: pointer;
+    vertical-align: middle;
+    text-align: center;
+    border: 1px solid #609fc6;
+    color: #000;
+    background-color: #e4f5ff;
+    background-image: linear-gradient(to bottom, #e4f5ff, #a9dbff);
+}
+.button-add:hover{
+    background: #a9dbff;
+    border-color: #609fc6;
+}
+.model-form-left{
+    float: left;
+    border-right: 1px solid #dddddd;
+    width: 20%;
+    height: 600px;
+}
+.left-header{
+    height: 580px;
+}
+.left-header select{
+    width: 100px;
+    height: 25px;
+    line-height: 25px;
+    margin-bottom: 10px;
+} 
+.left-footer input[type="checkbox"]{
+    float: right;
+    margin-right: 8px;
+}
+.model-form-right{
+    float: right;
+    width: 78%;
+}
+.directive-only{
+    color: #ff0000;
+}
+.myIndex{
+    height: 35px;
+    line-height: 35px;
+}
+.myIndex a{
+    text-decoration: none;
+    color: #444;
+}
+.myIndex a:hover{
+    text-decoration: underline;
+    color: #0099CC;
+}
+.myIndex input[type="checkbox"]{
+    float: right;
+    margin-right: 5px;
+    margin-top: 12px;
+}
+.parameter-width{
+    display: inline-block;
+    margin-left: 35px !important;
+    margin-bottom: 20px;
+}
+.parameter-width input,.parameter-width select{
+    width: 60px;
+    height: 25px;
+    line-height: 25px;
+    margin-right: 15px;
+    padding-left: 10px;
+}
+select{
+    height: 25px;
+    line-height: 25px;
+    border: 1px solid #cccccc;
+}
+#getRiskFundNetResult_table td{
+    white-space: nowrap;
+}
+.parameter-height{
+    height: 35px;
+}
+.dataTables_scroll{
+    margin-right: 12px;
+}
+.icon-update{
+    margin-left: 5px;
+    margin-right: 5px;
+}
+.updateIndex{
+    margin-left: 5px;
+    margin-right: 5px;
+}
+.myopacity{
+    opacity: 0;
+}
+/*#capitalAccount_table_wrapper table,#capitalAccountGroup_table_wrapper table,#capitalAccountSum_table_wrapper table,*/
+/*#currentPosition_table_wrapper table,#allOrders_table_wrapper table,#traderDetail_table_wrapper table,*/
+/*#positionQuery_table_wrapper table,#riskAccountSum_table_wrapper table*/
+/*{*/
+    /*width: 100% !important;*/
+/*}*/
+.mycontrol{
+    /*display: none;*/
+}
+.position-header{
+    height: 30px;
+    margin-top: 5px;
+}
+.position-label{
+    margin-left: 12px;
+}
+.position-btn{
+    width: 40px;
+    height: 25px;
+    -webkit-border-radius: 3px;
+    -moz-border-radius: 3px;
+    border-radius: 3px;
+    background: #F3F3F3;
+    border: 1px solid #cccccc;
+    color: #000;
+}
+.position-btn:hover,
+ .position-btn:active{
+    background: rgba(100, 119, 204, 1);
+    border-color: #6477CC;
+    color: #ffffff;
+}
+.myred{
+    color: #E30909;
+    /*font-weight: bold;*/
+}
+.mybackRed{
+    background: rgba(254, 63, 96, 0.7);
+}
+.myyellow{
+    background: rgba(241, 247, 22, 0.7);
+}
+.mywhite{
+    background: #ffffff;
+}
+.myblack{
+    color: #000;
+}
+.mygreen{
+    color: #00B83F;
+    /*font-weight: bold;*/
+}
+.menu-style{
+    background-color: #6477CC;
+    color: #ffffff;
+    border-top-left-radius: 3px;
+    border-top-right-radius: 3px;
+    display: block;
+    height: 26px;
+    line-height: 22px;
+    margin-left: 12px;
+}
+#menu-show li:hover .icon-right{
+    color: #6477cc;
+}
+.riskAndcapital{
+    width: 100%;
+    display: inline-block;
+}
+.fullRow{
+    width: 100%;
+}
+.dispear{
+    display: none;
+}
+.fullTable{
+    width: 100% !important;
+}
+table.dataTable thead th,table.dataTable tbody td{
+    text-align: center;
+}
+.control-setting{
+    display: none;
+}
+.myinformation{
+    color: #D45B0D;
+    padding-left: 5px;
+    padding-right: 5px;
+}
+.visitedA{
+    color: #183AD5 !important;
+    font-size: 14px;
+}
+select[disabled]{
+    background: #EBEBE4;
+}
+.operation-table{
+    float: left;
+    margin-top: 2rem;
+    margin-bottom: 1rem;
+    width: 100%;
+}
+.btn-add-left{
+    float: left;
+    margin-left: 1.2rem;
+}
+.btn-add-right{
+    float: right;
+    margin-right: 1.2rem;
+}
+
+.mybtn-info.disabled,
+.mybtn-info[disabled],
+fieldset[disabled] .mybtn-info,
+.mybtn-info.disabled:hover,
+.mybtn-info[disabled]:hover,
+fieldset[disabled] .mybtn-info:hover,
+.mybtn-info.disabled:focus,
+.mybtn-info[disabled]:focus,
+fieldset[disabled] .mybtn-info:focus,
+.mybtn-info.disabled.focus,
+.mybtn-info[disabled].focus,
+fieldset[disabled] .mybtn-info.focus,
+.mybtn-info.disabled:active,
+.mybtn-info[disabled]:active,
+fieldset[disabled] .mybtn-info:active,
+.mybtn-info.disabled.active,
+.mybtn-info[disabled].active,
+fieldset[disabled] .mybtn-info.active {
+    background-color: #c0c0c0;
+    border-color: #c0c0c0;
+}

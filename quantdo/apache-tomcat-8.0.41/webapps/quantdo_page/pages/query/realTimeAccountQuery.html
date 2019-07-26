@@ -1,0 +1,70 @@
+<div class="row" ng-controller="RealTimeAccountQueryController">
+	<!-- start 定义表单查询-->
+
+
+	<form class="form-12">
+		 <div class="form-row" >
+			<div class="row-col-one" ng-show="isMom" >
+				  <label class="word-style">查询方式</label>
+                   <select  ng-model="queryEntity.searchType" class="value-style"
+					 	ng-change="changeInstClient()" ng-options="op.key as op.text for op in searchTypes">
+				   </select>
+			</div>
+			<div class="row-col-one" >
+				  <label class="word-style">所属机构</label>
+                  <select ng-model="queryEntity.brokerageFirmID" class="value-style" ng-disabled="noInst"
+								ng-options="op.instClientID as op.instClientAbbrName for op in instClientList" ng-change="changeInstClient()">
+								<option value="">全部</option>
+								</select>
+			</div>
+			
+			<div class="row-col-one" >
+				  <label class="word-style">{{typeName}}</label>
+                 <select ng-model="queryEntity.accountID" id="account" class="value-style"
+										name="account" ng-options="s as s.instClientID+'_'+s.innerAccountID+'_'+s.accountName for s in tEntitys">
+										<option value="">全部</option>		
+								 </select>
+			</div>
+				
+		</div>
+		<div class="btn-beyond-one-row">
+      	      <button type="button" class="btn btn-query btn-word-two" ng-show="realTimeAccountQuery_query"
+								ng-click="find(queryEntity)" ng-disabled="isQuery" >查询</button>
+					        <button type="button" class="btn btn-reset btn-beyond-two" ng-show="realTimeAccountQuery_export"
+							ng-click="exportExcelRTA(queryEntity)" ng-show="realTimeAccountQuery_export">导出excel</button>
+    	</div>
+
+			
+	</form>
+	<!--End 表单查询 -->
+<div class="col-xs-12 clear-padding-right">
+        <div class="row">
+            <div class="col-xs-12 clear-padding-right">
+                <div>
+                    <table id="realAccount_table" class="cell-border stripe" cellspacing="0" width="100%">
+				  <tfoot class="realAccountFoot">
+						<!-- <tr>
+							<td  style="text-align:center">合计</td>
+							<td style="text-align:center"></td>
+							<td style="text-align:center"></td>
+							<td style="text-align:center"></td>
+							<td style="text-align:center"></td>
+							<td style="text-align:center"></td>
+							<td style="text-align:center"></td>
+							<td style="text-align:center"></td>
+							<td style="text-align:center"></td>
+							<td style="text-align:center"></td>
+							<td style="text-align:center"></td>
+							<td style="text-align:center"></td>
+							<td style="text-align:center"></td> 
+							<td style="text-align:center"></td>
+						    <td style="text-align:center"></td>
+						</tr> -->
+					</tfoot>
+				</table>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>

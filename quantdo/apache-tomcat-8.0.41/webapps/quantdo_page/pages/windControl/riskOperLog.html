@@ -1,0 +1,39 @@
+<link href="windControl/riskOperLog.css" rel="stylesheet">
+<title>风控参数变更流水查询</title>
+<div ng-controller="riskOperLogQueryController" style="width: 100%;overflow: auto;">
+
+		<div style="float: left;">
+    		<div class="detailRow" style="height:auto;">
+    		    <label>机构:</label>
+				<select ng-change = "brokerIDChange()" ng-disabled = riskAccountSelectIsCanUse ng-model="riskOperLogQueryEntity.accInstClientID" class="select-style" 
+						ng-options="cf.instClientID as cf.instClientID+'_'+cf.instClientAbbrName for cf in brokerEntity"><option value="">[全部]</option>
+                </select>
+    			<label>类型:</label>
+    			<select ng-change = "typeChange()" ng-model="riskOperLogQueryEntity.accType"  class="select-style" 
+    			        ng-options="op.accType as op.accName for op in typeEntity"><option value="">[全部]</option>
+                </select>
+                <label>产品名称/资产单元:</label>
+                <select  ng-model="riskOperLogQueryEntity.accId"  class="select-style" 
+    			        ng-options="op.accId as op.accId+'_'+op.accName for op in productEntity"><option value="">[全部]</option>
+                </select>
+                <label>风控参数:</label>
+    			<select  ng-model="riskOperLogQueryEntity.menuId"  class="select-style" 
+    			        ng-options="op.idxDictId as op.idxDictName for op in menuEntity"><option value="">[全部]</option>
+                </select>
+                <label>变更人员:</label>
+                <select ng-change = "userIDChange()" ng-model="riskOperLogQueryEntity.operUserId"  class="select-style" 
+    			        ng-options="op.userID as op.userID+'_'+op.userName for op in userEntity"><option value="">[全部]</option>
+                </select>
+                <label>开始日期:</label>
+                 <input forType="date" type="text" ng-readonly="true" class="product-time" ng-model="riskOperLogQueryEntity.begindate">
+                <label>结束日期:</label>
+                 <input forType="date" type="text" ng-readonly="true" class="product-time" ng-model="riskOperLogQueryEntity.enddate">
+                 <input  type="button"  value="查询" class="myNewBtn" ng-click="find(riskOperLogQueryEntity)">
+    		</div>
+    	</div>
+    	
+    	<div style="margin-top:55px" class="detailRow" >
+	    <table id="riskOperLogQuery_table" class="cell-border stripe" cellspacing="0" width="100%">
+	    </table>
+	</div>
+</div>

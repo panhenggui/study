@@ -1,0 +1,81 @@
+.userriskparameter-select-style{
+    width:180px;
+}
+/* 
+.modal-width{
+    width: 900px;
+}
+
+.label-style {
+    width: 118px;
+} */
+th{
+    text-align:center;
+    white-space:nowrap;
+}
+
+td{
+    white-space:nowrap;
+}
+.modal-width{
+    width: 800px;
+}
+
+.date-style{
+    padding-top: 0px;
+    padding-bottom: 0px;
+    width: 170px;
+}
+
+.label-style{
+    width: 115px;
+}
+
+.input-style{
+    width:170px;
+    padding-left: 2px;
+    padding-right: 2px;
+    
+}
+
+.input-style-w{
+	float: left;
+	width: 70%;
+	
+}
+.userriskparameter-input-style-w{
+	float: left;
+	width: 180px !important;
+	
+}
+.input-style-left{
+	float: left;
+}
+.select-style{
+    width:170px;
+}
+.lable-style-left{
+	float: left;
+	line-height: 35px;
+}
+label{
+	white-space: nowrap;
+}
+.input-sm{
+	width: 70px !important;
+}
+.row1{
+	width:400px;
+}
+.select-style-rem{
+	width: 170px;
+}
+.select-style-w{
+	width: 137px;
+}
+.lable-text-left{
+	text-align: left;
+}
+.div-style{
+	margin-right: 30px;
+}

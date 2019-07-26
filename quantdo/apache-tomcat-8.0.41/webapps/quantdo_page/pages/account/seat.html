@@ -1,0 +1,351 @@
+<link rel="stylesheet" href="account/seat.css" />
+<title>交易通道管理</title>
+<div>
+	<ol class="breadcrumb">
+		<li><a>系统管理</a></li>
+		<li class="active">交易通道管理</li>
+	</ol>
+</div>
+<br>
+<div class="row" ng-controller="SeatController">
+	<!-- start 定义表单查询-->
+	<form class="form-horizontal">
+		<div class="row">
+			<div class=col-xs-12>
+				<div class="alert alert-success" ng-show="resultInfo">交易通道信息保存成功!</div>
+			</div>
+		</div>
+		<div class="row">
+			<div class="col-xs-3" style="margin-left: -50px;">
+				<div class="form-group">
+					<label class="col-sm-5 control-label">经纪公司代码</label>
+					<div class="col-sm-5">
+						<select class="select-style"
+							ng-model="queryEntity.brokerageFirmID">
+							<option value="">全部</option>
+							<option ng-repeat="broker in brokerageEntitys"
+								value="{{broker.brokerageFirmID}}">
+								{{broker.brokerageFirmID}}_{{broker.brokerageFirmName}}</option>
+						</select>
+					</div>
+				</div>
+			</div>
+			<!-- <div class="col-xs-2">
+				<div class="form-group">
+					<label class="col-sm-5 control-label">交易所代码</label>
+
+					<div class="col-sm-5">
+						<select class="select-style" ng-model="queryEntity.exchID">
+								<option value="">全部</option>
+								<option ng-repeat="exch in exchEntitys" value="{{exch.exchID}}">
+									{{exch.exchID}}_{{exch.exchName}}</option>
+						</select>
+					</div>
+				</div>
+			</div> -->
+			<!-- <div class="col-xs-1">
+			</div> -->
+			<div class="col-xs-2">
+				<div class="form-group">
+					<button class="btn btn-success" id="bootbox-options1"
+						ng-click="find(queryEntity)" ng-disabled="isQuery">查询</button>
+				</div>
+			</div>
+		</div>
+	</form>
+	<!--End 表单查询 -->
+
+	<!--PAGE CONTENT -->
+	<div class="col-xs-12">
+		<button class="btn btn-success" id="bootbox-options"
+			ng-click="initParameter()" data-toggle="modal" data-target="#seatModal">新增
+		</button>
+		<!-- PAGE CONTENT ENDS -->
+		<div class="row">
+			<div class="col-xs-12">
+				<div class="clearfix">
+					<div class="pull-right tableTools-container"></div>
+				</div>
+				<div>
+					<table id="dynamic-table"
+						class="table table-striped table-bordered table-hover"
+						datatable="ng">
+						<thead>
+							<tr class="center">
+								<th>
+								<label class="pos-rel"><span class="lbl"></span>序号</label>
+								</th>
+								
+								<th class="center">通道编号</th>
+								<th class="center">通道名称</th>
+								<th class="center">通道系统</th>
+								<th class="center">经纪公司名称</th>
+								<th class="center">会员代码</th>
+								<th class="center">连接地址配置</th>
+								<th class="center">资金账号</th>
+								<th class="center">操作</th>
+							</tr>
+						</thead>
+
+						<tbody>
+							<tr ng-repeat="listEntity in listEntitys" class="center">
+								<td class="center">{{($index+1)}}</td>
+								<td ng-bind="listEntity.seatID"></td>
+								<td ng-bind="listEntity.seatName"></td>
+								<td>{{transSeatSystems(listEntity.seatSystem)}}</td>
+								<td>
+									{{transBrokerage(listEntity.brokerageFirmID)}}
+								</td>
+								<td ng-bind="listEntity.memberID"></td>
+								<td ng-bind="listEntity.ipAddress"></td>
+								<td ng-bind="listEntity.seatUser"></td>
+									<input type="hidden" ng-bind="listEntity.recordIndex">
+								</div>
+								<td>
+									<div class="hidden-sm hidden-xs action-buttons">
+										<a class="blue" ng-click="initUpdateParam($index,listEntity)"
+											data-toggle="modal" data-target="#seatModal" style="cursor:pointer">[修改]</a> 
+										<a class="blue" style="cursor:pointer"
+											class="ace-icon fa fa-trash-o bigger-130"
+											ng-click="remove($index,listEntity)">[删除]</a>
+										<a class="blue" data-toggle="modal" data-target="#seatPwdReset"
+											ng-click="pwdReset(listEntity)" style="cursor:pointer">[重置密码]</a>     
+                                    
+									</div>
+								</td>
+							</tr>
+						</tbody>
+					</table>
+				</div>
+
+			</div>
+		</div>
+		<!-- PAGE CONTENT ENDS -->
+	</div>
+	<!-- /.col -->
+
+	<!-- 新增 修改 模态框（Modal） -->
+	<div class="modal fade" id="seatModal" tabindex="-1" role="dialog"
+		aria-labelledby="myModalLabel" aria-hidden="true"
+		data-backdrop="static" data-keyboard="false">
+		<div class="modal-dialog">
+			<div class="modal-content">
+				<div class="modal-header">
+					<button type="button" class="close" data-dismiss="modal"
+						aria-hidden="true">&times;</button>
+					<h4 class="modal-title" id="myModalLabel">交易通道信息维护</h4>
+				</div>
+				<div class="modal-body">
+					<!-- 添加表单内容-->
+					<form class="form-horizontal" role="form" name="myForm" novalidate>
+						<div class="form-group" id="show" style="display:none;">
+							<label class="col-sm-3 control-label">通道编号</label>
+							<div class="col-sm-5" >
+								<input class="date-style form-control" type="text" ng-readonly="isUpdate" class="form-control"
+									placeholder="请输入通道名称" ng-model="ModalEntity.seatID" required
+									name="seatID" id="seatID" />
+								<span ></span>
+							</div>
+						</div>
+						<div class="form-group">
+							<label class="col-sm-3 control-label">通道名称<span
+								style="color: red;">*</span></label>
+							<div class="col-xs-5">
+								<input class="date-style form-control" type="text" 
+									placeholder="请输入通道名称" ng-model="ModalEntity.seatName" required
+									name="seatName" id="seatName" maxlength="20" onkeydown="myKeyup(event,this)" tab="1" />
+								<span ng-show="myForm.seatName.$dirty && myForm.seatName.$invalid"
+									style="color: red;">通道名称必填</span>
+							</div>
+						</div>
+						<div class="form-group">
+							<label class="col-sm-3 control-label">通道系统</label>
+							<div class="col-sm-8">
+								<select ng-model="ModalEntity.seatSystem" required 
+									id="seatSystem" class="select-style" name="seatSystem" 
+									ng-options="s.key as s.text for s in seatSystems" onkeydown="myKeyup(event,this)" tab="2">
+									<!-- ng-change="seatSystemSelect(ModalEntity)" -->
+								</select>
+								<span ng-show="myForm.seatSystem.$dirty && myForm.seatSystem.$invalid"
+									style="color: red;"></span>
+							</div>
+						</div>
+						<!-- <div class="form-group">
+							<label class="col-sm-3 control-label">通道类型</label>
+							<div class="col-sm-8">
+								<select ng-model="ModalEntity.apiLinkType" id="apiLinkType" ng-disabled="true"
+									class="select-style" ng-disabled="isOK" ng-options="a.key as a.text for a in apiLinkTypes" 
+									onkeydown="myKeyup(event,this)" tab="3">
+								</select>
+							</div>
+						</div> -->
+						<div class="form-group">
+							<label class="col-sm-3 control-label">经纪公司代码</label>
+							<div class="col-sm-8">
+								<select ng-model="ModalEntity.brokerageFirmID" required name="brokerageFirmID" 
+									id="brokerageFirmID" class="select-style"  ng-disabled="isUpdate" 
+									maxlength="10" onkeydown="myKeyup(event,this)" tab="3">
+									<option ng-repeat="broker in brokerageEntitys" value="{{broker.brokerageFirmID}}">
+										{{broker.brokerageFirmID}}_{{broker.brokerageFirmName}}</option>
+								</select>
+								<span ng-show="myForm.brokerageFirmID.$dirty && myForm.brokerageFirmID.$invalid"
+									style="color: red;"></span>
+							</div>
+						</div>
+						<div class="form-group">
+							<label class="col-sm-3 control-label">会员代码<span
+								style="color: red;">*</span></label>
+							<div class="col-sm-5">
+								<input type="text" class="form-control" id="memberID" ng-readonly="isShow" maxlength="10" required
+									name="memberID" ng-model="ModalEntity.memberID" required onkeydown="myKeyup(event,this)" tab="4">
+									<span ng-show="myForm.memberID.$dirty && myForm.memberID.$invalid" style="color: red;">会员代码必填</span>
+									  <!-- <span ng-if="ModalEntity.seatSystem==3" style="color: red;">席位号</span>
+									  <span ng-if="ModalEntity.seatSystem!=3" style="color: red;">资金账号</span> -->
+							</div>
+						</div>
+						<!-- <div class="form-group">
+							<label class="col-sm-3 control-label">交易所代码</label>
+							<div class="col-sm-8">
+								<select ng-model="ModalEntity.exchID" id="exchID" 
+									class="select-style" ng-readonly="isUpdate" ng-disabled="isExchID">
+									<option ng-repeat="exch in exchEntitys" value="{{exch.exchID}}">
+									{{exch.exchID}}_{{exch.exchName}}</option>
+								</select>
+							</div>
+						</div> -->
+						<div class="form-group">
+							<label class="col-sm-3 control-label">连接地址配置<span 
+								style="color: red;">*</span></label>
+							<div class="col-xs-8">
+								<textarea class="date-style form-control" onkeydown="myKeyup(event,this)" tab="5"
+								style="width: 375px; height: 50px; resize: none;"
+									placeholder="192.168.1.1" ng-model="ModalEntity.ipAddress"
+									name="ipAddress" id="ipAddress" required
+									maxlength="255" ></textarea>
+									<span ng-show="myForm.ipAddress.$dirty && myForm.ipAddress.$invalid"
+									style="color: red;">连接地址配置必填</span>
+							</div>
+						</div>
+						
+						<!-- <div class="form-group">
+							<label class="col-sm-3 control-label">端口<span
+								style="color: red;">*</span></label>
+							<div class="col-sm-8">
+								<input type="text" class="form-control" placeholder="请输四位数字端口"
+									id="port" name="port" ng-model="ModalEntity.port" maxlength="4" onkeydown="myKeyup(event,this)" tab="3"
+									ng-pattern="/^(\d{4}$)/" required > <span
+									ng-show="myForm.port.$dirty && myForm.port.$invalid"
+									style="color: red;">四位数字端口</span>
+							</div>
+						</div> -->
+						<div class="form-group">
+							<label class="col-sm-3 control-label">资金账号<span
+								style="color: red;">*</span></label>
+							<div class="col-sm-5">
+								<input type="text" class="form-control" id="seatUser" ng-readonly="isUpdate"
+									name="seatUser" ng-model="ModalEntity.seatUser" required onkeydown="myKeyup(event,this)" tab="6">
+									<span ng-show="myForm.seatUser.$dirty && myForm.seatUser.$invalid" style="color: red;">资金账号必填</span>
+									  <!-- <span ng-if="ModalEntity.seatSystem==3" style="color: red;">席位号</span>
+									  <span ng-if="ModalEntity.seatSystem!=3" style="color: red;">资金账号</span> -->
+							</div>
+						</div>
+						<div class="form-group">
+							<label class="col-sm-3 control-label">密码<span
+								style="color: red;">*</span></label>
+							<div class="col-sm-5">
+								<input type="password" class="form-control" placeholder="请输入密码" ng-readonly="isUpdate"
+									id="seatPassword" name="seatPassword" required onkeyup="kEvent(event,this)"
+									ng-model="ModalEntity.seatPassword" onkeydown="myKeyup(event,this)" tab="7"
+									ng-change="isSeat(ModalEntity.seatPassword,ModalEntity.reSeatPassword)">
+									<span ng-show="myForm.seatPassword.$dirty && myForm.seatPassword.$invalid" 
+									 style="color: red;">密码必填</span>
+							</div>
+						</div>
+						<div class="form-group">
+							<label class="col-sm-3 control-label">密码确认<span
+								style="color: red;">*</span></label>
+							<div class="col-sm-5">
+								<input type="password" class="form-control" placeholder="请输入密码确认" ng-readonly="isUpdate"
+									id="reSeatPassword" name="reSeatPassword" required onkeyup="kEvent(event,this)"
+									ng-model="ModalEntity.reSeatPassword" onkeydown="myKeyup(event,this)" tab="8" 
+									ng-change="isSeat(ModalEntity.seatPassword,ModalEntity.reSeatPassword)">
+									<span ng-show="myForm.reSeatPassword.$dirty && myForm.reSeatPassword.$invalid" 
+									 style="color: red;"></span>
+							</div>
+						</div>
+				</div>
+				<div>
+					<input type="hidden" ng-bind="ModalEntity.recordIndex">
+				</div>
+				</form>
+				<!--End  添加表单内容-->
+			</div>
+			<div class="modal-footer">
+				<span class="btn btn-info btn-sm popover-info" data-rel="popover"
+					data-placement="bottom" title="" ng-click="myForm.seatName.$invalid || myForm.seatSystem.$invalid || myForm.reSeatPassword.$invalid ||
+					myForm.ipAddress.$invalid || myForm.seatUser.$invalid || myForm.seatPassword.$invalid || pwdSeat || myForm.memberID.$invalid||save(ModalEntity)"
+					ng-disabled="myForm.seatName.$invalid || myForm.seatSystem.$invalid || myForm.reSeatPassword.$invalid ||
+					myForm.ipAddress.$invalid || myForm.seatUser.$invalid || myForm.seatPassword.$invalid || pwdSeat || myForm.memberID.$invalid">&nbsp;确定&nbsp;</span>
+				<span class="btn btn-close btn-sm popover-info" data-rel="popover"
+					data-placement="bottom" title="" data-dismiss="modal">&nbsp;取消&nbsp;</span>
+			</div>
+		</div>
+	</div>
+	<!-- 密码重置 -->
+    <div class="modal fade" id="seatPwdReset" tabindex="-1" role="dialog" 
+         aria-labelledby="myModalLabel" aria-hidden="true"
+         data-backdrop="static" data-keyboard="false">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal"
+                            aria-hidden="true">&times;</button>
+                    <h4 class="modal-title" >交易通道密码信息维护</h4>
+                </div>
+                <div class="modal-body">
+                    <!-- 添加表单内容-->
+                    <form class="form-horizontal" role="form" name="myFormPwdReset" novalidate>
+                        <div class="panel panel-default">
+                            <div class="panel-heading">
+                                <h3 class="panel-title">密码重置</h3>
+                            </div>
+                            <div class="panel-body">
+                            <div class="form-group">
+                                <label  class="col-sm-3 control-label">密码<span style="color: red;">*</span></label>
+                                <div class="col-sm-5">
+                                    <input type="password" class="form-control"  placeholder="请输入密码" ng-change="isSeat(ModalPwdEntity.seatPassword,ModalPwdEntity.reSeatPassword)"
+                                           name="seatPassword" ng-model="ModalPwdEntity.seatPassword" required maxlength="200" ng-disabled="forceRisk.disabled" onkeydown="myKeyup(event,this)" onkeyup="kEvent(event,this)" tab="9" />
+                                    <span ng-show="myFormPwdReset.seatPassword.$dirty && myFormPwdReset.seatPassword.$invalid" style="color: red;"></span>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label  class="col-sm-3 control-label">确认密码<span style="color: red;">*</span></label>
+                                <div class="col-sm-5">
+                                    <input type="password" class="form-control"  placeholder="请输入确认密码" ng-change="isSeat(ModalPwdEntity.seatPassword,ModalPwdEntity.reSeatPassword)"
+                                           name="reSeatPassword" ng-model="ModalPwdEntity.reSeatPassword" required maxlength="200" ng-disabled="forceRisk.disabled" onkeydown="myKeyup(event,this)" onkeyup="kEvent(event,this)"  tab="10" />
+                                    <span ng-show="myFormPwdReset.reSeatPassword.$dirty && myFormPwdReset.reSeatPassword.$invalid" style="color: red;"></span>
+                                </div>
+                            </div>
+                            </div>
+                        </div>
+      
+                    </form>
+                    <!--End  添加表单内容-->
+                </div>
+                <div class="modal-footer">
+                   <span class="btn btn-info btn-sm popover-info" data-rel="popover"
+                         data-placement="bottom" title=""
+                         ng-click="myFormPwdReset.reSeatPassword.$invalid || myFormPwdReset.seatPassword.$invalid || pwdSeat||updateResetPwd(ModalPwdEntity)"
+                       ng-disabled="myFormPwdReset.reSeatPassword.$invalid || myFormPwdReset.seatPassword.$invalid || pwdSeat ">&nbsp;确定&nbsp;</span>
+                   <span class="btn btn-info btn-sm popover-info" data-rel="popover"
+                         data-placement="bottom" title="" data-dismiss="modal">&nbsp;关闭&nbsp;</span>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- end 密码重置 -->
+</div>
+<!-- /.modal -->
+
+    
+    

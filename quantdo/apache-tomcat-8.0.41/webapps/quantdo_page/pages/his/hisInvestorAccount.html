@@ -1,0 +1,162 @@
+<div class="row" ng-controller="HisInvestorAccountController">
+	<!-- start 定义表单查询-->
+	<form class="form-12">
+		<div class="form-row">
+			<div class="alert alert-success" ng-show="resultFlag">
+				<span ng-bind="resultInfo"></span>
+			</div>
+		</div>
+		<div class="form-row">
+			<div class="row-col-one" ng-show="isMom">
+				<label class="word-style">查询方式</label> <select
+					ng-model="queryEntity.searchType"
+					class="value-style"
+					ng-change="changeInstClient()"
+					ng-options="op.key as op.text for op in searchTypes">
+				</select>
+			</div>
+			<div class="row-col-one">
+				<label class="word-style">所属机构</label> 
+				<select
+					ng-model="queryEntity.brokerageFirmID"
+					class="value-style"   ng-disabled="noInst"
+					ng-options="op.instClientID as op.instClientAbbrName for op in instClientList"
+					ng-change="changeInstClient()">
+					<option value="">全部</option>
+				</select>
+			</div>
+			<div class="row-col-one">
+				<label class="word-style">{{typeName}}</label> <select
+					ng-model="queryEntity.accountID" id="account"
+					class="value-style"   name="account"
+					ng-options="s as s.instClientID+'_'+s.innerAccountID+'_'+s.accountName for s in tEntitys">
+					<option value="">全部</option>
+				</select>
+			</div>
+		</div>
+		<div class="form-row">
+			<div class="row-col-one">
+				<label class="word-style">开始日期</label> <input
+					type="text"  onchange="" class="Wdate value-style word-style" onfocus="WdatePicker({lang:'zh-cn',dateFmt:'yyyyMMdd'})"
+					ng-model="queryEntity.beginDate" ng-readonly="true" id="settleDate" />
+			</div>
+			<div class="row-col-one">
+				<label class="word-style">结束日期</label> <input
+					type="text" onchange="" class="Wdate value-style word-style" onfocus="WdatePicker({lang:'zh-cn',dateFmt:'yyyyMMdd'})"
+					ng-model="queryEntity.endDate" ng-readonly="true" id="settleDate"/>
+			</div>
+		</div>
+		<div class="btn-beyond-one-row">
+			<button type="button" class="btn btn-query btn-word-two" ng-show="hisInvestorAccount_query"
+				ng-click="find(queryEntity)" ng-disabled="isQuery" >查询</button>
+			<button class="btn btn-reset btn-beyond-two" id="bootbox-options1"
+					ng-click="exportExcelHIA(queryEntity)" ng-show="hisInvestorAccount_export">导出excel</button>
+		</div>
+</form>
+<!--End 表单查询 -->
+
+<!--PAGE CONTENT -->
+	<div class="col-xs-12 clear-padding-right">
+        <div class="row">
+            <div class="col-xs-12 clear-padding-right">
+			<div>
+				<table id="hisAccount_table"
+					class="cell-border stripe" cellspacing="0" width="100%">
+					<tfoot class="hisAccountFoot">
+						<!-- <tr>
+							<td  style="text-align:center">合计</td>
+							<td  style="text-align:center"></td>
+							<td  style="text-align:center"></td>
+							<td  style="text-align:center"></td>
+							<td  style="text-align:center"></td>
+							<td  style="text-align:center"></td>
+							<td  style="text-align:center"></td>
+							<td  style="text-align:center"></td>
+							<td  style="text-align:center"></td>
+							<td  style="text-align:center"></td>
+							<td  style="text-align:center"></td>
+							<td  style="text-align:center"></td>
+							<td  style="text-align:center"></td>
+							<td  style="text-align:center"></td>
+							<td  style="text-align:center"></td>
+							<td  style="text-align:center"></td>
+						</tr> -->
+					</tfoot>
+				</table>
+
+
+
+				<!-- 
+					<table id="dynamic-table"
+						class="table table-striped table-bordered table-hover"
+						datatable="ng">
+						<thead>
+							<tr>
+								<th class="center"><label class="pos-rel"> <span
+										class="ace" /> <span class="lbl"></span>
+								序号</label></th>
+								<th>交易日期</th>
+								<th>{{typeName}}</th>
+								<th>{{typeName}}名称</th>
+								<th>所属机构</th>
+								<th>上日结存</th>
+								<th>今日出入金</th>
+								<th>可用资金</th>
+								<th>保证金</th>
+								<th>手续费</th>
+								<th>冻结保证金</th>
+								<th>冻结手续费</th>
+								<th>平仓盈亏</th>
+								<th>持仓盈亏</th>
+								<th>动态权益</th>
+								<th>风险度</th>
+							</tr>
+						</thead>
+						<tbody>
+							<tr ng-repeat="listEntity in listEntitys">
+								<td class="center">{{($index+1)}}</td>
+								<td class="center" ng-bind="listEntity.settleDate"></td>
+								<td class="center" ng-bind="listEntity.traderID"></td>
+								<td class="center">{{listEntity.accountName}}</td>
+								<td>{{transInstClient(listEntity.brokerageFirmID)}}</td>
+								<td class="center">{{listEntity.preBalance | number:2}}</td>
+								<td class="center">{{listEntity.deposit - listEntity.withdraw | number:2}}</td>
+								<td class="center">{{listEntity.available | number:2}}</td>
+								<td class="center">{{listEntity.margin | number:2}}</td>
+								<td class="center">{{listEntity.fee | number:2}}</td>
+								<td class="center">{{listEntity.frozenMargin | number:2}}</td>
+								<td class="center">{{listEntity.frozenFee | number:2}}</td>
+								<td class="center">{{listEntity.closeProfit | number:2}}</td>
+								<td class="center">{{listEntity.positionProfit | number:2}}</td>
+								<td class="center">{{listEntity.dynamicRights | number:2}}</td>
+								<td class="center">{{listEntity.risk * 100 | number:2}}%</td>
+							</tr>
+						</tbody>
+						<tfoot>
+							<tr>
+								<td class="center">合计</td>
+								<td class="center">共{{listEntitys.length}}笔</td>
+								<td class="center"></td>
+								<td class="center"></td>
+								<td class="center"></td>
+								<td class="center"></td>
+								<td class="center"></td>
+								<td class="center"></td>
+								<td class="center">{{margin | number:2}}</td>保证金sum
+								<td class="center"></td>
+								<td class="center"></td>
+								<td class="center"></td>
+								<td class="center">{{closeProfit | number:2}}</td>平仓盈亏sum
+								<td class="center">{{positionProfit | number:2}}</td>持仓盈亏sum
+								<td class="center">{{dynamicRights | number:2}}</td> 动态权益
+								<td class="center"></td>
+							</tr>
+						</tfoot>
+					</table> -->
+			</div>
+		</div>
+	</div>
+	<!-- PAGE CONTENT ENDS -->
+</div>
+<!-- /.col -->
+</div>

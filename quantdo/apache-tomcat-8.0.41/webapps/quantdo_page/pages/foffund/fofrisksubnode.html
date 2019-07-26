@@ -1,0 +1,197 @@
+<link rel="stylesheet" href="foffund/fofrisksubnode.css"/>
+<div class="row" ng-controller="fofRiskSubNodeController">
+    <!-- start 定义表单查询-->
+    <!--End 表单查询 -->
+    <form class="form-12">
+		<div class="form-row" >
+               <div class="row-col-one">
+                   <label class="word-style">子产品机构代码</label>
+						<select ng-model="queryEntity.fofInstClientID" 
+							class="value-style"
+							ng-options="op.fofInstClientID as op.fofInstClientID+'_'+ op.fofInstClientName for op in queryFofInstClientList">
+							<option value="">全部</option>
+						</select> 
+				</div>
+				
+				<div class="row-col-one">
+					<label class="word-style">子产品名称</label>
+					<input type="text" ng-model="queryEntity.fundProductName" class="value-style"/>
+				</div>
+				
+		</div>
+		<div class="btn-beyond-one-row">
+   			<button type="button" class="btn btn-query btn-word-two"  ng-click="find(queryEntity)" ng-disabled="isQuery"> 查询</button>
+		</div>
+   			
+		<div class="row-form row-btn-operation">
+			<div class="row-btn-icon">
+	   			<span class="btn-add-icon"></span>
+				<input type="button" class="btn btn-add btn-icon-two" value="新增" 
+					ng-click="initParameter()" data-toggle="modal" data-target="#riskSubNodeModal">
+			</div>
+        </div>
+	</form>
+
+    <!--PAGE CONTENT -->
+    <div class="col-xs-12 clear-padding-right">
+        <div class="row">
+            <div class="col-xs-12 clear-padding-right">
+                <div>
+                    <table id="fofRiskSubNode_dynamic_table" class="cell-border stripe" cellspacing="0" width="100%">
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- /.col -->
+
+    <!-- 新增 修改 模态框（Modal） -->
+    <div class="modal fade" id="riskSubNodeModal" tabindex="-1" role="dialog"
+         aria-labelledby="myModalLabel" aria-hidden="true" data-backdrop="static" data-keyboard="false">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close"
+                            data-dismiss="modal" aria-hidden="true">
+                        &times;
+                    </button>
+                    <h4 class="modal-title" id="myModalLabel">
+                       风控子节点信息维护
+                    </h4>
+                </div>
+                <div class="modal-body">
+                    <!-- 添加表单内容-->
+                    <form class="form-horizontal" role="form" name="myForm" novalidate>
+                        <div class="form-group row">
+                            <label class="col-sm-3 control-label">子产品机构代码<span style="color: red;">*</span></label>
+                            <div class="col-sm-8">
+                                <select ng-model="ModalEntity.fofInstClientID" class="form-control" name="fofInstClientID" required ng-disabled="isUpdate" 
+                                	ng-options="op.fofInstClientID as op.fofInstClientID+'_'+op.fofInstClientName for op in fofInstClientList"></select>
+									<span ng-show="myForm.fofInstClientID.$dirty && myForm.fofInstClientID.$invalid"
+                                          style="color: red;">子产品机构代码为必选项</span>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label  class="col-sm-3 control-label">子产品代码<span style="color: red;">*</span></label>
+                            <div class="col-xs-6">
+                                <input class="form-control" type="text" placeholder="请输入子产品代码"
+                                       ng-model="ModalEntity.fundProductID" name="fundProductID" id="fundProductID"
+                                       maxlength="10" ng-pattern="/^[0-9]*$/" required ng-readonly="isUpdate"/>
+											<span ng-show="myForm.fundProductID.$dirty && myForm.fundProductID.$invalid"
+                                                  style="color: red;">子产品代码为必填项,且仅能输入数字</span>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label  class="col-sm-3 control-label">子产品名称<span style="color: red;">*</span></label>
+                            <div class="col-xs-6">
+                                <input class="form-control" type="text" placeholder="请输入子产品名称"
+                                       ng-model="ModalEntity.fundProductName" name="fundProductName" id="fundProductName"
+                                       maxlength="50" required/>
+                                       <span ng-show="myForm.fundProductName.$dirty && myForm.fundProductName.$invalid"
+                                                  style="color: red;">子产品名称为必填项</span>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label  class="col-sm-3 control-label">用户名<span style="color: red;">*</span></label>
+                            <div class="col-xs-6">
+                                <input type="text" class="form-control"  placeholder="请输入用户名"  id="userID" ng-disabled="isUpdate"
+                                       name="userID" ng-model="ModalEntity.userID" ng-minlength="2" required maxlength="50">
+                                <span ng-show="myForm.userID.$dirty && myForm.userID.$invalid" 
+                                	style="color: red;">用户名为必填项,且必须2个字符以上</span>
+                            </div>
+                        </div>
+                        <div class="form-group" ng-show="!isUpdate">
+                            <label  class="col-sm-3 control-label">密码<span style="color: red;">*</span></label>
+                            <div class="col-xs-6">
+                                <input type="password" class="form-control"  placeholder="请输入密码"  id="password"
+                                       name="password" ng-model="ModalEntity.password" required maxlength="50">
+                                <span ng-show="myForm.password.$dirty && myForm.password.$invalid" 
+                                	style="color: red;">密码为必填项</span>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label  class="col-sm-3 control-label">方式<span style="color: red;">*</span></label>
+                            <div class="col-xs-6">
+                                <select ng-model="ModalEntity.refreshType" class="form-control" name="refreshType" required
+                                	ng-options="op.key as op.text for op in refreshTypes" ng-disabled="true"
+                                	ng-change="changeRefreshType(ModalEntity.refreshType)"></select>
+									<span ng-show="myForm.refreshType.$dirty && myForm.refreshType.$invalid"
+                                          style="color: red;">方式为必选项</span>
+                            </div>
+                        </div>
+                        <div class="form-group" ng-show="notDBType">
+                            <label  class="col-sm-3 control-label">地址<span style="color: red;">*</span></label>
+                            <div class="col-xs-6">
+                                <input type="text" class="form-control"  placeholder="请输入地址"  id="address"
+                                       name="address" ng-model="ModalEntity.address" maxlength="100">
+                                <span ng-show="myForm.address.$dirty && myForm.address.$invalid" 
+                                	style="color: red;">地址为必填项</span>
+                            </div>
+                        </div>
+                        <div><input type="hidden" ng-bind="ModalEntity.recordIndex"></div>
+                    </form>
+                    <!--End  添加表单内容-->
+                </div>
+                <div class="modal-footer">
+                    <span class="btn btn-info btn-sm popover-info" data-rel="popover" data-placement="bottom" title=""
+                          ng-click="save(ModalEntity)"
+                          ng-disabled="myForm.$invalid">&nbsp;确定&nbsp;</span>
+                    <span class="btn btn-info btn-sm popover-info" data-rel="popover" data-placement="bottom" title=""
+                          data-dismiss="modal">&nbsp;取消&nbsp;</span>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- /.modal -->
+    
+    <!-- 密码重置 模态框（Modal） -->
+    <div class="modal fade" id="pwdChangeModal" tabindex="-1" role="dialog"
+         aria-labelledby="myModalLabel" aria-hidden="true" data-backdrop="static" data-keyboard="false">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close"
+                            data-dismiss="modal" aria-hidden="true">
+                        &times;
+                    </button>
+                    <h4 class="modal-title" id="myModalLabel">
+                       风控子节点密码重置
+                    </h4>
+                </div>
+                <div class="modal-body">
+                    <!-- 添加表单内容-->
+                    <form class="form-horizontal" role="form" name="myForm1" novalidate>
+                        <div class="form-group">
+                            <label  class="col-sm-3 control-label">用户名<span style="color: red;">*</span></label>
+                            <div class="col-xs-6">
+                                <input type="text" class="select-style" ng-disabled="true"
+                                       name="userID" ng-model="pwdEntity.userID" ng-minlength="2" required maxlength="50">
+                                <span ng-show="myForm1.userID.$dirty && myForm1.userID.$invalid" 
+                                	style="color: red;">用户名为必填项,且必须2个字符以上</span>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label  class="col-sm-3 control-label">密码<span style="color: red;">*</span></label>
+                            <div class="col-xs-6">
+                                <input type="password" class="select-style"  placeholder="请输入密码" 
+                                       name="password" ng-model="pwdEntity.password" required maxlength="50">
+                                <span ng-show="myForm1.password.$dirty && myForm1.password.$invalid" 
+                                	style="color: red;">密码为必填项</span>
+                            </div>
+                        </div>
+                    </form>
+                    <!--End  添加表单内容-->
+                </div>
+                <div class="modal-footer">
+                    <span class="btn btn-info btn-sm popover-info" data-rel="popover" data-placement="bottom" title=""
+                          ng-click="resetPwd(pwdEntity)"
+                          ng-disabled="myForm1.$invalid">&nbsp;确定&nbsp;</span>
+                    <span class="btn btn-info btn-sm popover-info" data-rel="popover" data-placement="bottom" title=""
+                          data-dismiss="modal">&nbsp;取消&nbsp;</span>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- /.modal -->
+
+</div>

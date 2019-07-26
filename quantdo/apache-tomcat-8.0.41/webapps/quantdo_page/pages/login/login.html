@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+<meta charset="utf-8" />
+<title>全球交易系统</title>
+
+<meta name="description" content="User login page" />
+<meta name="viewport"
+	content="width=device-width, initial-scale=1.0, maximum-scale=1.0" />
+<link rel="stylesheet"
+	href="../../framework/ui-ace-finally/login/login.css">
+<script type="text/javascript">
+        window.jQuery || document.write("<script src='../../framework/ui-ace-finally/assets/js/jquery.js'>"+"<"+"/script>");
+    </script>
+	<script src="../../framework/ui-ace-finally/assets/js/jquery.js"></script>
+<script src="../../config.js"></script>
+<script src="../../framework/ui-ace-finally/assets/js/layer/layer.js"></script>
+<script src="../../framework/ui-ace-finally/framework.js"></script>
+<script src="../../service/LogonService.js"></script>
+<script src="login.js"></script>
+<script src="../app.js"></script>
+</head>
+
+<body class="page-login">
+	<div class="login-container">
+		<h1 class="login-title"></h1>
+		<div class="login-input">
+			<input type="text" id="username" class="login-input-content" placeholder="请输入用户名" autofocus onkeydown="myKeyup(event,this)" tab="1" />
+			<input type="password" id="password" class="login-input-content" placeholder="请输入密码"  onkeydown="myKeyup(event,this)" tab="2" />
+			<div class="validate-picture-container">
+				<input type="text" placeholder="请输入验证码" class="login-input-content validate-picture"  maxlength="4" id="validcode" onkeydown="myKeyup(event,this)" tab="3" />
+				<img id="validImg" src="" class="validate-picture-show" />
+			</div>
+
+		</div>
+		<div class="login-operation">
+			<input type="button" class="login-operation-style" value="登录"  onkeydown="myKeyup(event,this)" tab="4"
+				   onclick="logon()" />
+		</div>
+
+	</div>
+</body>
+</html>

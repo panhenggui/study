@@ -1,0 +1,40 @@
+<!-- page specific plugin scripts -->
+
+<link rel="stylesheet" href="file/file.css" />
+
+<title>file upload and download</title>
+
+<!-- ajax layout which only needs content area -->
+<div class="row" ng-controller="fileController">
+
+	<div class="col-xs-12">
+
+		<h2>Upload File!</h2>
+
+		<h3>Form submit upload file!</h3>
+		<form id="upload" method="POST" action="#files" enctype="multipart/form-data">
+			File to upload: <input type="file" name="file" id="1"/><br/><input type="file" name="file1" id="2"/><br/>
+			<input type="submit" value="Upload"> Press here to upload the file!
+		</form>
+
+		<br/>
+		<h3>jquery upload file</h3>
+		<div id="fileuploader">Upload</div>
+
+		<br/>
+		<h3>Angularjs upload file</h3>
+		<div>
+			watching model:
+			<div class="button" ngf-select ng-model="files">Upload using model $watch</div>
+			<div class="button" ngf-select ngf-change="upload($files)">Upload on file change</div>
+		</div>
+
+		<h2>Download File!</h2>
+		<button ng-click="download()">下载</button><br/>
+		<!--<button ng-click="upload()">上传</button>-->
+		<!-- PAGE CONTENT ENDS -->
+	</div><!-- /.col -->
+</div><!-- /.row -->
+
+
+

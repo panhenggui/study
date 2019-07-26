@@ -1,0 +1,171 @@
+th{
+    text-align:center;
+    white-space:nowrap;
+}
+td{
+    text-align:center;
+    white-space:nowrap;
+}
+.modal-width{
+	text-align:center;
+    width: 800px;
+}
+
+.date-style{
+    padding-top: 0px;
+    padding-bottom: 0px;
+    width: 170px;
+}
+
+.label-style{
+    width: 115px;
+}
+
+.input-style{
+    width:170px;
+    padding-left: 2px;
+    padding-right: 2px;
+}
+.fundProduct-select-style{
+    width:170px;
+}
+.control-label{
+	white-space: nowrap;
+}
+.fund-select{
+	width: 170px
+}
+
+.wcmoverflatLeftDiv{
+    position:relative;
+    height:350px;
+    width:260px;
+    left:35px;
+    overflow:auto;
+     top:-1px;
+    border:1px solid silver;
+
+}
+.wcmoverflatLeftTitleDiv{
+    position:relative;
+    height:30px;
+    width:260px;
+    left:35px;
+    border:1px solid silver;
+}
+.wcmoverflatMidDiv{
+    height:100px;
+    width:30px;
+    top:-270px;
+    left:303px;
+    position:relative;
+}
+.wcmoverflatRightDiv{
+    position:relative;
+    height:350px;
+    width:260px;
+    left:345px;
+    top:-480px;
+    overflow:auto;
+    border:1px solid silver;
+}
+.wcmoverflatRightTitleDiv{
+    position:relative;
+    height:30px;
+    width:260px;
+    left:345px;
+    top:-480px;
+    overflow:auto;
+    border:1px solid silver;
+    border-bottom: none;
+}
+
+
+.wcmmodalbodydiv{
+     height:380px;
+     width:650px;
+}
+
+.specthead tr th {
+    text-align:left;
+    width:260px;
+    line-height: 20px;
+    padding: 4px;
+/*    background: #f9f9f9;*/
+}
+.spectbody tr td {
+    text-align: left;
+    width:260px;
+    border-top:1px solid silver;
+    border-bottom:1px solid silver;
+    padding: 4px;
+    line-height: 20px;
+} 
+.hoverTr:hover{
+    background:silver;
+}
+.windColoerTr{
+	background:#ffffff;
+}
+
+.selectActive{
+	 background:#e9f7ff;
+}
+
+.row-operation-distance{
+	margin-right: 5px;
+	cursor: default;
+}
+.update-row5{
+	color: #519e67;
+}
+.update-row9{
+	color: #F08A86;
+}
+.update-row1 {
+	color: #519e67;
+}
+.update-row2{
+	color: #519e67;
+}
+.update-row3{
+	color: #fb3232;
+	width: 80px;
+}
+.update-row6{
+	color: #0a9aec;
+	width: 60px;
+}
+.update-row7{
+	color: #fb3232;
+}
+.update-row4{
+	color: #519e67;
+	width: 80px;
+}
+.update-row8{
+	color: #519e67;
+}
+
+.delete-row1{
+	color: #0a9aec;
+}
+/*
+.fobid-operation{
+	color: #fb3232;
+}
+.reset-operation{
+	color: #519e67;
+}
+.row-operation-distance:hover{
+	font-weight: bold;
+}
+.right-row:hover{
+	color: #38a0da;
+}
+.reset-operation:hover{
+	color: #1d9640;
+}
+.fobid-operation:hover{
+	color: #ce0f0f;
+} */

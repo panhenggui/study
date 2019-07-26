@@ -1,0 +1,9 @@
+.select-style{
+    width:170px;
+}
+.control-label{
+	white-space:nowrap;
+}
+.input-style{
+	width:170px !important;
+}

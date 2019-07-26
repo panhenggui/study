@@ -1,0 +1,117 @@
+<div class="row" ng-controller="OperClientPositionQueryController">
+	<!-- start 定义表单查询-->
+	<form class="form-12">
+		 <div class="form-row">
+			<div class="row-col-one" ng-show="isMom"  >
+				  <label class="word-style">查询方式</label>
+                  <select ng-model="queryEntity.searchType" class="value-style"
+								ng-options="op.key as op.text for op in searchTypes"
+								ng-change="changeInstClient()">
+							</select>
+			</div>
+			
+			<div class="row-col-one"  >
+				  <label class="word-style">持仓类型</label>
+                 <select ng-model="queryEntity.combTradeType"
+							ng-change="changeTradeType()" class="value-style"
+								ng-options="op.key as op.text for op in combTradeTypes">
+							</select>
+			</div>
+			
+			
+			<div class="row-col-one"  >
+				  <label class="word-style">所属机构</label>
+                  <select ng-model="queryEntity.brokerid" class="value-style" ng-disabled="noInst"
+							ng-options="op.instClientID as op.instClientAbbrName for op in instClientList" ng-change="changeInstClient()">
+							<option value="">全部</option>
+							</select>
+			</div>
+			<div class="row-col-one"   ng-show="!isMom">
+				  <label class="word-style">{{showID}}</label>
+                 <select ng-model="queryEntity.accountID"  class="value-style"
+							ng-options="op as op.instClientID+'_'+op.accountID+'_'+op.accountName for op in queryAccountEntitys">
+							<option value="">全部</option>
+				 </select>
+			</div>
+			<div class="row-col-one" ng-show="isMom" >
+				  <label class="word-style">{{showID}}</label>
+                  <select ng-model="queryEntity.accountID" class="value-style"
+							ng-options="op as op.instClientID+'_'+op.accountID+'_'+op.accountName for op in queryAccountEntitys">
+							<option value="">全部</option>
+							</select>
+			</div>
+			<div class="row-col-one"  >
+				  <label class="word-style">{{showInstrumentID}}</label>
+                  <input type="text" class="value-style" ng-model="queryEntity.instrumentID" />
+			</div>
+			
+			
+			<div class="row-col-one" >
+					<label class="word-style">合约类别</label>
+						<select ng-model="queryEntity.productType" class="value-style"
+						ng-options="op.key as op.key+'_'+op.text for op in productTypes">
+						<option value="">全部</option>
+						</select>
+			</div>
+		</div>
+		<div class="btn-beyond-one-row">
+      	      <button type="button" class="btn btn-query btn-word-two"  ng-show="operClientPositionQuery_query"
+							ng-click="find(queryEntity)" ng-disabled="isQuery">查询</button>
+						<button type="button" class="btn btn-reset btn-beyond-two" ng-show="operClientPositionQuery_export"
+							ng-click="exportExcelOCP(queryEntity)">导出excel</button>
+    	</div>
+	</form>
+	<!--End 表单查询 -->
+
+
+<!--PAGE CONTENT START-->
+	<div class="col-xs-12 clear-padding-right">
+        <div class="row">
+            <div class="col-xs-12 clear-padding-right">
+                <div>
+                    <div ng-show ="!isCom" >
+						<table id="legclientPosition_table" class="cell-border stripe" cellspacing="0" width="100%">
+						    <tfoot  class="clientPositionFoot">
+								<tr >
+									<td style="text-align:center">合计</td>
+									<td style="text-align:center"></td>
+									<td style="text-align:center"></td>
+									<td style="text-align:center"></td>
+									<td style="text-align:center"></td>
+									<td style="text-align:center"></td>
+									<td style="text-align:center"></td>
+									<td style="text-align:center"></td>
+									<td style="text-align:center"></td>
+									<td style="text-align:center"></td>
+									<td style="text-align:center"></td>
+									<td style="text-align:center"></td>
+								</tr>
+							</tfoot>
+						</table>
+					</div>
+					<div  ng-show="isCom" >
+							<table id="comclientPosition_table" class="cell-border stripe" cellspacing="0" width="100%">
+							<tfoot  class="comclientPositionFoot">
+								<tr style="text-align:center" >
+									<td style="text-align:center">合计</td>
+									<td style="text-align:center"></td>
+									<td style="text-align:center"></td>
+									<td style="text-align:center"></td>
+									<td style="text-align:center"></td>
+									<td style="text-align:center"></td>
+									<td style="text-align:center"></td>
+									<td style="text-align:center"></td>
+									<td style="text-align:center"></td>
+									<td style="text-align:center"></td>
+									<td style="text-align:center"></td>
+									<td style="text-align:center"></td>
+									<td style="text-align:center"></td>
+								</tr>
+							</tfoot>
+						</table>
+					</div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

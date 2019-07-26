@@ -1,0 +1,89 @@
+<!-- 市场占比设置 -->
+<div ng-controller="marketProportionSetController" style="width: 100%;overflow: auto;">
+ <div style="height:10px;"></div>
+    <input type="button" ng-show = "markerProportionSetAddButtonIsShow" value = &nbsp;&nbsp;&nbsp;新&nbsp;&nbsp;增&nbsp;&nbsp;&nbsp; class="backFilter myNewBtn" name="PositionMarketProportionSetService.save" ng-click = "showDetail()">
+    <div style="height:15px;"></div>
+
+ 	<div id="outMarketDiv">
+ 		<div id = "innerMarketTable">
+	    <table id="marketProportionSet_table" class="cell-border stripe" cellspacing="0" width="100%"></table>
+	    </div>
+	</div>
+	
+	<div ng-show = marketProportionSetShow>
+	<label class="detail-header">市场占比设置</label>
+	<div class="controlDetail">
+    	<div style="float: left;">
+    		<div class="detailRow">
+    			<ul>
+    				<li ng-repeat="contractType in contractTypes" style="float:left;">
+    					<input style='cursor:pointer;' type="radio" value="{{contractType.key}}"
+    					ng-model="$parent.initRadio"  ng-checked="$parent.initRadio==contractType.key"  
+    					ng-disabled="marketProportionSet_radionFlag"  name="marketProportionSet_contractType" 
+    					ng-click="initSelect()">{{contractType.text}}
+    				</li>
+    			</ul>
+    		</div>
+    		<div class="detailRow" >
+    		<!-- select 框默认值设置 -->
+    			资产类型:
+    			<select ng-model="entity.groupID"  class="select-style" ng-change="selctChange()" name="marketProportionSet_riskgroup"
+                        ng-options="op.groupID as op.groupName for op in riskgroup" ng-disabled="marketProportionSet_radionFlag">
+                </select>
+    			统计粒度:
+    			<select ng-model="entity.particlesize"  class="select-style" ng-change="selctChange()" name="marketProportionSet_statistics"
+                        ng-options="op.dictId as op.dictName for op in statistics" ng-disabled="marketProportionSet_radionFlag">
+                </select>
+    			<!-- <select ng-model="entity.statistics" name="marketProportionSetSet_statistics" class="select-style">
+                    <option ng-repeat="rg in statistics" value="{{rg.dictId}}">
+                        {{rg.dictName}}
+                    </option>
+                </select> -->
+    			分子:
+    			<select ng-model="entity.numerator"  class="select-style" ng-change="selctChange()" name="marketProportionSet_molecule"
+                        ng-options="op.dictId as op.dictName for op in molecule" ng-disabled="marketProportionSet_radionFlag">
+                </select>
+    			<!-- <select ng-model="entity.molecule" name="marketProportionSetSet_molecule" class="select-style">
+                    <option ng-repeat="rg in molecule" value="{{rg.dictId}}">
+                        {{rg.dictName}}
+                    </option>
+                </select> -->
+    			分母:
+    			<select ng-model="entity.denominator"  class="select-style" ng-change="selctChange()" name="marketProportionSet_denominator"
+                        ng-options="op.dictId as op.dictName for op in denominator" ng-disabled="marketProportionSet_radionFlag">
+                </select>
+    			<!-- <select ng-model="entity.denominator" name="marketProportionSetSet_denominator" class="select-style">
+                    <option ng-repeat="rg in denominator" value="{{rg.dictId}}">
+                        {{rg.dictName}}
+                    </option>
+                </select> -->
+    			阈值:
+    			<input type="number" ng-max="1000" ng-min="0.01" ng-change="selctChange()" ng-model="entity.threshold" >%
+    		</div>
+    		<div class="detailRow">
+    			<span>设置描述：{{descr}}</span>
+    		</div>
+    	</div>
+	    <div class="operation-table">
+	    
+	        <div class="btn-add-left">
+	  			<input ng-show = "marketProportionSetEdit" type="button" value="{{updateOrSavaContent_save}}" class="backFilter myNewBtn" ng-click="SaveOrupdate()"
+					   name="PositionMarketProportionSetService.save">
+	        </div>
+	        <div class="btn-add-left">
+	  			<input ng-show = "!marketProportionSetEdit" type="button" value="{{updateOrSavaContent_update}}" class="backFilter myNewBtn" ng-click="SaveOrupdate()"
+					   name="PositionMarketProportionSetService.save">
+	        </div>
+	    
+   	    	<div class="btn-add-left">
+    			<input ng-show = "marketProportionSetEdit" type="button" value={{marketProportionSet_buttonName_detail_save}} class="backFilter myNewBtn" title="添加持仓占比设置" ng-click="addPostionSet()"
+	   				name="PositionMarketProportionSetService.save">
+	   		</div>
+	   		<div class="btn-add-left">
+    			<input ng-show = "!marketProportionSetEdit" type="button" value={{marketProportionSet_buttonName_detail_update}} class="backFilter myNewBtn" title="添加持仓占比设置" ng-click="giveUpUpdate()"
+	   				name="PositionMarketProportionSetService.save">
+	   		</div>
+	   	</div>
+    </div>
+    </div>
+</div>

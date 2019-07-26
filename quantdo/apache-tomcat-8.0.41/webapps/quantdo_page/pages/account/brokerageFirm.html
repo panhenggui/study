@@ -1,0 +1,320 @@
+<link rel="stylesheet" href="account/brokerageFirm.css" />
+<div class="row" ng-controller="BrokerageFirmController">
+    <!-- start 定义表单查询-->
+    <form class="form-12">
+        <div class="form-row">
+            <div class="row-col-one">
+                <div class="alert alert-success" ng-show="resultInfo">经纪公司信息保存成功!</div>
+            </div>
+         </div>
+         <div class="form-row">
+			<div class="row-col-one"> 
+                <label class="word-style">经纪公司代码</label>
+				<select class="value-style" ng-model="queryEntity.brokerageFirmID" >
+				    <option value="">全部</option>
+				    <option ng-repeat="broker in queryBrIds" value="{{broker.brokerageFirmID}}">
+                                {{broker.brokerageFirmID}}_{{broker.brokerageFirmName}}
+                     </option>
+				</select>
+             </div>
+			 <div class="row-col-one" >
+				  <label class="word-style">经纪公司名称</label>
+                  <input type="text" class="value-style" ng-model="queryEntity.brokerageFirmName"  name="brokerageFirmName"/>
+			</div>
+        </div>
+        <div class="btn-beyond-one-row"  ng-show="brokerageFirm_query" >
+      	      <button type="button" class="btn btn-query btn-word-two"  ng-click="find()" ng-disabled="isQuery"> 查询</button>
+    	</div>
+		<div class="row-form row-btn-operation">
+          	<div class="row-btn-icon">
+               <span class="btn-add-icon"></span>
+               <input type="button" class="btn btn-add btn-icon-two" ng-show="brokerageFirm_add"  value="新增" data-toggle='modal'
+                      data-target='#brokerageFirmModal' ng-click="initParameter()">
+           </div>
+        </div>	
+    </form>
+    <!--End 表单查询 -->
+    
+	<!--PAGE CONTENT START-->
+	<div class="col-xs-12 clear-padding-right">
+        <div class="row">
+            <div class="col-xs-12 clear-padding-right">
+                <div>
+                    <table id="brokerage_dynamic_table" class="cell-border stripe" cellspacing="0" width="100%">
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!--PAGE CONTENT END-->
+
+    <!-- 新增 修改 模态框（Modal） -->
+    <div class="modal fade" id="brokerageFirmModal" tabindex="-1" role="dialog"
+         aria-labelledby="myModalLabel" aria-hidden="true" data-backdrop="static" data-keyboard="false">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close"
+                            data-dismiss="modal" aria-hidden="true">
+                        &times;
+                    </button>
+                    <h4 class="modal-title">
+                        经纪公司信息维护
+                    </h4>
+                </div>
+                <div class="modal-body">
+                    <!-- 添加表单内容-->
+                    <form class="form-horizontal" role="form" name="myForm" novalidate>
+                        <div class="form-group">
+                            <label class="col-sm-3 control-label">经纪公司代码<span style="color: red;">*</span></label>
+                            <div class="col-xs-6">
+                                <input class="form-control" type="text" placeholder="请输入经纪公司代码"
+                                       ng-model="ModalEntity.brokerageFirmID" name="brokerageFirmID" id="brokerageFirmID"
+                                       ng-pattern="/^[a-zA-Z0-9_]+$/" maxlength="10" required   ng-readonly="isUpdate"/>
+											<span ng-show="myForm.brokerageFirmID.$dirty && myForm.brokerageFirmID.$invalid"
+                                                  style="color: red;">经纪公司代码为必填项且只能为英文、数字、下划线组合</span>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label  class="col-sm-3 control-label">经纪公司名称<span style="color: red;">*</span></label>
+                            <div class="col-xs-6">
+                                <input type="text" class="form-control"  placeholder="请输入经纪公司名称"  id="brokerageFirmName"
+                                       name="brokerageFirmName" ng-model="ModalEntity.brokerageFirmName" required maxlength="100">
+                                <span ng-show="myForm.brokerageFirmName.$dirty && myForm.brokerageFirmName.$invalid"  style="color: red;">经纪公司名称为必填项且只能为中文、英文、数字、下划线组合</span>
+                            </div>
+                        </div>
+                        <div><input type="hidden" ng-bind="ModalEntity.recordIndex"></div>
+                    </form>
+                    <!--End  添加表单内容-->
+                </div>
+                <div class="modal-footer">
+                    <span class="btn btn-info btn-sm popover-info" data-rel="popover" data-placement="bottom" title=""
+                          ng-click="myForm.brokerageFirmName.$invalid || myForm.brokerageFirmID.$invalid||saveBroker(ModalEntity)"
+                          ng-disabled="myForm.brokerageFirmName.$invalid || myForm.brokerageFirmID.$invalid">&nbsp;确定&nbsp;</span>
+                    <span class="btn  btn-close btn-sm popover-info" data-rel="popover" data-placement="bottom" title=""
+                          data-dismiss="modal">&nbsp;取消&nbsp;</span>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- /.modal -->
+    
+     <!-- 线路设置 模态框（Modal） -->
+    <div class="modal fade in" id="seatFirmModal" tabindex="-1" role="dialog"
+         aria-labelledby="myModalLabel" aria-hidden="true" data-backdrop="static" data-keyboard="false">
+        <div class="modal-dialog" style ="width: 1000px; height: 500px">
+            <div class="modal-content"  >
+                <div class="modal-header">
+                    <button type="button" class="close"
+                            data-dismiss="modal" aria-hidden="true">
+                        &times;
+                    </button>
+                    <h4 class="modal-title">
+                       交易通道信息设置
+                    </h4>
+                </div>
+                <div class="modal-body">
+					<!--PAGE CONTENT START-->
+					<div class="row-form row-btn-operation">
+					<div class="row-btn-icon">
+			               <span class="btn-add-icon"></span>
+			               <input type="button" class="btn btn-add btn-icon-two" value="新增" data-toggle='modal'  ng-show="brokerageFirm_channel_add"
+			                      data-target='#brokSeatModal' ng-click="initSeatParameter()">
+			        </div>
+			        </div>
+					<div class="clear-padding-right">
+				        <div class="row">
+				            <div class="col-xs-12 clear-padding-right">
+				                <div>
+				                    <table id="seat_dynamic_table" class="cell-border stripe" cellspacing="0" width="100%">
+				                    </table>
+				                </div>
+				            </div>
+				        </div>
+				    </div>
+				    <!--PAGE CONTENT END-->
+                </div>	
+	             <div class="modal-footer">
+					<span class="btn btn-close btn-sm popover-info" data-rel="popover"
+						data-placement="bottom" title="" data-dismiss="modal">&nbsp;关闭&nbsp;</span>
+				</div>
+        </div>
+     </div>
+    </div>
+    <!-- /.modal -->
+    	<!-- 新增 修改 模态框（Modal） -->
+	<div class="modal fade" id="brokSeatModal" tabindex="-1" role="dialog"
+		aria-labelledby="myModalLabel" aria-hidden="true"
+		data-backdrop="static" data-keyboard="false">
+		<div class="modal-dialog" style="width:600px">
+			<div class="modal-content">
+				<div class="modal-header">
+					<button type="button" class="close" data-dismiss="modal"
+						aria-hidden="true">&times;</button>
+					<h4 class="modal-title" id="myModalLabel">交易通道信息维护</h4>
+				</div>
+				<div class="modal-body">
+					<!-- 添加表单内容-->
+					<form class="form-horizontal" role="form" name="mySeatForm" novalidate>
+						<div class="form-group" id="show" style="display:none;">
+							<label class="col-sm-3 control-label">通道编号</label>
+							<div class="col-sm-6" >
+								<input  type="text" ng-readonly="isUpdate" class="form-control" maxlength="128"
+									placeholder="请输入通道编号" ng-model="SeatModalEntity.seatID" required
+									name="seatID" id="seatID" />
+								<span ></span>
+							</div>
+						</div>
+						<div class="form-group">
+							<label class="col-sm-3 control-label">通道名称<span
+								style="color: red;">*</span></label>
+							<div class="col-sm-6">
+								<input class="form-control" type="text" 
+									placeholder="请输入通道名称" ng-model="SeatModalEntity.seatName" required
+									name="seatName" id="seatName" maxlength="50" onkeydown="myKeyup(event,this)" tab="1" />
+								<span ng-show="mySeatForm.seatName.$dirty && mySeatForm.seatName.$invalid"
+									style="color: red;">通道名称必填</span>
+							</div>
+						</div>
+						<div class="form-group">
+							<label class="col-sm-3 control-label">通道类型<span
+								style="color: red;">*</span></label>
+							<div class="col-sm-6">
+								<select ng-model="SeatModalEntity.seatSystem" required 
+									id="seatSystem" class="form-control" name="seatSystem"  ng-change="seatSystemSelect(SeatModalEntity.seatSystem)"
+									ng-options="s.key as s.text for s in seatSystems" onkeydown="myKeyup(event,this)" tab="2">
+									
+								</select>
+								<span ng-show="mySeatForm.seatSystem.$dirty && mySeatForm.seatSystem.$invalid"
+									style="color: red;"></span>
+							</div>
+						</div>
+						<div class="form-group">
+							<label class="col-sm-3 control-label">经纪公司代码<span
+								style="color: red;">*</span></label>
+							<div class="col-sm-6">
+								<select ng-model="SeatModalEntity.brokerageFirmID" required name="brokerageFirmID" 
+									id="brokerageFirmID" class="form-control"  ng-disabled="true"  class="select-style" 
+									ng-options="s.brokerageFirmID as s.brokerageFirmID +'_'+  s.brokerageFirmName for s in brokerageEntitys" 
+									maxlength="10" onkeydown="myKeyup(event,this)" tab="3">
+									
+								</select>
+								<span ng-show="mySeatForm.brokerageFirmID.$dirty && mySeatForm.brokerageFirmID.$invalid"
+									style="color: red;"></span>
+							</div>
+						</div>
+						<div class="form-group">
+							<label class="col-sm-3 control-label">会员代码</label>
+							<div class="col-sm-6">
+								<input type="text" class="form-control"  id="memberID" ng-readonly="isShow" maxlength="10" 
+									name="memberID" ng-model="SeatModalEntity.memberID" required onkeydown="myKeyup(event,this)" tab="4">
+									<span style="color: red;">（当交易系统为CTP或QDP或QDP外盘或QDIAM时，会员代码不能为空！）</span>
+							</div>
+						</div>
+						<!-- <div class="form-group">
+							<label class="col-sm-3 control-label">报盘接入方式<span
+								style="color: red;">*</span></label>
+							<div class="col-sm-6">
+								<select ng-model="SeatModalEntity.linkManagerType" required name="linkManagerType" 
+									id="linkManagerType" class="form-control"  class="select-style" 
+									ng-options="s.key as s.key +'_'+  s.text for s in linkManagerTypes" 
+									maxlength="10" onkeydown="myKeyup(event,this)"  >
+									
+								</select>
+					
+							</div>
+						</div> -->
+						<div class="form-group">
+							<label class="col-sm-3 control-label">合约转换类型</label>
+							<div class="col-sm-6">
+								<select ng-model="SeatModalEntity.codeType" required name="codeType" 
+									id="codeType" class="form-control"  class="select-style" 
+									ng-options="s.codeType as s.codeType +'_'+  s.codeTypeName for s in codeTypes" 
+									maxlength="10" onkeydown="myKeyup(event,this)"  >
+								</select>
+					
+							</div>
+						</div>
+						
+						<div class="form-group" ng-show="showApiLinkType" >
+							<label class="col-sm-3 control-label">是否从上层获取合约<span
+								style="color: red;">*</span></label>
+							<div class="col-sm-6">
+								<select ng-model="SeatModalEntity.apiLinkType" required name="apiLinkType" 
+									class="form-control"  class="select-style" 
+									ng-options="s.key as s.key +'_'+  s.text for s in apiLinkTypes" 
+									maxlength="10" onkeydown="myKeyup(event,this)"  >
+									
+								</select>
+					
+							</div>
+						</div>
+						
+						
+						
+						<div class="form-group">
+							<label class="col-sm-3 control-label">本地连接地址配置</label>
+							<div class="col-sm-6">
+								<textarea class="select-style" onkeydown="myKeyup(event,this)" 
+								 style="width: 375px; height: 50px; resize: none;"
+									placeholder="127.0.0.1:8080,127.0.0.2:8080 " ng-model="SeatModalEntity.ipAddress"
+									name="ipAddress" id="ipAddress" required
+									 ></textarea>
+							
+							</div>
+						</div>
+						<div class="form-group">
+							<label class="col-sm-3 control-label">上联连接地址配置<span 
+								style="color: red;">*</span></label>
+							<div class="col-sm-6">
+								<textarea class="select-style" onkeydown="myKeyup(event,this)"  
+								 style="width: 375px; height: 50px; resize: none;" required
+									placeholder="127.0.0.1:8080,127.0.0.2:8080 " ng-model="SeatModalEntity.fatherIpAddress"
+									name="fatherIpAddress" id="fatherIpAddress" required
+									 ></textarea>
+									
+							</div>
+						</div>
+
+						
+						<div class="form-group" ng-show="isyisheng || isctp " >
+							<label class="col-sm-3 control-label">appID<span style="color: red;" ng-show="isyisheng">*</span></label>
+							<div class="col-sm-6">
+								<textarea class="select-style" onkeydown="myKeyup(event,this)" tab="5"
+								 style="width: 375px; height: 50px; resize: none;"
+									placeholder="请输入appID" ng-model="SeatModalEntity.appID"
+									name="appID" id="appID" required
+									></textarea>
+								
+							</div>
+						</div>
+						<div class="form-group" ng-show="isyisheng || isctp "  >
+							<label class="col-sm-3 control-label">certlInfo<span style="color: red;" ng-show="isyisheng">*</span></label>
+							<div class="col-sm-6">
+								<textarea class="select-style" onkeydown="myKeyup(event,this)" tab="5"
+								 style="width: 375px; height: 50px; resize: none;"
+									placeholder="请输入certlInfo"  ng-model="SeatModalEntity.certlInfo"
+									name="certlInfo" id="certlInfo" required
+									 ></textarea>
+									 
+							</div>
+						</div>
+					</form>
+					<div>
+	                    <input type="hidden" ng-bind="SeatModalEntity.recordIndex">
+	                </div>
+				</div>
+			     <div class="modal-footer">
+				<span class="btn btn-info btn-sm popover-info" data-rel="popover"
+					data-placement="bottom" title="" 
+					ng-click="mySeatForm.seatName.$invalid || mySeatForm.seatSystem.$invalid ||   mySeatForm.fatherIpAddress.$invalid || 
+					 (mySeatForm.appID.$invalid && isyisheng) || (mySeatForm.certlInfo.$invalid && isyisheng) ||saveSeat(SeatModalEntity)"
+					ng-disabled="mySeatForm.seatName.$invalid || mySeatForm.fatherIpAddress.$invalid || (mySeatForm.certlInfo.$invalid && isyisheng) ||
+					 (mySeatForm.appID.$invalid && isyisheng) || mySeatForm.seatSystem.$invalid">&nbsp;确定&nbsp;</span>
+				<span class="btn btn-close btn-sm popover-info" data-rel="popover"
+					data-placement="bottom" title=""  ng-click="quit()">&nbsp;取消&nbsp;</span>
+			</div>
+		</div>
+	 </div>
+	</div>
+</div>
